@@ -1,6 +1,8 @@
 import cgi
 import wsgiref.handlers
 import os
+import logging
+
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
