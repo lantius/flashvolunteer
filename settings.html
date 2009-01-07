@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+ <body>
+ <h1>Volunteer Settings</h1>
+	<BR> Todays message: {{ message }}
+	<BR> Manage your settings:
+	<div> Neighborhood: <form action="/settings" method="post">
+			<select name="neighborhood">
+				<option value="capital_hill">Capital Hill</option>
+				<option value="west_seattle">West Seattle</option>
+				<option value="belltown">Belltown</option>
+			</select>
+			<input type=submit value="Update your neighborhood">
+		</form>
+	</div>
+	<div>
+		<form action="/delete" method="get"> <input type="submit" value="Delete your account"></form>
+	</div>
+	<div><a href="{{logout_url}}">logout</a></div>
+ </body>
+</html>
