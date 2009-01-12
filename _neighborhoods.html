@@ -1,0 +1,5 @@
+<select name="neighborhood">
+	{% for neighborhood in neighborhoods %}
+	<option value="{{neighborhood.key.id}}">{{neighborhood.name}}</option>
+	{% endfor %}
+</select>

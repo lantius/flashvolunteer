@@ -3,7 +3,7 @@ import os
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer, Event, EventVolunteer
+from models import Volunteer, Event, EventVolunteer, Neighborhood
 
 
 ################################################################################
@@ -27,32 +27,12 @@ class EventsPage(webapp.RequestHandler):
       self.redirect("/settings");
 
     message = "default message"
-    ownedEvents = EventVolunteer.gql("where volunteer = :volunteer AND isowner=true", volunteer=volunteer).fetch(limit=100)
-    if ownedEvents:
-      events_html="Created Events:<BR><table border=\"1\">\n"
-    
-      for ownedEvent in ownedEvents:
-        event = ownedEvent.event
-        events_html += "\t<tr>\n"
-        events_html += "\t\t<td>" + event.name + "</td>\n\t\t<td>" + event.neighborhood + "</td>\n"
-        events_html += "\t\t<td><form action=\"/events\" method=\"post\">"
-        events_html += "<input type=hidden name=\"delete\" value=\"true\">"
-        events_html += "<input type=hidden name=\"event_name\" value=\""+ event.name + "\">"
-        events_html += "<input type=hidden name=\"event_neighborhood\" value=\""+ event.neighborhood + "\">"
-        events_html += "<input type=submit value=\"delete\">"
-        events_html += "</form></td>\n"
-        events_html += "\t</tr>\n"
-
-      events_html += "</table>\n"
-    else:
-      events_html ="Create an Event<BR>"
-      
-      
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
         'logout_url': logout_url,
         'message': message,
-        'events_html': events_html
+        'events' : volunteer.events(),
+        'neighborhoods' : Neighborhood.all(),
       }
     path = os.path.join(os.path.dirname(__file__), 'events.html')
     self.response.out.write(template.render(path, template_values))
@@ -79,8 +59,8 @@ class EventsPage(webapp.RequestHandler):
       return
 
     event = Event()
-    event.name = self.request.get('event_name')
-    event.neighborhood = self.request.get('event_neighborhood')
+    event.name = self.request.get('name')
+    event.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))
     # TODO
     # Check to make sure values are present and valid
     event.put()
@@ -100,20 +80,16 @@ class EventsPage(webapp.RequestHandler):
         self.redirect(users.create_login_url(self.request.uri))
         return
         
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    volunteer = Volunteer.gql("WHERE user = :user", user=user).get();
     if not volunteer:
       self.redirect("/settings");
     
-    name = self.request.get('event_name')
-    neighborhood = self.request.get('event_neighborhood')
+    event = Event.get_by_id(int(self.request.get('id')))
     
-    #TODO
-    # Make this more efficient with a join
-    ownedEvents = EventVolunteer.gql("where volunteer = :volunteer AND isowner=true", volunteer=volunteer).fetch(limit=100)
-    if ownedEvents:
-      for ownedEvent in ownedEvents:
-        event = ownedEvent.event
-        if event.name == name and event.neighborhood == neighborhood:
-          event.delete()
-          ownedEvent.delete()
-          return
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
+                        volunteer=volunteer, event=event).get()
+    if eventvolunteer:
+      event.delete()
+      eventvolunteer.delete()
+      # TODO: need to delete all other volunteers for this event as well, when we have them...
+      

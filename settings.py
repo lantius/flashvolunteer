@@ -3,7 +3,7 @@ import os
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer
+from models import Volunteer, Neighborhood
 
 ################################################################################
 # Settings page
@@ -45,12 +45,13 @@ class SettingsPage(webapp.RequestHandler):
     else:
       message = "Welcome back old volunteer"
       if volunteer.neighborhood:
-        message += " from " + volunteer.neighborhood
-      
+        message += " from " + volunteer.neighborhood.name
+    
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
         'logout_url': logout_url,
         'message': message,
+        'neighborhoods' : Neighborhood.all(),
       }
     path = os.path.join(os.path.dirname(__file__), 'settings.html')
     self.response.out.write(template.render(path, template_values))
@@ -62,27 +63,10 @@ class SettingsPage(webapp.RequestHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
 
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
-    if volunteer and self.request.get('neighborhood'):
-      #TODO:
-      # Set neighborhoods up in DB
-      # Verify that neighborhood input is in the DB
-      volunteer.neighborhood = self.request.get('neighborhood')
-      volunteer.put();
-      
-    if not volunteer:
-      message = "Welcome new volunteer from " + self.request.get('neighborhood')
-    else:
-      message = "Welcome back old volunteer"
-      if volunteer.neighborhood:
-        message += " from " + volunteer.neighborhood
-      
-
-    logout_url = users.create_logout_url(self.request.uri)
-    template_values = {
-        'logout_url': logout_url,
-        'message': message,
-      }
-    path = os.path.join(os.path.dirname(__file__), 'settings.html')
-    self.response.out.write(template.render(path, template_values))
-
+    volunteer = Volunteer.gql("where user = :user", user=user).get()
+    if volunteer and self.request.get('neighborhood'):      
+      volunteer.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))
+      volunteer.put()
+    
+    self.redirect('settings')
+    

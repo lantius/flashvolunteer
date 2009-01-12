@@ -4,7 +4,7 @@ import os
 import logging
 
 from settings import SettingsPage, DeleteVolunteerPage
-from models import Volunteer
+from models import Volunteer, Neighborhood
 from events import EventsPage
 
 from google.appengine.ext import webapp, db
@@ -34,7 +34,7 @@ class MainPage(webapp.RequestHandler):
       settings_text = "Account Settings"
       events_text="create_an event!"
       if volunteer.neighborhood:
-        message += " from " + volunteer.neighborhood
+        message += " from " + volunteer.neighborhood.name
       
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
@@ -46,6 +46,14 @@ class MainPage(webapp.RequestHandler):
     path = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(path, template_values))
 
+class InitializeStore(webapp.RequestHandler):
+  def get(self):
+    neighborhoods = ("Capital Hill", "West Seattle", "University District", "Wedgewood")
+    for neighborhood_name in neighborhoods:
+      n = Neighborhood(name=neighborhood_name)
+      n.put()
+    
+    
 ################################################################################
 # gae mojo
 ################################################################################
@@ -56,6 +64,7 @@ def main():
                                      ('/settings', SettingsPage), #handles posts as well
                                      ('/delete', DeleteVolunteerPage),
                                      ('/events', EventsPage), #handles posts as well
+                                     ('/_init', InitializeStore)
                                     ],
                                     debug=True)
   wsgiref.handlers.CGIHandler().run(application)
