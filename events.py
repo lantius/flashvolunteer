@@ -1,4 +1,4 @@
-import os
+import os, string
 
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
@@ -11,10 +11,11 @@ from models import Volunteer, Event, EventVolunteer, Neighborhood
 ################################################################################
 class EventsPage(webapp.RequestHandler):
 
+
   ################################################################################
-  # GET
+  # INDEX
   ################################################################################  
-  def get(self):
+  def list(self):
     user = users.get_current_user()
 
     if not user:
@@ -36,7 +37,15 @@ class EventsPage(webapp.RequestHandler):
       }
     path = os.path.join(os.path.dirname(__file__), 'events.html')
     self.response.out.write(template.render(path, template_values))
+    
+  def show(self, event_id):
 
+     event = Event.get_by_id(int(event_id))
+     template_values = { 'event' : event, }
+     path = os.path.join(os.path.dirname(__file__), 'event.html')
+     self.response.out.write(template.render(path, template_values))
+     
+     
   ################################################################################
   # POST
   ################################################################################
@@ -92,4 +101,15 @@ class EventsPage(webapp.RequestHandler):
       event.delete()
       eventvolunteer.delete()
       # TODO: need to delete all other volunteers for this event as well, when we have them...
+
+
+  ################################################################################
+  # GET
+  ################################################################################    
+  def get(self, url_data):    
+    if url_data:
+      self.show(url_data[1:])
+    else:
+      self.list()
       
+    

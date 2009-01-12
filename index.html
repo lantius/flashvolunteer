@@ -1,8 +1,10 @@
-<html>
-  <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
-  </head>
- <body>
+{% extends "_layout.html" %}
+{% block title %}
+Flash Volunteer
+{% endblock title %}
+
+
+{% block content %}
  <h1>Flash Volunteer</h1>
 
  Get started!  It's easy!
@@ -11,5 +13,17 @@
 	<div><a href='/events'>{{ events_text }}</a></div>
 	<BR><BR><a href="{{logout_url}}">logout</a>
 
- </body>
-</html>
+{% if events %}
+	<h3>Events in your neighborhood:</h3>
+
+	<table>
+	{% for event in events %}
+	<tr>
+	<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
+	<td>{{event.neighborhood.name}}</td>
+	</tr>
+	{% endfor %}
+	</table>
+{% endif %}
+
+{% endblock content %}

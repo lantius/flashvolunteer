@@ -1,0 +1,10 @@
+{% extends "_layout.html" %}
+
+{% block title %}
+Flash Volunteer Event : {{event.name}}
+{% endblock title %}
+
+{% block content %}
+<h1>{{event.name}}</h1>
+{{event.neighborhood.name}}
+{% endblock content %}

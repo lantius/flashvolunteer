@@ -35,13 +35,15 @@ class MainPage(webapp.RequestHandler):
       events_text="create_an event!"
       if volunteer.neighborhood:
         message += " from " + volunteer.neighborhood.name
-      
+        events = volunteer.neighborhood.events
+        
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
         'logout_url': logout_url,
         'message': message,
         'events_text': events_text,
         'settings_text': settings_text,
+        'events' : events,
       }
     path = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(path, template_values))
@@ -63,7 +65,7 @@ def main():
                                     [('/', MainPage),
                                      ('/settings', SettingsPage), #handles posts as well
                                      ('/delete', DeleteVolunteerPage),
-                                     ('/events', EventsPage), #handles posts as well
+                                     ('/events(|/.*)', EventsPage), #handles posts as well
                                      ('/_init', InitializeStore)
                                     ],
                                     debug=True)

@@ -1,8 +1,9 @@
-<html>
-	<head>
-		<link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
-	</head>
-	<body>
+{% extends "_layout.html" %}
+{% block title %}
+Create an Event
+{% endblock title %}
+
+{% block content %}
 	<h1>Create an Event</h1>
 	<div>Today's Message: {{ message }} </div>
 	<form action="/events" method="post">
@@ -16,7 +17,7 @@
 	   Created Events:<BR><table border="1">
        {% for event in events %}
 	    <tr>
-		<td>{{event.name}}</td>
+		<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
 		<td>{{event.neighborhood.name}}</td>
 		<td><form action="/events" method="post">
         <input type=hidden name="delete" value="true">
@@ -32,5 +33,4 @@
 	
 	<div><a href="{{logout_url}}">logout</a></div>
 	<div><a href="/">home</a></div>
-  </body>
-</html>
+{% endblock content %}

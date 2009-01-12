@@ -1,8 +1,9 @@
-<html>
-  <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
-  </head>
- <body>
+{% extends "_layout.html" %}
+{% block title %}
+Volunteer Settings
+{% endblock title %}
+
+{% block content %}
  <h1>Volunteer Settings</h1>
 	<BR> Todays message: {{ message }}
 	<BR> Manage your settings:
@@ -16,5 +17,4 @@
 	</div>
 	<div><a href="{{logout_url}}">logout</a></div>
 	<div><a href="/">home</a></div>
- </body>
-</html>
+{% endblock content %}
