@@ -9,8 +9,8 @@ class Volunteer(db.Model):
 
 class Event(db.Model):
   name = db.StringProperty()
-  date = db.DateProperty()
   neighborhood = db.StringProperty()
+  date = db.DateProperty()
   
 class EventVolunteer(db.Model):
   event = db.ReferenceProperty(Event,

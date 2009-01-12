@@ -32,8 +32,8 @@ class SettingsPage(webapp.RequestHandler):
     user = users.get_current_user()
 
     if not user:
-        self.redirect(users.create_login_url(self.request.uri))
-        return
+      self.redirect(users.create_login_url(self.request.uri))
+      return
 
     volunteer = Volunteer.gql("where user = :user", user=user).get();
     
@@ -59,8 +59,8 @@ class SettingsPage(webapp.RequestHandler):
     user = users.get_current_user()
 
     if not user:
-        self.redirect(users.create_login_url(self.request.uri))
-        return
+      self.redirect(users.create_login_url(self.request.uri))
+      return
 
     volunteer = Volunteer.gql("where user = :user", user=user).get();
     if volunteer and self.request.get('neighborhood'):

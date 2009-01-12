@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+	</head>
+	<body>
+	<h1>Create an Event</h1>
+	<div>Today's Message: {{ message }} </div>
+	<form action="/events" method="post">
+		Neighborhood:<select name="event_neighborhood">
+			<option value="capital_hill">Capital Hill</option>
+			<option value="west_seattle">West Seattle</option>
+			<option value="belltown">Belltown</option>
+		</select><BR>
+		Event Title:<input type="text" name="event_name"><BR>
+		<input type=submit value="Create Event">
+	</form>
+	<div> {{events_html}} </div>
+	<div><a href="{{logout_url}}">logout</a></div>
+	<div><a href="/">home</a></div>
+  </body>
+</html>
