@@ -6,11 +6,11 @@ Flash Volunteer Event : {{event.name}}
 
 {% block content %}
 <h1>{{event.name}}</h1>
-{{event.neighborhood.name}}
+Being held in {{event.neighborhood.name}}
 <p>
 {% if eventvolunteer %}
 	{% if eventvolunteer.isowner %}
-		You're the owner!
+		You're the owner - <a href="/events/{{event.key.id}}/edit">Edit this event</a>
 	{% else %}
 	Created by<ul>
 	{% for owner in owners %}

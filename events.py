@@ -120,6 +120,11 @@ class EventsPage(webapp.RequestHandler):
 
 
   ################################################################################
+  # POST
+  ################################################################################    
+
+
+  ################################################################################
   # GET
   ################################################################################    
   def get(self, url_data):    
@@ -129,7 +134,7 @@ class EventsPage(webapp.RequestHandler):
       self.list()
 
 ################################################################################
-# EventVolunteer
+# VolunteerForEvent
 ################################################################################
 class VolunteerForEvent(webapp.RequestHandler):
 
@@ -153,9 +158,71 @@ class VolunteerForEvent(webapp.RequestHandler):
       if self.request.get('delete') and self.request.get('delete') == "true":
         if eventvolunteer:
           eventvolunteer.delete()
-          self.redirect('/events/' + url_data + "?deleted")
       else:
         if not eventvolunteer:
           eventvolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=False)
           eventvolunteer.put()
-          self.redirect('/events/' + url_data + "?added")
+    
+    self.redirect('/events/' + url_data)
+
+
+################################################################################
+# EditEventPage
+################################################################################
+class EditEventPage(webapp.RequestHandler):
+  
+  ################################################################################
+  def get(self, url_data):
+    user = users.get_current_user()
+    if not user:
+      self.redirect(users.create_login_url(self.request.uri))
+      return
+    
+    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    if not volunteer:
+      self.redirect("/settings");    
+    
+    event = Event.get_by_id(int(url_data))
+    
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+                           volunteer=volunteer, event=event).get()
+    if not eventvolunteer:
+      self.redirect("/events/" + url_data)
+      return
+    
+    owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
+    
+                           
+    logout_url = users.create_logout_url(self.request.uri)
+    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 
+    'logout_url': logout_url, 
+    'neighborhoods' : Neighborhood.all(),
+    }
+    path = os.path.join(os.path.dirname(__file__), 'event_edit.html')
+    self.response.out.write(template.render(path, template_values))
+  
+  ################################################################################
+  def post(self, url_data):
+    user = users.get_current_user()
+    if not user:
+      self.redirect(users.create_login_url(self.request.uri))
+      return
+    
+    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    if not volunteer:
+      self.redirect("/settings");    
+    
+    event = Event.get_by_id(int(url_data))
+    
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+                           volunteer=volunteer, event=event).get()
+    if not eventvolunteer:
+      self.redirect("/events/" + url_data)
+      return
+    
+    event.name = self.request.get('name')
+    event.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))
+    event.put()
+    
+    self.redirect("/events/" + url_data)
+    

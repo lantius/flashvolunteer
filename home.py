@@ -5,7 +5,7 @@ import logging
 
 from settings import SettingsPage, DeleteVolunteerPage
 from models import Volunteer, Neighborhood
-from events import EventsPage, VolunteerForEvent
+from events import EventsPage, VolunteerForEvent, EditEventPage
 from volunteers import VolunteersPage
 
 from google.appengine.ext import webapp, db
@@ -80,8 +80,9 @@ def main():
                                      ('/settings', SettingsPage), #handles posts as well
                                      ('/delete', DeleteVolunteerPage),
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
+                                     ('/events/(\d+)/edit', EditEventPage),
+                                     ('/events(|/\d+)', EventsPage),                                
                                      #TODO break out cases to be explicit below
-                                     ('/events(|/.*)', EventsPage), #handles posts as well
                                      ('/_init', InitializeStore),
                                      ('/volunteers/(\d+)', VolunteersPage)
                                     ],
