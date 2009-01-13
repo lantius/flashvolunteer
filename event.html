@@ -7,4 +7,36 @@ Flash Volunteer Event : {{event.name}}
 {% block content %}
 <h1>{{event.name}}</h1>
 {{event.neighborhood.name}}
+<p>
+{% if eventvolunteer %}
+	{% if eventvolunteer.isowner %}
+		You're the owner!
+	{% else %}
+	Created by<ul>
+	{% for owner in owners %}
+		<li>{{owner.volunteer.user.nickname}}</li>
+	{% endfor %}
+	</ul>
+  	You're a volunteer 
+	<form action="/events/{{ event.key.id }}/volunteer" method="post">
+		<input type=hidden name="delete" value="true">
+		<input type=submit value="unvolunteer">
+	</form>
+	{% endif %}
+{% else %}
+	Click here to volunteer for this event: 
+	<form action="/events/{{ event.key.id }}/volunteer" method="post">
+		<input type=submit value="volunteer!">
+	</form>
+{% endif %}
+</p>
+<p>
+<h3>Signed up volunteers:</h3>
+<ul>
+{% for volunteer in event.volunteers %}
+<li>{{ volunteer.user.nickname }}</li>
+{% endfor %}
+</ul>
+</p>
 {% endblock content %}
+

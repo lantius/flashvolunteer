@@ -1,0 +1,11 @@
+{% extends "_layout.html" %}
+{% block title %}
+{{ volunteer.user.nickname }}'s public page
+{% endblock title %}
+
+{% block content %}
+This is a volunteer page for {{volunteer.user.nickname}}<BR>
+They rep {{volunteer.neighborhood.name}}
+<BR>
+Their events: {% include "_events.html" %}
+{% endblock content %}

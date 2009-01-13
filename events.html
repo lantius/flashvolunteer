@@ -13,24 +13,10 @@ Create an Event
 		<input type="submit" value="Create Event">
 	</form>
 	<div>
-	{% if events %}
-	   Created Events:<BR><table border="1">
-       {% for event in events %}
-	    <tr>
-		<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
-		<td>{{event.neighborhood.name}}</td>
-		<td><form action="/events" method="post">
-        <input type=hidden name="delete" value="true">
-        <input type=hidden name="id" value="{{event.key.id}}">
-        <input type=submit value="delete">
-        </form></td></tr>
-	   {% endfor %}
-	   </table>
+	{% if eventvolunteer %}
+	   Your events:<BR>{% include "_events.html" %}
 	{% else %}
 		Create an Event</br>
 	{% endif %}
 	</div>
-	
-	<div><a href="{{logout_url}}">logout</a></div>
-	<div><a href="/">home</a></div>
 {% endblock content %}
