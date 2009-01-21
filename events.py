@@ -22,18 +22,20 @@ class EventsPage(webapp.RequestHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
 
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    volunteer = Volunteer.gql("where user = :user", user=user).get()
     
     if not volunteer:
-      self.redirect("/settings");
+      self.redirect("/settings")
+      return
 
     message = "default message"
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
         'logout_url': logout_url,
         'message': message,
-        'eventvolunteer' : volunteer.ev_set,
-        'neighborhoods' : Neighborhood.all(),
+        'eventvolunteer': volunteer.ev_set,
+        'neighborhoods': Neighborhood.all(),
+        'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__), 'events.html')
     self.response.out.write(template.render(path, template_values))
@@ -50,14 +52,14 @@ class EventsPage(webapp.RequestHandler):
     user = users.get_current_user()
     logout_url = ''
     if user:    
-      volunteer = Volunteer.gql("where user = :user", user=user).get();
+      volunteer = Volunteer.gql("where user = :user", user=user).get()
       logout_url = users.create_logout_url(self.request.uri)
       
       if volunteer:
         eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
                            volunteer=volunteer, event=event).get()
                            
-    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url}
+    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url, 'session_id': volunteer.session_id}
     path = os.path.join(os.path.dirname(__file__), 'event.html')
     self.response.out.write(template.render(path, template_values))
      
@@ -72,9 +74,14 @@ class EventsPage(webapp.RequestHandler):
         self.redirect(users.create_login_url(self.request.uri))
         return
         
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    volunteer = Volunteer.gql("where user = :user", user=user).get()
     if not volunteer:
-      self.redirect("/settings");
+      self.redirect("/settings")
+      return
+
+    if not volunteer.check_session_id(self.request.get('session_id')):
+      self.redirect('/timeout')
+      return
 
     isDelete = self.request.get('delete')
     
@@ -94,6 +101,7 @@ class EventsPage(webapp.RequestHandler):
     eventVolunteer.put()
     
     self.redirect("/events")
+    return
     
   ################################################################################
   # DELETE
@@ -105,9 +113,14 @@ class EventsPage(webapp.RequestHandler):
         self.redirect(users.create_login_url(self.request.uri))
         return
         
-    volunteer = Volunteer.gql("WHERE user = :user", user=user).get();
+    volunteer = Volunteer.gql("WHERE user = :user", user=user).get()
     if not volunteer:
-      self.redirect("/settings");
+      self.redirect("/settings")
+      return
+    
+    if not volunteer.check_session_id(self.request.get('session_id')):
+      self.redirect('/timeout')
+      return
     
     event = Event.get_by_id(int(self.request.get('id')))
     
@@ -146,9 +159,14 @@ class VolunteerForEvent(webapp.RequestHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
     
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    volunteer = Volunteer.gql("where user = :user", user=user).get()
     if not volunteer:
-      self.redirect("/settings");
+      self.redirect("/settings")
+      return
+      
+    if not volunteer.check_session_id(self.request.get('session_id')):
+      self.redirect('/timeout')
+      return
       
     event = Event.get_by_id(int(url_data))
     
@@ -164,7 +182,7 @@ class VolunteerForEvent(webapp.RequestHandler):
           eventvolunteer.put()
     
     self.redirect('/events/' + url_data)
-
+    return
 
 ################################################################################
 # EditEventPage
@@ -178,9 +196,10 @@ class EditEventPage(webapp.RequestHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
     
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    volunteer = Volunteer.gql("where user = :user", user=user).get()
     if not volunteer:
-      self.redirect("/settings");    
+      self.redirect("/settings")
+      return
     
     event = Event.get_by_id(int(url_data))
     
@@ -196,7 +215,8 @@ class EditEventPage(webapp.RequestHandler):
     logout_url = users.create_logout_url(self.request.uri)
     template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 
     'logout_url': logout_url, 
-    'neighborhoods' : Neighborhood.all(),
+    'neighborhoods': Neighborhood.all(),
+    'session_id': volunteer.session_id,
     }
     path = os.path.join(os.path.dirname(__file__), 'event_edit.html')
     self.response.out.write(template.render(path, template_values))
@@ -208,9 +228,14 @@ class EditEventPage(webapp.RequestHandler):
       self.redirect(users.create_login_url(self.request.uri))
       return
     
-    volunteer = Volunteer.gql("where user = :user", user=user).get();
+    volunteer = Volunteer.gql("where user = :user", user=user).get()
     if not volunteer:
-      self.redirect("/settings");    
+      self.redirect("/settings")
+      return
+    
+    if not volunteer.check_session_id(self.request.get('session_id')):
+      self.redirect('/timeout')
+      return
     
     event = Event.get_by_id(int(url_data))
     

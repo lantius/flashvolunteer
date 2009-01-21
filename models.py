@@ -10,9 +10,16 @@ class Neighborhood(db.Model):
 class Volunteer(db.Model):
   user = db.UserProperty()
   neighborhood = db.ReferenceProperty(Neighborhood)
+  session_id = db.StringProperty()
 
   def events(self):
     return (ev.event for ev in self.ev_set)
+    
+  def check_session_id(self, form_session_id):
+    if form_session_id == self.session_id:
+      return True
+    
+    return False
   
 class Event(db.Model):
   name = db.StringProperty()

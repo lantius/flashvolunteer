@@ -58,6 +58,13 @@ class InitializeStore(webapp.RequestHandler):
       n.put()
     
     
+
+class TimeoutPage(webapp.RequestHandler):
+  def get(self):
+    path = os.path.join(os.path.dirname(__file__), 'session_timeout.html')
+    self.response.out.write(template.render(path, ''))
+    
+
 ################################################################################
 # gae mojo
 ################################################################################
@@ -84,7 +91,8 @@ def main():
                                      ('/events(|/\d+)', EventsPage),                                
                                      #TODO break out cases to be explicit below
                                      ('/_init', InitializeStore),
-                                     ('/volunteers/(\d+)', VolunteersPage)
+                                     ('/volunteers/(\d+)', VolunteersPage),
+                                     ('/timeout', TimeoutPage),
                                     ],
                                     debug=True)
   wsgiref.handlers.CGIHandler().run(application)

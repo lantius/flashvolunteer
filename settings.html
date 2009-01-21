@@ -10,6 +10,7 @@ Volunteer Settings
 	<div> Neighborhood: <form action="/settings" method="post">
 		{% include "_neighborhoods.html" %}
 		<input type=submit value="Update your neighborhood">
+		<input type=hidden name="session_id" value="{{ session_id }}">
 		</form>
 	</div>
 	<div>

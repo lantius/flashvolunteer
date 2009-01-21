@@ -4,11 +4,12 @@
 	<td><a href="/events/{{ev.event.key.id}}">{{ev.event.name}}</a></td>
 	<td>{{ev.event.neighborhood.name}}</td>
 	{% if ev.isowner %}
-		<td><form action="/events" method="post">
+	<td><form action="/events" method="post">
         <input type=hidden name="delete" value="true">
         <input type=hidden name="id" value="{{ev.event.key.id}}">
         <input type=submit value="delete">
-        </form>
+		<input type=hidden name="session_id" value="{{ session_id }}">
+	</form>
 	{% endif %}
 	</td></tr>
    {% endfor %}

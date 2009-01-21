@@ -20,12 +20,14 @@ Being held in {{event.neighborhood.name}}
   	You're a volunteer 
 	<form action="/events/{{ event.key.id }}/volunteer" method="post">
 		<input type=hidden name="delete" value="true">
+		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=submit value="unvolunteer">
 	</form>
 	{% endif %}
 {% else %}
 	Click here to volunteer for this event: 
 	<form action="/events/{{ event.key.id }}/volunteer" method="post">
+		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=submit value="volunteer!">
 	</form>
 {% endif %}

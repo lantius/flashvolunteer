@@ -11,6 +11,7 @@ Create an Event
 <BR>
 		Event Title:<input type="text" name="name"><BR>
 		<input type="submit" value="Create Event">
+		<input type=hidden name="session_id" value="{{ session_id }}">
 	</form>
 	<div>
 	{% if eventvolunteer %}
