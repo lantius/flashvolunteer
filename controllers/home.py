@@ -27,16 +27,17 @@ class MainPage(webapp.RequestHandler):
       message = "Welcome volunteer"
       settings_text = "Create an account"
       events_text= ""
-      events = Event.all()
+      events = { 'Upcoming events' : Event.all() }
     else:
       message = "Welcome back old volunteer " + volunteer.user.nickname()
       settings_text = "Account Settings"
       events_text="create_an event!"
+      
+      events = { 'Your events' : volunteer.events() }
+      
       if volunteer.neighborhood:
         message += " from " + volunteer.neighborhood.name
-        events = volunteer.neighborhood.events
-      else:
-        events = Event.all()
+        events['Neighborhood events'] = volunteer.neighborhood.events
         
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
