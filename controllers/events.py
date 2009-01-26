@@ -17,7 +17,7 @@ class EventsPage(webapp.RequestHandler):
   # INDEX
   ################################################################################  
   def list(self):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='/settings')
 
     message = "default message"
     logout_url = users.create_logout_url(self.request.uri)
@@ -42,16 +42,18 @@ class EventsPage(webapp.RequestHandler):
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     
     eventvolunteer = ""
-
     logout_url = ''
+    session_id = ''
+    
     if user:    
       logout_url = users.create_logout_url(self.request.uri)
       
     if volunteer:
       eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
                          volunteer=volunteer, event=event).get()
+      session_id = volunteer.session_id
                            
-    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url, 'session_id': volunteer.session_id}
+    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url, 'session_id': session_id}
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event.html')
     self.response.out.write(template.render(path, template_values))
      
@@ -118,7 +120,7 @@ class EventsPage(webapp.RequestHandler):
 class VolunteerForEvent(webapp.RequestHandler):
 
   def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='/settings')
 
     event = Event.get_by_id(int(url_data))
     

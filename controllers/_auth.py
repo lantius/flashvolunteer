@@ -15,14 +15,16 @@ class Authorize():
       volunteer = Volunteer.gql("where user = :user", user=user).get();
       
     if requireVolunteer:
-    
+      
       if not volunteer:
         req.redirect(redirectTo)
         sys.exit
-    
-      if req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
+
+      if volunteer and req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
         req.redirect('/timeout')
         sys.exit
     
+    
     return(user,volunteer)
+  
   login = staticmethod(login)
