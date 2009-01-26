@@ -5,6 +5,7 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from models import Volunteer, Event, EventVolunteer, Neighborhood
 
+from controllers._auth import Authorize
 
 ################################################################################
 # Events page
@@ -16,17 +17,7 @@ class EventsPage(webapp.RequestHandler):
   # INDEX
   ################################################################################  
   def list(self):
-    user = users.get_current_user()
-
-    if not user:
-      self.redirect(users.create_login_url(self.request.uri))
-      return
-
-    volunteer = Volunteer.gql("where user = :user", user=user).get()
-    
-    if not volunteer:
-      self.redirect("/settings")
-      return
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
 
     message = "default message"
     logout_url = users.create_logout_url(self.request.uri)
@@ -37,7 +28,7 @@ class EventsPage(webapp.RequestHandler):
         'neighborhoods': Neighborhood.all(),
         'session_id': volunteer.session_id
       }
-    path = os.path.join(os.path.dirname(__file__), 'events.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events.html')
     self.response.out.write(template.render(path, template_values))
     
   ################################################################################
@@ -45,22 +36,23 @@ class EventsPage(webapp.RequestHandler):
   # A SINGLE EVENT
   ################################################################################
   def show(self, event_id):
+    (user, volunteer) = Authorize.login(self)
+
     event = Event.get_by_id(int(event_id))
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     
     eventvolunteer = ""
-    user = users.get_current_user()
+
     logout_url = ''
     if user:    
-      volunteer = Volunteer.gql("where user = :user", user=user).get()
       logout_url = users.create_logout_url(self.request.uri)
       
-      if volunteer:
-        eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                           volunteer=volunteer, event=event).get()
+    if volunteer:
+      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
+                         volunteer=volunteer, event=event).get()
                            
     template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url, 'session_id': volunteer.session_id}
-    path = os.path.join(os.path.dirname(__file__), 'event.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event.html')
     self.response.out.write(template.render(path, template_values))
      
      
@@ -68,21 +60,8 @@ class EventsPage(webapp.RequestHandler):
   # POST
   ################################################################################
   def post(self, url_data):
-    user = users.get_current_user()
-
-    if not user:
-        self.redirect(users.create_login_url(self.request.uri))
-        return
-        
-    volunteer = Volunteer.gql("where user = :user", user=user).get()
-    if not volunteer:
-      self.redirect("/settings")
-      return
-
-    if not volunteer.check_session_id(self.request.get('session_id')):
-      self.redirect('/timeout')
-      return
-
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    
     isDelete = self.request.get('delete')
     
     if isDelete and isDelete == 'true':
@@ -107,20 +86,7 @@ class EventsPage(webapp.RequestHandler):
   # DELETE
   ################################################################################
   def delete(self):
-    user = users.get_current_user()
-
-    if not user:
-        self.redirect(users.create_login_url(self.request.uri))
-        return
-        
-    volunteer = Volunteer.gql("WHERE user = :user", user=user).get()
-    if not volunteer:
-      self.redirect("/settings")
-      return
-    
-    if not volunteer.check_session_id(self.request.get('session_id')):
-      self.redirect('/timeout')
-      return
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
     
     event = Event.get_by_id(int(self.request.get('id')))
     
@@ -152,22 +118,8 @@ class EventsPage(webapp.RequestHandler):
 class VolunteerForEvent(webapp.RequestHandler):
 
   def post(self, url_data):
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
 
-    user = users.get_current_user()
-
-    if not user:
-      self.redirect(users.create_login_url(self.request.uri))
-      return
-    
-    volunteer = Volunteer.gql("where user = :user", user=user).get()
-    if not volunteer:
-      self.redirect("/settings")
-      return
-      
-    if not volunteer.check_session_id(self.request.get('session_id')):
-      self.redirect('/timeout')
-      return
-      
     event = Event.get_by_id(int(url_data))
     
     if event:
@@ -191,15 +143,7 @@ class EditEventPage(webapp.RequestHandler):
   
   ################################################################################
   def get(self, url_data):
-    user = users.get_current_user()
-    if not user:
-      self.redirect(users.create_login_url(self.request.uri))
-      return
-    
-    volunteer = Volunteer.gql("where user = :user", user=user).get()
-    if not volunteer:
-      self.redirect("/settings")
-      return
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
     
     event = Event.get_by_id(int(url_data))
     
@@ -218,25 +162,13 @@ class EditEventPage(webapp.RequestHandler):
     'neighborhoods': Neighborhood.all(),
     'session_id': volunteer.session_id,
     }
-    path = os.path.join(os.path.dirname(__file__), 'event_edit.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event_edit.html')
     self.response.out.write(template.render(path, template_values))
   
   ################################################################################
   def post(self, url_data):
-    user = users.get_current_user()
-    if not user:
-      self.redirect(users.create_login_url(self.request.uri))
-      return
-    
-    volunteer = Volunteer.gql("where user = :user", user=user).get()
-    if not volunteer:
-      self.redirect("/settings")
-      return
-    
-    if not volunteer.check_session_id(self.request.get('session_id')):
-      self.redirect('/timeout')
-      return
-    
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+
     event = Event.get_by_id(int(url_data))
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,

@@ -6,8 +6,11 @@
  <body>
 	{% block content %}
 	{% endblock content %}
+	
+	<hr />
 	<div> |
 	{%if logout_url %}<a href="{{logout_url}}">logout</a> | {% endif %}
-	<a href="/">home</a> |</div>
+	<a href="/">home</a> |
+	</div>
 </body>
 </html>

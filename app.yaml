@@ -8,4 +8,5 @@ handlers:
   static_dir: stylesheets  
 
 - url: /.*
-  script: home.py
+  script: controllers/home.py
+  login: admin
