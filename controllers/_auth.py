@@ -12,7 +12,7 @@ class Authorize():
       sys.exit
     
     if user:
-      volunteer = Volunteer.gql("where user = :user", user=user).get();
+      volunteer = Volunteer.gql("where user = :user", user=user).get()
       
     if requireVolunteer:
       

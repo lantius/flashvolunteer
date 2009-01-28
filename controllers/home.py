@@ -6,7 +6,7 @@ import logging
 from controllers._auth import Authorize
 
 from controllers.settings import SettingsPage, DeleteVolunteerPage
-from models import Volunteer, Neighborhood, Event
+from models import Volunteer, Neighborhood, Event, InterestCategory
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
 from controllers.volunteers import VolunteersPage
 
@@ -56,6 +56,13 @@ class InitializeStore(webapp.RequestHandler):
     for neighborhood_name in neighborhoods:
       n = Neighborhood(name=neighborhood_name)
       n.put()
+    
+    categories = ("Animals","Arts & Culture","Children & Youth", "Education & Literacy", 
+                  "Environment", "Gay, Lesbian, Bi, & Transgender", "Homeless & Housing",
+                  "Hunger", "Justice & Legal", "Senior Citizens")
+    for category_name in categories:
+      c = InterestCategory(name = category_name)
+      c.put()
 
 
 class TimeoutPage(webapp.RequestHandler):

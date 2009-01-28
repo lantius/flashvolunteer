@@ -7,6 +7,10 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets  
 
+- url: /test
+  script: tests/unit.py
+  login: admin
+
 - url: /.*
   script: controllers/home.py
   login: admin

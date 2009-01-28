@@ -11,10 +11,37 @@ from controllers._auth import Authorize
 # Events page
 ################################################################################
 class EventsPage(webapp.RequestHandler):
-
+  ################################################################################
+  # GET
+  ################################################################################    
+  def get(self, url_data):    
+    if url_data:
+      self.show(url_data[1:])
+    else:
+      self.list()
 
   ################################################################################
-  # INDEX
+  # POST
+  ################################################################################
+  def post(self, url_data):
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+
+    isDelete = self.request.get('delete')
+
+    if isDelete and isDelete == 'true':
+      self.delete({'id' : self.request.get('id'),
+                   }, volunteer)
+      self.redirect("/events")
+      return
+
+    self.create({'name' : self.request.get('name'),
+                 'neighborood' : self.request.get('neighborhood'),
+                 }, volunteer)
+    self.redirect("/events")
+    return
+
+  ################################################################################
+  # LIST
   ################################################################################  
   def list(self):
     (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='/settings')
@@ -32,8 +59,7 @@ class EventsPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
     
   ################################################################################
-  # SHOW
-  # A SINGLE EVENT
+  # SHOW A SINGLE EVENT
   ################################################################################
   def show(self, event_id):
     (user, volunteer) = Authorize.login(self)
@@ -57,40 +83,11 @@ class EventsPage(webapp.RequestHandler):
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event.html')
     self.response.out.write(template.render(path, template_values))
      
-     
-  ################################################################################
-  # POST
-  ################################################################################
-  def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
-    
-    isDelete = self.request.get('delete')
-    
-    if isDelete and isDelete == 'true':
-      EventsPage.delete(self)
-      self.redirect("/events")
-      return
-
-    event = Event()
-    event.name = self.request.get('name')
-    event.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))
-    # TODO
-    # Check to make sure values are present and valid
-    event.put()
-
-    eventVolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=True)
-    eventVolunteer.put()
-    
-    self.redirect("/events")
-    return
-    
   ################################################################################
   # DELETE
   ################################################################################
-  def delete(self):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
-    
-    event = Event.get_by_id(int(self.request.get('id')))
+  def delete(self, params, volunteer):    
+    event = Event.get_by_id(int(params['id']))
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
                         volunteer=volunteer, event=event).get()
@@ -99,20 +96,21 @@ class EventsPage(webapp.RequestHandler):
       eventvolunteer.delete()
       # TODO: need to delete all other volunteers for this event as well, when we have them...
 
-
   ################################################################################
-  # POST
-  ################################################################################    
-
-
+  # CREATE
   ################################################################################
-  # GET
-  ################################################################################    
-  def get(self, url_data):    
-    if url_data:
-      self.show(url_data[1:])
-    else:
-      self.list()
+  def create(self, params, volunteer):
+    event = Event()
+    event.name = params['name']
+    event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+    # TODO
+    # Check to make sure values are present and valid
+    event.put()
+
+    eventVolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=True)
+    eventVolunteer.put()
+    
+    return event.key().id()
 
 ################################################################################
 # VolunteerForEvent

@@ -6,7 +6,10 @@ from google.appengine.ext import db
 class Neighborhood(db.Model):
   name = db.StringProperty()
   # implicitly has .events and .volunteers properties
-  
+
+class InterestCategory(db.Model):
+  name = db.StringProperty()
+
 class Volunteer(db.Model):
   user = db.UserProperty()
   neighborhood = db.ReferenceProperty(Neighborhood)
@@ -38,3 +41,19 @@ class EventVolunteer(db.Model):
                                     required = True,
                                     collection_name = 'ev_set')
   isowner = db.BooleanProperty(required = True)
+
+class EventInterestCategory(db.Model):
+  event = db.ReferenceProperty(Event,
+                               required = True,
+                               collection_name = 'eventinterestcategories') 
+  interestcategory = db.ReferenceProperty(InterestCategory,
+                                required = True,
+                                collection_name = 'eventinterestcategories')
+                                
+class VolunteerInterestCategory(db.Model):
+  volunteer = db.ReferenceProperty(Volunteer,
+                               required = True,
+                               collection_name = 'volunteerinterestcategories')
+  interestcategory = db.ReferenceProperty(InterestCategory,
+                                required = True,
+                                collection_name = 'volunteerinterestcategories')
