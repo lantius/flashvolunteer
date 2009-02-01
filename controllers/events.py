@@ -86,7 +86,7 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   # DELETE
   ################################################################################
-  def delete(self, params, volunteer):    
+  def delete(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
