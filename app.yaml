@@ -7,8 +7,8 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets  
 
-- url: /test
-  script: tests/unit.py
+- url: /test.*
+  script: gaeunit.py
   login: admin
 
 - url: /.*
