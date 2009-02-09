@@ -17,7 +17,22 @@ class Volunteer(db.Model):
 
   def events(self):
     return (ev.event for ev in self.eventvolunteers)
-    
+  
+  def following(self):
+    return (f.follower for f in self.volunteerfollowing)
+
+  def followers(self):
+    return (f.volunteer for f in self.volunteerfollowers)
+  
+  # both following and follower
+  def friends(self):
+    fr = []
+    for following in self.following():
+      for follower in self.followers():
+        if following.key().id == follower.key().id:
+          fr.append(following)
+    return (f for f in fr)
+  
   def check_session_id(self, form_session_id):
     if form_session_id == self.session_id:
       return True
@@ -60,3 +75,13 @@ class VolunteerInterestCategory(db.Model):
   interestcategory = db.ReferenceProperty(InterestCategory,
                                 required = True,
                                 collection_name = 'volunteerinterestcategories')
+
+
+class VolunteerFollower(db.Model):
+  volunteer = db.ReferenceProperty(Volunteer,
+                                   required = True,
+                                   collection_name = 'volunteerfollowing')
+  follower = db.ReferenceProperty(Volunteer,
+                                  required = True,
+                                  collection_name = 'volunteerfollowers')
+                                  
