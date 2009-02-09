@@ -26,16 +26,16 @@ class EventsPage(webapp.RequestHandler):
   def post(self, url_data):
     (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
 
-    isDelete = self.request.get('delete')
+    is_delete = self.request.get('delete')
 
-    if isDelete and isDelete == 'true':
+    if is_delete and is_delete == 'true':
       self.delete({'id' : self.request.get('id'),
                    }, volunteer)
       self.redirect("/events")
       return
 
     self.create({'name' : self.request.get('name'),
-                 'neighborood' : self.request.get('neighborhood'),
+                 'neighborhood' : self.request.get('neighborhood'),
                  }, volunteer)
     self.redirect("/events")
     return
@@ -92,9 +92,10 @@ class EventsPage(webapp.RequestHandler):
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
                         volunteer=volunteer, event=event).get()
     if eventvolunteer:
+      eventvolunteers  = EventVolunteer.gql("WHERE event = :event", event=event).fetch(1000)
+      for ev in eventvolunteers:
+        ev.delete()      
       event.delete()
-      eventvolunteer.delete()
-      # TODO: need to delete all other volunteers for this event as well, when we have them...
 
   ################################################################################
   # CREATE
@@ -158,9 +159,9 @@ class EditEventPage(webapp.RequestHandler):
                            
     logout_url = users.create_logout_url(self.request.uri)
     template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 
-    'logout_url': logout_url, 
-    'neighborhoods': Neighborhood.all(),
-    'session_id': volunteer.session_id,
+      'logout_url': logout_url, 
+      'neighborhoods': Neighborhood.all(),
+      'session_id': volunteer.session_id,
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event_edit.html')
     self.response.out.write(template.render(path, template_values))
