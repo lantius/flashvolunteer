@@ -72,11 +72,11 @@ class InitializeStore(webapp.RequestHandler):
       c.put()  
   
   def is_initialized(self):
-    n = Neighborhood.gql("WHERE name = :name", name = "Capital Hill")
+    n = Neighborhood.gql("WHERE name = :name", name = "Capital Hill").get()
     if n:
       return True
-    else:
-      return False
+    
+    return False
      
 class TimeoutPage(webapp.RequestHandler):
   def get(self):
