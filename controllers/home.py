@@ -52,6 +52,13 @@ class MainPage(webapp.RequestHandler):
 
 class InitializeStore(webapp.RequestHandler):
   def get(self):
+    if not self.is_initialized():
+      self.initialize_store()
+    
+    self.redirect("/")
+    return
+  
+  def initialize_store(self):
     neighborhoods = ("Capital Hill", "West Seattle", "University District", "Wedgewood")
     for neighborhood_name in neighborhoods:
       n = Neighborhood(name=neighborhood_name)
@@ -62,9 +69,15 @@ class InitializeStore(webapp.RequestHandler):
                   "Hunger", "Justice & Legal", "Senior Citizens")
     for category_name in categories:
       c = InterestCategory(name = category_name)
-      c.put()
-
-
+      c.put()  
+  
+  def is_initialized(self):
+    n = Neighborhood.gql("WHERE name = :name", name = "Capital Hill")
+    if n:
+      return True
+    else:
+      return False
+     
 class TimeoutPage(webapp.RequestHandler):
   def get(self):
     path = os.path.join(os.path.dirname(__file__), '..', 'views','session_timeout.html')
