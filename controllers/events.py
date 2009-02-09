@@ -51,7 +51,7 @@ class EventsPage(webapp.RequestHandler):
     template_values = {
         'logout_url': logout_url,
         'message': message,
-        'eventvolunteer': volunteer.ev_set,
+        'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': Neighborhood.all(),
         'session_id': volunteer.session_id
       }
