@@ -29,6 +29,6 @@ class VolunteersPage(webapp.RequestHandler):
     
     page_volunteer = Volunteer.get_by_id(int(url_data))
     
-    template_values = { 'eventvolunteer': page_volunteer.ev_set, 'volunteer': page_volunteer, 'logout_url': logout_url}
+    template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 'volunteer': page_volunteer, 'logout_url': logout_url}
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteer.html')
     self.response.out.write(template.render(path, template_values))

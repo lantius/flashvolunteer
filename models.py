@@ -16,7 +16,7 @@ class Volunteer(db.Model):
   session_id = db.StringProperty()
 
   def events(self):
-    return (ev.event for ev in self.ev_set)
+    return (ev.event for ev in self.eventvolunteers)
     
   def check_session_id(self, form_session_id):
     if form_session_id == self.session_id:
@@ -31,15 +31,18 @@ class Event(db.Model):
   date = db.DateProperty()
   
   def volunteers(self):
-     return (ev.volunteer for ev in self.ev_set)
-  
+     return (ev.volunteer for ev in self.eventvolunteers)
+
+################################################################################
+# "join" models
+################################################################################
 class EventVolunteer(db.Model):
   event = db.ReferenceProperty(Event,
                                required = True,
-                               collection_name = 'ev_set')
+                               collection_name = 'eventvolunteers')
   volunteer = db.ReferenceProperty(Volunteer,
                                     required = True,
-                                    collection_name = 'ev_set')
+                                    collection_name = 'eventvolunteers')
   isowner = db.BooleanProperty(required = True)
 
 class EventInterestCategory(db.Model):
