@@ -143,22 +143,42 @@ class VolunteerForEvent(webapp.RequestHandler):
 class EditEventPage(webapp.RequestHandler):
   
   ################################################################################
+  # GET
+  ################################################################################
   def get(self, url_data):
     (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    self.edit({ 'id' : url_data }, volunteer)
+
+  ################################################################################
+  # POST
+  ################################################################################
+  def post(self, url_data):
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    self.update({ 'id' : url_data, 
+                  'name' : self.request.get('name'),
+                  'neighborhood' : int(self.request.get('neighborhood')),
+                  }, volunteer)
+    self.redirect("/events/" + url_data)
     
-    event = Event.get_by_id(int(url_data))
+  ################################################################################
+  # EDIT
+  ################################################################################
+  def edit(self, params, volunteer):
+    event = Event.get_by_id(int(params['id']))
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
     if not eventvolunteer:
-      self.redirect("/events/" + url_data)
+      self.redirect("/events/" + params['id'])
       return
     
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-    
                            
     logout_url = users.create_logout_url(self.request.uri)
-    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 
+    template_values = { 
+      'event' : event, 
+      'eventvolunteer': eventvolunteer, 
+      'owners': owners, 
       'logout_url': logout_url, 
       'neighborhoods': Neighborhood.all(),
       'session_id': volunteer.session_id,
@@ -167,20 +187,15 @@ class EditEventPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
   
   ################################################################################
-  def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
-
-    event = Event.get_by_id(int(url_data))
+  # UPDATE
+  ################################################################################
+  def update(self, params, volunteer):
+    event = Event.get_by_id(int(params['id']))
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
-    if not eventvolunteer:
-      self.redirect("/events/" + url_data)
-      return
-    
-    event.name = self.request.get('name')
-    event.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))
-    event.put()
-    
-    self.redirect("/events/" + url_data)
+    if eventvolunteer:
+      event.name = params['name']
+      event.neighborhood = Neighborhood.get_by_id(params['neighborhood'])
+      event.put()
     
