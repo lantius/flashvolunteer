@@ -22,6 +22,7 @@ class MainPage(webapp.RequestHandler):
   def get(self):
     (user, volunteer) = Authorize.login(self)
     events=""
+    byinterest = []
     
     if not volunteer:
       message = "Welcome volunteer"
@@ -39,7 +40,6 @@ class MainPage(webapp.RequestHandler):
         message += " from " + volunteer.neighborhood.name
         events['Neighborhood events'] = volunteer.neighborhood.events
         
-      byinterest = []
       for ic in volunteer.interestcategories():
         if ic.events():
           byinterest.append(ic)
