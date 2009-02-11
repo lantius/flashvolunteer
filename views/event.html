@@ -7,6 +7,13 @@ Flash Volunteer Event : {{event.name}}
 {% block content %}
 <h1>{{event.name}}</h1>
 Being held in {{event.neighborhood.name}}
+
+<h3>Interest categories</h3><ul>
+{% for ic in event.interestcategories %}
+  <li>{{ic.name}}</li>
+{% endfor %}
+</ul>
+
 <p>
 {% if eventvolunteer %}
 	{% if eventvolunteer.isowner %}

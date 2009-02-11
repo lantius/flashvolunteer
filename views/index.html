@@ -24,4 +24,16 @@ Flash Volunteer
 	</table>
 {% endfor %}
 
+{% for i in byinterest %}
+<h3>Interest: {{ i.name }}</h3>
+<table>
+  {% for event in i.events %}
+<tr>
+<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
+<td>{{event.neighborhood.name}}</td>
+</tr>
+  {% endfor %}
+</table>
+
+{% endfor %}
 {% endblock content %}

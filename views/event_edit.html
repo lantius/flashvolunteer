@@ -9,8 +9,12 @@ Flash Volunteer Event : {{event.name}} : Edit
 <form method="post" action="/events/{{event.key.id}}/edit">
 	<h1>Editing <input type="text" name="name" value="{{event.name}}"></h1>
 	<p>Being held in {% include "_neighborhoods.html" %}</p>
+
+  <h3>Interest categories</h3>
+  {% include "_interestcategories.html" %}
+
 	<a href="/events/{{event.key.id}}">Cancel</a> 
-	<input type=hidden name="session_id" value="{{ session_id }}">s
+	<input type=hidden name="session_id" value="{{ session_id }}">
 	<input type="submit" value="update">
 </form>
 <p>

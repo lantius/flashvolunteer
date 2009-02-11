@@ -9,9 +9,14 @@ Volunteer Settings
 	<BR> Manage your settings:
 	<div> Neighborhood: <form action="/settings" method="post">
 		{% include "_neighborhoods.html" %}
-		<input type=submit value="Update your neighborhood">
+
+    <h3>Interest categories</h3>
+    {% include "_interestcategories.html" %}
+
+
+<p>		<input type=submit value="Update">
 		<input type=hidden name="session_id" value="{{ session_id }}">
-		</form>
+		</p></form>
 	</div>
 	<div>
 		<form action="/delete" method="get"> <input type="submit" value="Delete your account"></form>

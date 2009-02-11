@@ -6,9 +6,12 @@ from google.appengine.ext import db
 class Neighborhood(db.Model):
   name = db.StringProperty()
   # implicitly has .events and .volunteers properties
-
+      
 class InterestCategory(db.Model):
   name = db.StringProperty()
+
+  def events(self):
+    return (eic.event for eic in self.eventinterestcategories)
 
 class Volunteer(db.Model):
   user = db.UserProperty()
@@ -18,6 +21,9 @@ class Volunteer(db.Model):
   def events(self):
     return (ev.event for ev in self.eventvolunteers)
   
+  def interestcategories(self):
+    return (vic.interestcategory for vic in self.volunteerinterestcategories)
+
   def following(self):
     return (f.follower for f in self.volunteerfollowing)
 
@@ -47,6 +53,9 @@ class Event(db.Model):
   
   def volunteers(self):
      return (ev.volunteer for ev in self.eventvolunteers)
+  
+  def interestcategories(self):
+     return (eic.interestcategory for eic in self.eventinterestcategories)
 
 ################################################################################
 # "join" models

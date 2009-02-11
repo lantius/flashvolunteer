@@ -39,12 +39,18 @@ class MainPage(webapp.RequestHandler):
         message += " from " + volunteer.neighborhood.name
         events['Neighborhood events'] = volunteer.neighborhood.events
         
+      byinterest = []
+      for ic in volunteer.interestcategories():
+        if ic.events():
+          byinterest.append(ic)
+        
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
         'logout_url': logout_url,
         'message': message,
         'events_text': events_text,
         'settings_text': settings_text,
+        'byinterest' : byinterest,
         'events' : events,
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'index.html')

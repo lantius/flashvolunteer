@@ -3,9 +3,10 @@ import os, string
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer, Event, EventVolunteer, Neighborhood
+from models import Volunteer, Event, EventVolunteer, Neighborhood, InterestCategory, EventInterestCategory
 
 from controllers._auth import Authorize
+from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
 ################################################################################
 # Events page
@@ -34,9 +35,13 @@ class EventsPage(webapp.RequestHandler):
       self.redirect("/events")
       return
 
-    self.create({'name' : self.request.get('name'),
-                 'neighborhood' : self.request.get('neighborhood'),
-                 }, volunteer)
+    params = {}
+    for name in self.request.arguments():
+      params[name] = self.request.get_all(name)
+      if len(params[name]) == 1: 
+        params[name] = params[name][0]
+          
+    self.create(params, volunteer)
     self.redirect("/events")
     return
 
@@ -48,11 +53,13 @@ class EventsPage(webapp.RequestHandler):
 
     message = "default message"
     logout_url = users.create_logout_url(self.request.uri)
+    
     template_values = {
         'logout_url': logout_url,
         'message': message,
         'eventvolunteer': volunteer.eventvolunteers,
-        'neighborhoods': Neighborhood.all(),
+        'neighborhoods': NeighborhoodHelper().selected(volunteer),
+        'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events.html')
@@ -104,9 +111,16 @@ class EventsPage(webapp.RequestHandler):
     event = Event()
     event.name = params['name']
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
-    # TODO
-    # Check to make sure values are present and valid
+    
+    # TODO: Check to make sure values are present and valid
+    # TODO: transaction such that if anything throws an exception we don't litter the database
     event.put()
+
+    for interestcategory in InterestCategory.all():
+      pic = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+      if params[pic] == ['1','1']: 
+        eic = EventInterestCategory(event = event, interestcategory = interestcategory)
+        eic.put()
 
     eventVolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=True)
     eventVolunteer.put()
@@ -154,10 +168,16 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def post(self, url_data):
     (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
-    self.update({ 'id' : url_data, 
-                  'name' : self.request.get('name'),
-                  'neighborhood' : int(self.request.get('neighborhood')),
-                  }, volunteer)
+    params = { 'id' : url_data, 
+               'name' : self.request.get('name'),
+               'neighborhood' : int(self.request.get('neighborhood')),
+             }
+    for interestcategory in InterestCategory.all():
+      icp = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+      params[icp] = self.request.get_all(icp)        
+    
+    self.update(params, volunteer)
+    
     self.redirect("/events/" + url_data)
     
   ################################################################################
@@ -173,14 +193,16 @@ class EditEventPage(webapp.RequestHandler):
       return
     
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-                           
+    
+
     logout_url = users.create_logout_url(self.request.uri)
     template_values = { 
       'event' : event, 
       'eventvolunteer': eventvolunteer, 
       'owners': owners, 
       'logout_url': logout_url, 
-      'neighborhoods': Neighborhood.all(),
+      'neighborhoods': NeighborhoodHelper().selected(event),
+      'interestcategories' : InterestCategoryHelper().selected(event),
       'session_id': volunteer.session_id,
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event_edit.html')
@@ -197,5 +219,16 @@ class EditEventPage(webapp.RequestHandler):
     if eventvolunteer:
       event.name = params['name']
       event.neighborhood = Neighborhood.get_by_id(params['neighborhood'])
+      
+      for interestcategory in InterestCategory.all():
+        paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+        eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
+                            event = event, interestcategory = interestcategory).get()
+        if params[paramname] == ['1','1'] and not eic:          
+          eic = EventInterestCategory(event = event, interestcategory = interestcategory)
+          eic.put()
+        elif params[paramname] == ['1'] and eic:
+          eic.delete()
+          
       event.put()
     

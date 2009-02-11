@@ -10,6 +10,10 @@ Create an Event
 		Neighborhood: {% include "_neighborhoods.html" %}
 <BR>
 		Event Title:<input type="text" name="name"><BR>
+		  
+		<h3>Interest categories</h3>
+    {% include "_interestcategories.html" %}
+		  
 		<input type="submit" value="Create Event">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 	</form>

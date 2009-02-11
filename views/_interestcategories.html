@@ -1,0 +1,8 @@
+<ul>
+{% for ic in interestcategories %}
+  <li>
+  <input type="hidden" name="interestcategory[{{ic.key.id}}]" value="1" />
+  <input type="checkbox" name="interestcategory[{{ic.key.id}}]" value="1" {% if ic.selected %} checked {% endif %} />{{ic.name}}
+  </li>
+{% endfor %}
+</ul>

@@ -6,7 +6,9 @@ from controllers._auth import Authorize
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer, Neighborhood
+from models import Volunteer, Neighborhood, InterestCategory, VolunteerInterestCategory
+
+from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
 ################################################################################
 # Settings page
@@ -49,10 +51,12 @@ class SettingsPage(webapp.RequestHandler):
         message += " from " + volunteer.neighborhood.name
     
     logout_url = users.create_logout_url(self.request.uri)
+    
     template_values = {
         'logout_url': logout_url,
         'message': message,
-        'neighborhoods': Neighborhood.all(),
+        'neighborhoods': NeighborhoodHelper().selected(volunteer),
+        'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'settings.html')
@@ -64,6 +68,17 @@ class SettingsPage(webapp.RequestHandler):
     if volunteer.check_session_id(self.request.get('session_id')) and self.request.get('neighborhood'):      
       volunteer.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))
       volunteer.put()
-    
+      
+      for interestcategory in InterestCategory.all():
+        paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+        vic = VolunteerInterestCategory.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
+                            volunteer = volunteer, interestcategory = interestcategory).get()
+        if self.request.get_all(paramname) == ['1','1'] and not vic:          
+          vic = VolunteerInterestCategory(volunteer = volunteer, interestcategory = interestcategory)
+          vic.put()
+        elif self.request.get_all(paramname) == ['1'] and vic:
+          vic.delete()
+      
+      
     self.redirect('settings')
     

@@ -11,8 +11,16 @@ class EventsTest(unittest.TestCase):
     self.volunteer  = Volunteer()
     self.volunteer.put()
     
+    self.interestcategory1 = InterestCategory()
+    self.interestcategory1.put()
+
+    self.interestcategory2 = InterestCategory()
+    self.interestcategory2.put()
+    
   def tearDown(self):
     self.volunteer.delete()
+    self.interestcategory1.delete()
+    self.interestcategory2.delete()
     
   def test_event_create(self):
     name = 'create unit test'
