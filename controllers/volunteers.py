@@ -43,8 +43,6 @@ class VolunteersPage(webapp.RequestHandler):
                         volunteer=page_volunteer, follower=volunteer).get()
                         
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
-                        'friends' : page_volunteer.friends(),
-                        'followers' : page_volunteer.followers(),
                         'volunteerfollower' : volunteerfollower,
                         'volunteer': page_volunteer,
                         'session_id' : volunteer.session_id,

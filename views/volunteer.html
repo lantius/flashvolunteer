@@ -4,18 +4,26 @@
 {% endblock title %}
 
 {% block content %}
-This is a volunteer page for {{volunteer.user.nickname}}<BR>
+<h1>{{volunteer.user.nickname}}</h1><BR>
 They rep {{volunteer.neighborhood.name}}
 <BR>
 Their events: {% include "_events.html" %}
+<br>
+They like:
+<ul>
+{% for ic in volunteer.interestcategories %}
+  <li>{{ic.name}}</li>
+{% endfor %}
+</ul>
 
-<P>Friends:<ul>
-{% for friend in friends %}
-<li></li>
+<P>
+Following:<ul>
+{% for f in volunteer.following %}
+<li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
+{% endfor %}</ul>
+</p>
 
-{% endfor %}</ul></p>
 <p>Followers:
-  
   {% if volunteerfollower %}
 	<form action="/volunteers/{{ volunteer.key.id }}/follow" method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}">
@@ -28,9 +36,10 @@ Their events: {% include "_events.html" %}
 		<input type=submit value="follow me!">
 	</form>
   {% endif %}
+  
 <ul>
-  {% for follower in followers %}
-  <li>{{follower.user.nickname}}</li>
+  {% for f in volunteer.followers %}
+  <li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
 
   {% endfor %}
 </ul>
