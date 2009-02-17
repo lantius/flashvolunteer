@@ -21,7 +21,7 @@ Being held in {{event.neighborhood.name}}
 	{% else %}
 	Created by<ul>
 	{% for owner in owners %}
-		<li>{{owner.volunteer.user.nickname}}</li>
+		<li><a href="/volunteers/{{owner.volunteer.key.id}}">{{owner.volunteer.user.nickname}}</a></li>
 	{% endfor %}
 	</ul>
   	You're a volunteer 
@@ -43,7 +43,7 @@ Being held in {{event.neighborhood.name}}
 <h3>Signed up volunteers:</h3>
 <ul>
 {% for volunteer in event.volunteers %}
-<li>{{ volunteer.user.nickname }}</li>
+<li><a href="/volunteers/{{volunteer.key.id}}">{{ volunteer.user.nickname }}</a></li>
 {% endfor %}
 </ul>
 </p>

@@ -25,10 +25,10 @@ class Volunteer(db.Model):
     return (vic.interestcategory for vic in self.volunteerinterestcategories)
 
   def following(self):
-    return (f.follower for f in self.volunteerfollowing)
+    return (f.volunteer for f in self.volunteerfollowing)
 
   def followers(self):
-    return (f.volunteer for f in self.volunteerfollowers)
+    return (f.follower for f in self.volunteerfollowers)
   
   # both following and follower
   def friends(self):
@@ -89,8 +89,8 @@ class VolunteerInterestCategory(db.Model):
 class VolunteerFollower(db.Model):
   volunteer = db.ReferenceProperty(Volunteer,
                                    required = True,
-                                   collection_name = 'volunteerfollowing')
+                                   collection_name = 'volunteerfollowers')
   follower = db.ReferenceProperty(Volunteer,
                                   required = True,
-                                  collection_name = 'volunteerfollowers')
+                                  collection_name = 'volunteerfollowing')
                                   

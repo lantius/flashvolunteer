@@ -8,7 +8,7 @@ from controllers._auth import Authorize
 from controllers.settings import SettingsPage, DeleteVolunteerPage
 from models import Volunteer, Neighborhood, Event, InterestCategory
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
-from controllers.volunteers import VolunteersPage
+from controllers.volunteers import VolunteersPage, FollowVolunteer
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
@@ -29,6 +29,8 @@ class MainPage(webapp.RequestHandler):
       settings_text = "Create an account"
       events_text= ""
       events = { 'Upcoming events' : Event.all() }
+      followers = {}
+      following = {}
     else:
       message = "Welcome back old volunteer " + volunteer.user.nickname()
       settings_text = "Account Settings"
@@ -43,7 +45,10 @@ class MainPage(webapp.RequestHandler):
       for ic in volunteer.interestcategories():
         if ic.events():
           byinterest.append(ic)
-        
+      
+      followers = volunteer.followers()
+      following = volunteer.following()
+      
     logout_url = users.create_logout_url(self.request.uri)
     template_values = {
         'logout_url': logout_url,
@@ -52,6 +57,8 @@ class MainPage(webapp.RequestHandler):
         'settings_text': settings_text,
         'byinterest' : byinterest,
         'events' : events,
+        'followers' : followers,
+        'following' : following,
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'index.html')
     self.response.out.write(template.render(path, template_values))
@@ -116,7 +123,8 @@ def main():
                                      ('/events(|/\d+)', EventsPage),                                
                                      #TODO break out cases to be explicit below
                                      ('/_init', InitializeStore),
-                                     ('/volunteers/(\d+)', VolunteersPage),
+                                     ('/volunteers/(\d+)/follow', FollowVolunteer),
+                                     ('/volunteers(|/\d+)', VolunteersPage),
                                      ('/timeout', TimeoutPage),
                                     ],
                                     debug=True)

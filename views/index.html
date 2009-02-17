@@ -34,6 +34,19 @@ Flash Volunteer
 </tr>
   {% endfor %}
 </table>
-
 {% endfor %}
+
+<h3>Users you're following</h3><ul>
+{% for f in following %}
+<li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
+{% endfor %}
+</ul>
+<h3>Users following you</h3><ul>
+  {% for f in followers %}
+<li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
+
+  {% endfor %}
+  
+</ul>
+
 {% endblock content %}

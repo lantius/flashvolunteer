@@ -8,4 +8,32 @@ This is a volunteer page for {{volunteer.user.nickname}}<BR>
 They rep {{volunteer.neighborhood.name}}
 <BR>
 Their events: {% include "_events.html" %}
+
+<P>Friends:<ul>
+{% for friend in friends %}
+<li></li>
+
+{% endfor %}</ul></p>
+<p>Followers:
+  
+  {% if volunteerfollower %}
+	<form action="/volunteers/{{ volunteer.key.id }}/follow" method="post">
+		<input type=hidden name="session_id" value="{{ session_id }}">
+		<input type=hidden name="delete" value="true">
+		<input type=submit value="stop following me!">
+	</form>
+  {% else %}
+	<form action="/volunteers/{{ volunteer.key.id }}/follow" method="post">
+		<input type=hidden name="session_id" value="{{ session_id }}">
+		<input type=submit value="follow me!">
+	</form>
+  {% endif %}
+<ul>
+  {% for follower in followers %}
+  <li>{{follower.user.nickname}}</li>
+
+  {% endfor %}
+</ul>
+</p>
+
 {% endblock content %}
