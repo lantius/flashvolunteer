@@ -6,6 +6,8 @@ from google.appengine.ext import webapp
 from models import Volunteer, Event, EventVolunteer, Neighborhood, InterestCategory, EventInterestCategory
 
 from controllers._auth import Authorize
+from controllers._params import Parameters
+
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
 ################################################################################
@@ -25,22 +27,14 @@ class EventsPage(webapp.RequestHandler):
   # POST
   ################################################################################
   def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
-
-    is_delete = self.request.get('delete')
-
-    if is_delete and is_delete == 'true':
-      self.delete({'id' : self.request.get('id'),
-                   }, volunteer)
+    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')  
+    params = Parameters.parameterize(self.request)
+    
+    if 'is_delete' in params and params['is_delete'] == 'true':
+      self.delete(params, volunteer)
       self.redirect("/events")
       return
 
-    params = {}
-    for name in self.request.arguments():
-      params[name] = self.request.get_all(name)
-      if len(params[name]) == 1: 
-        params[name] = params[name][0]
-          
     self.create(params, volunteer)
     self.redirect("/events")
     return
@@ -99,9 +93,10 @@ class EventsPage(webapp.RequestHandler):
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
                         volunteer=volunteer, event=event).get()
     if eventvolunteer:
-      eventvolunteers  = EventVolunteer.gql("WHERE event = :event", event=event).fetch(1000)
-      for ev in eventvolunteers:
-        ev.delete()      
+      for ev in event.eventvolunteers:
+        ev.delete() 
+      for ei in event.eventinterestcategories:
+        ei.delete()
       event.delete()
 
   ################################################################################
