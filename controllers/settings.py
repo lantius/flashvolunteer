@@ -16,11 +16,36 @@ from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 class DeleteVolunteerPage(webapp.RequestHandler):
   
   def get(self):
-    (user, volunteer) = Authorize.login(self,True, True, '/')
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
+
+    # Remove followers relationship
+    followers = volunteer.followers();
+    for f in followers:
+      f.delete()
+
+    # Remove following relatoinship
+    following = volunteer.following();
+    for f in following:
+      f.delete()
     
+    # Remove interest categories
+    interests = volunteer.interestcategories();
+    for interest in interests:
+      interest.delete()
+
+    # Remove events you've volunteered for
+    evs = volunteer.eventvolunteers
+    for ev in evs:
+      ev.delete()
+
+    # Finally remove the volunteer
     volunteer.delete()
     
-    self.response.out.write('volunteer removed')
+	#We need to put a better page here
+    self.redirect('/')
 
 ################################################################################
 # Settings page
@@ -37,7 +62,10 @@ class SettingsPage(webapp.RequestHandler):
     return random_string;
         
   def get(self):
-    (user, volunteer) = Authorize.login(self, requireUser=True)
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True)
+    except:
+      return
 
     if not volunteer:
       message = "Welcome newly registered volunteer"
@@ -63,7 +91,10 @@ class SettingsPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
 
   def post(self):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
 
     if volunteer.check_session_id(self.request.get('session_id')) and self.request.get('neighborhood'):      
       volunteer.neighborhood = Neighborhood.get_by_id(int(self.request.get('neighborhood')))

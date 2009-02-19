@@ -28,7 +28,7 @@ class MainPage(webapp.RequestHandler):
       message = "Welcome volunteer"
       settings_text = "Create an account"
       events_text= ""
-      events = { 'Upcoming events' : Event.all() }
+      events = { 'All Upcoming events' : Event.all() }
       followers = {}
       following = {}
     else:

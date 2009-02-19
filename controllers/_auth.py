@@ -18,11 +18,13 @@ class Authorize():
       
       if not volunteer:
         req.redirect(redirectTo)
-        sys.exit
+        raise NoVolunteerError, "No volunteer for the user"
+
+        volunteer = volunteers.get()
 
       if volunteer and req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
         req.redirect('/timeout')
-        sys.exit
+        raise TimeoutError, "Volunteer's session timed out"
     
     
     return(user,volunteer)

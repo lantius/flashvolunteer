@@ -27,7 +27,11 @@ class EventsPage(webapp.RequestHandler):
   # POST
   ################################################################################
   def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')  
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
+
     params = Parameters.parameterize(self.request)
     
     if 'is_delete' in params and params['is_delete'] == 'true':
@@ -43,7 +47,10 @@ class EventsPage(webapp.RequestHandler):
   # LIST
   ################################################################################  
   def list(self):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='/settings')
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
 
     message = "default message"
     logout_url = users.create_logout_url(self.request.uri)
@@ -128,7 +135,10 @@ class EventsPage(webapp.RequestHandler):
 class VolunteerForEvent(webapp.RequestHandler):
 
   def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='/settings')
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
 
     event = Event.get_by_id(int(url_data))
     
@@ -155,14 +165,20 @@ class EditEventPage(webapp.RequestHandler):
   # GET
   ################################################################################
   def get(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
     self.edit({ 'id' : url_data }, volunteer)
 
   ################################################################################
   # POST
   ################################################################################
   def post(self, url_data):
-    (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
     params = { 'id' : url_data, 
                'name' : self.request.get('name'),
                'neighborhood' : int(self.request.get('neighborhood')),
