@@ -59,6 +59,7 @@ class MainPage(webapp.RequestHandler):
         'events' : events,
         'followers' : followers,
         'following' : following,
+        'volunteer' : volunteer,
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'index.html')
     self.response.out.write(template.render(path, template_values))

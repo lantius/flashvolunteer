@@ -4,13 +4,53 @@
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
   </head>
  <body>
+<div id="container"> 
+<div id="top">
+	<div id="logo"><a href="homelink"><img src="/stylesheets/logo.png" alt="flashvolunteer"/></a></div>
+	{%if logout_url %}<div id="userwelcome">Welcome, {{volunteer.user.nickname}} <br /><a href="{{logout_url}}">Log Out</a></div>{% endif %}
+	<div id="navtabs">
+		<ul>
+			<li><a href="/" {% block homeactive %}{% endblock homeactive %} >HOME</a></li>
+			<li><a href="/events" {% block eventsactive %}{% endblock eventsactive %} >EVENTS</a></li>
+			<li><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} >NEIGHBORHOODS</a></li>
+			<li><a href="/friends" {% block friendsactive %}{% endblock friendsactive %} >FRIENDS</a></li>
+			<li><a href="/settings" {% block profileactive %}{% endblock profileactive %} >PROFILE</a></li>
+			<li><a href="/help" {% block helpactive %}{% endblock helpactive %} >HELP</a></li>
+		</ul>
+	</div>
+	<div id="searchbox">
+		<form action="action" method="get">
+			<div><input type="text" name="search" value="Search" />
+			<input id="searchsubmit" type="submit" /></div>
+		</form>
+	</div>
+</div><!--end top-->
+
+<div id="bottom">
+	<div id="columns">
+ 
 	{% block content %}
 	{% endblock content %}
 	
-	<hr />
+<!--
 	<div> |
 	{%if logout_url %}<a href="{{logout_url}}">logout</a> | {% endif %}
 	<a href="/">home</a> |
 	</div>
+-->
+
+</div><!--end columns-->
+<div id="footer">
+	<ul>
+		<li><a href="aboutsvilink">About SVI</a></li>
+		<li><a href="feedbacklink">Give Us Feedback</a></li>
+		<li><a href="donatelink">Donate</a></li>
+		<li><a href="privacypolicylink">Privacy Policy</a></li>
+		<li><a href="toslink">Terms of Use</a></li>
+	</ul>
+	<div id="copyright">Copyright &copy; 2009 Organization Name. All Rights Reserved.</div>
+</div><!--end footer-->
+</div><!--end bottom-->
+</div><!--end content-->
 </body>
 </html>

@@ -3,8 +3,31 @@
 Flash Volunteer
 {% endblock title %}
 
+{% block homeactive %}
+class="current"
+{% endblock homeactive %}
+
 
 {% block content %}
+
+<div id="leftthird">
+
+		<div id="personblock" class="softmodule">
+			{% if volunteer.profileimage %}
+				<img src="{{ volunteer.profileimage }}" alt="{{ volunteer.user.nickname }}" />
+			{% else %}
+				<img src="/stylesheets/default-profile-pic.png" alt="{{ volunteer.user.nickname }}" />
+			{% endif %}
+			<ul>
+				<li id="personname">{{ volunteer.user.nickname }}</li>
+				{% if volunteer.personalstatement %}
+					<li id="personstatement">{{ volunteer.personalstatement }}</li>
+				{% endif %}
+				<li class="tallerlistitem"><a href="/settings">&raquo; Edit profile</a></li>
+			</ul>
+		</div><!--end personblock-->
+
+
  <h1>Flash Volunteer</h1>
 
  Get started!  It's easy!
@@ -12,10 +35,10 @@ Flash Volunteer
 	<div><a href='/settings'>{{ settings_text }}</a></div>	
 	<div><a href='/events'>{{ events_text }}</a></div>
 	
-{% for e in events.items %}
+{% for e in events.items %}{# for each type of event e... #}
 	<h3>{{ e.0 }}:</h3>
 	<table>
-	{% for event in e.1 %}
+	{% for event in e.1 %}{# for each event of type e...  #}
 	<tr>
 	<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
 	<td>{{event.neighborhood.name}}</td>
@@ -48,5 +71,12 @@ Flash Volunteer
   {% endfor %}
   
 </ul>
+</div><!--end leftthrid-->
+
+<div id="middlethird">
+</div><!--end middlethird-->
+
+<div id="rightthird">
+</div><!--end middlethird-->
 
 {% endblock content %}
