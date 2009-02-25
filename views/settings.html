@@ -4,21 +4,42 @@ Volunteer Settings
 {% endblock title %}
 
 {% block content %}
- <h1>Volunteer Settings</h1>
+  <h1>Volunteer Settings</h1>
 	<BR> Todays message: {{ message }}
 	<BR> Manage your settings:
-	<div> Neighborhood: <form action="/settings" method="post">
+  <form action="/settings" method="post" enctype="multipart/form-data".>
+  
+    <div><strong>Name:</strong>
+    <input type="text" name="name" size="40" value="{{ volunteer.name }}"  /></div>
+  
+  
+  <div><strong>Profile picture:</strong>
+		{% if volunteer.avatar %}
+			<br/><img src="/volunteers/{{volunteer.key.id}}/avatar" alt="{{ volunteer.user.nickname }}" /><br/>
+		{% endif %}
+  <input type="file" name="avatar" /> (JPEG format only)</div>
+  
+  <div><strong>Quote:</strong>
+  "<input type="text" name="quote" size="40" value="{{ volunteer.quote }}"  />"</div>
+
+  
+	<div> Neighborhood: 
 		{% include "_neighborhoods.html" %}
 
     <h3>Interest categories</h3>
     {% include "_interestcategories.html" %}
 
-
 <p>		<input type=submit value="Update">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		</p></form>
 	</div>
+
+  User since {{volunteer.joinedon}}
+	
 	<div>
-		<form action="/delete" method="get"> <input type="submit" value="Delete your account"></form>
+		<form action="/delete" method="post"> <input type="submit" value="Delete your account" />
+		  <input type=hidden name="is_delete" value="true" />
+			<input type=hidden name="session_id" value="{{ session_id }}" />
+  	</form>
 	</div>
 {% endblock content %}

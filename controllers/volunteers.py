@@ -94,4 +94,19 @@ class FollowVolunteer(webapp.RequestHandler):
 
     self.redirect('/volunteers/' + url_data)
     return
-  
+
+
+################################################################################
+# VolunteerAvatar
+################################################################################
+class VolunteerAvatar(webapp.RequestHandler):
+  ################################################################################
+  # GET
+  ################################################################################
+  def get(self, url_data):
+    volunteer = Volunteer.get_by_id(int(url_data))
+    if volunteer.avatar:
+      self.response.headers['Content-Type'] = "image/jpg"
+      self.response.out.write(volunteer.avatar)
+    else:
+      self.error(404)

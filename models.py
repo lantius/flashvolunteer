@@ -15,6 +15,10 @@ class InterestCategory(db.Model):
 
 class Volunteer(db.Model):
   user = db.UserProperty()
+  name = db.StringProperty()
+  avatar = db.BlobProperty()
+  quote = db.StringProperty()
+  joinedon = db.DateProperty(auto_now_add=True)
   neighborhood = db.ReferenceProperty(Neighborhood)
   session_id = db.StringProperty()
 

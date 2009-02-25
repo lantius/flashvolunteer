@@ -13,8 +13,8 @@ class="current"
 <div id="leftthird">
 
 		<div id="personblock" class="softmodule">
-			{% if volunteer.profileimage %}
-				<img src="{{ volunteer.profileimage }}" alt="{{ volunteer.user.nickname }}" />
+			{% if volunteer.avatar %}
+				<img src="/volunteers/{{volunteer.key.id}}/avatar" alt="{{ volunteer.user.nickname }}" />
 			{% else %}
 				<img src="/stylesheets/default-profile-pic.png" alt="{{ volunteer.user.nickname }}" />
 			{% endif %}

@@ -5,10 +5,10 @@ import logging
 
 from controllers._auth import Authorize
 
-from controllers.settings import SettingsPage, DeleteVolunteerPage
+from controllers.settings import SettingsPage
 from models import Volunteer, Neighborhood, Event, InterestCategory
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
-from controllers.volunteers import VolunteersPage, FollowVolunteer
+from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
@@ -118,13 +118,14 @@ def main():
   application = webapp.WSGIApplication(
                                     [('/', MainPage),
                                      ('/settings', SettingsPage), #handles posts as well
-                                     ('/delete', DeleteVolunteerPage),
+                                     ('/delete', SettingsPage),
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
                                      ('/events(|/\d+)', EventsPage),                                
                                      #TODO break out cases to be explicit below
                                      ('/_init', InitializeStore),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
+                                     ('/volunteers/(\d+)/avatar', VolunteerAvatar),
                                      ('/volunteers(|/\d+)', VolunteersPage),
                                      ('/timeout', TimeoutPage),
                                     ],
