@@ -70,9 +70,9 @@ class EventsTest(unittest.TestCase):
     ee = EditEventPage()
     e = EventsPage()
     params = { 'name' : 'edit unit test',
-               'neighborhood' : 1,
+               'neighborhood' : '1',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
-               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1'],
+               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1',
                }
     
     event_id = e.create(params, self.volunteer)
@@ -85,8 +85,8 @@ class EventsTest(unittest.TestCase):
     
     params = { 'id' : event_id, 
                'name' : 'edit unit test -- edited',
-               'neighborhood' : 2,
-               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1'],
+               'neighborhood' : '2',
+               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1',
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'],
     }
     ee.update(params, self.volunteer)

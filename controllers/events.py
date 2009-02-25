@@ -179,13 +179,9 @@ class EditEventPage(webapp.RequestHandler):
       (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
     except:
       return
-    params = { 'id' : url_data, 
-               'name' : self.request.get('name'),
-               'neighborhood' : int(self.request.get('neighborhood')),
-             }
-    for interestcategory in InterestCategory.all():
-      icp = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-      params[icp] = self.request.get_all(icp)        
+      
+    params = Parameters.parameterize(self.request)
+    params['id'] = url_data
     
     self.update(params, volunteer)
     
@@ -229,7 +225,7 @@ class EditEventPage(webapp.RequestHandler):
                            volunteer=volunteer, event=event).get()
     if eventvolunteer:
       event.name = params['name']
-      event.neighborhood = Neighborhood.get_by_id(params['neighborhood'])
+      event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
       
       for interestcategory in InterestCategory.all():
         paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'
@@ -238,7 +234,7 @@ class EditEventPage(webapp.RequestHandler):
         if params[paramname] == ['1','1'] and not eic:          
           eic = EventInterestCategory(event = event, interestcategory = interestcategory)
           eic.put()
-        elif params[paramname] == ['1'] and eic:
+        elif params[paramname] == '1' and eic:
           eic.delete()
           
       event.put()
