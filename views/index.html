@@ -28,6 +28,39 @@ class="current"
 		</div><!--end personblock-->
 
 
+		<div id="personinformation" class="softmodule">
+			<div class="moduletitle">
+				<h3>Information</h3>
+				<a href="/settings">edit</a>
+			</div>
+			<ul>
+				<li><span class="label">I live in:</span> <a href="{{ volunteer.homeneighborhoodurl.url }}">{{ volunteer.homeneighborhood }}</a></li>
+				<li><span class="label">I work in:</span> <a href="{{ volunteer.workneighborhoodurl.url }}">{{ volunteer.workneighborhood }}</a></li>
+				<li><span class="label">I have been a Flash Volunteer for:</span> {{ volunteer.careertime }}</li>
+				<li><span class="label">I have volunteered at:</span> {{ volunteer.pasteventscount }}</li>
+				<li><span class="label">I am signed up for:</span> {{ volunteer.upcomingeventscount }} upcoming events</li>
+			</ul>
+		</div><!--end information-->
+
+		<div id="personfriends" class="softmodule">
+			<div class="moduletitle">
+				<h3>Friends</h3>
+			</div>
+			<ul>
+				<li id="numberfriends">{{ volunteer.friendscount }} friends</li>
+				{% for f in volunteer.following %}
+					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
+				{% endfor %}
+				{% for f in volunteer.follower %}
+					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
+				{% endfor %}
+				<li class="tallerlistitem"><a href="/friends">&raquo; View All Friends</a></li>
+			</ul>
+		</div><!--end friends-->
+	</div><!--end leftthird-->
+
+
+<div id="middlethird">
  <h1>Flash Volunteer</h1>
 
  Get started!  It's easy!
@@ -35,10 +68,10 @@ class="current"
 	<div><a href='/settings'>{{ settings_text }}</a></div>	
 	<div><a href='/events'>{{ events_text }}</a></div>
 	
-{% for e in events.items %}{# for each type of event e... #}
+{% for e in events.items %}{# for each type of event... #}
 	<h3>{{ e.0 }}:</h3>
 	<table>
-	{% for event in e.1 %}{# for each event of type e...  #}
+	{% for event in e.1 %}{# for each event of type...  #}
 	<tr>
 	<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
 	<td>{{event.neighborhood.name}}</td>
@@ -71,9 +104,7 @@ class="current"
   {% endfor %}
   
 </ul>
-</div><!--end leftthrid-->
 
-<div id="middlethird">
 </div><!--end middlethird-->
 
 <div id="rightthird">
