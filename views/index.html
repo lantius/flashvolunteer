@@ -3,19 +3,15 @@
 Flash Volunteer
 {% endblock title %}
 
-{% block homeactive %}
-class="current"
-{% endblock homeactive %}
+{% block homeactive %}class="current"{% endblock homeactive %}
 
 
 {% block content %}
 
 <div id="leftthird">
-
 	{% include "volunteer_modules/_narrow_name.html" %}
 	{% include "volunteer_modules/_information.html" %}
 	{% include "friend_modules/_list_brief.html" %}
-	
 </div><!--end leftthird-->
 
 
@@ -71,6 +67,9 @@ class="current"
 </div><!--end middlethird-->
 
 <div id="rightthird">
-</div><!--end middlethird-->
+	{% include "event_modules/_find_event.html" %}
+	{% include "neighborhood_modules/_most_active_brief.html" %}
+	{% include "help_modules/_faq_links_brief.html" %}
+</div><!--end rightthird-->
 
 {% endblock content %}

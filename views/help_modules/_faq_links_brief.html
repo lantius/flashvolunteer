@@ -1,0 +1,11 @@
+
+		<div id="faqlinks" class="hardmodule">
+			<div class="moduletitle">
+				<h3>Frequently Asked Questions</h3>
+			</div>
+			<ul>
+			{% for f in faqs %}
+				<li><a href="/faq#{{ f.id }}">{{ f.name }}</a></li>
+			{% endfor %}
+			</ul>
+		</div><!--end faqlinks-->

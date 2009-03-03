@@ -5,10 +5,10 @@
 			</div>
 			<ul>
 				<li id="numberfriends">{{ volunteer.friendscount }} friends</li>
-				{% for f in volunteer.following %}
+				{% for f in following %}
 					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
 				{% endfor %}
-				{% for f in volunteer.follower %}
+				{% for f in followers %}
 					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
 				{% endfor %}
 				<li class="tallerlistitem"><a href="/friends">&raquo; View All Friends</a></li>

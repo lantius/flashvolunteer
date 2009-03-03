@@ -1,0 +1,13 @@
+
+		<div id="neighborhoods" class="hardmodule">
+			<div class="moduletitle">
+				<h3>Neighborhoods</h3>
+			</div>
+			<ul>
+				<li><span class="label">Most active neighborhoods:</span></li>
+				{% for neighborhood in neighborhoods.byactivity %}
+					<li>{{ neighborhood.name }}</li>
+				{% endfor %}
+				<li class="tallerlistitem"><a href="/neighborhoods/compare">&raquo; Compare neighborhoods</a></li>
+			</ul>
+		</div><!--end neighborhoods-->
