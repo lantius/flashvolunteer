@@ -1,10 +1,10 @@
 from models import Volunteer, Event, Neighborhood, InterestCategory
 
 class NeighborhoodHelper():
-  def selected(self, selector):
+  def selected(self, selected_neighborhood):
     neighborhoods = []
     for neighborhood in Neighborhood.all():
-      if selector.neighborhood and neighborhood.key().id() == selector.neighborhood.key().id():
+      if selected_neighborhood and neighborhood.key().id() == selected_neighborhood.key().id():
         neighborhood.selected = True
       neighborhoods.append(neighborhood)
     return neighborhoods

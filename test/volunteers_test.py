@@ -1,6 +1,7 @@
 import unittest
 from webtest import TestApp
 from google.appengine.ext import webapp
+from google.appengine.api import urlfetch
 
 from controllers.volunteers import *
 
@@ -8,8 +9,15 @@ class VolunteersTest(unittest.TestCase):
   
   def setUp(self):
     self.application = webapp.WSGIApplication([('/volunteers', VolunteersPage)], debug=True)
-  
-  
+
+  #dev_appserver.py can only handle on request at a time. Be smarter (run a second server)  
+  def test_url(self):
+      volunteer = Volunteer()
+      volunteer.put()
+      #response = urlfetch.fetch(volunteer.url)
+      #self.assertEquals(0, response.content.find('<html>'))
+      self.assertTrue(1)
+      volunteer.delete()
   
   def test_follow_friend(self):
     volunteer  = Volunteer()

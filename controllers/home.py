@@ -38,9 +38,9 @@ class MainPage(webapp.RequestHandler):
       
       events = { 'Your events' : volunteer.events() }
       
-      if volunteer.neighborhood:
-        message += " from " + volunteer.neighborhood.name
-        events['Neighborhood events'] = volunteer.neighborhood.events
+      if volunteer.home_neighborhood:
+        message += " from " + volunteer.home_neighborhood.name
+        events['Neighborhood events'] = volunteer.home_neighborhood.events
         
       for ic in volunteer.interestcategories():
         if ic.events():

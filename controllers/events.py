@@ -59,7 +59,7 @@ class EventsPage(webapp.RequestHandler):
         'logout_url': logout_url,
         'message': message,
         'eventvolunteer': volunteer.eventvolunteers,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer),
+        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id
       }
@@ -208,7 +208,7 @@ class EditEventPage(webapp.RequestHandler):
       'eventvolunteer': eventvolunteer, 
       'owners': owners, 
       'logout_url': logout_url, 
-      'neighborhoods': NeighborhoodHelper().selected(event),
+      'neighborhoods': NeighborhoodHelper().selected(event.neighborho),
       'interestcategories' : InterestCategoryHelper().selected(event),
       'session_id': volunteer.session_id,
     }

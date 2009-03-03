@@ -23,8 +23,23 @@ Volunteer Settings
   "<input type="text" name="quote" size="40" value="{{ volunteer.quote }}"  />"</div>
 
   
-	<div> Neighborhood: 
-		{% include "_neighborhoods.html" %}
+	<div> Home Neighborhood: 
+		<select name="home_neighborhood">
+			{% for neighborhood in home_neighborhoods %}
+			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}
+			</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div> Work Neighborhood: 
+		<select name="work_neighborhood">
+			{% for neighborhood in work_neighborhoods %}
+			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}
+			</option>
+			{% endfor %}
+		</select>
+	</div>
 
     <h3>Interest categories</h3>
     {% include "_interestcategories.html" %}

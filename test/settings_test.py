@@ -23,43 +23,51 @@ class SettingsTest(unittest.TestCase):
     
   # UPDATE
   def test_update(self):
-    params = {'neighborhood' : 1, 
+    params = {'home_neighborhood' : 1,
+              'work_neighborhood' : 2,
               'quote' : 'test quote',
               'name' : 'test name',
               'avatar' : None }
         
     s = SettingsPage()
     v = Volunteer()
-    v.neighborhood = Neighborhood.get_by_id(params['neighborhood'])
+    v.home_neighborhood = Neighborhood.get_by_id(params['home_neighborhood'])
+    v.work_neighborhood = Neighborhood.get_by_id(params['work_neighborhood'])
     v.quote = params['quote']
     v.name = params['name']
     v.put()
-    self.assertEqual(v.neighborhood, Neighborhood.get_by_id(params['neighborhood']))
+    self.assertEqual(v.home_neighborhood, Neighborhood.get_by_id(params['home_neighborhood']))
+    self.assertEqual(v.work_neighborhood, Neighborhood.get_by_id(params['work_neighborhood']))
     self.assertEqual(v.quote, params['quote'])
     self.assertEqual(v.name, params['name'])
     self.assertEqual(v.volunteerinterestcategories.count(), 0)
-      
-    params = {'neighborhood' : 2,
+    
+    # now update the new volunteeer
+    params = {'home_neighborhood' : 2,
+              'work_neighborhood' : 3,
               'quote' : 'updated test quote',
               'name' : 'updated test name',
               'avatar' : None, 
               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1' }
     s.update(params, v)
-    self.assertEqual(v.neighborhood, Neighborhood.get_by_id(params['neighborhood']))
+    self.assertEqual(v.home_neighborhood, Neighborhood.get_by_id(params['home_neighborhood']))
+    self.assertEqual(v.work_neighborhood, Neighborhood.get_by_id(params['work_neighborhood']))
     self.assertEqual(v.quote, params['quote'])
     self.assertEqual(v.name, params['name'])
     self.assertEqual(v.volunteerinterestcategories.count(), 1)
     self.assertEqual(v.interestcategories().next().key().id, self.interestcategory1.key().id )
 
-    params = {'neighborhood' : 2,
+    params = {'home_neighborhood' : 2,
+              'work_neighborhood' : 3,
               'quote' : 'updated test quote',
               'name' : 'updated test name',
               'avatar' : None, 
               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1',
               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'], }
     s.update(params, v)
-    self.assertEqual(v.neighborhood, Neighborhood.get_by_id(params['neighborhood']))
+    self.assertEqual(v.home_neighborhood, Neighborhood.get_by_id(params['home_neighborhood']))
+    self.assertEqual(v.work_neighborhood, Neighborhood.get_by_id(params['work_neighborhood']))
     self.assertEqual(v.quote, params['quote'])
     self.assertEqual(v.name, params['name'])
     self.assertEqual(v.volunteerinterestcategories.count(), 1)

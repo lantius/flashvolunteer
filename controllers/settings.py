@@ -58,8 +58,8 @@ class SettingsPage(webapp.RequestHandler):
       volunteer.put();
     else:
       message = "Welcome back old volunteer"
-      if volunteer.neighborhood:
-        message += " from " + volunteer.neighborhood.name
+      if volunteer.home_neighborhood:
+        message += " from " + volunteer.home_neighborhood.name
     
     logout_url = users.create_logout_url(self.request.uri)
     
@@ -67,7 +67,8 @@ class SettingsPage(webapp.RequestHandler):
         'volunteer' : volunteer, 
         'logout_url': logout_url,
         'message': message,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer),
+        'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id
       }
@@ -78,7 +79,8 @@ class SettingsPage(webapp.RequestHandler):
   # UPDATE
   ################################################################################
   def update(self, params, volunteer):
-    volunteer.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+    volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+    volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
     
     if params['avatar']:
       volunteer.avatar = params['avatar']

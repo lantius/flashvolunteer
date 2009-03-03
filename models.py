@@ -6,6 +6,10 @@ from google.appengine.ext import db
 class Neighborhood(db.Model):
   name = db.StringProperty()
   # implicitly has .events and .volunteers properties
+
+  def url(self):
+    return '/neighborhoods/' + str(self.key().id())
+
       
 class InterestCategory(db.Model):
   name = db.StringProperty()
@@ -19,8 +23,12 @@ class Volunteer(db.Model):
   avatar = db.BlobProperty()
   quote = db.StringProperty()
   joinedon = db.DateProperty(auto_now_add=True)
-  neighborhood = db.ReferenceProperty(Neighborhood)
+  home_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'home_neighborhood')
+  work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
   session_id = db.StringProperty()
+
+  def url(self):
+    return '/volunteers/' + str(self.key().id())
 
   def events(self):
     return (ev.event for ev in self.eventvolunteers)
@@ -33,13 +41,19 @@ class Volunteer(db.Model):
 
   def followers(self):
     return (f.follower for f in self.volunteerfollowers)
+
+  def events_past_count(self):
+    return 68
   
+  def events_future_count(self):
+    return 69
+    
   # both following and follower
   def friends(self):
     fr = []
     for following in self.following():
       for follower in self.followers():
-        if following.key().id == follower.key().id:
+        if following.key().id() == follower.key().id():
           fr.append(following)
     return (f for f in fr)
   
@@ -89,7 +103,6 @@ class VolunteerInterestCategory(db.Model):
                                 required = True,
                                 collection_name = 'volunteerinterestcategories')
 
-
 class VolunteerFollower(db.Model):
   volunteer = db.ReferenceProperty(Volunteer,
                                    required = True,
@@ -98,3 +111,5 @@ class VolunteerFollower(db.Model):
                                   required = True,
                                   collection_name = 'volunteerfollowing')
                                   
+
+
