@@ -1,0 +1,14 @@
+
+		<div id="personinformation" class="softmodule">
+			<div class="moduletitle">
+				<h3>Information</h3>
+				<a href="/settings">edit</a>
+			</div>
+			<ul>
+				<li><span class="label">I live in:</span> <a href="{{ volunteer.homeneighborhoodurl.url }}">{{ volunteer.homeneighborhood }}</a></li>
+				<li><span class="label">I work in:</span> <a href="{{ volunteer.workneighborhoodurl.url }}">{{ volunteer.workneighborhood }}</a></li>
+				<li><span class="label">I have been a Flash Volunteer for:</span> {{ volunteer.careertime }}</li>
+				<li><span class="label">I have volunteered at:</span> {{ volunteer.pasteventscount }}</li>
+				<li><span class="label">I am signed up for:</span> {{ volunteer.upcomingeventscount }} upcoming events</li>
+			</ul>
+		</div><!--end information-->

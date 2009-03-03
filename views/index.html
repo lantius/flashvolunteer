@@ -12,55 +12,18 @@ class="current"
 
 <div id="leftthird">
 
-		<div id="personblock" class="softmodule">
-			{% if volunteer.avatar %}
-				<img src="/volunteers/{{volunteer.key.id}}/avatar" alt="{{ volunteer.user.nickname }}" />
-			{% else %}
-				<img src="/stylesheets/default-profile-pic.png" alt="{{ volunteer.user.nickname }}" />
-			{% endif %}
-			<ul>
-				<li id="personname">{{ volunteer.user.nickname }}</li>
-				{% if volunteer.personalstatement %}
-					<li id="personstatement">{{ volunteer.personalstatement }}</li>
-				{% endif %}
-				<li class="tallerlistitem"><a href="/settings">&raquo; Edit profile</a></li>
-			</ul>
-		</div><!--end personblock-->
-
-
-		<div id="personinformation" class="softmodule">
-			<div class="moduletitle">
-				<h3>Information</h3>
-				<a href="/settings">edit</a>
-			</div>
-			<ul>
-				<li><span class="label">I live in:</span> <a href="{{ volunteer.homeneighborhoodurl.url }}">{{ volunteer.homeneighborhood }}</a></li>
-				<li><span class="label">I work in:</span> <a href="{{ volunteer.workneighborhoodurl.url }}">{{ volunteer.workneighborhood }}</a></li>
-				<li><span class="label">I have been a Flash Volunteer for:</span> {{ volunteer.careertime }}</li>
-				<li><span class="label">I have volunteered at:</span> {{ volunteer.pasteventscount }}</li>
-				<li><span class="label">I am signed up for:</span> {{ volunteer.upcomingeventscount }} upcoming events</li>
-			</ul>
-		</div><!--end information-->
-
-		<div id="personfriends" class="softmodule">
-			<div class="moduletitle">
-				<h3>Friends</h3>
-			</div>
-			<ul>
-				<li id="numberfriends">{{ volunteer.friendscount }} friends</li>
-				{% for f in volunteer.following %}
-					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
-				{% endfor %}
-				{% for f in volunteer.follower %}
-					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
-				{% endfor %}
-				<li class="tallerlistitem"><a href="/friends">&raquo; View All Friends</a></li>
-			</ul>
-		</div><!--end friends-->
-	</div><!--end leftthird-->
+	{% include "volunteer_modules/_narrow_name.html" %}
+	{% include "volunteer_modules/_information.html" %}
+	{% include "friend_modules/_list_brief.html" %}
+	
+</div><!--end leftthird-->
 
 
 <div id="middlethird">
+
+	{% include "messaging_modules/_brief.html" %}
+	{% include "event_modules/_volunteer_upcoming.html" %}
+	
  <h1>Flash Volunteer</h1>
 
  Get started!  It's easy!

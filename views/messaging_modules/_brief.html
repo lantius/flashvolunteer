@@ -1,0 +1,17 @@
+
+	<div id="personinbox" class="softmodule">
+			<div class="moduletitle"><h3>Inbox</h3><a href="/messages">view all messages</a></div>
+			<div class="messages">
+				<ul>
+					<li>
+						<table>
+							<tr><th class="sender">From:</th><th class="subject">Subject:</th></tr>
+							{% for m in volutneer.messages %}
+								<tr><td class="sender"><a href="{{ m.sender.profile }}">{{ m.sender }}</a></td><td class="subject"><a href="{{ m.url }}">{{ m.subject }}</a></td></tr>
+							{% endfor %}
+						</table>
+					</li>
+					<li class="tallerlistitem"><a href="/messages">&raquo; View All Messages</a></li>
+				</ul>
+			</div>
+		</div><!--end profileinbox-->

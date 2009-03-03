@@ -1,0 +1,15 @@
+
+		<div id="personblock" class="softmodule">
+			{% if volunteer.avatar %}
+				<img src="/volunteers/{{volunteer.key.id}}/avatar" alt="{{ volunteer.user.nickname }}" />
+			{% else %}
+				<img src="/stylesheets/default-profile-pic.png" alt="{{ volunteer.user.nickname }}" />
+			{% endif %}
+			<ul>
+				<li id="personname">{{ volunteer.user.nickname }}</li>
+				{% if volunteer.personalstatement %}
+					<li id="personstatement">{{ volunteer.personalstatement }}</li>
+				{% endif %}
+				<li class="tallerlistitem"><a href="/settings">&raquo; Edit profile</a></li>
+			</ul>
+		</div><!--end personblock-->

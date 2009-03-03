@@ -1,0 +1,16 @@
+
+		<div id="personfriends" class="softmodule">
+			<div class="moduletitle">
+				<h3>Friends</h3>
+			</div>
+			<ul>
+				<li id="numberfriends">{{ volunteer.friendscount }} friends</li>
+				{% for f in volunteer.following %}
+					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
+				{% endfor %}
+				{% for f in volunteer.follower %}
+					<li><a href="{{f.url}}">{{ f.user.nickname }}</a></li>
+				{% endfor %}
+				<li class="tallerlistitem"><a href="/friends">&raquo; View All Friends</a></li>
+			</ul>
+		</div><!--end friends-->

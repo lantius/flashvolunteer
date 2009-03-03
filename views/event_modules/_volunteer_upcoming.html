@@ -1,0 +1,7 @@
+		
+		<div id="personupcomingevents" class="softmodule">
+			<div class="moduletitle"><h3>My Upcoming Events</h3></div>
+			{% for event in volunteer.upcomingevents %}
+				{% include "event_modules/_upcoming_brief.html" %}
+			{% endfor %}
+		</div><!--end profileupcomingevents-->
