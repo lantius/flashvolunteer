@@ -16,54 +16,8 @@ Flash Volunteer
 
 
 <div id="middlethird">
-
 	{% include "messaging_modules/_brief.html" %}
 	{% include "event_modules/_volunteer_upcoming.html" %}
-	
- <h1>Flash Volunteer</h1>
-
- Get started!  It's easy!
-	<BR> Todays message: {{ message }}
-	<div><a href='/settings'>{{ settings_text }}</a></div>	
-	<div><a href='/events'>{{ events_text }}</a></div>
-	
-{% for e in events.items %}{# for each type of event... #}
-	<h3>{{ e.0 }}:</h3>
-	<table>
-	{% for event in e.1 %}{# for each event of type...  #}
-	<tr>
-	<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
-	<td>{{event.neighborhood.name}}</td>
-	</tr>
-	{% endfor %}
-	</table>
-{% endfor %}
-
-{% for i in byinterest %}
-<h3>Interest: {{ i.name }}</h3>
-<table>
-  {% for event in i.events %}
-<tr>
-<td><a href="events/{{event.key.id}}">{{event.name}}</a></td>
-<td>{{event.neighborhood.name}}</td>
-</tr>
-  {% endfor %}
-</table>
-{% endfor %}
-
-<h3>Users you're following</h3><ul>
-{% for f in following %}
-<li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
-{% endfor %}
-</ul>
-<h3>Users following you</h3><ul>
-  {% for f in followers %}
-<li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
-
-  {% endfor %}
-  
-</ul>
-
 </div><!--end middlethird-->
 
 <div id="rightthird">
