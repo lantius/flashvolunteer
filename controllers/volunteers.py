@@ -47,9 +47,15 @@ class VolunteersPage(webapp.RequestHandler):
       logout_url = users.create_logout_url(self.request.uri)
 
     page_volunteer = Volunteer.get_by_id(int(volunteer_id))
+
+    if not page_volunteer:
+      self.error(404)
+      self.response.out.write('404 page! boo!')
+
     volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
-                        volunteer=page_volunteer, follower=volunteer).get()
-                        
+                      volunteer=page_volunteer, follower=volunteer).get()
+                      
+                      
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                         'volunteerfollower' : volunteerfollower,
                         'volunteer': page_volunteer,
@@ -57,7 +63,8 @@ class VolunteersPage(webapp.RequestHandler):
                         'logout_url': logout_url}
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteer.html')
     self.response.out.write(template.render(path, template_values))
-    
+
+
   ################################################################################
   # LIST
   ################################################################################
