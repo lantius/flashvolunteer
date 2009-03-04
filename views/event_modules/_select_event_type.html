@@ -1,0 +1,6 @@
+<select name="eventtype">
+	<option value="default">Event type...</option>
+	{% for type in events.items %}
+		<option value="{{ type.0 }}">{{ type.0 }}</option>
+	{% endfor %}
+</select>

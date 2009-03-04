@@ -9,6 +9,7 @@ from controllers.settings import SettingsPage
 from models import Volunteer, Neighborhood, Event, InterestCategory
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
+from controllers._helpers import NeighborhoodHelper
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
@@ -60,6 +61,7 @@ class MainPage(webapp.RequestHandler):
         'followers' : followers,
         'following' : following,
         'volunteer' : volunteer,
+        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'index.html')
     self.response.out.write(template.render(path, template_values))
