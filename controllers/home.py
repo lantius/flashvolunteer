@@ -21,9 +21,15 @@ from google.appengine.api import users
 class MainPage(webapp.RequestHandler):
   
   def get(self):
-    (user, volunteer) = Authorize.login(self)
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
+      
     events=""
     byinterest = []
+    
+    home_neighborhood = None
     
     if not volunteer:
       message = "Welcome volunteer"
@@ -39,9 +45,11 @@ class MainPage(webapp.RequestHandler):
       
       events = { 'Your events' : volunteer.events() }
       
+      
       if volunteer.home_neighborhood:
         message += " from " + volunteer.home_neighborhood.name
         events['Neighborhood events'] = volunteer.home_neighborhood.events
+        home_neighborhood = volunteer.home_neighborhood
         
       for ic in volunteer.interestcategories():
         if ic.events():
@@ -61,7 +69,7 @@ class MainPage(webapp.RequestHandler):
         'followers' : followers,
         'following' : following,
         'volunteer' : volunteer,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'neighborhoods': NeighborhoodHelper().selected(home_neighborhood),
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'index.html')
     self.response.out.write(template.render(path, template_values))

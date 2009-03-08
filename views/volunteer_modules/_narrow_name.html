@@ -1,12 +1,17 @@
 
 		<div id="personblock" class="softmodule">
 		{% if volunteer.avatar %}
-			<img src="/volunteers/{{volunteer.key.id}}/avatar" alt="{{ volunteer.user.nickname }}" />
+			<img src="/volunteers/{{volunteer.key.id}}/avatar" alt=
+				{% if volunteer.name %}"{{ volunteer.name }}"{% else %}"{{ volunteer.user.nickname }}"{% endif %}
+			/>
 		{% else %}
-			<img src="/stylesheets/default-profile-pic.png" alt="{{ volunteer.user.nickname }}" />
+			<img src="/stylesheets/default-profile-pic.png" alt=
+				{% if volunteer.name %}"{{ volunteer.name }}"{% else %}"{{ volunteer.user.nickname }}"{% endif %}
+			/>
 		{% endif %}
 			<ul>
-				<li id="personname">{{ volunteer.user.nickname }}</li>
+				<li id="personname">{% if volunteer.name %}{{ volunteer.name }}{% else %}{{ volunteer.user.nickname }}{% endif %}
+				</li>
 				{% if volunteer.quote %}
 					<li id="personstatement">{{ volunteer.quote }}</li>
 				{% endif %}

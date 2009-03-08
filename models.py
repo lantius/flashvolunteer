@@ -67,7 +67,8 @@ class Event(db.Model):
   name = db.StringProperty()
   neighborhood = db.ReferenceProperty(Neighborhood,
                                       collection_name = 'events')
-  date = db.DateProperty()
+  date_created = db.DateProperty(auto_now_add=True)
+  date = db.DateTimeProperty()
   
   def volunteers(self):
      return (ev.volunteer for ev in self.eventvolunteers)
