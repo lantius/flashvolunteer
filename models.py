@@ -70,6 +70,9 @@ class Event(db.Model):
   date_created = db.DateProperty(auto_now_add=True)
   date = db.DateTimeProperty()
   
+  def url(self):
+    return '/events/' + str(self.key().id())
+  
   def volunteers(self):
      return (ev.volunteer for ev in self.eventvolunteers)
   

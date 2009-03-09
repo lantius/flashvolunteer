@@ -1,7 +1,7 @@
 <table border="1">
    {% for ev in eventvolunteer %}
     <tr>
-	<td><a href="/events/{{ev.event.key.id}}">{{ev.event.name}}</a></td>
+	<td><a href="{{ev.event.url}}">{{ev.event.name}}</a></td>
 	<td>{{ev.event.neighborhood.name}}</td>
 	{% if ev.isowner %}
 	<td><form action="/events" method="post">

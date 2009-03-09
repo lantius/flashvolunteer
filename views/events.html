@@ -8,13 +8,13 @@ class="current"
 {% endblock %}
 
 {% block content %}
-	<h1>Create an Event</h1>
-	<div>Today's Message: {{ message }} </div>
-	<form action="/events" method="post">
-		Neighborhood: {% include "_neighborhoods.html" %}
+  <h1>Create an Event</h1>
+  <div>Today's Message: {{ message }} </div>
+  <form action="/events" method="post">
+    Neighborhood: {% include "_neighborhoods.html" %}
 <BR>
-		Event Title:<input type="text" name="name"><BR>
-		  
+    Title:<input type="text" name="name"><BR>
+		Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
 		<h3>Interest categories</h3>
     {% include "_interestcategories.html" %}
 		  

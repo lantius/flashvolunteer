@@ -1,7 +1,7 @@
 
 		<div id="personblock" class="softmodule">
 		{% if volunteer.avatar %}
-			<img src="/volunteers/{{volunteer.key.id}}/avatar" alt=
+			<img src="{{volunteer.url}}/avatar" alt=
 				{% if volunteer.name %}"{{ volunteer.name }}"{% else %}"{{ volunteer.user.nickname }}"{% endif %}
 			/>
 		{% else %}

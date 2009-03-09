@@ -15,7 +15,7 @@ Volunteer Settings
   
   <div><strong>Profile picture:</strong>
 		{% if volunteer.avatar %}
-			<br/><img src="/volunteers/{{volunteer.key.id}}/avatar" alt="{{ volunteer.user.nickname }}" /><br/>
+			<br/><img src="{{volunteer.url}}/avatar" alt="{{ volunteer.user.nickname }}" /><br/>
 		{% endif %}
   <input type="file" name="avatar" /> (JPEG format only)</div>
   

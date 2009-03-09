@@ -6,7 +6,9 @@ Flash Volunteer Event : {{event.name}}
 
 {% block content %}
 <h1>{{event.name}}</h1>
-Being held in {{event.neighborhood.name}}
+Being held in {{event.neighborhood.name}} on {{event.date|date:"F jS, Y"}}
+<br/><br/>
+Created on {{event.date_created|date:"F jS, Y"}}
 
 <h3>Interest categories</h3><ul>
 {% for ic in event.interestcategories %}
@@ -21,11 +23,11 @@ Being held in {{event.neighborhood.name}}
 	{% else %}
 	Created by<ul>
 	{% for owner in owners %}
-		<li><a href="/volunteers/{{owner.volunteer.key.id}}">{{owner.volunteer.user.nickname}}</a></li>
+		<li><a href="{{owner.volunteer.url}}">{{owner.volunteer.user.nickname}}</a></li>
 	{% endfor %}
 	</ul>
   	You're a volunteer 
-	<form action="/events/{{ event.key.id }}/volunteer" method="post">
+	<form action="{{event.url}}/volunteer" method="post">
 		<input type=hidden name="delete" value="true">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=submit value="unvolunteer">
@@ -33,7 +35,7 @@ Being held in {{event.neighborhood.name}}
 	{% endif %}
 {% else %}
 	Click here to volunteer for this event: 
-	<form action="/events/{{ event.key.id }}/volunteer" method="post">
+	<form action="{{event.url}}/volunteer" method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=submit value="volunteer!">
 	</form>
@@ -43,7 +45,7 @@ Being held in {{event.neighborhood.name}}
 <h3>Signed up volunteers:</h3>
 <ul>
 {% for volunteer in event.volunteers %}
-<li><a href="/volunteers/{{volunteer.key.id}}">{{ volunteer.user.nickname }}</a></li>
+<li><a href="{{volunteer.url}}">{{ volunteer.user.nickname }}</a></li>
 {% endfor %}
 </ul>
 </p>

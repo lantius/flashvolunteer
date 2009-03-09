@@ -7,7 +7,7 @@ from controllers._auth import Authorize
 
 from controllers.settings import SettingsPage
 from models import Volunteer, Neighborhood, Event, InterestCategory
-from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
+from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, SearchEventsPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import NeighborhoodHelper
 from controllers.neighborhoods import NeighborhoodsPage
@@ -135,6 +135,7 @@ def main():
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
                                      ('/events(|/\d+)', EventsPage),
+                                     ('/events/search(.*)', SearchEventsPage),
                                      ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
                                      ('/friends', FriendsPage),
                                      ('/help', HelpPage),

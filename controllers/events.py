@@ -1,4 +1,4 @@
-import os, string
+import os, string, datetime
 
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
@@ -112,6 +112,7 @@ class EventsPage(webapp.RequestHandler):
   def create(self, params, volunteer):
     event = Event()
     event.name = params['name']
+    event.date = datetime.datetime.strptime(params['date'], "%m/%d/%Y")
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
     
     # TODO: Check to make sure values are present and valid
@@ -208,7 +209,7 @@ class EditEventPage(webapp.RequestHandler):
       'eventvolunteer': eventvolunteer, 
       'owners': owners, 
       'logout_url': logout_url, 
-      'neighborhoods': NeighborhoodHelper().selected(event.neighborho),
+      'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
       'interestcategories' : InterestCategoryHelper().selected(event),
       'session_id': volunteer.session_id,
     }
@@ -225,6 +226,7 @@ class EditEventPage(webapp.RequestHandler):
                            volunteer=volunteer, event=event).get()
     if eventvolunteer:
       event.name = params['name']
+      event.date = datetime.datetime.strptime(params['date'], "%m/%d/%Y")
       event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
       
       for interestcategory in InterestCategory.all():
@@ -238,4 +240,58 @@ class EditEventPage(webapp.RequestHandler):
           eic.delete()
           
       event.put()
+
+
+################################################################################
+# SearchEventsPage
+################################################################################
+class SearchEventsPage(webapp.RequestHandler):
+  ################################################################################
+  # GET
+  ################################################################################
+  def get(self, url_data):
+    params = Parameters.parameterize(self.request)
+    self.search(params)
+      
+  def search(self, params):
+    (neighborhood, fromdate, todate, events)  = self.do_search(params)
+    template_values = { 
+      'neighborhood' : neighborhood,
+      'fromdate' : fromdate,
+      'todate' : todate,
+      'events' : events
+    }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events_search.html')
+    self.response.out.write(template.render(path, template_values))
     
+  def do_search(self, params):
+    events_query = Event.all()
+    neighborhood = None
+    todate = None
+    fromdate = None
+    
+    if params['neighborhood']:
+      try:
+        neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+        events_query.filter('neighborhood =', neighborhood)
+      except:
+        pass
+      
+    if params['fromdate']:
+      try:
+        fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
+        events_query.filter('date >=', fromdate)
+      except:
+        pass
+
+    if params['todate']:
+      try:
+        todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
+        events_query.filter('date <=', todate)
+      except:
+        pass
+      
+    events = events_query.fetch(limit = 25)
+    
+    return (neighborhood, fromdate, todate, events)
+  

@@ -19,19 +19,19 @@ They like:
 <P>
 Following:<ul>
 {% for f in volunteer.following %}
-<li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
+<li><a href="{{f.url}}">{{f.user.nickname}}</a></li>
 {% endfor %}</ul>
 </p>
 
 <p>Followers:
   {% if volunteerfollower %}
-	<form action="/volunteers/{{ volunteer.key.id }}/follow" method="post">
+	<form action="{{volunteer.url}}/follow" method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=hidden name="delete" value="true">
 		<input type=submit value="stop following me!">
 	</form>
   {% else %}
-	<form action="/volunteers/{{ volunteer.key.id }}/follow" method="post">
+	<form action="{{volunteer.url}}/follow" method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=submit value="follow me!">
 	</form>
@@ -39,7 +39,7 @@ Following:<ul>
   
 <ul>
   {% for f in volunteer.followers %}
-  <li><a href="/volunteers/{{f.key.id}}">{{f.user.nickname}}</a></li>
+  <li><a href="{{f.url}}">{{f.user.nickname}}</a></li>
 
   {% endfor %}
 </ul>
