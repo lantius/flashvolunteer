@@ -8,7 +8,7 @@ from models import Neighborhood
 class NeighborhoodsTest(unittest.TestCase):
   
   #dev_appserver.py can only handle on request at a time. Be smarter (run a second server)
-  def test_url(self):
+  def test_url(self):      
       neighborhood = Neighborhood()
       neighborhood.put()
       #response = urlfetch.fetch(neighborhood.url())

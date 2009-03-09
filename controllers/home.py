@@ -10,6 +10,9 @@ from models import Volunteer, Neighborhood, Event, InterestCategory
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import NeighborhoodHelper
+from controllers.neighborhoods import NeighborhoodsPage
+from controllers.friends import FriendsPage
+from controllers.help import HelpPage
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
@@ -131,8 +134,11 @@ def main():
                                      ('/delete', SettingsPage),
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
-                                     ('/events(|/\d+)', EventsPage),                                
-                                     #TODO break out cases to be explicit below
+                                     ('/events(|/\d+)', EventsPage),
+                                     ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
+                                     ('/friends', FriendsPage),
+                                     ('/help', HelpPage),
+                                    #TODO break out cases to be explicit below
                                      ('/_init', InitializeStore),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),
