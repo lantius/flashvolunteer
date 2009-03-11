@@ -1,0 +1,55 @@
+
+		<div id="findaneventwide" class="hardmodule">
+			<div class="moduletitle"><h3>Find An Event</h3></div>
+			<form action="/events/search" method="get">
+				<ul class="leftformlist">
+					<li>
+						{% include "neighborhood_modules/_select_neighborhood.html" %}
+					</li>
+					<li>
+						{% include "event_modules/_select_event_type.html" %}
+					</li>
+				</ul>
+				<ul class="rightformlist" >
+					<li>
+						<span class="label">Date Range:</span><br />
+						<input class="daterange" name="fromdate" type="text" value="From date" />
+						<input class="daterange" name="todate" type="text" value="To date" />
+					</li>
+					<li>
+						<select name="time">
+							<option value="default">Time...</option>
+														
+								<option>6am</option>
+								<option>7am</option>
+								<option>8am</option>
+								<option>9am</option>
+								<option>10am</option>
+								<option>11am</option>
+								<option>12pm</option>
+								<option>1pm</option>
+								<option>2pm</option>
+								<option>3pm</option>
+								<option>4pm</option>
+								<option>5pm</option>
+								<option>6pm</option>
+								<option>7pm</option>
+								<option>8pm</option>
+								<option>9pm</option>
+								<option>10pm</option>
+								<option>11pm</option>
+								<option>12am</option>
+								<option>1am</option>
+								<option>2am</option>
+								<option>3am</option>
+								<option>4am</option>
+								<option>5am</option>	
+
+						</select>
+					</li>
+					<li style="text-align:right; padding-right: 10px;">
+						<input type="submit"  value="submit" />
+					</li>
+				</ul>
+			</form>
+		</div><!--end findevent-->

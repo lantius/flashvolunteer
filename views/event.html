@@ -4,7 +4,17 @@
 Flash Volunteer Event : {{event.name}}
 {% endblock title %}
 
+{% block eventsactive %}
+class="current"
+{% endblock %}
+
 {% block content %}
+
+<div id="lefthalf">
+
+
+
+
 <h1>{{event.name}}</h1>
 Being held in {{event.neighborhood.name}} on {{event.date|date:"F jS, Y"}}
 <br/><br/>
@@ -49,5 +59,15 @@ Created on {{event.date_created|date:"F jS, Y"}}
 {% endfor %}
 </ul>
 </p>
+
+
+
+
+</div>
+
+<div id="righthalf">
+
+</div>
+
 {% endblock content %}
 
