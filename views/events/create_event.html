@@ -1,0 +1,35 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Events
+{% endblock title %}
+
+{% block createeventsactive %}
+class="current"
+{% endblock %}
+
+{% block content %}
+
+<div id="middlewhole">
+  <h1>Create an Event</h1>
+  <div>Today's Message: {{ message }} </div>
+  <form action="/events" method="post">
+    Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}
+<BR>
+    Title:<input type="text" name="name"><BR>
+		Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
+		<h3>Interest categories</h3>
+    {% include "_interestcategories.html" %}
+		  
+		<input type="submit" value="Create Event">
+		<input type=hidden name="session_id" value="{{ session_id }}">
+	</form>
+	<div>
+	{% if eventvolunteer %}
+	   Your events:<BR>{% include "_events.html" %}
+	{% else %}
+		Create an Event</br>
+	{% endif %}
+	</div>
+</div><!--end middlewhole-->
+
+{% endblock}

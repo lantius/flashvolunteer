@@ -1,48 +1,22 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Create an Event
+Create Events
 {% endblock title %}
 
 {% block eventsactive %}
 class="current"
 {% endblock %}
 
-{% block content %}
 
+{% block content %}
 
 <div id="lefthalf">
 	{% include "_volunteer_upcoming.html" %}
+	{% include "_volunteer_past.html" %}
 </div><!--end lefthalf-->
 
 <div id="righthalf">
 	{% include "_find_event_wide.html" %}
 </div><!--end righthalf-->
-
-
-  <h1>Create an Event</h1>
-  <div>Today's Message: {{ message }} </div>
-  <form action="/events" method="post">
-    Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}
-<BR>
-	Title:<input type="text" name="name"><BR>
-	Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
-	Time:<input type="text" name="time"> ([00-23]:[00-59])<br/>
-
-		<h3>Interest categories</h3>
-    {% include "_interestcategories.html" %}
-		  
-		<input type="submit" value="Create Event">
-		<input type=hidden name="session_id" value="{{ session_id }}">
-	</form>
-	<div>
-	{% if eventvolunteer %}
-	   Your events:<BR>{% include "_events.html" %}
-	{% else %}
-		Create an Event</br>
-	{% endif %}
-	</div>
-
 	
 {% endblock content %}
-
-
