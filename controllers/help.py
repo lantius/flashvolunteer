@@ -18,6 +18,6 @@ class HelpPage(webapp.RequestHandler):
     template_values = {
         'logout_url': logout_url,
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'help.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'help', 'help.html')
     self.response.out.write(template.render(path, template_values))
     return

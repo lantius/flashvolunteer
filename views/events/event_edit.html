@@ -1,4 +1,4 @@
-{% extends "_layout.html" %}
+{% extends "../_layout.html" %}
 
 {% block title %}
 Flash Volunteer Event : {{event.name}} : Edit
@@ -9,10 +9,10 @@ Flash Volunteer Event : {{event.name}} : Edit
 <form method="post" action="{{event.url}}/edit">
 	<h1>Editing <input type="text" name="name" value="{{event.name}}"></h1>
 	Date:<input type="text" name="date" value="{{event.date|date:"m/d/Y"}}"> (mm/dd/yyyy)<br/>
-	<p>Being held in {% include "_neighborhoods.html" %}</p>
+	<p>Being held in {% include "../neighborhoods/_neighborhoods.html" %}</p>
 
   <h3>Interest categories</h3>
-  {% include "_interestcategories.html" %}
+  {% include "../interestcategories/_interestcategories.html" %}
 
 	<a href="{{event.url}}">Cancel</a> 
 	<input type=hidden name="session_id" value="{{ session_id }}">

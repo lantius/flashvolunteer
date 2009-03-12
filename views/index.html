@@ -9,21 +9,21 @@ Flash Volunteer
 {% block content %}
 
 <div id="leftthird">
-	{% include "volunteer_modules/_narrow_name.html" %}
-	{% include "volunteer_modules/_information.html" %}
-	{% include "friend_modules/_list_brief.html" %}
+	{% include "volunteers/_narrow_name.html" %}
+	{% include "volunteers/_information.html" %}
+	{% include "volunteers/_list_brief.html" %}
 </div><!--end leftthird-->
 
 
 <div id="middlethird">
-	{% include "messaging_modules/_brief.html" %}
-	{% include "event_modules/_volunteer_upcoming.html" %}
+	{% include "messages/_brief.html" %}
+	{% include "events/_volunteer_upcoming.html" %}
 </div><!--end middlethird-->
 
 <div id="rightthird">
-	{% include "event_modules/_find_event.html" %}
-	{% include "neighborhood_modules/_most_active_brief.html" %}
-	{% include "help_modules/_faq_links_brief.html" %}
+	{% include "events/_find_event.html" %}
+	{% include "neighborhoods/_most_active_brief.html" %}
+	{% include "help/_faq_links_brief.html" %}
 </div><!--end rightthird-->
 
 {% endblock content %}

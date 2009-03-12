@@ -18,7 +18,7 @@ class NeighborhoodsPage(webapp.RequestHandler):
     template_values = {
         'logout_url': logout_url,
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')
     self.response.out.write(template.render(path, template_values))
     return
     

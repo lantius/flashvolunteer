@@ -18,6 +18,6 @@ class FriendsPage(webapp.RequestHandler):
     template_values = {
         'logout_url': logout_url,
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'friends.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'friends.html')
     self.response.out.write(template.render(path, template_values))
     return

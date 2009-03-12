@@ -72,7 +72,7 @@ class SettingsPage(webapp.RequestHandler):
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'settings.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
     self.response.out.write(template.render(path, template_values))
 
   ################################################################################

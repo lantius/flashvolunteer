@@ -64,7 +64,7 @@ class EventsPage(webapp.RequestHandler):
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
     
   ################################################################################
@@ -89,7 +89,7 @@ class EventsPage(webapp.RequestHandler):
       session_id = volunteer.session_id
                            
     template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url, 'session_id': session_id}
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))
      
   ################################################################################
@@ -214,7 +214,7 @@ class EditEventPage(webapp.RequestHandler):
       'interestcategories' : InterestCategoryHelper().selected(event),
       'session_id': volunteer.session_id,
     }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'event_edit.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
     self.response.out.write(template.render(path, template_values))
   
   ################################################################################
@@ -262,7 +262,7 @@ class SearchEventsPage(webapp.RequestHandler):
       'todate' : todate,
       'events' : events
     }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events_search.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
     self.response.out.write(template.render(path, template_values))
     
   def do_search(self, params):

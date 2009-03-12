@@ -1,4 +1,4 @@
-{% extends "_layout.html" %}
+{% extends "../_layout.html" %}
 {% block title %}
 Volunteer Settings
 {% endblock title %}
@@ -45,7 +45,7 @@ Volunteer Settings
 	</div>
 
     <div><h3>Interest categories</h3>
-    {% include "_interestcategories.html" %}
+    {% include "../interestcategories/_interestcategories.html" %}
 
 <p>		<input type=submit value="Update">
 		<input type=hidden name="session_id" value="{{ session_id }}">

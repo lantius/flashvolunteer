@@ -61,7 +61,7 @@ class VolunteersPage(webapp.RequestHandler):
                         'volunteer': page_volunteer,
                         'session_id' : volunteer.session_id,
                         'logout_url': logout_url}
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteer.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteer.html')
     self.response.out.write(template.render(path, template_values))
 
 

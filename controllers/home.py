@@ -99,7 +99,7 @@ class InitializeStore(webapp.RequestHandler):
       c.put()  
   
   def is_initialized(self):
-    n = Neighborhood.gql("WHERE name = :name", name = "Capital Hill").get()
+    n = Neighborhood.gql("WHERE name = :name", name = "Capitol Hill").get()
     if n:
       return True
     

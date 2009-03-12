@@ -1,4 +1,4 @@
-{% extends "_layout.html" %}
+{% extends "../_layout.html" %}
 {% block title %}
 Create an Event
 {% endblock title %}
@@ -11,18 +11,18 @@ class="current"
 
 
 <div id="lefthalf">
-	{% include "event_modules/_volunteer_upcoming.html" %}
+	{% include "_volunteer_upcoming.html" %}
 </div><!--end lefthalf-->
 
 <div id="righthalf">
-	{% include "event_modules/_find_event_wide.html" %}
+	{% include "_find_event_wide.html" %}
 </div><!--end righthalf-->
 
 
   <h1>Create an Event</h1>
   <div>Today's Message: {{ message }} </div>
   <form action="/events" method="post">
-    Neighborhood: {% include "neighborhood_modules/_select_neighborhood.html" %}
+    Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}
 <BR>
     Title:<input type="text" name="name"><BR>
 		Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
