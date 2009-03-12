@@ -3,8 +3,11 @@
 Volunteer Settings
 {% endblock title %}
 
+{% block profileactive %}class="current"{% endblock profileactive %}
+
+
 {% block content %}
-  <h1>Volunteer Settings</h1>
+  <h1>Volunteer Profile</h1>
 	<BR> Todays message: {{ message }}
 	<BR> Manage your settings:
   <form action="/settings" method="post" enctype="multipart/form-data".>
@@ -41,7 +44,7 @@ Volunteer Settings
 		</select>
 	</div>
 
-    <h3>Interest categories</h3>
+    <div><h3>Interest categories</h3>
     {% include "_interestcategories.html" %}
 
 <p>		<input type=submit value="Update">
