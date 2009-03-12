@@ -80,6 +80,18 @@ class Event(db.Model):
   date_created = db.DateProperty(auto_now_add=True)
   date = db.DateTimeProperty()
   
+  def get_date(self):
+    if not self.date:
+      return "no date set"
+  
+    return self.date.strftime("%A, %d %B %Y")
+  
+  def get_time(self):
+    if not self.date:
+      return "no time set"
+      
+    return self.date.strftime("%I:%M%p")
+  
   def url(self):
     return '/events/' + str(self.key().id())
     

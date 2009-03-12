@@ -113,7 +113,7 @@ class EventsPage(webapp.RequestHandler):
   def create(self, params, volunteer):
     event = Event()
     event.name = params['name']
-    event.date = datetime.datetime.strptime(params['date'], "%m/%d/%Y")
+    event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
     
     # TODO: Check to make sure values are present and valid
@@ -227,7 +227,7 @@ class EditEventPage(webapp.RequestHandler):
                            volunteer=volunteer, event=event).get()
     if eventvolunteer:
       event.name = params['name']
-      event.date = datetime.datetime.strptime(params['date'], "%m/%d/%Y")
+      event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
       event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
       
       for interestcategory in InterestCategory.all():

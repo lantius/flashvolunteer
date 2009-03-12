@@ -2,8 +2,8 @@
 			<div class="shortevent">
 				<ul>
 					<li><span class="label">Event:</span> {{ event.name }}</li>
-					<li><span class="label">Date:</span> {{ event.date }}</li>
-					<li><span class="label">Time:</span> {{ event.time }}</li>
+					<li><span class="label">Date:</span> {{ event.get_date }}</li>
+					<li><span class="label">Time:</span> {{ event.get_time }}</li>
 					<li><span class="label">Neighorhood:</span> <a href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>
 					<li><span class="label">Location:</span> {{ event.location }} (<a href="{{ event.maplink }}">see map</a>)</li>
 					<li><span class="label">Host:</span> {{ event.hosts }}</li>

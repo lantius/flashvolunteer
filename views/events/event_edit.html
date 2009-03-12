@@ -9,6 +9,7 @@ Flash Volunteer Event : {{event.name}} : Edit
 <form method="post" action="{{event.url}}/edit">
 	<h1>Editing <input type="text" name="name" value="{{event.name}}"></h1>
 	Date:<input type="text" name="date" value="{{event.date|date:"m/d/Y"}}"> (mm/dd/yyyy)<br/>
+	Time:<input type="text" name="time" value="{{event.date|date:"H:i"}}"> ([00-23]:[00-59])<br/>
 	<p>Being held in {% include "../neighborhoods/_neighborhoods.html" %}</p>
 
   <h3>Interest categories</h3>
