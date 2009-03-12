@@ -250,7 +250,6 @@ class EditEventPage(webapp.RequestHandler):
           
       event.put()
 
-
 ################################################################################
 # SearchEventsPage
 ################################################################################
@@ -303,4 +302,41 @@ class SearchEventsPage(webapp.RequestHandler):
     events = events_query.fetch(limit = 25)
     
     return (neighborhood, fromdate, todate, events)
+  
+  
+################################################################################
+# SearchEventsPage
+################################################################################
+class NewEventPage(webapp.RequestHandler):
+  ################################################################################
+  # GET
+  ################################################################################
+  def get(self):
+    self.new()
+
+  ################################################################################
+  # GET
+  ################################################################################
+  def new(self):
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
+
+    message = "default message"
+    logout_url = users.create_logout_url(self.request.uri)
+    
+    template_values = {
+        'logout_url': logout_url,
+        'message': message,
+        'volunteer': volunteer,
+        'eventvolunteer': volunteer.eventvolunteers,
+        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'interestcategories' : InterestCategoryHelper().selected(volunteer),
+        'session_id': volunteer.session_id
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
+    self.response.out.write(template.render(path, template_values))
+    
+
   
