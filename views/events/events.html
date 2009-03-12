@@ -24,8 +24,10 @@ class="current"
   <form action="/events" method="post">
     Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}
 <BR>
-    Title:<input type="text" name="name"><BR>
-		Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
+	Title:<input type="text" name="name"><BR>
+	Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
+	Time:<input type="text" name="time"> ([00-23]:[00-59])<br/>
+
 		<h3>Interest categories</h3>
     {% include "_interestcategories.html" %}
 		  

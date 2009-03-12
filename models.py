@@ -1,8 +1,12 @@
+import datetime
 from google.appengine.ext import db
 
 ################################################################################
 # models
 ################################################################################
+
+################################################################################
+# Neighborhood
 class Neighborhood(db.Model):
   name = db.StringProperty()
   # implicitly has .events and .volunteers properties
@@ -10,13 +14,16 @@ class Neighborhood(db.Model):
   def url(self):
     return '/neighborhoods/' + str(self.key().id())
 
-      
+################################################################################
+# InterestCategory
 class InterestCategory(db.Model):
   name = db.StringProperty()
 
   def events(self):
     return (eic.event for eic in self.eventinterestcategories)
 
+################################################################################
+# Volunteer
 class Volunteer(db.Model):
   user = db.UserProperty()
   name = db.StringProperty()
@@ -32,7 +39,6 @@ class Volunteer(db.Model):
       return self.name
 
     return self.user.nickname
-    
     
   def url(self):
     return '/volunteers/' + str(self.key().id())
@@ -72,7 +78,10 @@ class Volunteer(db.Model):
       return True
     
     return False
-  
+
+
+################################################################################
+# Event
 class Event(db.Model):
   name = db.StringProperty()
   neighborhood = db.ReferenceProperty(Neighborhood,
@@ -108,6 +117,13 @@ class Event(db.Model):
 
   def interestcategories(self):
      return (eic.interestcategory for eic in self.eventinterestcategories)
+     
+  def validate(self, params):
+    try:
+      datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
+      return True
+    except:
+      return False
 
 ################################################################################
 # "join" models

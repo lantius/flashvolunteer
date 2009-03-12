@@ -112,6 +112,10 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   def create(self, params, volunteer):
     event = Event()
+    
+    if not event.validate(params):
+      return None
+      
     event.name = params['name']
     event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
@@ -190,10 +194,11 @@ class EditEventPage(webapp.RequestHandler):
     self.redirect("/events/" + url_data)
     
   ################################################################################
-  # EDIT
+  # EDIT (is the get)
   ################################################################################
   def edit(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
+  
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
@@ -222,6 +227,9 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def update(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
+    
+    if not event.validate(params):
+      return None
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()

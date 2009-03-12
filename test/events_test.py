@@ -44,7 +44,7 @@ class EventsTest(unittest.TestCase):
     self.assertTrue(owner.isowner)
     self.assertEqual(event.name, params['name'])
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])
-    self.assertEqual(event.date.strftime("%I:%M%p"), params['time'])
+    self.assertEqual(event.date.strftime("%H:%M"), params['time'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
     
     self.assertEqual(event.interestcategories().next().key().id, self.interestcategory1.key().id )
