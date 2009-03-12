@@ -27,6 +27,13 @@ class Volunteer(db.Model):
   work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
   session_id = db.StringProperty()
 
+  def get_name(self):
+    if self.name:
+      return self.name
+
+    return self.user.nickname
+    
+    
   def url(self):
     return '/volunteers/' + str(self.key().id())
 
@@ -47,6 +54,9 @@ class Volunteer(db.Model):
   
   def events_future_count(self):
     return 69
+    
+  def events_future(self):
+    return self.events()
     
   # both following and follower
   def friends(self):
@@ -72,10 +82,18 @@ class Event(db.Model):
   
   def url(self):
     return '/events/' + str(self.key().id())
-  
+    
   def volunteers(self):
      return (ev.volunteer for ev in self.eventvolunteers)
-  
+     
+  def hosts(self):
+    hosts = ""
+    for ev in self.eventvolunteers:
+      if ev.isowner:
+        hosts += "<a href='" + ev.volunteer.url() + "'>" + ev.volunteer.get_name() + "</a> "
+    
+    return hosts
+
   def interestcategories(self):
      return (eic.interestcategory for eic in self.eventinterestcategories)
 

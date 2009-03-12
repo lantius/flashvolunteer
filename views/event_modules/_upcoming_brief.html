@@ -1,11 +1,12 @@
 
 			<div class="shortevent">
 				<ul>
-					<li><span class="label">Event:</span> {{ event.title }}</li>
+					<li><span class="label">Event:</span> {{ event.name }}</li>
 					<li><span class="label">Date:</span> {{ event.date }}</li>
 					<li><span class="label">Time:</span> {{ event.time }}</li>
+					<li><span class="label">Neighorhood:</span> <a href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>
 					<li><span class="label">Location:</span> {{ event.location }} (<a href="{{ event.maplink }}">see map</a>)</li>
-					<li><span class="label">Host:</span> <a href="{{ event.hostlink }}">{{ event.host }}</a></li>
+					<li><span class="label">Host:</span> {{ event.hosts }}</li>
 					<li><span class="label">Current Attendees:</span> {{ event.numberofattendees }} (<a href="{{ event.attendeeslist }}">see list</a>)</li>
 					<li class="tallerlistitem"><a href="{{ event.url }}">&raquo; View Event Details</a></li>
 				</ul>

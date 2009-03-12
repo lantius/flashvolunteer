@@ -42,7 +42,7 @@ class MainPage(webapp.RequestHandler):
       followers = {}
       following = {}
     else:
-      message = "Welcome back old volunteer " + volunteer.user.nickname()
+      message = "Welcome back old volunteer " + volunteer.get_name()
       settings_text = "Account Settings"
       events_text="create_an event!"
       

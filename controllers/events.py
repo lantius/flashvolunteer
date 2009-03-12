@@ -58,6 +58,7 @@ class EventsPage(webapp.RequestHandler):
     template_values = {
         'logout_url': logout_url,
         'message': message,
+        'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),

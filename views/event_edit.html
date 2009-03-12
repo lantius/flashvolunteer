@@ -22,7 +22,7 @@ Flash Volunteer Event : {{event.name}} : Edit
 <h3>Signed up volunteers:</h3>
 <ul>
 {% for volunteer in event.volunteers %}
-<li>{{ volunteer.user.nickname }}</li>
+<li>{{ volunteer.get_name }}</li>
 {% endfor %}
 </ul>
 </p>

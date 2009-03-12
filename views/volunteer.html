@@ -1,10 +1,10 @@
 {% extends "_layout.html" %}
 {% block title %}
-{{ volunteer.user.nickname }}'s public page
+{{ volunteer.get_name }}'s public page
 {% endblock title %}
 
 {% block content %}
-<h1>{{volunteer.user.nickname}}</h1><BR>
+<h1>{{volunteer.get_name}}</h1><BR>
 They rep {{volunteer.home_neighborhood.name}}
 <BR>
 Their events: {% include "_events.html" %}
@@ -19,7 +19,7 @@ They like:
 <P>
 Following:<ul>
 {% for f in volunteer.following %}
-<li><a href="{{f.url}}">{{f.user.nickname}}</a></li>
+<li><a href="{{f.url}}">{{f.get_name}}</a></li>
 {% endfor %}</ul>
 </p>
 

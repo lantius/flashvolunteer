@@ -33,7 +33,7 @@ Created on {{event.date_created|date:"F jS, Y"}}
 	{% else %}
 	Created by<ul>
 	{% for owner in owners %}
-		<li><a href="{{owner.volunteer.url}}">{{owner.volunteer.user.nickname}}</a></li>
+		<li><a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a></li>
 	{% endfor %}
 	</ul>
   	You're a volunteer 
