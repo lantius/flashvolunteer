@@ -74,7 +74,7 @@ class MainPage(webapp.RequestHandler):
         'volunteer' : volunteer,
         'neighborhoods': NeighborhoodHelper().selected(home_neighborhood),
       }
-    path = os.path.join(os.path.dirname(__file__), '..', 'views', 'index.html')
+    path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
     self.response.out.write(template.render(path, template_values))
 
 class InitializeStore(webapp.RequestHandler):
