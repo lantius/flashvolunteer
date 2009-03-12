@@ -86,7 +86,7 @@ class InitializeStore(webapp.RequestHandler):
     return
   
   def initialize_store(self):
-    neighborhoods = ("Capital Hill", "West Seattle", "University District", "Wedgewood")
+    neighborhoods = ("Capitol Hill", "West Seattle", "University District", "Wedgewood")
     for neighborhood_name in neighborhoods:
       n = Neighborhood(name=neighborhood_name)
       n.put()
