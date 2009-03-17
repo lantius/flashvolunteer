@@ -113,7 +113,7 @@ class EventsPage(webapp.RequestHandler):
   def create(self, params, volunteer):
     event = Event()
     
-    if not event.validate(params):
+    if not event.validate(params):    
       return None
       
     event.name = params['name']
