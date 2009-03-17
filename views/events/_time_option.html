@@ -1,0 +1,22 @@
+<!--{{ event.date|date:"H:i" }}-->
+<select class="narrowselect" name="time">
+		<option value="none">Time...</option>
+		<option value="06:00">6am</option>
+		<option value="07:00">7am</option>
+		<option value="08:00">8am</option>
+		<option value="09:00">9am</option>
+		<option value="10:00">10am</option>
+		<option value="11:00">11am</option>
+		<option value="12:00">12pm</option>
+		<option value="13:00"{%if event %}{%ifequal "00" {{event.date|date:"i"}} %} selected {% endifequal %}{% endif %}>1pm</option>
+		<option value="14:00">2pm</option>
+		<option value="15:00">3pm</option>
+		<option value="16:00">4pm</option>
+		<option value="17:00">5pm</option>
+		<option value="18:00">6pm</option>
+		<option value="19:00">7pm</option>
+		<option value="20:00">8pm</option>
+		<option value="21:00">9pm</option>
+		<option value="22:00">10pm</option>
+		<option value="23:00">11pm</option>
+</select>
