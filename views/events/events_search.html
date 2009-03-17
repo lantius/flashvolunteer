@@ -5,29 +5,30 @@ Search
 
 {%block content %}
 <h3>Events
-{% if neighborhood %}
-in {{neighborhood.name}}
-{% endif %}
+	{% if neighborhood %}
+	in {{neighborhood.name}}
+	{% endif %}
 
-{% if fromdate %}
-on or after {{fromdate|date:"F jS, Y" }}
-{% endif %}
+	{% if fromdate %}
+	on or after {{fromdate|date:"F jS, Y" }}
+	{% endif %}
 
-{% if todate %}
-and on or before {{todate|date:"F jS, Y" }}
-{% endif %}</h3>
+	{% if todate %}
+	and on or before {{todate|date:"F jS, Y" }}
+	{% endif %}
+</h3>
 
 
 <div style="height: 200px">
-
-{% if events %}
-<ol>
-{% for event in events %}
-<li><strong><a href="{{event.url}}">{{ event.name }}</a></strong>
-{% endfor %}
-</ol>
-{% else %}
-<p>No search results found.</p>
-{% endif %}
+	{% if events %}
+	<ol>
+		{% for event in events %}
+			{% include "../events/_upcoming_brief.html" %}
+		{% endfor %}
+	</ol>
+	{% else %}
+	<p>No search results found.</p>
+	{% endif %}
 </div>
+
 {% endblock content %}
