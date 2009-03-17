@@ -79,11 +79,14 @@ class MainPage(webapp.RequestHandler):
 
 class InitializeStore(webapp.RequestHandler):
   def get(self):
-    if not self.is_initialized():
-      self.initialize_store()
+    self.init()
     
     self.redirect("/")
     return
+  
+  def init(self):
+    if not self.is_initialized():
+      self.initialize_store()
   
   def initialize_store(self):
     neighborhoods = ("Capitol Hill", "West Seattle", "University District", "Wedgewood")
@@ -127,6 +130,8 @@ class TimeoutPage(webapp.RequestHandler):
 # /events/1?delete=true POST: delete up for an event
 
 def main():
+  init = InitializeStore()
+  init.init()
   logging.getLogger().setLevel(logging.DEBUG)
   application = webapp.WSGIApplication(
                                     [('/', MainPage),

@@ -79,8 +79,10 @@ class SettingsPage(webapp.RequestHandler):
   # UPDATE
   ################################################################################
   def update(self, params, volunteer):
-    volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
-    volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
+    if params['home_neighborhood']:
+      volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+    if params['work_neighborhood']:
+      volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
     
     if params['avatar']:
       volunteer.avatar = params['avatar']
