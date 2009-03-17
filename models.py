@@ -1,5 +1,6 @@
 import datetime
 from google.appengine.ext import db
+from types import *
 
 ################################################################################
 # models
@@ -56,14 +57,19 @@ class Volunteer(db.Model):
     return (f.follower for f in self.volunteerfollowers)
 
   def events_past_count(self):
-    return 68
+    return len(self.events_past())
+
+  def events_past(self):
+    future_filter = lambda x: x.date < datetime.datetime.today()
+    return filter(future_filter, self.events())
   
   def events_future_count(self):
-    return 69
-    
+    return len(self.events_future())
+
   def events_future(self):
-    return self.events()
-    
+    future_filter = lambda x: x.date >= datetime.datetime.today()
+    return filter(future_filter, self.events())
+        
   # both following and follower
   def friends(self):
     fr = []
