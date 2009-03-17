@@ -120,6 +120,7 @@ class EventsPage(webapp.RequestHandler):
     event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
     event.description = params['description']
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+    event.address = params['address']
     
     # TODO: Check to make sure values are present and valid
     # TODO: transaction such that if anything throws an exception we don't litter the database
@@ -239,6 +240,7 @@ class EditEventPage(webapp.RequestHandler):
       event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
       event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
       event.description = params['description']
+      event.address = params['address']
       
       for interestcategory in InterestCategory.all():
         paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'

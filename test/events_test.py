@@ -31,6 +31,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/01/2009',
                'time' : '03:00',
                'description' : 'test description',
+               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
 
@@ -57,7 +58,8 @@ class EventsTest(unittest.TestCase):
     params = { 'name' : 'delete unit test',
                 'date' : '01/01/2009',
                 'time' : '03:00',
-                'description' : 'test description',             
+                'description' : 'test description',
+                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                 'neighborhood' : 1,
                 'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                 'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1' }
@@ -83,6 +85,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/01/2009',
                'time' : '03:00',
                'description' : 'test description',
+               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'neighborhood' : '1',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1',
@@ -103,6 +106,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/02/2009',
                'time' : '13:00',
                'description' : 'test description -- edited',
+               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'neighborhood' : '2',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1',
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'],
@@ -137,6 +141,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/01/2009',
                'time' : '15:00',
                'description' : 'test description',
+               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
@@ -146,6 +151,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/02/2010',
                'time' : '23:01',
                'description' : 'test description',
+               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
@@ -155,6 +161,7 @@ class EventsTest(unittest.TestCase):
                'date' : '05/05/2008',
                'time' : '12:01',   
                'description' : 'test description',
+               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
