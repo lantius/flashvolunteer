@@ -18,6 +18,8 @@ class="current"
     Title:<input type="text" name="name"><BR>
 		Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
 		Time:<input type="text" name="time"> (HH:MM)</br>
+		<p>Description:<br/><textarea name="description">{{event.description}}</textarea></p>
+    
 		<h3>Interest categories</h3>
     {% include "../interestcategories/_interestcategories.html" %}
 		  

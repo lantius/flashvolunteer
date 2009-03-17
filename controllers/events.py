@@ -118,6 +118,7 @@ class EventsPage(webapp.RequestHandler):
       
     event.name = params['name']
     event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
+    event.description = params['description']
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
     
     # TODO: Check to make sure values are present and valid
@@ -237,6 +238,7 @@ class EditEventPage(webapp.RequestHandler):
       event.name = params['name']
       event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
       event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+      event.description = params['description']
       
       for interestcategory in InterestCategory.all():
         paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'
@@ -305,7 +307,7 @@ class SearchEventsPage(webapp.RequestHandler):
   
   
 ################################################################################
-# SearchEventsPage
+# NewEventsPage
 ################################################################################
 class NewEventPage(webapp.RequestHandler):
   ################################################################################

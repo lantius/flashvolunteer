@@ -88,6 +88,7 @@ class Event(db.Model):
                                       collection_name = 'events')
   date_created = db.DateProperty(auto_now_add=True)
   date = db.DateTimeProperty()
+  description = db.StringProperty()
   
   def get_date(self):
     if not self.date:

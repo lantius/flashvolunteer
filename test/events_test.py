@@ -30,6 +30,7 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/01/2009',
                'time' : '03:00',
+               'description' : 'test description',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
 
@@ -45,6 +46,7 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(event.name, params['name'])
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])
     self.assertEqual(event.date.strftime("%H:%M"), params['time'])
+    self.assertEqual(event.description, params['description'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
     
     self.assertEqual(event.interestcategories().next().key().id, self.interestcategory1.key().id )
@@ -54,7 +56,8 @@ class EventsTest(unittest.TestCase):
     e = EventsPage()
     params = { 'name' : 'delete unit test',
                 'date' : '01/01/2009',
-                'time' : '03:00',                
+                'time' : '03:00',
+                'description' : 'test description',             
                 'neighborhood' : 1,
                 'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                 'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1' }
@@ -78,7 +81,8 @@ class EventsTest(unittest.TestCase):
     e = EventsPage()
     params = { 'name' : 'edit unit test',
                'date' : '01/01/2009',
-               'time' : '03:00',                
+               'time' : '03:00',
+               'description' : 'test description',
                'neighborhood' : '1',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1',
@@ -88,7 +92,8 @@ class EventsTest(unittest.TestCase):
 
     event = Event.get_by_id(int(event_id))
     self.assertEqual(event.name, params['name'])
-    self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])    
+    self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])
+    self.assertEqual(event.description, params['description'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
     self.assertEqual(event.eventinterestcategories.count(), 1)
     self.assertEqual(event.interestcategories().next().key().id, self.interestcategory1.key().id )
@@ -96,7 +101,8 @@ class EventsTest(unittest.TestCase):
     params = { 'id' : event_id, 
                'name' : 'edit unit test -- edited',
                'date' : '01/02/2009',
-               'time' : '13:00',                
+               'time' : '13:00',
+               'description' : 'test description -- edited',
                'neighborhood' : '2',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1',
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'],
@@ -106,6 +112,7 @@ class EventsTest(unittest.TestCase):
     event = Event.get_by_id(int(event_id))
     self.assertEqual(event.name, params['name'])
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])    
+    self.assertEqual(event.description, params['description'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
     self.assertEqual(event.eventinterestcategories.count(), 1)
     self.assertEqual(event.interestcategories().next().key().id, self.interestcategory2.key().id )
@@ -128,7 +135,8 @@ class EventsTest(unittest.TestCase):
     event_params = { 'name' : 'create unit test',
                'neighborhood' : 1,
                'date' : '01/01/2009',
-               'time' : '15:00',                
+               'time' : '15:00',
+               'description' : 'test description',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
@@ -136,7 +144,8 @@ class EventsTest(unittest.TestCase):
     event_params = { 'name' : 'create unit test',
                'neighborhood' : 1,
                'date' : '01/02/2010',
-               'time' : '23:01',                
+               'time' : '23:01',
+               'description' : 'test description',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
@@ -144,7 +153,8 @@ class EventsTest(unittest.TestCase):
     event_params = { 'name' : 'create unit test',
                'neighborhood' : 3,
                'date' : '05/05/2008',
-               'time' : '12:01',                
+               'time' : '12:01',   
+               'description' : 'test description',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
