@@ -18,7 +18,7 @@ class="current"
     Title:<input type="text" name="name"><BR>
 		Date:<input type="text" name="date"> (mm/dd/yyyy)<br/>
 		<h3>Interest categories</h3>
-    {% include "_interestcategories.html" %}
+    {% include "../interestcategories/_interestcategories.html" %}
 		  
 		<input type="submit" value="Create Event">
 		<input type=hidden name="session_id" value="{{ session_id }}">
