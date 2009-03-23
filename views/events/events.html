@@ -1,6 +1,6 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Create Events
+Events
 {% endblock title %}
 
 {% block eventsactive %}
@@ -17,6 +17,7 @@ class="current"
 
 <div id="righthalf">
 	{% include "_find_event_wide.html" %}
+	{% include "_recommended_events.html" %}
 </div><!--end righthalf-->
 	
 {% endblock content %}

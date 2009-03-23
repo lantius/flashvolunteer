@@ -1,0 +1,8 @@
+		<div id="recommendedevents" class="hardmodule">
+			<div class="moduletitle"><h3>Recommended Events</h3></div>
+			<ul>
+				{% for event in recommended_events %}
+					<li><a href="{{ event.url }}" >{{ event.date }}:</a> {{ event.name }}</li>
+				{% endfor %}
+			</ul>
+		</div><!--end recommended events-->

@@ -1,6 +1,6 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Events
+Create Events
 {% endblock title %}
 
 {% block createeventactive %}
@@ -10,15 +10,17 @@ class="current"
 {% block content %}
 
 <div id="middlewhole">
+
   <h1>Create an Event</h1>
   <div>Today's Message: {{ message }} </div>
   <form action="/events" method="post">
 		Title:<input type="text" name="name"/><BR>
 		Date:<input type="text" name="date"/> (mm/dd/yyyy)<br/>
 		<p>Time: {% include "../events/_time_option.html" %} </p>
-		Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}<BR>
+		<p>Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}</p>
+		<p>Address: {% include "../neighborhoods/_enter_address.html" %}</p>
 		<p>Description:<br/><textarea name="description">{{event.description}}</textarea></p>
-    
+    	
 		<h3>Interest categories</h3>
 		{% include "../interestcategories/_interestcategories.html" %}
 		<input type="submit" value="Create Event">
@@ -31,6 +33,7 @@ class="current"
 		Create an Event</br>
 	{% endif %}
 	</div>
+	
 </div><!--end middlewhole-->
 
 {% endblock %}
