@@ -7,7 +7,8 @@ from controllers._auth import Authorize
 
 from controllers.settings import SettingsPage
 from models import Volunteer, Neighborhood, Event, InterestCategory
-from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, SearchEventsPage, NewEventPage
+from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, SearchEventsPage
+from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import NeighborhoodHelper
 from controllers.neighborhoods import NeighborhoodsPage
@@ -137,19 +138,18 @@ def main():
                                     [('/', MainPage),
                                      ('/settings', SettingsPage), #handles posts as well
                                      ('/delete', SettingsPage),
-                                     ('/events/new', NewEventPage),
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
-                                     ('/events(|/\d+)', EventsPage),
+                                     ('/events/(\d+)/messages(|/\d+|new)', EventMessagesPage),
+                                     ('/events(|/\d+|/new)', EventsPage),
                                      ('/events/search(.*)', SearchEventsPage),
                                      ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
                                      ('/friends', FriendsPage),
-                                     ('/help', HelpPage),
-                                    #TODO break out cases to be explicit below
-                                     ('/_init', InitializeStore),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),
                                      ('/volunteers(|/\d+)', VolunteersPage),
+                                     ('/help', HelpPage),
+                                     ('/_init', InitializeStore),
                                      ('/timeout', TimeoutPage),
                                     ],
                                     debug=True)

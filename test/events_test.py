@@ -182,17 +182,3 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(fromdate, None)    
     self.assertEqual(todate, None)    
     self.assertEqual(len(events), 3)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

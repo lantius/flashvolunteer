@@ -78,7 +78,7 @@ class Volunteer(db.Model):
         if following.key().id() == follower.key().id():
           fr.append(following)
     return (f for f in fr)
-  
+
   def check_session_id(self, form_session_id):
     if form_session_id == self.session_id:
       return True
@@ -114,7 +114,7 @@ class Event(db.Model):
     
   def volunteers(self):
      return (ev.volunteer for ev in self.eventvolunteers)
-     
+  
   def hosts(self):
     hosts = ""
     for ev in self.eventvolunteers:
@@ -125,13 +125,27 @@ class Event(db.Model):
 
   def interestcategories(self):
      return (eic.interestcategory for eic in self.eventinterestcategories)
-     
+
+  def messages(self):
+     return (em.message for em in self.eventmessages)
+
   def validate(self, params):
     try:
       datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
       return True
     except:
       return False
+
+################################################################################
+# Message
+class Message(db.Model):
+  title = db.StringProperty()
+  sent = db.DateTimeProperty(auto_now_add=True)
+  sender = db.ReferenceProperty(Volunteer,
+                                collection_name = 'sent_messages')
+  #recipient(s): implement either by duplicating messages to one recipient
+  #  or by using some kind of join model VolunteerMessage / EventMessage
+  content = db.TextProperty()
 
 ################################################################################
 # "join" models
@@ -153,6 +167,14 @@ class EventInterestCategory(db.Model):
                                 required = True,
                                 collection_name = 'eventinterestcategories')
                                 
+class EventMessage(db.Model):
+  event = db.ReferenceProperty(Event,
+                               required = True,
+                               collection_name = 'eventmessages')
+  message = db.ReferenceProperty(Message,
+                                 required = True,
+                                 collection_name = 'eventmessages')
+
 class VolunteerInterestCategory(db.Model):
   volunteer = db.ReferenceProperty(Volunteer,
                                required = True,

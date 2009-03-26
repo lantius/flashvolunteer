@@ -19,7 +19,10 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################    
   def get(self, url_data):    
     if url_data:
-      self.show(url_data[1:])
+      if '/new' == url_data:
+        self.new()
+      else:
+        self.show(url_data[1:])
     else:
       self.list()
 
@@ -106,6 +109,30 @@ class EventsPage(webapp.RequestHandler):
       for ei in event.eventinterestcategories:
         ei.delete()
       event.delete()
+
+  ################################################################################
+  # NEW
+  ################################################################################
+  def new(self):
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+    except:
+      return
+
+    message = "default message"
+    logout_url = users.create_logout_url(self.request.uri)
+
+    template_values = {
+        'logout_url': logout_url,
+        'message': message,
+        'volunteer': volunteer,
+        'eventvolunteer': volunteer.eventvolunteers,
+        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'interestcategories' : InterestCategoryHelper().selected(volunteer),
+        'session_id': volunteer.session_id
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
+    self.response.out.write(template.render(path, template_values))
 
   ################################################################################
   # CREATE
@@ -306,41 +333,5 @@ class SearchEventsPage(webapp.RequestHandler):
     events = events_query.fetch(limit = 25)
     
     return (neighborhood, fromdate, todate, events)
-  
-  
-################################################################################
-# NewEventsPage
-################################################################################
-class NewEventPage(webapp.RequestHandler):
-  ################################################################################
-  # GET
-  ################################################################################
-  def get(self):
-    self.new()
-
-  ################################################################################
-  # GET
-  ################################################################################
-  def new(self):
-    try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
-    except:
-      return
-
-    message = "default message"
-    logout_url = users.create_logout_url(self.request.uri)
-    
-    template_values = {
-        'logout_url': logout_url,
-        'message': message,
-        'volunteer': volunteer,
-        'eventvolunteer': volunteer.eventvolunteers,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-        'interestcategories' : InterestCategoryHelper().selected(volunteer),
-        'session_id': volunteer.session_id
-      }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
-    self.response.out.write(template.render(path, template_values))
-    
 
   
