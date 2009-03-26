@@ -30,8 +30,8 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/01/2009',
                'time' : '03:00',
-               'description' : 'test description',
-               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
+               'description' : 'test description\non the internet with two lines!',
+               'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
 
