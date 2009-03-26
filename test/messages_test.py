@@ -48,19 +48,19 @@ class MessagesTest(unittest.TestCase):
     event = Event.get_by_id(int(event_id))
 
     self.assertEqual(self.volunteer.sent_messages.count(), 0)
+    self.assertEqual(event.eventmessages.count(), 0)
     
     m = MessagesPage()
     params = { 'title' : 'test message', 
                'content' : 'lorum ipsum\ndolor sit amet'}
     message_id = m.create(params, self.volunteer)
     message = Message.get_by_id(int(message_id))
+    message.recipient = event
+    message.put()
     
     self.assertEqual(self.volunteer.sent_messages.count(), 1)
-    self.assertEqual(event.eventmessages.count(), 0)
+    self.assertEqual(event.messages.count(), 1)
+    self.assertEqual(self.volunteer.messages.count(), 0)
     
-    em = EventMessage(event = event, message = message)
-    em.put()
-    
-    self.assertEqual(event.eventmessages.count(), 1)
     
   

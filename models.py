@@ -126,9 +126,6 @@ class Event(db.Model):
   def interestcategories(self):
      return (eic.interestcategory for eic in self.eventinterestcategories)
 
-  def messages(self):
-     return (em.message for em in self.eventmessages)
-
   def validate(self, params):
     try:
       datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
@@ -143,8 +140,8 @@ class Message(db.Model):
   sent = db.DateTimeProperty(auto_now_add=True)
   sender = db.ReferenceProperty(Volunteer,
                                 collection_name = 'sent_messages')
-  #recipient(s): implement either by duplicating messages to one recipient
-  #  or by using some kind of join model VolunteerMessage / EventMessage
+  recipient = db.ReferenceProperty(None,
+                                   collection_name = 'messages')
   content = db.TextProperty()
 
 ################################################################################
