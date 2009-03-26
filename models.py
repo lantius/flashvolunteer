@@ -94,7 +94,7 @@ class Event(db.Model):
                                       collection_name = 'events')
   date_created = db.DateProperty(auto_now_add=True)
   date = db.DateTimeProperty()
-  description = db.StringProperty(multiline=True)
+  description = db.TextProperty()
   address = db.StringProperty(multiline=True)
   
   def get_date(self):
