@@ -4,6 +4,10 @@
 Flash Volunteer Event : {{event.name}}
 {% endblock title %}
 
+{% block pagespectitle %}
+<h1>Event: {{event.name}}</h1>
+{% endblock pagespectitle %}
+
 {% block eventsactive %}
 class="current"
 {% endblock %}
@@ -11,25 +15,19 @@ class="current"
 {% block content %}
 
 <div id="lefthalf">
-
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ&sensor=true_or_false" type="text/javascript"></script>
-<script src="/stylesheets/google_maps.js"></script>
-
-  <script type="text/javascript">
-  function loadMap() {
-      showAddress("{{event.address}}");
-  }
-  
-  window.onload = loadMap;
-  </script>
+	{% include "../events/_details.html" %}
+	{% include "../events/_description.html" %}
+	{% include "../events/_special_instructions.html" %}
 
 
 
-<h1>{{event.name}}</h1>
+
+
+
 Being held in {{event.neighborhood.name}} on {{event.date|date:"F jS, Y"}}
 
 <br/><br/>
-    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+    
 {{event.address}}
 <br/><br/>
 Created on {{event.date_created|date:"F jS, Y"}}
@@ -80,7 +78,8 @@ Created on {{event.date_created|date:"F jS, Y"}}
 </div>
 
 <div id="righthalf">
-
+	{% include "../events/_event_map.html" %}
+	{% include "../events/_attendees.html" %}
 </div>
 
 {% endblock content %}

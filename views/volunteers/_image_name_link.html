@@ -1,0 +1,12 @@
+
+<div class="imagenamelink">
+	<a href="{{ volunteer.url }}" >
+	<img src="
+	{% if volunteer.avatar %}
+		{{ volunteer.avatar }}
+	{% else %}
+		/stylesheets/default-profile-pic-small.png
+	{% endif %}
+	" alt="{{ volunteer.user.nickname }}" />
+	<br />{{ volunteer.user.nickname }}</a>
+</div>
