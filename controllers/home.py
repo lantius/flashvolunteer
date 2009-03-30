@@ -6,7 +6,12 @@ import logging
 from controllers._auth import Authorize
 
 from controllers.settings import SettingsPage
-from models import Volunteer, Neighborhood, Event, InterestCategory
+
+from models.volunteer import *
+from models.neighborhood import *
+from models.event import *
+from models.interestcategory import *
+
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, SearchEventsPage
 from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar

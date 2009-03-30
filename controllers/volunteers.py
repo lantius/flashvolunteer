@@ -6,7 +6,8 @@ from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
 
-from models import Volunteer, VolunteerFollower
+from models.volunteer import *
+from models.volunteerfollower import *
 
 
 ################################################################################

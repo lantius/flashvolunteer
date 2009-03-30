@@ -1,5 +1,5 @@
 from google.appengine.api import users
-from models import Volunteer
+from models.volunteer import *
 import sys
 
 class Authorize():

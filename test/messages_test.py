@@ -1,7 +1,10 @@
 import unittest
 from webtest import TestApp
 
-from models import *
+from models.message import *
+from models.event import *
+from models.volunteer import *
+
 from controllers.events import *
 from controllers.messages import *
 

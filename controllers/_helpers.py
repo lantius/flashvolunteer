@@ -1,4 +1,5 @@
-from models import Volunteer, Event, Neighborhood, InterestCategory
+from models.neighborhood import *
+from models.interestcategory import *
 
 class NeighborhoodHelper():
   def selected(self, selected_neighborhood):

@@ -6,7 +6,8 @@ from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
 
-from models import Message, Event
+from models.event import *
+from models.message import *
 
 ################################################################################
 # Messages page

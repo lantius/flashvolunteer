@@ -7,7 +7,11 @@ from controllers._params import Parameters
 from google.appengine.ext.webapp import template
 from google.appengine.api import users, images
 from google.appengine.ext import webapp, db
-from models import Volunteer, Neighborhood, InterestCategory, VolunteerInterestCategory
+
+from models.volunteer import *
+from models.neighborhood import *
+from models.interestcategory import *
+from models.volunteerinterestcategory import *
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 

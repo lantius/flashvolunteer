@@ -3,7 +3,12 @@ import os, string, datetime
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer, Event, EventVolunteer, Neighborhood, InterestCategory, EventInterestCategory
+from models.volunteer import *
+from models.event import *
+from models.eventvolunteer import *
+from models.neighborhood import *
+from models.interestcategory import *
+from models.eventinterestcategory import *
 
 from controllers._auth import Authorize
 from controllers._params import Parameters

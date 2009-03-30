@@ -3,7 +3,7 @@ from webtest import TestApp
 from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
 
-from models import Neighborhood
+from models.neighborhood import *
 
 class NeighborhoodsTest(unittest.TestCase):
   

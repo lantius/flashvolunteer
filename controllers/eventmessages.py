@@ -3,7 +3,11 @@ import os, string, datetime
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer, Event, Message, EventVolunteer
+
+from models.volunteer import *
+from models.event import *
+from models.message import *
+from models.eventvolunteer import *
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
