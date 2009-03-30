@@ -140,7 +140,7 @@ def main():
                                      ('/delete', SettingsPage),
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
-                                     ('/events/(\d+)/messages(|/\d+|new)', EventMessagesPage),
+                                     ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
                                      ('/events(|/\d+|/new)', EventsPage),
                                      ('/events/search(.*)', SearchEventsPage),
                                      ('/neighborhoods(|/\d+)', NeighborhoodsPage),     

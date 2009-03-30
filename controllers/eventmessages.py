@@ -3,23 +3,23 @@ import os, string, datetime
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from models import Volunteer, Event, Message
+from models import Volunteer, Event, Message, EventVolunteer
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
-from controllers.messages import Message
+from controllers.messages import MessagesPage
 
 ################################################################################
 ################################################################################
-class EventMessagesPage(webapp.RequestHandler):
+class EventMessagesPage(MessagesPage):
 
   ################################################################################
   # GET
   def get(self, event_data, message_data):    
-    event = Event.get_by_id(int(event_data[1:]))
+    event = Event.get_by_id(int(event_data))
 
     if message_data:
-      if 'new' == message_data:
+      if '/new' == message_data:
         self.new(event)
       else:
         self.show(event, message_data[1:])
@@ -34,18 +34,17 @@ class EventMessagesPage(webapp.RequestHandler):
     except:
       return
     
-    event = Event.get_by_id(int(event_data[1:]))
+    event = Event.get_by_id(int(event_data))
     params = Parameters.parameterize(self.request)
     
     if 'is_delete' in params and params['is_delete'] == 'true':
-      self.delete(params, volunteer)
+      self.delete(message_data[1:], volunteer)
       self.redirect(event.url() + '/messages')
       return
 
     self.create(params, event, volunteer)
     self.redirect(event.url() + '/messages')
     return
-  
   
   ################################################################################
   # NEW
@@ -55,11 +54,17 @@ class EventMessagesPage(webapp.RequestHandler):
     except:
       return
 
+    eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
+                event = event, volunteer = volunteer).get()
+                
     logout_url = users.create_logout_url(self.request.uri)
-
+    
+    message = Message()
     template_values = {
         'logout_url': logout_url,
         'event' : event,
+        'eventvolunteer' : eventvolunteer,
+        'message' : message,
         'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
@@ -73,26 +78,36 @@ class EventMessagesPage(webapp.RequestHandler):
     if not ev:
       return None
     
-    m = MessagesPage()
-    message_id = m.create(params, self.volunteer)
+    params['recipient'] = event
+    message_id = MessagesPage.create(self, params, volunteer)
     message = Message.get_by_id(int(message_id))
-
-    eventmessage = EventMessage(event = event, message = message)
-    eventmessage.put()
-    
-    return eventmessage.key().id()
     
   ################################################################################
-  # DELETE
-  def delete(self, params, event, volunteer):
-    message = Message.get_by_id(int(params['id']))
+  # LIST
+  def list(self, event):
+    try:
+      (user, volunteer) = Authorize.login(self, requireUser=False, requireVolunteer=False, redirectTo='settings')
+    except:
+      return
+    eventvolunteer = None  
+    logout_url = None
     
-    eventmessage = EventMessage.gql("WHERE message = :message AND event = :event" ,
-                        message=message, event=event).get()
-      
-      
-      
-      
-      
-      
+    if user:
+      logout_url = users.create_logout_url(self.request.uri)
+    
+      if volunteer:
+        eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
+                event = event, volunteer = volunteer).get()
+    
+    template_values = {
+        'eventvolunteer' : eventvolunteer,
+        'logout_url': logout_url,
+        'event' : event,
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_messages.html')
+    self.response.out.write(template.render(path, template_values))  
+    
+    
+    
+    
     

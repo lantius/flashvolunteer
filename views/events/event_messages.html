@@ -1,0 +1,31 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Messages for {{event.name}}
+{% endblock title %}
+
+{% block eventsactive %}
+class="current"
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Messages for {{event.name}}</h1>
+{% for message in event.messages %}
+	<p><strong>{{ message.title }}</strong><br/>
+	Sent by {{message.sender.name}} on {{message.sent}}:<br/>
+	{{message.content}}</p>
+	
+  {% if eventvolunteer %}
+	  <form method="post" action="{{message.url}}">
+	  <input type="hidden" name="is_delete" value="true" />
+		<input type=hidden name="session_id" value="{{ session_id }}">
+    <input type="submit" value="delete">
+		</form>
+	{% endif %}
+{% endfor %}
+
+{% if eventvolunteer %}
+<a href="{{event.url}}/messages/new">Create a new message</a>
+{% endif %}
+{% endblock content %}

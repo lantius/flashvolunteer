@@ -6,7 +6,7 @@ from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
 
-from models import Message
+from models import Message, Event
 
 ################################################################################
 # Messages page
@@ -15,7 +15,6 @@ class MessagesPage(webapp.RequestHandler):
 
   ################################################################################
   # GET
-  ################################################################################    
   def get(self, url_data):
     if url_data:
       self.show(url_data[1:])
@@ -24,7 +23,6 @@ class MessagesPage(webapp.RequestHandler):
 
   ################################################################################
   # POST
-  ################################################################################
   def post(self, url_data):
     try:
       (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
@@ -34,7 +32,7 @@ class MessagesPage(webapp.RequestHandler):
     params = Parameters.parameterize(self.request)
     
     if 'is_delete' in params and params['is_delete'] == 'true':
-      self.delete(params, volunteer)
+      self.delete(url_data[1:], volunteer)
       self.redirect("/messages")
       return
 
@@ -44,13 +42,19 @@ class MessagesPage(webapp.RequestHandler):
     
   ################################################################################
   # CREATE
-  ################################################################################
   def create(self, params, volunteer):
     message = Message()
     message.title = params['title']
     message.sender = volunteer
     message.content = params['content']
+    message.recipient = params['recipient']
+    
     message.put()
     
     return message.key().id()
     
+  ################################################################################
+  # DELETE
+  def delete(self, message_id, volunteer):
+    message = Message.get_by_id(int(message_id))
+    message.delete()

@@ -22,10 +22,12 @@ class MessagesTest(unittest.TestCase):
     self.interestcategory1.delete()
     self.interestcategory2.delete()
   
-  def test_create(self):
+  def test_message_create(self):
     m = MessagesPage()
     params = { 'title' : 'test message', 
-               'content' : 'lorum ipsum\ndolor sit amet'}
+               'content' : 'lorum ipsum\ndolor sit amet',
+               'recipient_object' : None,
+               'recipient' : None }
     message_id = m.create(params, self.volunteer)
     message = Message.get_by_id(int(message_id))
     
@@ -33,8 +35,17 @@ class MessagesTest(unittest.TestCase):
     self.assertEqual(params['title'], message.title)
     self.assertEqual(params['content'], message.content)
     self.assertEqual(self.volunteer.key().id(), message.sender.key().id())
+    return message
   
-  def test_messages(self):
+  def test_message_delete(self):
+    m = MessagesPage()
+    n = Message.all().count()
+    message = self.test_message_create()
+    self.assertEqual(n+1, Message.all().count())
+    m.delete( message.key().id() , self.volunteer)
+    self.assertEqual(n, Message.all().count())
+  
+  def test_event_messages(self):
     e = EventsPage()
     params = { 'name' : 'create unit test',
                'neighborhood' : 1,
@@ -48,16 +59,16 @@ class MessagesTest(unittest.TestCase):
     event = Event.get_by_id(int(event_id))
 
     self.assertEqual(self.volunteer.sent_messages.count(), 0)
-    self.assertEqual(event.eventmessages.count(), 0)
+    self.assertEqual(event.messages.count(), 0)
     
     m = MessagesPage()
     params = { 'title' : 'test message', 
-               'content' : 'lorum ipsum\ndolor sit amet'}
+               'content' : 'lorum ipsum\ndolor sit amet',
+               'recipient' : event }
     message_id = m.create(params, self.volunteer)
     message = Message.get_by_id(int(message_id))
-    message.recipient = event
-    message.put()
     
+    self.assertEqual(message.url(), event.url() + '/messages/' + str(message_id))
     self.assertEqual(self.volunteer.sent_messages.count(), 1)
     self.assertEqual(event.messages.count(), 1)
     self.assertEqual(self.volunteer.messages.count(), 0)

@@ -144,6 +144,9 @@ class Message(db.Model):
                                    collection_name = 'messages')
   content = db.TextProperty()
 
+  def url(self):
+    return self.recipient.url() + '/messages/' + str(self.key().id())
+
 ################################################################################
 # "join" models
 ################################################################################
@@ -163,14 +166,6 @@ class EventInterestCategory(db.Model):
   interestcategory = db.ReferenceProperty(InterestCategory,
                                 required = True,
                                 collection_name = 'eventinterestcategories')
-                                
-class EventMessage(db.Model):
-  event = db.ReferenceProperty(Event,
-                               required = True,
-                               collection_name = 'eventmessages')
-  message = db.ReferenceProperty(Message,
-                                 required = True,
-                                 collection_name = 'eventmessages')
 
 class VolunteerInterestCategory(db.Model):
   volunteer = db.ReferenceProperty(Volunteer,
