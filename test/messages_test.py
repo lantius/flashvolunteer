@@ -48,7 +48,7 @@ class MessagesTest(unittest.TestCase):
     m.delete( message.key().id() , self.volunteer)
     self.assertEqual(n, Message.all().count())
   
-  def test_event_messages(self):
+  def test_event_message_create(self):
     e = EventsPage()
     params = { 'name' : 'create unit test',
                'neighborhood' : 1,
@@ -75,6 +75,5 @@ class MessagesTest(unittest.TestCase):
     self.assertEqual(self.volunteer.sent_messages.count(), 1)
     self.assertEqual(event.messages.count(), 1)
     self.assertEqual(self.volunteer.messages.count(), 0)
-    
     
   

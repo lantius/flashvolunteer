@@ -21,19 +21,20 @@ from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 class EventsPage(webapp.RequestHandler):
   ################################################################################
   # GET
-  ################################################################################    
   def get(self, url_data):    
     if url_data:
       if '/new' == url_data:
         self.new()
+      elif '/search' == url_data:
+        params = Parameters.parameterize(self.request)
+        self.search(params)
       else:
         self.show(url_data[1:])
     else:
       self.list()
-
+    
   ################################################################################
   # POST
-  ################################################################################
   def post(self, url_data):
     try:
       (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
@@ -43,7 +44,7 @@ class EventsPage(webapp.RequestHandler):
     params = Parameters.parameterize(self.request)
     
     if 'is_delete' in params and params['is_delete'] == 'true':
-      self.delete(params, volunteer)
+      self.delete(url_data[1:], volunteer)
       self.redirect("/events")
       return
 
@@ -53,7 +54,6 @@ class EventsPage(webapp.RequestHandler):
 
   ################################################################################
   # LIST
-  ################################################################################  
   def list(self):
     try:
       (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
@@ -77,7 +77,6 @@ class EventsPage(webapp.RequestHandler):
     
   ################################################################################
   # SHOW A SINGLE EVENT
-  ################################################################################
   def show(self, event_id):
     (user, volunteer) = Authorize.login(self)
 
@@ -102,9 +101,8 @@ class EventsPage(webapp.RequestHandler):
      
   ################################################################################
   # DELETE
-  ################################################################################
-  def delete(self, params, volunteer):
-    event = Event.get_by_id(int(params['id']))
+  def delete(self, event_id, volunteer):
+    event = Event.get_by_id(int(event_id))
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
                         volunteer=volunteer, event=event).get()
@@ -117,7 +115,6 @@ class EventsPage(webapp.RequestHandler):
 
   ################################################################################
   # NEW
-  ################################################################################
   def new(self):
     try:
       (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
@@ -141,7 +138,6 @@ class EventsPage(webapp.RequestHandler):
 
   ################################################################################
   # CREATE
-  ################################################################################
   def create(self, params, volunteer):
     event = Event()
     
@@ -169,6 +165,50 @@ class EventsPage(webapp.RequestHandler):
     
     return event.key().id()
 
+  ################################################################################
+  # SEARCH
+  def search(self, params):
+    (neighborhood, fromdate, todate, events)  = self.do_search(params)
+    template_values = { 
+      'neighborhood' : neighborhood,
+      'fromdate' : fromdate,
+      'todate' : todate,
+      'events' : events
+    }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def do_search(self, params):
+    events_query = Event.all()
+    neighborhood = None
+    todate = None
+    fromdate = None
+
+    if params['neighborhood']:
+      try:
+        neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+        events_query.filter('neighborhood =', neighborhood)
+      except:
+        pass
+
+    if params['fromdate']:
+      try:
+        fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
+        events_query.filter('date >=', fromdate)
+      except:
+        pass
+
+    if params['todate']:
+      try:
+        todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
+        events_query.filter('date <=', todate)
+      except:
+        pass
+
+    events = events_query.fetch(limit = 25)
+
+    return (neighborhood, fromdate, todate, events)
+
 ################################################################################
 # VolunteerForEvent
 ################################################################################
@@ -195,6 +235,7 @@ class VolunteerForEvent(webapp.RequestHandler):
     
     self.redirect('/events/' + url_data)
     return
+
 
 ################################################################################
 # EditEventPage
@@ -285,58 +326,5 @@ class EditEventPage(webapp.RequestHandler):
           eic.delete()
           
       event.put()
-
-################################################################################
-# SearchEventsPage
-################################################################################
-class SearchEventsPage(webapp.RequestHandler):
-  ################################################################################
-  # GET
-  ################################################################################
-  def get(self, url_data):
-    params = Parameters.parameterize(self.request)
-    self.search(params)
-      
-  def search(self, params):
-    (neighborhood, fromdate, todate, events)  = self.do_search(params)
-    template_values = { 
-      'neighborhood' : neighborhood,
-      'fromdate' : fromdate,
-      'todate' : todate,
-      'events' : events
-    }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
-    self.response.out.write(template.render(path, template_values))
-    
-  def do_search(self, params):
-    events_query = Event.all()
-    neighborhood = None
-    todate = None
-    fromdate = None
-    
-    if params['neighborhood']:
-      try:
-        neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
-        events_query.filter('neighborhood =', neighborhood)
-      except:
-        pass
-      
-    if params['fromdate']:
-      try:
-        fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
-        events_query.filter('date >=', fromdate)
-      except:
-        pass
-
-    if params['todate']:
-      try:
-        todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
-        events_query.filter('date <=', todate)
-      except:
-        pass
-      
-    events = events_query.fetch(limit = 25)
-    
-    return (neighborhood, fromdate, todate, events)
 
   

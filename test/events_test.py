@@ -51,25 +51,16 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
     
     self.assertEqual(event.interestcategories().next().key().id, self.interestcategory1.key().id )
+    return event
     
   # DELETE
   def test_event_delete(self):
     e = EventsPage()
-    params = { 'name' : 'delete unit test',
-                'date' : '01/01/2009',
-                'time' : '03:00',
-                'description' : 'test description',
-                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
-                'neighborhood' : 1,
-                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
-                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1' }
 
     n = Event.all().count()
-    event_id = e.create(params, self.volunteer)
-
-    params = { 'id' : event_id, 
-               'delete' : 'true' }
-    e.delete(params, self.volunteer)
+    event_id = self.test_event_create().key().id()
+    
+    e.delete(event_id, self.volunteer)
     self.assertEqual(n, Event.all().count())
   
     event = Event.get_by_id(int(event_id))
@@ -80,28 +71,9 @@ class EventsTest(unittest.TestCase):
   # UPDATE  
   def test_event_update(self):
     ee = EditEventPage()
-    e = EventsPage()
-    params = { 'name' : 'edit unit test',
-               'date' : '01/01/2009',
-               'time' : '03:00',
-               'description' : 'test description',
-               'address' : '3334 NE Blakeley St. Seattle, WA 98105',
-               'neighborhood' : '1',
-               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
-               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1',
-               }
-    
-    event_id = e.create(params, self.volunteer)
+    event = self.test_event_create()
 
-    event = Event.get_by_id(int(event_id))
-    self.assertEqual(event.name, params['name'])
-    self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])
-    self.assertEqual(event.description, params['description'])
-    self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
-    self.assertEqual(event.eventinterestcategories.count(), 1)
-    self.assertEqual(event.interestcategories().next().key().id, self.interestcategory1.key().id )
-    
-    params = { 'id' : event_id, 
+    params = { 'id' : event.key().id() , 
                'name' : 'edit unit test -- edited',
                'date' : '01/02/2009',
                'time' : '13:00',
@@ -113,7 +85,7 @@ class EventsTest(unittest.TestCase):
     }
     ee.update(params, self.volunteer)
     
-    event = Event.get_by_id(int(event_id))
+    event = Event.get_by_id(int(event.key().id() ))
     self.assertEqual(event.name, params['name'])
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])    
     self.assertEqual(event.description, params['description'])
@@ -123,11 +95,11 @@ class EventsTest(unittest.TestCase):
 
   # SEARCH
   def test_event_search(self):
-    se = SearchEventsPage()
+    e = EventsPage()
     search_params = { 'neighborhood' : '1',
                       'fromdate' : '12/12/2008', 
                       'todate' : '01/01/2010', }
-    (neighborhood, fromdate, todate, events) = se.do_search(search_params)
+    (neighborhood, fromdate, todate, events) = e.do_search(search_params)
     
     self.assertEqual(neighborhood, Neighborhood.get_by_id(int(search_params['neighborhood'])))
     self.assertEqual(fromdate.strftime("%m/%d/%Y"), search_params['fromdate'])    
@@ -135,7 +107,6 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(len(events), 0)    
     
     # insert 3 events to play with
-    e = EventsPage()
     event_params = { 'name' : 'create unit test',
                'neighborhood' : 1,
                'date' : '01/01/2009',
@@ -166,7 +137,7 @@ class EventsTest(unittest.TestCase):
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
 
-    (neighborhood, fromdate, todate, events) = se.do_search(search_params)
+    (neighborhood, fromdate, todate, events) = e.do_search(search_params)
     self.assertEqual(len(events), 1)
     
     event = events[0]
@@ -177,7 +148,7 @@ class EventsTest(unittest.TestCase):
     search_params = { 'neighborhood' : 'bad neighborhood',
                       'fromdate' : 'bad fromdate', 
                       'todate' : 'bad to date', }
-    (neighborhood, fromdate, todate, events) = se.do_search(search_params)
+    (neighborhood, fromdate, todate, events) = e.do_search(search_params)
     self.assertEqual(neighborhood, None)    
     self.assertEqual(fromdate, None)    
     self.assertEqual(todate, None)    

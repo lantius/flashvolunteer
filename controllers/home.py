@@ -12,7 +12,7 @@ from models.neighborhood import *
 from models.event import *
 from models.interestcategory import *
 
-from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, SearchEventsPage
+from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
 from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import NeighborhoodHelper
@@ -146,8 +146,7 @@ def main():
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
                                      ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
-                                     ('/events(|/\d+|/new)', EventsPage),
-                                     ('/events/search(.*)', SearchEventsPage),
+                                     ('/events(|/\d+|/new|/search)', EventsPage),
                                      ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
                                      ('/friends', FriendsPage),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
