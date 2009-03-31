@@ -25,17 +25,17 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   def get(self):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True)
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
-    self.show(user, volunteer)
+    self.show(volunteer)
 
   ################################################################################
   # POST
   ################################################################################
   def post(self):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
 
@@ -52,8 +52,14 @@ class SettingsPage(webapp.RequestHandler):
   # SHOW
   # TODO: this is a GET that changes the database.  danger, will robinson!
   ################################################################################
-  def show(self, user, volunteer):
+  def show(self, volunteer):
     if not volunteer:
+      user = users.get_current_user()
+
+      if not user:
+        req.redirect(users.create_login_url(req.request.uri))
+        return
+      
       message = "Welcome newly registered volunteer"
       volunteer = Volunteer()
       volunteer.user = user
@@ -65,12 +71,8 @@ class SettingsPage(webapp.RequestHandler):
       if volunteer.home_neighborhood:
         message += " from " + volunteer.home_neighborhood.name
     
-    logout_url = users.create_logout_url(self.request.uri)
-    
     template_values = {
         'volunteer' : volunteer, 
-        'logout_url': logout_url,
-        'message': message,
         'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),

@@ -3,20 +3,21 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import template
 import os
 
+from controllers._auth import Authorize
+
 ################################################################################
 # Help page
 ################################################################################
 class HelpPage(webapp.RequestHandler):
   def get(self):    
     
-    user = users.get_current_user()
-    if user:
-      logout_url = users.create_logout_url(self.request.uri)
-    else:
-      logout_url = ""
-
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='settings')
+    except:
+      return
+    
     template_values = {
-        'logout_url': logout_url,
+        'volunteer': volunteer,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'help', 'help.html')
     self.response.out.write(template.render(path, template_values))

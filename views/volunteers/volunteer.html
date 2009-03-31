@@ -1,45 +1,45 @@
 {% extends "../_layout.html" %}
 {% block title %}
-{{ volunteer.get_name }}'s public page
+{{ page_volunteer.get_name }}'s public page
 {% endblock title %}
 
 {% block content %}
-<h1>{{volunteer.get_name}}</h1><BR>
-They rep {{volunteer.home_neighborhood.name}}
+<h1>{{page_volunteer.get_name}}</h1><BR>
+They rep {{page_volunteer.home_neighborhood.name}}
 <BR>
 Their events: {% include "../events/_events.html" %}
 <br>
 They like:
 <ul>
-{% for ic in volunteer.interestcategories %}
+{% for ic in page_volunteer.interestcategories %}
   <li>{{ic.name}}</li>
 {% endfor %}
 </ul>
 
 <P>
 Following:<ul>
-{% for f in volunteer.following %}
+{% for f in page_volunteer.following %}
 <li><a href="{{f.url}}">{{f.get_name}}</a></li>
 {% endfor %}</ul>
 </p>
 
 <p>Followers:
   {% if volunteerfollower %}
-	<form action="{{volunteer.url}}/follow" method="post">
+	<form action="{{page_volunteer.url}}/follow" method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=hidden name="delete" value="true">
 		<input type=submit value="stop following me!">
 	</form>
   {% else %}
-	<form action="{{volunteer.url}}/follow" method="post">
+	<form action="{{page_volunteer.url}}/follow" method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}">
 		<input type=submit value="follow me!">
 	</form>
   {% endif %}
   
 <ul>
-  {% for f in volunteer.followers %}
-  <li><a href="{{f.url}}">{{f.user.nickname}}</a></li>
+  {% for f in page_volunteer.followers %}
+  <li><a href="{{f.url}}">{{f.get_name}}</a></li>
 
   {% endfor %}
 </ul>

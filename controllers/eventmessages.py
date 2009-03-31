@@ -34,7 +34,7 @@ class EventMessagesPage(MessagesPage):
   # POST
   def post(self, event_data, message_data):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
     
@@ -54,18 +54,16 @@ class EventMessagesPage(MessagesPage):
   # NEW
   def new(self, event):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
 
     eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
                 event = event, volunteer = volunteer).get()
-                
-    logout_url = users.create_logout_url(self.request.uri)
-    
+
     message = Message()
     template_values = {
-        'logout_url': logout_url,
+        'volun teer': volunteer,
         'event' : event,
         'eventvolunteer' : eventvolunteer,
         'message' : message,
@@ -90,22 +88,18 @@ class EventMessagesPage(MessagesPage):
   # LIST
   def list(self, event):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=False, requireVolunteer=False, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='settings')
     except:
       return
     eventvolunteer = None  
-    logout_url = None
-    
-    if user:
-      logout_url = users.create_logout_url(self.request.uri)
-    
-      if volunteer:
-        eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
-                event = event, volunteer = volunteer).get()
+
+    if volunteer:
+      eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
+              event = event, volunteer = volunteer).get()
     
     template_values = {
         'eventvolunteer' : eventvolunteer,
-        'logout_url': logout_url,
+        'volunteer': volunteer,
         'event' : event,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_messages.html')

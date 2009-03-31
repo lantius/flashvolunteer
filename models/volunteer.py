@@ -1,4 +1,5 @@
 import datetime
+from google.appengine.api import users
 from google.appengine.ext import db
 from models.neighborhood import *
 from models.interestcategory import *
@@ -19,10 +20,13 @@ class Volunteer(db.Model):
     if self.name:
       return self.name
 
-    return self.user.nickname
+    return self.volunteer.nickname
     
   def url(self):
     return '/volunteers/' + str(self.key().id())
+
+  def logout_url(self):
+    return users.create_logout_url('/')
 
   def events(self):
     return (ev.event for ev in self.eventvolunteers)

@@ -17,11 +17,11 @@ class MainPage(webapp.RequestHandler):
   
   def get(self):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=False, requireVolunteer=False)
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
     
-    # if user is logged in, then they get their login page
+    # if volunteer is logged in, then they get their login page
     # otherwise, they get the splash page
     
     if not volunteer:
@@ -34,9 +34,11 @@ class MainPage(webapp.RequestHandler):
   def splashpage(self):
     
     login_url = users.create_login_url(self.request.uri)      
+    account_url = users.create_login_url('/settings')
     
     template_values = { 
-      'login_url' : login_url 
+      'login_url' : login_url,
+      'account_url' : account_url
     }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'splash.html')
     self.response.out.write(template.render(path, template_values))
@@ -55,9 +57,7 @@ class MainPage(webapp.RequestHandler):
       if ic.events():
         byinterest.append(ic)
   
-    logout_url = users.create_logout_url(self.request.uri)
     template_values = {
-        'logout_url': logout_url,
         'volunteer' : volunteer,
         'neighborhoods': NeighborhoodHelper().selected(home_neighborhood),
       }

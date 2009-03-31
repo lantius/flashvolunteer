@@ -37,7 +37,7 @@ class EventsPage(webapp.RequestHandler):
   # POST
   def post(self, url_data):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
 
@@ -56,16 +56,11 @@ class EventsPage(webapp.RequestHandler):
   # LIST
   def list(self):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
-
-    message = "default message"
-    logout_url = users.create_logout_url(self.request.uri)
     
     template_values = {
-        'logout_url': logout_url,
-        'message': message,
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
@@ -78,24 +73,25 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   # SHOW A SINGLE EVENT
   def show(self, event_id):
-    (user, volunteer) = Authorize.login(self)
+    volunteer = Authorize.login(self)
 
     event = Event.get_by_id(int(event_id))
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     
     eventvolunteer = ""
-    logout_url = ''
     session_id = ''
     
-    if user:    
-      logout_url = users.create_logout_url(self.request.uri)
-      
     if volunteer:
       eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
                          volunteer=volunteer, event=event).get()
       session_id = volunteer.session_id
                            
-    template_values = { 'event' : event, 'eventvolunteer': eventvolunteer, 'owners': owners, 'logout_url': logout_url, 'session_id': session_id}
+    template_values = { 'event' : event, 
+                        'eventvolunteer': eventvolunteer, 
+                        'owners': owners, 
+                        'volunteer': volunteer, 
+                        'session_id': session_id
+                        }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))
      
@@ -117,16 +113,11 @@ class EventsPage(webapp.RequestHandler):
   # NEW
   def new(self):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
 
-    message = "default message"
-    logout_url = users.create_logout_url(self.request.uri)
-
     template_values = {
-        'logout_url': logout_url,
-        'message': message,
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
@@ -216,7 +207,7 @@ class VolunteerForEvent(webapp.RequestHandler):
 
   def post(self, url_data):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
 
@@ -247,7 +238,7 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def get(self, url_data):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
     self.edit({ 'id' : url_data }, volunteer)
@@ -257,7 +248,7 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def post(self, url_data):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
       
@@ -284,12 +275,11 @@ class EditEventPage(webapp.RequestHandler):
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     
 
-    logout_url = users.create_logout_url(self.request.uri)
     template_values = { 
       'event' : event, 
       'eventvolunteer': eventvolunteer, 
       'owners': owners, 
-      'logout_url': logout_url, 
+      'volunteer': volunteer, 
       'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
       'interestcategories' : InterestCategoryHelper().selected(event),
       'session_id': volunteer.session_id,

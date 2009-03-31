@@ -8,8 +8,8 @@
 <div id="container"> 
 <div id="top">
 	<div id="logo"><a href="/"><img src="/stylesheets/logo.png" alt="flashvolunteer"/></a></div>
-	{%if logout_url %}
-		<div id="userwelcome">Welcome, {{ volunteer.get_name }} <br /><a href="{{logout_url}}">Log Out</a></div>
+	{%if volunteer %}
+		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name }} <br /><a href="{{volunteer.logout_url}}">Log Out</a></div>
 	{% endif %}
 	<div id="navtabs">
 		<ul>
@@ -40,13 +40,6 @@
  
 	{% block content %}
 	{% endblock content %}
-	
-<!--
-	<div> |
-	{%if logout_url %}<a href="{{logout_url}}">logout</a> | {% endif %}
-	<a href="/">home</a> |
-	</div>
--->
 
 </div><!--end columns-->
 <div id="footer">

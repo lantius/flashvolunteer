@@ -67,7 +67,7 @@ Created on {{event.date_created|date:"F jS, Y"}}
 <h3>Signed up volunteers:</h3>
 <ul>
 {% for volunteer in event.volunteers %}
-<li><a href="{{volunteer.url}}">{{ volunteer.user.nickname }}</a></li>
+<li><a href="{{volunteer.url}}">{{ volunteer.get_name }}</a></li>
 {% endfor %}
 </ul>
 </p>

@@ -9,15 +9,12 @@ from controllers._auth import Authorize
 from models.volunteer import *
 from models.volunteerfollower import *
 
-
 ################################################################################
 # Volunteers page
-################################################################################
 class VolunteersPage(webapp.RequestHandler):
 
   ################################################################################
   # GET
-  ################################################################################
   def get(self, url_data):
 
     if url_data:
@@ -26,11 +23,13 @@ class VolunteersPage(webapp.RequestHandler):
       self.list() 
 
   ################################################################################
-  # SHOW
+  # POST
+
   ################################################################################
+  # SHOW
   def show(self, volunteer_id):
     try:
-      (user, volunteer) = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
       
@@ -41,11 +40,6 @@ class VolunteersPage(webapp.RequestHandler):
     if not volunteer or not volunteer.session_id:
       self.redirect("/setting")
       return
-
-    logout_url =''
-
-    if user:
-      logout_url = users.create_logout_url(self.request.uri)
 
     page_volunteer = Volunteer.get_by_id(int(volunteer_id))
 
@@ -59,31 +53,29 @@ class VolunteersPage(webapp.RequestHandler):
                       
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                         'volunteerfollower' : volunteerfollower,
-                        'volunteer': page_volunteer,
-                        'session_id' : volunteer.session_id,
-                        'logout_url': logout_url}
+                        'page_volunteer': page_volunteer,
+                        'volunteer' : volunteer,
+                        'session_id' : volunteer.session_id
+                        }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteer.html')
     self.response.out.write(template.render(path, template_values))
 
 
   ################################################################################
   # LIST
-  ################################################################################
   def list(self):
     return
     
 
 ################################################################################
 # FollowVolunteer
-################################################################################
 class FollowVolunteer(webapp.RequestHandler):
 
   ################################################################################
   # POST
-  ################################################################################
   def post(self, url_data):
     try:
-      (user, volunteer) = Authorize.login(self, requireUser=True, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
     except:
       return
 
@@ -106,11 +98,9 @@ class FollowVolunteer(webapp.RequestHandler):
 
 ################################################################################
 # VolunteerAvatar
-################################################################################
 class VolunteerAvatar(webapp.RequestHandler):
   ################################################################################
   # GET
-  ################################################################################
   def get(self, url_data):
     volunteer = Volunteer.get_by_id(int(url_data))
     if volunteer.avatar:

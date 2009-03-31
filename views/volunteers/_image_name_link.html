@@ -7,6 +7,6 @@
 	{% else %}
 		/stylesheets/default-profile-pic-small.png
 	{% endif %}
-	" alt="{{ volunteer.user.nickname }}" />
-	<br />{{ volunteer.user.nickname }}</a>
+	" alt="{{ volunteer.get_name }}" />
+	<br />{{ volunteer.get_name }}</a>
 </div>

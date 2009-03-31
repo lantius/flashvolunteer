@@ -294,7 +294,7 @@ def _run_test_suite(runner, suite):
        temp_stub = datastore_file_stub.DatastoreFileStub('GAEUnitDataStore', None, None)  
        apiproxy_stub_map.apiproxy.RegisterStub('datastore', temp_stub)
        # Allow the other services to be used as-is for tests.
-       for name in ['user', 'urlfetch', 'mail', 'memcache', 'images']: 
+       for name in ['volunteer', 'urlfetch', 'mail', 'memcache', 'images']: 
            apiproxy_stub_map.apiproxy.RegisterStub(name, original_apiproxy.GetStub(name))
        runner.run(suite)
     finally:
@@ -407,7 +407,7 @@ _MAIN_PAGE_CONTENT = """
                 for (var className in classes) {
                     // TODO: Optimize for the case where tests are run by class so we don't
                     //       have to always execute each method separately.  This should be
-                    //       possible when we have a UI that allows the user to select tests
+                    //       possible when we have a UI that allows the volunteer to select tests
                     //       by module, class, and method.
                     //requestTestRun(moduleName, className);
                     methods = classes[className];
