@@ -2,12 +2,9 @@ import unittest
 from webtest import TestApp
 from google.appengine.ext import webapp
 
-from controllers.home import *
+from controllers._helpers import InitializeStore
 
 class InititalizeTest(unittest.TestCase):
-  def setUp(self):
-    self.application = webapp.WSGIApplication([('/', InitializeStore)], debug=True)
-  
   def test_initialize_store(self):
     i = InitializeStore()
     
