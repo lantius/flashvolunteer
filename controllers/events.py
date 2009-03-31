@@ -1,7 +1,6 @@
 import os, string, datetime
 
 from google.appengine.ext.webapp import template
-from google.appengine.api import users
 from google.appengine.ext import webapp
 from models.volunteer import *
 from models.event import *
