@@ -12,5 +12,5 @@ handlers:
   login: admin
 
 - url: /.*
-  script: controllers/home.py
-  login: admin
+  script: controllers/route.py
+  #login: admin
