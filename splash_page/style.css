@@ -22,12 +22,14 @@ body {
 	border-top: #30b003 7px solid;
 	border-bottom: #30b003 7px solid;
 	background: #FFF;
+	text-align: center;
 }
 
 #subcontainer {
 	margin: auto;
 	position: relative;
 	width: 760px;
+	text-align: left;
 }
 #left {
 	float: left;
