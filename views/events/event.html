@@ -18,63 +18,6 @@ class="current"
 	{% include "../events/_details.html" %}
 	{% include "../events/_description.html" %}
 	{% include "../events/_special_instructions.html" %}
-
-
-
-
-
-
-Being held in {{event.neighborhood.name}} on {{event.date|date:"F jS, Y"}}
-
-<br/><br/>
-    
-{{event.address}}
-<br/><br/>
-Created on {{event.date_created|date:"F jS, Y"}}
-
-<h3>Interest categories</h3><ul>
-{% for ic in event.interestcategories %}
-  <li>{{ic.name}}</li>
-{% endfor %}
-</ul>
-
-<p>
-{% if eventvolunteer %}
-	{% if eventvolunteer.isowner %}
-		You're the owner - <a href="/events/{{event.key.id}}/edit">Edit this event</a>
-	{% else %}
-	Created by<ul>
-	{% for owner in owners %}
-		<li><a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a></li>
-	{% endfor %}
-	</ul>
-  	You're a volunteer 
-	<form action="{{event.url}}/volunteer" method="post">
-		<input type=hidden name="delete" value="true">
-		<input type=hidden name="session_id" value="{{ session_id }}">
-		<input type=submit value="unvolunteer">
-	</form>
-	{% endif %}
-{% else %}
-	Click here to volunteer for this event: 
-	<form action="{{event.url}}/volunteer" method="post">
-		<input type=hidden name="session_id" value="{{ session_id }}">
-		<input type=submit value="volunteer!">
-	</form>
-{% endif %}
-</p>
-<p>
-<h3>Signed up volunteers:</h3>
-<ul>
-{% for volunteer in event.volunteers %}
-<li><a href="{{volunteer.url}}">{{ volunteer.get_name }}</a></li>
-{% endfor %}
-</ul>
-</p>
-
-
-
-
 </div>
 
 <div id="righthalf">

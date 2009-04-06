@@ -9,7 +9,9 @@ class="current"
 
 {% block content %}
 
-<div id="middlewhole">
+<div id="left75">
+
+	{% include "../events/_create.html" %}
 
   <h1>Create an Event</h1>
   <div>Today's Message: {{ message }} </div>
@@ -34,6 +36,9 @@ class="current"
 	{% endif %}
 	</div>
 	
-</div><!--end middlewhole-->
+</div><!--end left75-->
+<div id="right25">
+	{% include "../events/_creation_tips.html" %}
+</div><!--end right25-->
 
 {% endblock %}

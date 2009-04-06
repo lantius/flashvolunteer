@@ -4,7 +4,30 @@
 		<li><span class="label">Event:</span> {{ event.name }}</li>
 		<li><span class="label">Date:</span> {{ event.get_date }}</li>
 		<li><span class="label">Time:</span> {{ event.get_time }}</li>
-		<li><span class="label">Host:</span> {{ event.get_host }}</li>
+		<li><span class="label">Host:</span> 
+			{% for owner in owners %}
+				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a> 
+			{% endfor %}</li>
 		<li><span class="label">Address:</span> {{ event.address }}</li>
+		<li id="eventactionbutton">
+		{% if eventvolunteer %}
+			{% if eventvolunteer.isowner %}
+				<form action="/events/{{event.key.id}}/edit">
+					<input type="submit" value="Edit this event" />
+				</form>
+			{% else %}
+				<form action="{{event.url}}/volunteer" method="post" >
+					<input type=hidden name="delete" value="true" />
+					<input type=hidden name="session_id" value="{{ session_id }}" />
+					<input type=submit value="unvolunteer" />
+				</form>
+			{% endif %}
+		{% else %}
+			<form action="{{event.url}}/volunteer" method="post">
+				<input type=hidden name="session_id" value="{{ session_id }}" />
+				<input type=submit value="volunteer" />
+			</form>
+		{% endif %}
+		</li>
 	</ul>
 </div><!--end eventdetails-->

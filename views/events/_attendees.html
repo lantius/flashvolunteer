@@ -3,7 +3,19 @@
 <div id="eventattendees" class="hardmodule">
 	<div class="moduletitle"><h3>Event Attendees</h3></div>
 	<ul>
-		<li class="tallerlistitem" ><a>&raquo Sign up for this event</a></li>
+		<li class="tallerlistitem" >
+		{% if eventvolunteer %}
+			{% if eventvolunteer.isowner %}
+				<form class="noindentform" action="/events/{{event.key.id}}/edit">
+					<input class="nobuttonsubmit" type="submit" value="&raquo; Edit this event" />
+				</form>
+			{% endif %}
+		{% else %}
+			<form class="noindentform" action="{{event.url}}/volunteer" method="post">
+				<input type=hidden name="session_id" value="{{ session_id }}" />
+				<input class="nobuttonsubmit" type=submit value="volunteer" />
+			</form>
+		{% endif %}</li>
 		<li class="tallerlistitem" ><a>&raquo Invite a friend to this event</a></li>
 		<li><ul id="imagenamelinklist">
 			{% for volunteer in event.volunteers %}
