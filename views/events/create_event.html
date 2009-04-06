@@ -10,32 +10,8 @@ class="current"
 {% block content %}
 
 <div id="left75">
-
 	{% include "../events/_create.html" %}
-
-  <h1>Create an Event</h1>
-  <div>Today's Message: {{ message }} </div>
-  <form action="/events" method="post">
-		Title:<input type="text" name="name"/><BR>
-		Date:<input type="text" name="date"/> (mm/dd/yyyy)<br/>
-		<p>Time: {% include "../events/_time_option.html" %} </p>
-		<p>Neighborhood: {% include "../neighborhoods/_select_neighborhood.html" %}</p>
-		<p>Address: {% include "../neighborhoods/_enter_address.html" %}</p>
-		<p>Description:<br/><textarea name="description">{{event.description}}</textarea></p>
-    	
-		<h3>Interest categories</h3>
-		{% include "../interestcategories/_interestcategories.html" %}
-		<input type="submit" value="Create Event">
-		<input type=hidden name="session_id" value="{{ session_id }}">
-	</form>
-	<div>
-	{% if eventvolunteer %}
-	   Your events:<BR>{% include "_events.html" %}
-	{% else %}
-		Create an Event</br>
-	{% endif %}
-	</div>
-	
+	{#% include "../interestcategories/_interestcategories.html" %#}
 </div><!--end left75-->
 <div id="right25">
 	{% include "../events/_creation_tips.html" %}

@@ -2,14 +2,63 @@
 <div id="createevent" class="softmodule">
 	<div class="moduletitle"><h3>Create An Event</h3></div>
 	<form action="/events" method="post"><ul>
-		<li><div class="eventcreatelabel">Event Name:</div><input name="name" type="textarea" /></li>
-		<li><div class="eventcreatelabel">Date:</div><input type="textarea" /></li>
-		<li><div class="eventcreatelabel">Time:</div><input type="textarea" /></li>
-		<li><div class="eventcreatelabel">Location:</div><input type="textarea" /></li>
-		<li><div class="eventcreatelabel">Attendees:</div><input type="textarea" /></li>
-		<li><div class="eventcreatelabel">Event Description:</div><input type="textarea" /></li>
-		<li><div class="eventcreatelabel">Special Instructions:</div><input type="textarea" /></li>
+		<li>
+			<div class="eventcreatelabel">Event Name:</div>
+			<div class="eventinput">
+				{% include "../events/_name_input.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Date:</div>
+			<div class="eventinput">
+				{% include "../events/_date_option.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Start Time:</div>
+			<div class="eventinput">
+				{% include "../events/_time_option.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Neighborhood:</div>
+			<div class="eventinput">
+				{% include "../neighborhoods/_select_neighborhood.html" %}
+			</div>
+		</li>
+		
+		<li>
+			<div class="eventcreatelabel">Location:</div>
+			<div class="eventinput">
+				{% include "../neighborhoods/_enter_address.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Attendees:</div>
+			<div class="eventinput">
+				{% include "../events/_volunteer_input.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Event Description:</div>
+			<div class="eventinput">
+				{% include "../events/_description_input.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Special Instructions:</div>
+			<div class="eventinput">
+				{% include "../events/_specinstr_input.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Interest Categories:</div>
+			<div class="eventinput">
+				{% include "../interestcategories/_interestcategories.html" %}
+			</div>
+		</li>
 	</ul>
-	<input type="submit" value="submit" />
+	<input type=hidden name="session_id" value="{{ session_id }}">
+	<input id="submit" type="submit" value="submit" />
 	</form>
 </div>
