@@ -6,30 +6,12 @@ Flash Volunteer Event : {{event.name}} : Edit
 
 {% block content %}
 
-<form method="post" action="{{event.url}}/edit">
-	<h1>Editing <input type="text" name="name" value="{{event.name}}"></h1>
-	Date:<input type="text" name="date" value="{{event.date|date:"m/d/Y"}}"> (mm/dd/yyyy)<br/>
-	<p>Time:{% include "../events/_time_option.html" %}</p>
-	<p>Address: :<br/><textarea name="address">{{event.address}}</textarea></p>
-  
-	<p>Being held in {% include "../neighborhoods/_neighborhoods.html" %}</p>
-  
-  <p>Description:<br/><textarea name="description">{{event.description}}</textarea></p>
-  
-  <h3>Interest categories</h3>
-  {% include "../interestcategories/_interestcategories.html" %}
 
-	<a href="{{event.url}}">Cancel</a> 
-	<input type=hidden name="session_id" value="{{ session_id }}">
-	<input type="submit" value="update">
-</form>
-<p>
-<h3>Signed up volunteers:</h3>
-<ul>
-{% for volunteer in event.volunteers %}
-<li>{{ volunteer.get_name }}</li>
-{% endfor %}
-</ul>
-</p>
+<div id="left75">
+	{% include "../events/_create_edit.html" %}
+</div><!--end left75-->
+<div id="right25">
+	{% include "../events/_creation_tips.html" %}
+</div><!--end right25-->
+
 {% endblock content %}
-

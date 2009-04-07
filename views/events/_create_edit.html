@@ -1,7 +1,12 @@
 
 <div id="createevent" class="softmodule">
 	<div class="moduletitle"><h3>Create An Event</h3></div>
-	<form action="/events" method="post"><ul>
+	
+	<form action="{% if event %}
+						{{event.url}}/edit
+					{% else %}
+						/events
+					{% endif %}" method="post"><ul>
 		<li>
 			<div class="eventcreatelabel">Event Name:</div>
 			<div class="eventinput">
@@ -30,7 +35,7 @@
 		<li>
 			<div class="eventcreatelabel">Location:</div>
 			<div class="eventinput">
-				{% include "../neighborhoods/_enter_address.html" %}
+				{% include "../events/_enter_address.html" %}
 			</div>
 		</li>
 		<li>
@@ -48,7 +53,7 @@
 		<li>
 			<div class="eventcreatelabel">Special Instructions:</div>
 			<div class="eventinput">
-				{% include "../events/_specinstr_input.html" %}
+				{% include "../events/_special_instructions_input.html" %}
 			</div>
 		</li>
 		<li>
@@ -59,6 +64,10 @@
 		</li>
 	</ul>
 	<input type=hidden name="session_id" value="{{ session_id }}">
-	<input id="submit" type="submit" value="submit" />
+	<input id="submit" type="submit" value="{% if event %}
+												Update
+											{% else %}
+												Create
+											{% endif %}" />
 	</form>
 </div>
