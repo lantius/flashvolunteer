@@ -74,8 +74,9 @@ body {
 	font-weight: bold;
 }
 
-#moreinfo {
+#left #moreinfo {
 	margin-top: 20px;
+	font-size: 11pt;
 }
 
 .listlabel {
