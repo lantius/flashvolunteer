@@ -1,8 +1,12 @@
 
 <div id="personupcomingevents" class="hardmodule">
-	<div class="moduletitle"><h3>Special Instructions from the Event Host</h3></div>
+	{% if event.specialinstructions and event.specialinstructions|length %}
+	<div class="moduletitle">
+		<h3>Special Instructions from the Event Host</h3>
+	</div>
+	{% endif %}
 	<ul>
-		<li>{{ event.specialinstructions }}</li>
+		<li>{% if event.specialinstructions and event.specialinstructions|length %}{{ event.specialinstructions }}{% endif %}</li>
 		<li class="tallerlistitem"><a href="mailto:{{ event.contact }}">&raquo; Contact Event Host</a></li>
 	</ul>
 </div><!--end profileupcomingevents-->

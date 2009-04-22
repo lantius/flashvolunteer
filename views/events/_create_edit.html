@@ -64,10 +64,12 @@
 		</li>
 	</ul>
 	<input type=hidden name="session_id" value="{{ session_id }}">
-	<input id="submit" type="submit" value="{% if event %}
-												Update
-											{% else %}
-												Create
-											{% endif %}" />
+	<input id="submit" type="submit" value="
+	{% if event %}
+Update
+	{% else %}
+Create
+	{% endif %}" 
+	/>
 	</form>
 </div>

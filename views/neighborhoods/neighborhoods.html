@@ -1,6 +1,6 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Under construction
+Flash volunteer neighborhoods
 {% endblock title %}
 
 {% block neighborhoodsactive %}
@@ -9,8 +9,11 @@ class="current"
 
 
 {% block content %}
-<br/><br/>
-<div style="height: 200px">
-<img style="margin: auto" src="/stylesheets/ucanim.gif" />
-</div>
+<h1>Supported Neighborhoods</h1>
+<h1>More coming soon!</h1>
+<ul>
+{% for neighborhood in neighborhoods %}
+	<li>{{neighborhood.name}}</li>
+{% endfor %}
+</ul>
 {% endblock content %}

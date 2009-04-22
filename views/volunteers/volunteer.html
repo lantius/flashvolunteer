@@ -5,7 +5,9 @@
 
 {% block content %}
 <h1>{{page_volunteer.get_name}}</h1><BR>
+{% if page_volunteer.home_neighborhood %}
 They rep {{page_volunteer.home_neighborhood.name}}
+{% endif %}
 <BR>
 Their events: {% include "../events/_events.html" %}
 <br>

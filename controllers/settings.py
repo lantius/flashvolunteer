@@ -64,7 +64,9 @@ class SettingsPage(webapp.RequestHandler):
       volunteer = Volunteer()
       volunteer.user = user
       volunteer.name = user.nickname()
-      volunteer.session_id = SettingsPage.randomString(self);
+      volunteer.session_id = SettingsPage.randomString(self)
+      volunteer.home_neighborhood = Neighborhood.get_by_id(1) ## TODO We need better defaults
+      volunteer.work_neighborhood = Neighborhood.get_by_id(1) ## TODO We need better defaults
       volunteer.put();
     else:
       message = "Welcome back old volunteer"

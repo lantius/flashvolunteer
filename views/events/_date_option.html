@@ -1,4 +1,4 @@
-<select name="month" />
+<!--select name="month" />
 	<option value="1" {% ifequal "1" event.date|date:"m" %}selected="selected"{% endifequal %}>January</option>
 	<option value="2" {% ifequal "2" event.date|date:"m" %}selected="selected"{% endifequal %}>February</option>
 	<option value="3" {% ifequal "3" event.date|date:"m" %}selected="selected"{% endifequal %}>March</option>
@@ -23,5 +23,5 @@
 	<option {% ifequal "2010" event.date|date:"Y" %}selected="selected"{% endifequal %}>2010</option>
 	<option {% ifequal "2011" event.date|date:"Y" %}selected="selected"{% endifequal %}>2011</option>
 	<option {% ifequal "2012" event.date|date:"Y" %}selected="selected"{% endifequal %}>2012</option>
-</select>
+</select-->
 <input type="text" name="date" value="{{ event.date|date:"m/d/Y" }}" />
