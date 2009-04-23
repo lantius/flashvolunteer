@@ -10,6 +10,7 @@ class EventsTest(unittest.TestCase):
     self.application = webapp.WSGIApplication([('/events', EventsPage)], debug=True)
     
     self.volunteer  = Volunteer()
+    self.volunteer.create_rights = True
     self.volunteer.put()
     
     self.interestcategory1 = InterestCategory()
@@ -31,6 +32,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/01/2009',
                'time' : '03:00',
                'description' : 'test description\non the internet with two lines!',
+               'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
@@ -62,7 +64,7 @@ class EventsTest(unittest.TestCase):
     
     e.delete(event_id, self.volunteer)
     self.assertEqual(n, Event.all().count())
-  
+
     event = Event.get_by_id(int(event_id))
     owner = EventVolunteer.gql("where event = :event", event=event).get()
     self.assertFalse(event)
@@ -78,6 +80,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/02/2009',
                'time' : '13:00',
                'description' : 'test description -- edited',
+               'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'neighborhood' : '2',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1',
@@ -112,6 +115,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/01/2009',
                'time' : '15:00',
                'description' : 'test description',
+               'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
@@ -122,6 +126,7 @@ class EventsTest(unittest.TestCase):
                'date' : '01/02/2010',
                'time' : '23:01',
                'description' : 'test description',
+               'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
@@ -132,6 +137,7 @@ class EventsTest(unittest.TestCase):
                'date' : '05/05/2008',
                'time' : '12:01',   
                'description' : 'test description',
+               'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }

@@ -12,6 +12,7 @@ from controllers.messages import *
 class MessagesTest(unittest.TestCase):
   def setUp(self):
     self.volunteer  = Volunteer()
+    self.volunteer.create_rights = True
     self.volunteer.put()
     
     self.interestcategory1 = InterestCategory()
@@ -55,6 +56,7 @@ class MessagesTest(unittest.TestCase):
                'date' : '01/01/2009',
                'time' : '03:00',
                'description' : 'test description\non the internet with two lines!',
+               'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }

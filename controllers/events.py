@@ -116,6 +116,10 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
 
+    if not volunteer.can_create_events():
+      self.redirect("/events") #TODO REDIRECT to error page
+      return
+
     template_values = {
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
@@ -131,6 +135,10 @@ class EventsPage(webapp.RequestHandler):
   def create(self, params, volunteer):
     event = Event()
     
+    if not volunteer.can_create_events():
+      self.redirect("/events") #TODO REDIRECT to error page
+      return
+    
     if not event.validate(params):    
       return None
       
@@ -139,6 +147,7 @@ class EventsPage(webapp.RequestHandler):
     event.description = params['description']
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
     event.address = params['address']
+    event.special_instructions = params['special_instructions']
     
     # TODO: Check to make sure values are present and valid
     # TODO: transaction such that if anything throws an exception we don't litter the database
@@ -303,6 +312,7 @@ class EditEventPage(webapp.RequestHandler):
       event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
       event.description = params['description']
       event.address = params['address']
+      event.special_instructions = params['special_instructions']
       
       for interestcategory in InterestCategory.all():
         paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'

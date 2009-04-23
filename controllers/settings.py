@@ -95,7 +95,7 @@ class SettingsPage(webapp.RequestHandler):
     if params['avatar']:
       volunteer.avatar = params['avatar']
       
-    volunteer.quote = params['quote']
+    volunteer.quote = "" + params['quote']
     volunteer.name  = params['name']
     
     for interestcategory in InterestCategory.all():

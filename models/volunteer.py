@@ -15,6 +15,7 @@ class Volunteer(db.Model):
   home_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'home_neighborhood')
   work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
   session_id = db.StringProperty()
+  create_rights = db.BooleanProperty(default=False)
 
   def get_name(self):
     if self.name:
@@ -68,3 +69,6 @@ class Volunteer(db.Model):
       return True
     
     return False
+    
+  def can_create_events(self):
+    return self.create_rights

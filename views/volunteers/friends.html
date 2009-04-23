@@ -1,6 +1,6 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Under construction
+Friends
 {% endblock title %}
 
 {% block friendsactive %}
@@ -9,8 +9,41 @@ class="current"
 
 
 {% block content %}
-<br/><br/>
-<div style="height: 200px">
-<img style="margin: auto" src="/stylesheets/ucanim.gif" />
-</div>
+<div id="personfriends" class="softmodule">
+	<div class="moduletitle">
+	</div>
+		{% for f in volunteer.following %}
+			{% if forloop.first %}
+		<h3>Following</h3><br>
+		<ul>
+			{% endif %}
+			<img src="
+			{% if f.avatar %}
+				{{ f.avatar }}
+			{% else %}
+				/stylesheets/default-profile-pic-small.png
+			{% endif %}
+			" alt="{{ volunteer.get_name }}" />
+			{% if forloop.last %}
+		</ul>
+			{% endif %}
+		{% endfor %}
+		{% for f in volunteer.followers %}
+			{% if forloop.first %}
+		<h3>Followers</h3><br>
+		<ul>
+			{% endif %}
+			<img src="
+			{% if f.avatar %}
+				{{ f.avatar }}
+			{% else %}
+				/stylesheets/default-profile-pic-small.png
+			{% endif %}
+			" alt="{{ volunteer.get_name }}" />
+			{% if forloop.last %}
+		</ul>
+			{% endif %}
+		{% endfor %}
+	</ul>
+</div><!--end friends-->
 {% endblock content %}

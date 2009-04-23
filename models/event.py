@@ -12,6 +12,7 @@ class Event(db.Model):
   date_created = db.DateProperty(auto_now_add=True)
   date = db.DateTimeProperty()
   description = db.TextProperty()
+  special_instructions = db.TextProperty()
   address = db.StringProperty(multiline=True)
   
   def get_date(self):

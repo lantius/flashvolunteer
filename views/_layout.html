@@ -19,7 +19,9 @@
 			<li><a href="/friends" {% block friendsactive %}{% endblock friendsactive %} >FRIENDS</a></li>
 			<li><a href="/settings" {% block profileactive %}{% endblock profileactive %} >PROFILE</a></li>
 			<li><a href="/help" {% block helpactive %}{% endblock helpactive %} >HELP</a></li>
+			{% if volunteer.can_create_events %}
 			<li><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} >CREATE EVENT</a></li>
+			{% endif %}
 		</ul>
 	</div>
 	<div id="searchbox">
