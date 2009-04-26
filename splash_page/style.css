@@ -38,7 +38,7 @@ body {
 	margin-right: 20px;
 }
 
-#left img {
+#left #fvlogo {
 	position: relative;
 	top: 20px;
 }
@@ -80,6 +80,15 @@ body {
 	color: #3b3b3b;
 }
 
+#left #fb-badge {
+	padding-top: 40px;
+	text-align: center;
+}
+
+#left #fb-insentive {
+	padding-top: 10px;
+	font-size: 8pt;
+}
 .listlabel {
 	color: #30b003;
 	font-weight: bold;
