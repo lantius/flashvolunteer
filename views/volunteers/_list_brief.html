@@ -4,7 +4,6 @@
 				<h3>Friends</h3>
 			</div>
 			<ul>
-				<li id="numberfriends">{{ volunteer.friendscount }} friends</li>
 				{% for f in volunteer.following %}
 					<li><a href="{{f.url}}">{{ f.get_name }}</a></li>
 				{% endfor %}

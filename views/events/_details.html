@@ -16,17 +16,21 @@
 					<input type="submit" value="Edit this event" />
 				</form>
 			{% else %}
-				<form action="{{event.url}}/volunteer" method="post" >
-					<input type=hidden name="delete" value="true" />
-					<input type=hidden name="session_id" value="{{ session_id }}" />
-					<input type=submit value="unvolunteer" />
-				</form>
+				{% if not event.inpast %}
+					<form action="{{event.url}}/volunteer" method="post" >
+						<input type=hidden name="delete" value="true" />
+						<input type=hidden name="session_id" value="{{ session_id }}" />
+						<input type=submit value="unvolunteer" />
+					</form>
+				{% endif %}
 			{% endif %}
 		{% else %}
-			<form action="{{event.url}}/volunteer" method="post">
-				<input type=hidden name="session_id" value="{{ session_id }}" />
-				<input type=submit value="volunteer" />
-			</form>
+			{% if not event.inpast %}
+				<form action="{{event.url}}/volunteer" method="post">
+					<input type=hidden name="session_id" value="{{ session_id }}" />
+					<input type=submit value="volunteer" />
+				</form>
+			{% endif %}
 		{% endif %}
 		</li>
 	</ul>

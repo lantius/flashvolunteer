@@ -62,7 +62,7 @@ class EventMessagesPage(MessagesPage):
 
     message = Message()
     template_values = {
-        'volun teer': volunteer,
+        'volunteer': volunteer,
         'event' : event,
         'eventvolunteer' : eventvolunteer,
         'message' : message,

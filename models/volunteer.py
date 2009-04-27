@@ -38,8 +38,14 @@ class Volunteer(db.Model):
   def following(self):
     return (f.volunteer for f in self.volunteerfollowing)
 
+  def following_len(self):
+    return len(self.following())
+
   def followers(self):
     return (f.follower for f in self.volunteerfollowers)
+
+  def followers_len(self):
+    return len(self.followers())
 
   def events_past_count(self):
     return len(self.events_past())
@@ -63,6 +69,9 @@ class Volunteer(db.Model):
         if following.key().id() == follower.key().id():
           fr.append(following)
     return (f for f in fr)
+
+  def friends_len(self):
+    return len(self.friends())
 
   def check_session_id(self, form_session_id):
     if form_session_id == self.session_id:

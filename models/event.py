@@ -50,3 +50,6 @@ class Event(db.Model):
       return True
     except:
       return False
+  
+  def inpast(self):
+      return self.date < datetime.datetime.now()

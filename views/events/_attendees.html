@@ -18,7 +18,7 @@
 		{% endif %}</li>
 		<li class="tallerlistitem" ><a>&raquo Invite a friend to this event</a></li>
 		<li><ul id="imagenamelinklist">
-			{% for volunteer in event.volunteers %}
+			{% for v in event.volunteers %}
 				<li>{% include "../volunteers/_image_name_link.html" %}</li>
 			{% endfor %}
 		</ul></li>

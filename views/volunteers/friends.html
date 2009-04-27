@@ -9,6 +9,15 @@ class="current"
 
 
 {% block content %}
+<div id="left25">
+	{% include "../volunteers/_following_list.html" %}
+	{% include "../volunteers/_followers_list.html" %}
+	
+</div>
+<div id="right75">
+	{% include "../volunteers/_friends_list.html" %}
+	
+	
 <div id="personfriends" class="softmodule">
 	<div class="moduletitle">
 	</div>
@@ -46,4 +55,8 @@ class="current"
 		{% endfor %}
 	</ul>
 </div><!--end friends-->
+	
+	
+</div>
+
 {% endblock content %}

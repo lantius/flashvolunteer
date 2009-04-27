@@ -1,12 +1,12 @@
 
 <div class="imagenamelink">
-	<a href="{{ volunteer.url }}" >
+	<a href="{{ v.url }}" >
 	<img src="
-	{% if volunteer.avatar %}
-		{{ volunteer.avatar }}
+	{% if v.avatar %}
+		{{ v.avatar }}
 	{% else %}
 		/stylesheets/default-profile-pic-small.png
 	{% endif %}
-	" alt="{{ volunteer.get_name }}" />
-	<br />{{ volunteer.get_name }}</a>
+	" alt="{{ v.get_name }}" />
+	<br />{{ v.get_name }}</a>
 </div>
