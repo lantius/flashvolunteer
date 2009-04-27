@@ -19,8 +19,8 @@ class SettingsTest(unittest.TestCase):
 
   def tearDown(self):
     self.interestcategory1.delete()
-    self.interestcategory2.delete()
-    
+    self.interestcategory2.delete() 
+
   # UPDATE
   def test_update(self):
     params = {'home_neighborhood' : 1,

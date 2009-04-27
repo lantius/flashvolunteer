@@ -45,6 +45,7 @@ class AuthorizeTest(unittest.TestCase):
     
     user = users.get_current_user()
     volunteer = Authorize.login(req, requireVolunteer=False, redirectTo='/test_url')
+    
     self.assertEqual(volunteer, None)
 
     volunteer  = Volunteer()
@@ -55,15 +56,18 @@ class AuthorizeTest(unittest.TestCase):
     self.assertEqual(volunteer.user.email(), 'test@example.com')
     
     self.logout()
-    volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
-    
-    #login_url = users.create_login_url('/')
-    #self.assertEqual(req.new_url, login_url)
+    self.assertRaises(AuthError, Authorize.login, req, requireVolunteer=True, redirectTo='/test_url')
+    try:
+      volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+    except:
+      self.assertEqual(req.new_url, '/test_url')    
 
     self.login('test-2@example.com')
-    volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
-    
-    self.assertEqual(req.new_url, '/test_url')
+    self.assertRaises(AuthError, Authorize.login, req, requireVolunteer=True, redirectTo='/test_url')
+    try:
+      volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+    except:
+      self.assertEqual(req.new_url, '/test_url')    
     
   def test_authenticated_post(self):  
     req = self.harness_req()
@@ -92,6 +96,9 @@ class AuthorizeTest(unittest.TestCase):
     self.assertEqual(volunteer.session_id, 'abcde')
     self.assertFalse(volunteer.check_session_id(req.request.get('session_id')))
     
-    volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
-    self.assertEqual(req.new_url, '/timeout')
+    self.assertRaises(TimeoutError, Authorize.login, req, requireVolunteer=True, redirectTo='/test_url')
+    try:
+      volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+    except:
+      self.assertEqual(req.new_url, '/timeout')
     

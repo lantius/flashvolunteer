@@ -28,51 +28,35 @@ class SettingsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
-    self.show(volunteer)
+    if volunteer:
+      self.edit(volunteer)
+    else:
+      self.new()
 
   ################################################################################
   # POST
   ################################################################################
   def post(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
 
     params = Parameters.parameterize(self.request)
-    
-    if 'is_delete' in params and params['is_delete'] == 'true':
-      self.delete(volunteer)
-      self.redirect('/')
-    else:  
-      self.update(params, volunteer)
-      self.redirect('/settings')
-
-  ################################################################################
-  # SHOW
-  # TODO: this is a GET that changes the database.  danger, will robinson!
-  ################################################################################
-  def show(self, volunteer):
     if not volunteer:
-      user = users.get_current_user()
-
-      if not user:
-        req.redirect(users.create_login_url(req.request.uri))
-        return
-      
-      message = "Welcome newly registered volunteer"
-      volunteer = Volunteer()
-      volunteer.user = user
-      volunteer.name = user.nickname()
-      volunteer.session_id = SettingsPage.randomString(self)
-      volunteer.home_neighborhood = Neighborhood.get_by_id(1) ## TODO We need better defaults
-      volunteer.work_neighborhood = Neighborhood.get_by_id(1) ## TODO We need better defaults
-      volunteer.put();
+      self.create(params)
+      self.redirect('/')
     else:
-      message = "Welcome back old volunteer"
-      if volunteer.home_neighborhood:
-        message += " from " + volunteer.home_neighborhood.name
-    
+      if 'is_delete' in params and params['is_delete'] == 'true':
+        self.delete(volunteer)
+        self.redirect('/')
+      else:  
+        self.update(params, volunteer)
+        self.redirect('/settings')
+
+  ################################################################################
+  # EDIT
+  def edit(self, volunteer):
     template_values = {
         'volunteer' : volunteer, 
         'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
@@ -82,10 +66,45 @@ class SettingsPage(webapp.RequestHandler):
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
     self.response.out.write(template.render(path, template_values))
+  
+  ################################################################################
+  # NEW
+  def new(self):
+    user = users.get_current_user()
+
+    if not user:
+      self.redirect(users.create_login_url(self.request.uri))
+      return
+
+    volunteer = Volunteer()
+    volunteer.name = user.nickname()
+
+    template_values = {
+        'volunteer' :  volunteer,
+        'home_neighborhoods': Neighborhood.all(),
+        'work_neighborhoods': Neighborhood.all(),
+        'interestcategories' : InterestCategory.all(),
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
+    self.response.out.write(template.render(path, template_values))
 
   ################################################################################
-  # UPDATE
+  # CREATE
+  def create(self, params):
+    user = users.get_current_user()
+
+    if not user:
+      self.redirect(users.create_login_url(self.request.uri))
+      return
+
+    volunteer = Volunteer()
+    volunteer.user = user
+    volunteer.name = user.nickname()
+    volunteer.put()
+    self.update(params, volunteer)
+    
   ################################################################################
+  # UPDATE
   def update(self, params, volunteer):
     if params['home_neighborhood']:
       volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
@@ -112,7 +131,6 @@ class SettingsPage(webapp.RequestHandler):
       
   ################################################################################
   # DELETE
-  ################################################################################
   def delete(self, volunteer):
     # Remove followers relationship
     followers = volunteer.volunteerfollowers;

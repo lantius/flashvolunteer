@@ -13,17 +13,37 @@ class Authorize():
       volunteer = None
     
     if requireVolunteer:
-      
       if not volunteer:
         req.redirect(redirectTo)
-        sys.exit            # should end execution IRL
-        return (None) # shouldn't get here except in tests
+        raise AuthError("You must be signed in to perform this action.")
+        #sys.exit(0)           # should end execution IRL
+        #return (None)      # shouldn't get here except in tests
         
       if volunteer and req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
         req.redirect('/timeout')
-        sys.exit            # should end execution IRL
-        return (None) # shouldn't get here except in tests    
+        raise TimeoutError("Session has timed out.")
+        #return (None)       # shouldn't get here except in tests    
     
     return(volunteer)
-  
+    
   login = staticmethod(login)
+  
+class AuthError(Exception):
+    """Exception raised for authorization errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self,message):
+        self.message = message
+        
+class TimeoutError(Exception):
+    """Exception raised for timeout errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self,message):
+        self.message = message
