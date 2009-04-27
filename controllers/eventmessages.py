@@ -105,6 +105,3 @@ class EventMessagesPage(MessagesPage):
     self.response.out.write(template.render(path, template_values))  
     
     
-    
-    
-    
