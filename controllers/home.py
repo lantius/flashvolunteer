@@ -51,7 +51,6 @@ class MainPage(webapp.RequestHandler):
     
     if volunteer.home_neighborhood:
       events['Neighborhood events'] = volunteer.home_neighborhood.events
-      home_neighborhood = volunteer.home_neighborhood
     
     for ic in volunteer.interestcategories():
       if ic.events():
@@ -59,7 +58,7 @@ class MainPage(webapp.RequestHandler):
   
     template_values = {
         'volunteer' : volunteer,
-        'neighborhoods': NeighborhoodHelper().selected(home_neighborhood),
+        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
     self.response.out.write(template.render(path, template_values))
