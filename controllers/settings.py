@@ -100,6 +100,7 @@ class SettingsPage(webapp.RequestHandler):
     volunteer = Volunteer()
     volunteer.user = user
     volunteer.name = user.nickname()
+    volunteer.session_id = SettingsPage.randomString(self)
     volunteer.put()
     self.update(params, volunteer)
     
