@@ -1,6 +1,9 @@
+import os
 import wsgiref.handlers
 import cgi, logging
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
+
 
 from controllers.home import MainPage
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
@@ -17,7 +20,7 @@ from controllers.settings import SettingsPage
 class TimeoutPage(webapp.RequestHandler):
   def get(self):
     path = os.path.join(os.path.dirname(__file__), '..', 'views','session_timeout.html')
-    self.response.out.write(template.render(path, ''))
+    self.response.out.write(template.render(path, {}))
 
 ################################################################################
 # gae mojo
