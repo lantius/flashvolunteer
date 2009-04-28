@@ -4,7 +4,6 @@ import cgi, logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
-
 from controllers.home import MainPage
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
 from controllers.eventmessages import EventMessagesPage
