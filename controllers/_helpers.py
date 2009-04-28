@@ -5,8 +5,9 @@ class NeighborhoodHelper():
   def selected(self, selected_neighborhood):
     neighborhoods = []
     for neighborhood in Neighborhood.all():
-      if selected_neighborhood and neighborhood.key().id() == selected_neighborhood.key().id():
-        neighborhood.selected = True
+      if selected_neighborhood:
+        if neighborhood.key().id() == selected_neighborhood.key().id():
+          neighborhood.selected = True
       neighborhoods.append(neighborhood)
     return neighborhoods
 
