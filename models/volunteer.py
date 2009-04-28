@@ -11,6 +11,7 @@ class Volunteer(db.Model):
   name = db.StringProperty()
   avatar = db.BlobProperty()
   quote = db.StringProperty()
+  twitter = db.StringProperty()
   joinedon = db.DateProperty(auto_now_add=True)
   home_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'home_neighborhood')
   work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')

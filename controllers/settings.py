@@ -3,6 +3,7 @@ import random
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
+from controllers._twitter import Twitter
 
 from google.appengine.ext.webapp import template
 from google.appengine.api import users, images
@@ -120,6 +121,11 @@ class SettingsPage(webapp.RequestHandler):
       
     volunteer.quote = "" + params['quote']
     volunteer.name  = params['name']
+    
+    
+    if volunteer.twitter != params['twitter']:
+      volunteer.twitter = params['twitter']
+      Twitter.toot("Welcome to Flash Volunteer!", volunteer.twitter)
     
     for interestcategory in InterestCategory.all():
       paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'

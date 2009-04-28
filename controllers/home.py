@@ -47,7 +47,7 @@ class MainPage(webapp.RequestHandler):
   # homepage
   def homepage(self, volunteer):
     events = { 'Your events' : volunteer.events() }
-    byinterest = None
+    byinterest = []
     
     if volunteer.home_neighborhood:
       events['Neighborhood events'] = volunteer.home_neighborhood.events
