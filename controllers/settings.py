@@ -108,9 +108,16 @@ class SettingsPage(webapp.RequestHandler):
   # UPDATE
   def update(self, params, volunteer):
     if params['home_neighborhood']:
-      volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+      if params['home_neighborhood'] == 'None':
+        volunteer.home_neighborhood = None;
+      else:
+        volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+        
     if params['work_neighborhood']:
-      volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
+      if params['work_neighborhood'] == 'None':
+        volunteer.work_neighborhood = None;
+      else:
+        volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
     
     if params['avatar']:
       volunteer.avatar = params['avatar']

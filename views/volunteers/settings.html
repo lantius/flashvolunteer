@@ -28,18 +28,18 @@ Volunteer Settings
   
 	<div> Home Neighborhood: 
 		<select name="home_neighborhood">
+			<option value="None">-- No Neighborhood select --</option>
 			{% for neighborhood in home_neighborhoods %}
-			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}
-			</option>
+			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
 			{% endfor %}
 		</select>
 	</div>
 
 	<div> Work Neighborhood: 
 		<select name="work_neighborhood">
+			<option value="None">-- No Neighborhood select --</option>
 			{% for neighborhood in work_neighborhoods %}
-			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}
-			</option>
+			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
 			{% endfor %}
 		</select>
 	</div>
