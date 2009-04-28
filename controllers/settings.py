@@ -81,11 +81,8 @@ class SettingsPage(webapp.RequestHandler):
 
     template_values = {
         'volunteer' :  volunteer,
-        'home_neighborhoods': Neighborhood.all(),
-        'work_neighborhoods': Neighborhood.all(),
-        'interestcategories' : InterestCategory.all(),
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'create.html')
     self.response.out.write(template.render(path, template_values))
 
   ################################################################################
@@ -99,10 +96,9 @@ class SettingsPage(webapp.RequestHandler):
 
     volunteer = Volunteer()
     volunteer.user = user
-    volunteer.name = user.nickname()
+    volunteer.name  = params['name']
     volunteer.session_id = SettingsPage.randomString(self)
     volunteer.put()
-    self.update(params, volunteer)
     
   ################################################################################
   # UPDATE
