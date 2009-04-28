@@ -9,7 +9,7 @@
 <div id="top">
 	<div id="logo"><a href="/"><img src="/stylesheets/logo.png" alt="flashvolunteer"/></a></div>
 	{%if volunteer %}
-		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name }} <br /><a href="{{volunteer.logout_url}}">Log Out</a></div>
+		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}">Log Out</a></div>
 	{% endif %}
 	<div id="navtabs">
 		<ul>

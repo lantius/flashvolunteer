@@ -13,17 +13,17 @@ Volunteer Settings
   <form action="/settings" method="post" enctype="multipart/form-data".>
   
     <div><strong>Name:</strong>
-    <input type="text" name="name" size="40" value="{{ volunteer.name }}"  /></div>
+    <input type="text" name="name" size="40" value="{{ volunteer.name|striptags }}"  /></div>
   
   
   <div><strong>Profile picture:</strong>
 		{% if volunteer.avatar %}
-			<br/><img src="{{volunteer.url}}/avatar" alt="{{ volunteer.get_name }}" /><br/>
+			<br/><img src="{{ volunteer.url }}/avatar" alt="{{ volunteer.get_name|striptags }}" /><br/>
 		{% endif %}
   <input type="file" name="avatar" /> (JPEG format only)</div>
   
   <div><strong>Quote:</strong>
-  "<input type="text" name="quote" size="40" value="{{ volunteer.quote }}"  />"</div>
+  "<input type="text" name="quote" size="40" value="{{ volunteer.quote|striptags }}"  />"</div>
 
   
 	<div> Home Neighborhood: 
@@ -52,7 +52,7 @@ Volunteer Settings
 		</p></form>
 	</div>
 
-  User since {{volunteer.joinedon}}
+  User since {{ volunteer.joinedon }}
 	
 	<div>
 		<form action="/delete" method="post"> <input type="submit" value="Delete your account" />

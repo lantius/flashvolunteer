@@ -32,7 +32,7 @@ class="current"
 			{% else %}
 				/stylesheets/default-profile-pic-small.png
 			{% endif %}
-			" alt="{{ volunteer.get_name }}" />
+			" alt="{{ volunteer.get_name|striptags }}" />
 			{% if forloop.last %}
 		</ul>
 			{% endif %}
@@ -48,7 +48,7 @@ class="current"
 			{% else %}
 				/stylesheets/default-profile-pic-small.png
 			{% endif %}
-			" alt="{{ volunteer.get_name }}" />
+			" alt="{{ volunteer.get_name|striptags }}" />
 			{% if forloop.last %}
 		</ul>
 			{% endif %}
