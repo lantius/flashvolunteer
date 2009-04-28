@@ -1,0 +1,159 @@
+
+a {
+	color: #008c99;
+}
+
+html {
+	background: #3b3b3b;
+}
+
+body {
+	background: #3b3b3b;
+	color: #838383;
+	font-family: "lucida grande", tahoma, verdana, arial, san-serif;
+	font-size: 9pt;
+
+}
+
+#container {
+	position: relative;
+	margin-top: 70px;
+	height: 550px;
+	border-top: #30b003 7px solid;
+	border-bottom: #30b003 7px solid;
+	background: #FFF;
+	text-align: center;
+}
+
+#subcontainer {
+	margin: auto;
+	position: relative;
+	width: 760px;
+	text-align: left;
+}
+#left {
+	float: left;
+	width: 280px;
+	text-align: right;
+	margin-right: 20px;
+}
+
+#left #fvlogo {
+	position: relative;
+	top: 20px;
+}
+#right {
+	float: right;
+	width: 430px;
+	border-left: #d8d8d8 solid 1px;
+	margin-top: 38px;
+	padding: 0 0 0 20px;
+}
+
+#discover {
+	font-weight: bold;
+	color: #008c99;
+	font-size: 15pt;
+}
+
+#info {
+	margin-top: 14px;	
+}
+
+#benefitsindividuals {
+	margin-top: 20px;
+}
+
+#benefitsorgs {
+	margin-top: 20px;
+}
+
+#releaseinfo {
+	margin-top: 40px;
+	color: #008c99;
+	font-weight: bold;
+}
+
+#left #moreinfo {
+	margin-top: 20px;
+	font-size: 11pt;
+	color: #3b3b3b;
+}
+
+#left #fb-badge {
+	padding-top: 40px;
+	text-align: center;
+}
+
+#left #fb-insentive {
+	text-align: center;
+	padding-top: 10px;
+	font-size: 8pt;
+}
+
+#left #login-create {
+	text-align: center;
+	padding-top: 40px;
+}
+
+#left #login-create a{
+	text-decoration: none;
+	vertical-align: middle;
+	font-size: 12pt;
+}
+
+.listlabel {
+	color: #30b003;
+	font-weight: bold;
+	font-size: 9pt;
+}
+
+li {
+	margin: 5px 0 0 15px;
+	list-style: url(raquo.png) outside;
+	font-size: 8pt;
+}
+
+#buttons {
+	
+}
+
+.button{
+	float: right;
+	display: block;
+	position: relative;
+	height: 22px;
+	color: #FFF;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.buttonleft {
+	display: block;
+	float: left;
+	width: 10px;
+	height: 22px;
+	background: url(/stylesheets/buttons/green/FV_Button_Green_Left.gif) left;
+}
+
+.buttoncenter {
+	display: block;
+	float: left;
+	height: 22px;
+	background: url(/stylesheets/buttons/green/FV_Button_Green_Center.gif) repeat-x;
+}
+
+.buttonright {
+	display: block;
+	float: left;
+	width: 10px;
+	height: 22px;
+	background: url(/stylesheets/buttons/green/FV_Button_Green_Right.gif) left;
+}
+
+
+/*
+#008c99 - blue colored text
+#5e5e5e - grey text
+
+*/
