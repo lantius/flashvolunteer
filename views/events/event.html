@@ -4,13 +4,15 @@
 Flash Volunteer Event : {{event.name}}
 {% endblock title %}
 
+{% block eventsactive %}
+class="current"
+{% endblock %}
+
+
 {% block pagespectitle %}
 <h1>Event: {{event.name}}</h1>
 {% endblock pagespectitle %}
 
-{% block eventsactive %}
-class="current"
-{% endblock %}
 
 {% block content %}
 
