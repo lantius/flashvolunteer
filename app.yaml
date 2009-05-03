@@ -4,6 +4,7 @@ runtime: python
 api_version: 1
 
 handlers:
+
 - url: /splash
   static_dir: splash_page
 
@@ -13,6 +14,10 @@ handlers:
 - url: /test.*
   script: gaeunit.py
   login: admin
+
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin    
 
 - url: /.*
   script: controllers/route.py
