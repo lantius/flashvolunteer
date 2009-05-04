@@ -2,7 +2,11 @@
 		<div id="personblock" class="softmodule">
 		
 		<img id="nameavatar" src="
-				{% if volunteer.avatar %}{{ volunteer.url }}{% else %}/stylesheets/default-profile-pic.png{% endif %}"  
+		        {% if volunteer.avatar %}
+		            {{ volunteer.url }}/avatar
+				{% else %}
+				/stylesheets/default-profile-pic.png
+				{% endif %}"  
 			alt="{{ volunteer.get_name|striptags }}"
 		/>
 			<ul>
