@@ -19,7 +19,7 @@
 		<li class="tallerlistitem" ><a>&raquo Invite a friend to this event</a></li>
 		<li><ul id="imagenamelinklist">
 			{% for v in event.volunteers %}
-				<li>{% include "../volunteers/_image_name_link.html" %}</li>
+				{% include "../volunteers/_image_name_link.html" %}
 			{% endfor %}
 		</ul></li>
 	</ul>
