@@ -28,7 +28,7 @@ def populate(sessionid):
     
     neighborhoods = dict([(n.name, n) for n in db.GqlQuery('SELECT * from Neighborhood')])
     
-    for i in range(5):
+    for i in range(3):
         email = 'volunteer%i@test.org'%i
         u = User(email)
 
@@ -44,6 +44,24 @@ def populate(sessionid):
           create_rights = False)
         
         v.put()      
+
+    for i in range(3):
+        email = 'organization%i@test.org'%i
+        u = User(email)
+
+        v = Volunteer(
+          name = email,
+          user = u,
+          #avatar = None,
+          #quote = 'test quote',
+          #twitter = None,
+          home_neighborhood = neighborhoods['Capitol Hill'],
+          #work_neighborhood = None,
+          session_id = sessionid,
+          create_rights = True)
+        
+        v.put()      
+
 
 #    for i in range(5):
 #        e = Event(
@@ -70,7 +88,17 @@ def delete_user(name):
                 name = name)
     for v in vols:
         v.delete()
-            
+        
+def get_events(name):
+    events = db.GqlQuery('SELECT * from Event WHERE name = :name',
+                name = name)
+    return events
+    
+def delete_event(name):
+    events = db.GqlQuery('SELECT * from Event WHERE name = :name',
+                name = name)
+    for e in events:
+        e.delete()
         
 if __name__ == '__main__':
     populate(sessionid = 'test')

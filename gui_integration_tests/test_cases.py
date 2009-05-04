@@ -6,6 +6,7 @@ from gui_integration_tests.datastore_interface import populate, armageddon
 
 class BaseTestCase(unittest.TestCase):
     populate = False 
+    stop_selenium_on_completion = True
     
     def setUp(self):
         self.verificationErrors = []
@@ -29,7 +30,8 @@ class BaseTestCase(unittest.TestCase):
             print e
             pass
         
-        sel.stop()
+        if self.stop_selenium_on_completion == True:
+            sel.stop()
         
         if self.populate == True:
             armageddon(sessionid='test')
@@ -37,12 +39,13 @@ class BaseTestCase(unittest.TestCase):
         self.assertEqual([], self.verificationErrors)
 
     
-from gui_integration_tests.test_settings import auth_user, auth_psswd
-class LoginFirst_Volunteer(BaseTestCase):
+    
+class AbstractLoginFirst(BaseTestCase):
+    name = None
+    admin = False
     
     def setUp(self):
         self.populate = True
-        self.name = "volunteer0@test.org"
         BaseTestCase.setUp(self)
         
         sel = self.selenium
@@ -52,7 +55,25 @@ class LoginFirst_Volunteer(BaseTestCase):
         sel.click("//div[@id='buttons']/a[2]/span[2]")
         sel.wait_for_page_to_load("30000")
         sel.type("email", self.name)
+        if self.admin:
+            sel.click("admin")
         sel.click("submit-login")
 #        sel.wait_for_page_to_load("30000")
 #        sel.click("tosagree")
 #        sel.click("//input[@value='Create my account']")
+        
+    
+    
+class LoginFirst_Volunteer(AbstractLoginFirst):
+    
+    def setUp(self):
+        self.name = "volunteer0@test.org"
+        AbstractLoginFirst.setUp(self)
+
+class LoginFirst_Organization(AbstractLoginFirst):
+    
+    def setUp(self):
+        self.name = "organization0@test.org"
+        self.admin = True
+        AbstractLoginFirst.setUp(self)
+        
