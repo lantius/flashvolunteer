@@ -3,32 +3,13 @@
 Search
 {% endblock title %}
 
+{% block eventsactive %}
+	class="current"
+{% endblock eventsactive %}
+
 {%block content %}
-<h3>Events
-	{% if neighborhood %}
-	in {{neighborhood.name}}
-	{% endif %}
-
-	{% if fromdate %}
-	on or after {{fromdate|date:"F jS, Y" }}
-	{% endif %}
-
-	{% if todate %}
-	and on or before {{todate|date:"F jS, Y" }}
-	{% endif %}
-</h3>
-
-
-<div style="height: 200px">
-	{% if events %}
-	<ol>
-		{% for event in events %}
-			{% include "../events/_upcoming_brief.html" %}
-		{% endfor %}
-	</ol>
-	{% else %}
-	<p>No search results found.</p>
-	{% endif %}
+<div id="centerwhole">
+	{% include "../events/_search_results.html" %}
 </div>
 
 {% endblock content %}

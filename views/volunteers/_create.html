@@ -1,0 +1,13 @@
+<div id="createvolunteer" class="softmodule" >
+	<div class="moduletitle">
+		<h3>Welcome to Flash Volunteer!</h3>
+	</div>
+	<form action="/settings" method="post">
+	<input type="hidden" name="session_id" value="{{ session_id }}" />
+	<ul>
+		<li><span class="label">Your Name:</span><input id="createnameinput" type="text" name="name" value="{{ volunteer.name }}" /></li>
+		<li><input type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/toslink">Terms of Use</a></li>
+		<li><input type="submit" value="Create my account" /></li>
+	</ul>
+	</form>
+</div>

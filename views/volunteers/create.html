@@ -5,20 +5,11 @@ Volunteer Settings
 
 {% block profileactive %}class="current"{% endblock profileactive %}
 
-
 {% block content %}
-  <div id="centerwhole">
-  <h1>Welcome to Flash Volunteer!</h1>
-  <form action="/settings" method="post">
-
-    <div><strong>Your Name:</strong>
-    <input type="text" name="name" size="40" value="{{ volunteer.name }}"  /></div>
-    <div><input type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/toslink">Terms of Use</a></div>
-    <p>
-      <input type=submit value="Create my account">
-		  <input type=hidden name="session_id" value="{{ session_id }}">
-		</p>
-	 </form>
-	</div>
-	</div>
+<div id="lefthalf">
+	{% include "../volunteers/_create.html" %}
+</div>
+<div id="righthalf">
+	{% include "../help/_create_info.html" %}
+</div>
 {% endblock content %}

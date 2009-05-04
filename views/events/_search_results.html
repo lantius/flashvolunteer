@@ -1,0 +1,37 @@
+<div id="eventssearchresult" class="hardmodule" >
+	<div class="moduletitle">
+		<h3>Search Results</h3>
+	</div>
+	<div id="eventyousearchedfor" >
+		<span class="label">You have searched for an event in
+		{% if neighborhood %}
+			{{neighborhood.name}}
+		{% else %}
+			any neighborhood
+		{% endif %}, 
+		{% if fromdate %}
+		on or after {{fromdate|date:"F jS, Y" }}
+		{% endif %}
+		
+		{% if fromdate and todate %}
+			and
+		{% endif %}
+		
+		{% if todate %}
+		on or before {{todate|date:"F jS, Y" }}
+		{% endif %}
+		
+		{% if not fromdate and not todate %}
+			at any time
+		{% endif %}</span>
+	</div>
+	{% if events %}
+	<ol>
+		{% for event in events %}
+			{% include "../events/_upcoming_brief.html" %}
+		{% endfor %}
+	</ol>
+	{% else %}
+	<p>No search results found.</p>
+	{% endif %}
+</div>
