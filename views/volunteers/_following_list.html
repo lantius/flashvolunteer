@@ -7,7 +7,7 @@
 				{% for f in volunteer.following %}
 					<li><a href="{{f.url}}">{{ f.get_name }}</a></li>
 				{% endfor %}
-				{% ifequal volunteer.following_count() "0" %}
+				{% ifequal volunteer.following_count "0" %}
 					<li>You are following no one</li>
 				{% endifequal %}
 			</ul>

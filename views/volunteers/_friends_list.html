@@ -7,7 +7,7 @@
 				{% for v in volunteer.friends %}
 					{% include "_image_name_link.html" %}
 				{% endfor %}
-				{% ifequal volunteer.friends_count() "0" %}
+				{% ifequal volunteer.friends_count "0" %}
 					<li>You have no friends</li>
 				{% endifequal %}
 			</ul>
