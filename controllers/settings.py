@@ -104,37 +104,41 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # UPDATE
   def update(self, params, volunteer):
-    if params['home_neighborhood']:
+    if 'home_neighborhood' in params:
       if params['home_neighborhood'] == 'None':
         volunteer.home_neighborhood = None;
       else:
         volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
         
-    if params['work_neighborhood']:
+    if 'work_neighborhood' in params:
       if params['work_neighborhood'] == 'None':
         volunteer.work_neighborhood = None;
       else:
         volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
     
-    if params['avatar']:
+    if 'avatar' in params and params['avatar']:
       volunteer.avatar = params['avatar']
-      
-    volunteer.quote = "" + params['quote']
-    volunteer.name  = params['name']
+    if 'quote' in params and params['quote']:
+      volunteer.quote = "" + params['quote']
+    if 'name' in params and params['name']:
+      volunteer.name  = params['name']
+    if 'delete_avatar' in params and params['delete_avatar']:
+      volunteer.avatar = None
     
-    
-    if volunteer.twitter != params['twitter']:
+    if 'twitter' in params and volunteer.twitter != params['twitter']:
       volunteer.twitter = params['twitter']
       Twitter.toot("Welcome to Flash Volunteer!", volunteer.twitter)
     
     for interestcategory in InterestCategory.all():
-      paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+      param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+      if not param_name in params or not params[param_name]:
+        continue
       vic = VolunteerInterestCategory.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
                           volunteer = volunteer, interestcategory = interestcategory).get()
-      if params[paramname] == ['1','1'] and not vic:          
+      if params[param_name] == ['1','1'] and not vic:          
         vic = VolunteerInterestCategory(volunteer = volunteer, interestcategory = interestcategory)
         vic.put()
-      elif params[paramname] == '1' and vic:
+      elif params[param_name] == '1' and vic:
         vic.delete()
     
     volunteer.put()

@@ -1,0 +1,12 @@
+<div class="softmodule" id="deleteavatar">
+	<div class="moduletitle">
+		<h3>Clear your avatar</h3>
+	</div>
+	<form action="/settings" method="post"> 
+	<ul>
+		<li><input type="submit" value="Clear your avatar" /></li>
+	</ul>
+		<input type=hidden name="delete_avatar" value="true" />
+		<input type=hidden name="session_id" value="{{ session_id }}" />
+  	</form>
+</div>
