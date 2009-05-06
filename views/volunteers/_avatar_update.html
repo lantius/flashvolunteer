@@ -1,0 +1,25 @@
+<div id="personblock" class="softmodule">
+    <img id="nameavatar" src="
+            {% if volunteer.avatar %}
+                {{ volunteer.url }}/avatar
+            {% else %}
+            /stylesheets/default-profile-pic.png
+            {% endif %}"  
+        alt="{{ volunteer.get_name|striptags }}"
+    />
+   	<form action="/settings" method="post" enctype="multipart/form-data">
+	<input type=hidden name="session_id" value="{{ session_id }}">
+       <ul>
+			<li><input type="file" name="avatar" size="10" id="avataruploadinput" /> (JPEG format only)</li>
+			<li><input type="submit" value="upload" /></li>
+		</ul>
+	<input type="hidden" name="home_neighborhood" value="{{ volunteer.home_neighborhood.key.id }}" />
+	<input type="hidden" name="work_neighborhood" value="{{ volunteer.work_neighborhood.key.id }}" />
+	<input type="hidden" name="session_id" value="{{ session_id }}">
+	<input type="hidden" name="twitter" />
+	<input type="hidden" name="name" value="{{ volunteer.name|striptags }}"  />
+	<input type="hidden" name="quote" value="{{ volunteer.quote|striptags }}"  />
+	{% include "../interestcategories/_hidden_interestcategories.html" %}
+	
+	</form>
+</div>

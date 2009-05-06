@@ -1,0 +1,6 @@
+<select name="work_neighborhood">
+	<option value="None">Neighborhood...</option>
+	{% for neighborhood in work_neighborhoods %}
+	<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
+	{% endfor %}
+</select>

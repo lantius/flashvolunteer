@@ -1,0 +1,6 @@
+{% for ic in interestcategories %}
+  <input type="hidden" name="interestcategory[{{ic.key.id}}]" value="1" />
+	{% if ic.selected %}
+		<input type="hidden" name="interestcategory[{{ic.key.id}}]" value="1" />
+	{% endif %}
+{% endfor %}

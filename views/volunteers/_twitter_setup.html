@@ -1,0 +1,20 @@
+<div id="personblock" class="softmodule">
+	<div class="moduletitle">
+		<h3>Twitter Setup</h3>
+	</div>
+   	<form action="/settings" method="post" enctype="multipart/form-data">
+	<input type=hidden name="session_id" value="{{ session_id }}" />
+	<input type="hidden" name="home_neighborhood" value="{{ volunteer.home_neighborhood.key.id }}" />
+	<input type="hidden" name="work_neighborhood" value="{{ volunteer.work_neighborhood.key.id }}" />
+	<input type="hidden" name="name" value="{{ volunteer.name|striptags }}"  />
+	<input type="hidden" name="quote" value="{{ volunteer.quote|striptags }}"  />
+	<input type="hidden" name="avatar" />
+	{% include "../interestcategories/_hidden_interestcategories.html" %}
+	<ul>
+		<li><span class="label">Twitter Username:</span> <input type="text" name="twitter" size="33" value="{{ volunteer.twitter|striptags }}"  /><br/>
+  (*Note: To receive tweets, you must also follow <a href="http://twitter.com/flashvolunteer">FlashVolunteer</a> on Twitter.)
+ 		</li>
+		<li><input type="submit" value="update" /></li>
+	</ul>
+	</form>
+</div>

@@ -1,0 +1,6 @@
+<select name="home_neighborhood">
+	<option value="None">Neighborhood...</option>
+	{% for neighborhood in home_neighborhoods %}
+	<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected="selected"{% endif %}>{{neighborhood.name}}</option>
+	{% endfor %}
+</select>

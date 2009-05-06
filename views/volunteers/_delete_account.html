@@ -1,0 +1,12 @@
+<div class="softmodule" id="deleteaccount">
+	<div class="moduletitle">
+		<h3>Delete Your Account</h3>
+	</div>
+	<form action="/delete" method="post"> 
+	<ul>
+		<li><input type="submit" value="Delete your account" /></li>
+	</ul>
+		<input type=hidden name="is_delete" value="true" />
+		<input type=hidden name="session_id" value="{{ session_id }}" />
+  	</form>
+</div>

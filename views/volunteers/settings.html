@@ -6,63 +6,24 @@ Volunteer Settings
 {% block profileactive %}class="current"{% endblock profileactive %}
 
 
+
+{% block pagespectitle %}
+	<h1>{{ volunteer.name }}</h1>
+{% endblock %}
+
 {% block content %}
-  <h1>Volunteer Profile</h1>
-	<BR> Todays message: {{ message }}
-	<BR> Manage your settings:
-  <form action="/settings" method="post" enctype="multipart/form-data".>
-  
-    <div><strong>Name:</strong>
-    <input type="text" name="name" size="40" value="{{ volunteer.name|striptags }}"  /></div>
-  
-  
-  <div><strong>Profile picture:</strong>
-		{% if volunteer.avatar %}
-			<br/><img src="{{ volunteer.url }}/avatar" alt="{{ volunteer.get_name|striptags }}" /><br/>
-		{% endif %}
-  <input type="file" name="avatar" /> (JPEG format only)</div>
-  
-  <div><strong>Quote:</strong>
-  "<input type="text" name="quote" size="40" value="{{ volunteer.quote|striptags }}"  />"</div>
-
-  <div><strong>Twitter username:</strong>
-  <input type="text" name="twitter" size="40" value="{{ volunteer.twitter|striptags }}"  /><br/>
-  (*Note: To receive tweets, you must also follow <a href="http://twitter.com/flashvolunteer">FlashVolunteer</a> on Twitter.)
-  </div>
-
-  
-	<div> Home Neighborhood: 
-		<select name="home_neighborhood">
-			<option value="None">-- No Neighborhood select --</option>
-			{% for neighborhood in home_neighborhoods %}
-			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
-			{% endfor %}
-		</select>
-	</div>
-
-	<div> Work Neighborhood: 
-		<select name="work_neighborhood">
-			<option value="None">-- No Neighborhood select --</option>
-			{% for neighborhood in work_neighborhoods %}
-			<option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
-			{% endfor %}
-		</select>
-	</div>
-
-    <div><h3>Interest categories</h3>
-    {% include "../interestcategories/_interestcategories.html" %}
-
-<p>		<input type=submit value="Update">
-		<input type=hidden name="session_id" value="{{ session_id }}">
-		</p></form>
-	</div>
-
-  User since {{ volunteer.joinedon }}
+<div id="leftthird">
+	{% include "../volunteers/_avatar_update.html" %}
+</div>
 	
-	<div>
-		<form action="/delete" method="post"> <input type="submit" value="Delete your account" />
-		  <input type=hidden name="is_delete" value="true" />
-			<input type=hidden name="session_id" value="{{ session_id }}" />
-  	</form>
-	</div>
+<div id="middlethird">
+	{% include "../volunteers/_edit_profile.html" %}
+	{% include "../volunteers/_twitter_setup.html" %}
+	{% include "../volunteers/_delete_account.html" %}
+
+</div>
+
+<div id="rightthird">
+	{% include "../help/_profile_tips.html" %}
+</div>
 {% endblock content %}
