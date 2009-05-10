@@ -74,7 +74,7 @@ class FollowVolunteer(webapp.RequestHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
 

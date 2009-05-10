@@ -33,7 +33,7 @@ class EventMessagesPage(MessagesPage):
   # POST
   def post(self, event_data, message_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
     
@@ -53,7 +53,7 @@ class EventMessagesPage(MessagesPage):
   # NEW
   def new(self, event):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
 
@@ -87,7 +87,7 @@ class EventMessagesPage(MessagesPage):
   # LIST
   def list(self, event):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
       return
     eventvolunteer = None  

@@ -10,13 +10,13 @@ class NewAccount(BaseTestCase):
     def test_new(self):
         sel = self.selenium
         sel.open("/")
-        sel.click("//div[@id='buttons']/a[2]/span[2]")
+        sel.click("//span[@id='l_create_account']")
         sel.wait_for_page_to_load("30000")
         sel.type("email", self.name)
         sel.click("submit-login")
         sel.wait_for_page_to_load("30000")
         sel.click("tosagree")
-        sel.click("//input[@value='Create my account']")
+        sel.click("//input[@id='s_create_account']")
         sel.wait_for_page_to_load("30000")
         try: self.failUnless(sel.is_text_present("Welcome, %s"%self.name))
         except AssertionError, e: self.verificationErrors.append(str(e))

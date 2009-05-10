@@ -36,7 +36,7 @@ class EventsPage(webapp.RequestHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
 
@@ -55,7 +55,7 @@ class EventsPage(webapp.RequestHandler):
   # LIST
   def list(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
     
@@ -103,6 +103,7 @@ class EventsPage(webapp.RequestHandler):
                         volunteer=volunteer, event=event).get()
     if eventvolunteer:
       for ev in event.eventvolunteers:
+        #TODO notify everyone who was going to attend that this was cancelled.
         ev.delete() 
       for ei in event.eventinterestcategories:
         ei.delete()
@@ -112,7 +113,7 @@ class EventsPage(webapp.RequestHandler):
   # NEW
   def new(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
 
@@ -215,7 +216,7 @@ class VolunteerForEvent(webapp.RequestHandler):
 
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
 
@@ -246,7 +247,7 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def get(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
     self.edit({ 'id' : url_data }, volunteer)
@@ -256,7 +257,7 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
       
@@ -272,7 +273,6 @@ class EditEventPage(webapp.RequestHandler):
   ################################################################################
   def edit(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
-  
     
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
@@ -315,13 +315,13 @@ class EditEventPage(webapp.RequestHandler):
       event.special_instructions = params['special_instructions']
       
       for interestcategory in InterestCategory.all():
-        paramname = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+        param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
         eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
                             event = event, interestcategory = interestcategory).get()
-        if params[paramname] == ['1','1'] and not eic:          
+        if params[param_name] == ['1','1'] and not eic:          
           eic = EventInterestCategory(event = event, interestcategory = interestcategory)
           eic.put()
-        elif params[paramname] == '1' and eic:
+        elif params[param_name] == '1' and eic:
           eic.delete()
           
       event.put()

@@ -11,7 +11,7 @@ class HelpPage(webapp.RequestHandler):
   def get(self):    
     
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
       return
     

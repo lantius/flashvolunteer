@@ -10,9 +10,9 @@ class DeleteAccount(LoginFirst_Volunteer):
     def test_new(self):
         sel = self.selenium
         sel.wait_for_page_to_load("30000")
-        sel.click("link=PROFILE")
+        sel.click("//a[@id='l_profile']")
         sel.wait_for_page_to_load("30000")
-        sel.click("//input[@value='Delete your account']")
+        sel.click("//input[@id='s_delete_account']")
         sel.wait_for_page_to_load("30000")
         
         self.assertFalse(check_if_user_exists(name = self.name))

@@ -15,6 +15,8 @@ from google.appengine.api.users import User
 from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
 from models.event import Event
+from models.eventvolunteer import EventVolunteer
+
 
 def auth_func():
     return auth_user, auth_psswd  
@@ -98,7 +100,14 @@ def delete_event(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',
                 name = name)
     for e in events:
-        e.delete()
+      if e.eventvolunteers:
+        for ev in e.eventvolunteers:
+          ev.delete()
+      # TODO: Delete interest categories    
+      #if e.eventinterestcategories:
+      #  for ei in e.eventinterestcategories:
+      #    ei.delete()
+      e.delete()
         
 if __name__ == '__main__':
     populate(sessionid = 'test')

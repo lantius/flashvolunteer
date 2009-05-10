@@ -11,8 +11,8 @@
 		/>
 			<ul>
 				<li id="personname">{{ volunteer.get_name|striptags }}</li>
-				{% if volunteer.quote|striptags %}
-					<li id="personstatement">{{ volunteer.quote|striptags }}</li>
+				{% if volunteer.get_quote|striptags %}
+					<li id="personstatement">{{ volunteer.get_quote|striptags }}</li>
 				{% endif %}
 				<li class="tallerlistitem"><a href="/settings">&raquo; Edit profile</a></li>
 			</ul>

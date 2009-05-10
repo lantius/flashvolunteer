@@ -11,7 +11,7 @@ from models.neighborhood import Neighborhood
 class NeighborhoodsPage(webapp.RequestHandler):
   def get(self, url_data):    
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
       return
     

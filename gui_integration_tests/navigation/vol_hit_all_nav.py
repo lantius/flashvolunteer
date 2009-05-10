@@ -8,16 +8,15 @@ class NewTest(LoginFirst_Volunteer):
     def test_new(self):
         sel = self.selenium
         sel.wait_for_page_to_load("30000")
-        sel.click("link=EVENTS")
+        sel.click("//a[@id='l_events']")
         sel.wait_for_page_to_load("30000")
-        sel.click("link=NEIGHBORHOODS")
+        sel.click("//a[@id='l_neighborhoods']")
         sel.wait_for_page_to_load("30000")
-        sel.click("link=FRIENDS")
+        sel.click("//a[@id='l_friends']")
         sel.wait_for_page_to_load("30000")
-        sel.click("link=PROFILE")
+        sel.click("//a[@id='l_profile']")
         sel.wait_for_page_to_load("30000")
-        sel.click("link=HELP")
-        sel.wait_for_page_to_load("30000")
+        sel.click("//a[@id='l_help']")
 
 if __name__ == "__main__":
     unittest.main()

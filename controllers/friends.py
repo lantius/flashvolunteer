@@ -10,7 +10,7 @@ from controllers._auth import Authorize
 class FriendsPage(webapp.RequestHandler):
   def get(self):    
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='settings')
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
       return
     

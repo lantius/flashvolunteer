@@ -118,11 +118,11 @@ class SettingsPage(webapp.RequestHandler):
     
     if 'avatar' in params and params['avatar']:
       volunteer.avatar = params['avatar']
-    if 'quote' in params and params['quote']:
+    if 'quote' in params:
       volunteer.quote = "" + params['quote']
-    if 'name' in params and params['name']:
+    if 'name' in params:
       volunteer.name  = params['name']
-    if 'delete_avatar' in params and params['delete_avatar']:
+    if 'delete_avatar' in params:
       volunteer.avatar = None
     
     if 'twitter' in params and volunteer.twitter != params['twitter']:
@@ -131,7 +131,7 @@ class SettingsPage(webapp.RequestHandler):
     
     for interestcategory in InterestCategory.all():
       param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-      if not param_name in params or not params[param_name]:
+      if not param_name in params:
         continue
       vic = VolunteerInterestCategory.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
                           volunteer = volunteer, interestcategory = interestcategory).get()

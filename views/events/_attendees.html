@@ -5,11 +5,7 @@
 	<ul>
 		<li class="tallerlistitem" >
 		{% if eventvolunteer %}
-			{% if eventvolunteer.isowner %}
-				<form class="noindentform" action="/events/{{event.key.id}}/edit">
-					<input class="nobuttonsubmit" type="submit" value="&raquo; Edit this event" />
-				</form>
-			{% endif %}
+
 		{% else %}
 			<form class="noindentform" action="{{event.url}}/volunteer" method="post">
 				<input type=hidden name="session_id" value="{{ session_id }}" />

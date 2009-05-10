@@ -19,7 +19,7 @@ class Authorize():
         #sys.exit(0)           # should end execution IRL
         #return (None)      # shouldn't get here except in tests
         
-      if volunteer and req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
+      elif req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
         req.redirect('/timeout')
         raise TimeoutError("Session has timed out.")
         #return (None)       # shouldn't get here except in tests    

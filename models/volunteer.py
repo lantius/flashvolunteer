@@ -23,6 +23,12 @@ class Volunteer(db.Model):
       return self.name
 
     return self.volunteer.nickname
+
+  def get_quote(self):
+    if self.quote:
+      return self.quote
+      
+    return ''
     
   def url(self):
     return '/volunteers/' + str(self.key().id())
@@ -60,7 +66,10 @@ class Volunteer(db.Model):
 
   def events_future(self):
     future_filter = lambda x: x.date >= datetime.datetime.today()
-    return filter(future_filter, self.events())
+    if self.events_future_count > 0: #TODO make more efficient
+      return filter(future_filter, self.events())
+    else:
+      return []
         
   # both following and follower
   def friends(self):

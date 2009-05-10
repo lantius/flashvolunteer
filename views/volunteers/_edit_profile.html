@@ -4,15 +4,13 @@
 	</div>
 	<form action="/settings" method="post" enctype="multipart/form-data".>
 	<input type="hidden" name="session_id" value="{{ session_id }}">
-	<input type="hidden" name="avatar" />
-	<input type="hidden" name="twitter" />
 	<ul>
 		<li><span class="label">Name:</span> <input type="text" name="name" value="{{ volunteer.name|striptags }}"  /></li>
-		<li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.quote|striptags }}"  /></li>
+		<li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
 		<li><span class="label">I live in:</span> {% include "../volunteers/_select_home_neighborhood.html" %}
 		<li><span class="label">I work in:</span> {% include "../volunteers/_select_work_neighborhood.html" %} </li>
 		<li><span class="label">Interest Categories:</span> {% include "../interestcategories/_interestcategories.html" %}</li>
-		<li><input type="submit" value="Update Profile Settings"></li>
+		<li><input type="submit" id="s_update_profile" value="Update Profile Settings"></li>
 	</ul>
 	
 	</form>
