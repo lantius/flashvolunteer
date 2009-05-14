@@ -1,17 +1,57 @@
+<form action="/settings" method="post" enctype="multipart/form-data".>
+
 <div id="editprofile" class="softmodule">
-	<div class="moduletitle">
-		<h3>Edit Profile</h3>
-	</div>
-	<form action="/settings" method="post" enctype="multipart/form-data".>
-	<input type="hidden" name="session_id" value="{{ session_id }}">
-	<ul>
-		<li><span class="label">Name:</span> <input type="text" name="name" value="{{ volunteer.name|striptags }}"  /></li>
-		<li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
-		<li><span class="label">I live in:</span> {% include "../volunteers/_select_home_neighborhood.html" %}
-		<li><span class="label">I work in:</span> {% include "../volunteers/_select_work_neighborhood.html" %} </li>
-		<li><span class="label">Interest Categories:</span> {% include "../interestcategories/_interestcategories.html" %}</li>
-		<li><input type="submit" id="s_update_profile" value="Update Profile Settings"></li>
-	</ul>
-	
-	</form>
+    <div class="moduletitle">
+        <h3>Basic</h3>
+    </div>
+    <input type="hidden" name="session_id" value="{{ session_id }}">
+    <ul>
+        <li><span class="label">Name:</span> <input type="text" name="name" value="{{ volunteer.name|striptags }}"  /></li>
+        <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
+        <li><span class="label">I live in:</span> {% include "../volunteers/_select_home_neighborhood.html" %}
+        <li><span class="label">I work in:</span> {% include "../volunteers/_select_work_neighborhood.html" %} </li>
+    </ul>
 </div>
+    
+<div id="editprofile" class="softmodule">
+    <div class="moduletitle">
+        <h3>Interest Categories</h3>
+    </div>
+    
+    <ul>
+        <li><span class="label">Interest Categories:</span> {% include "../interestcategories/_interestcategories.html" %}</li>
+    </ul>
+</div>
+
+<div id="editprofile" class="softmodule">    
+    <div class="moduletitle">
+        <h3>Twitter</h3>
+    </div>
+    
+    <ul>
+        <li><span class="label">Twitter Username:</span> <input type="text" name="twitter" size="33" value="{{ volunteer.twitter|striptags }}"  /><br/>
+  (*Note: To receive tweets, you must also follow <a href="http://twitter.com/flashvolunteer">FlashVolunteer</a> on Twitter.)
+        </li>
+    </ul>
+</div>
+<div id="editprofile" class="softmodule">
+    <div class="moduletitle">
+        <h3>Privacy</h3>
+    </div>
+
+    <ul>
+        <li>
+            <span class="label">Who can see your events?</span>
+            <select name="privacy__event_attendance">
+                <option value="friends" {% ifequal volunteer.privacy__event_attendance "friends" %} selected="selected"{% endifequal %}>FlashFriends</option>
+                <option value="noone" {% ifequal volunteer.privacy__event_attendance "noone" %} selected="selected"{% endifequal %}>No one</option>
+                <option value="everyone" {% ifequal volunteer.privacy__event_attendance "everyone" %} selected="selected"{% endifequal %}>Everyone</option>
+            </select>                
+        <li>
+    </ul>
+</div>
+
+<div id="editprofile" class="softmodule">    
+    <li><input type="submit" id="s_update_profile" value="Save Settings"></li>
+</div>
+</form>

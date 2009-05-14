@@ -18,6 +18,8 @@ class Volunteer(db.Model):
   session_id = db.StringProperty()
   create_rights = db.BooleanProperty(default=False)
 
+  privacy__event_attendance = db.StringProperty(default='friends')
+
   def get_name(self):
     if self.name:
       return self.name
@@ -84,10 +86,11 @@ class Volunteer(db.Model):
     return len(self.friends())
 
   def check_session_id(self, form_session_id):
-    if form_session_id == self.session_id:
-      return True
-    
-    return False
+    return form_session_id == self.session_id
     
   def can_create_events(self):
     return self.create_rights
+
+  def event_access(self, volunteer):
+      friends = [f.key().id() for f in self.friends()]
+      return self.privacy__event_attendance == 'everyone' or (self.privacy__event_attendance == 'friends' and volunteer.key().id() in friends)

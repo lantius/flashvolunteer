@@ -50,10 +50,13 @@ class VolunteersPage(webapp.RequestHandler):
                       volunteer=page_volunteer, follower=volunteer).get()
                       
                       
+    event_access = page_volunteer.event_access(volunteer = volunteer) 
+                      
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                         'volunteerfollower' : volunteerfollower,
                         'page_volunteer': page_volunteer,
                         'volunteer' : volunteer,
+                        'event_access': event_access,
                         'session_id' : volunteer.session_id
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteer.html')

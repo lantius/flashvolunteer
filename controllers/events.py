@@ -59,12 +59,13 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
     
+
     template_values = {
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
-        'session_id': volunteer.session_id
+        'session_id': volunteer.session_id,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
@@ -85,11 +86,19 @@ class EventsPage(webapp.RequestHandler):
                          volunteer=volunteer, event=event).get()
       session_id = volunteer.session_id
                            
+    disp_attendies = []
+    anonymous_attendies = []
+    for v in event.volunteers():
+        if v.event_access(volunteer = volunteer): disp_attendies.append(v)
+        else: anonymous_attendies.append(v)
+
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'owners': owners, 
                         'volunteer': volunteer, 
-                        'session_id': session_id
+                        'session_id': session_id,
+                        'displayable_attendies': disp_attendies,
+                        'anonymous_attendies': anonymous_attendies
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))

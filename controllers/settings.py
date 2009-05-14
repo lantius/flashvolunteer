@@ -141,6 +141,9 @@ class SettingsPage(webapp.RequestHandler):
       elif params[param_name] == '1' and vic:
         vic.delete()
     
+    if 'privacy__event_attendance' in params and volunteer.privacy__event_attendance != params['privacy__event_attendance']:
+        volunteer.privacy__event_attendance = params['privacy__event_attendance']
+        
     volunteer.put()
       
   ################################################################################
