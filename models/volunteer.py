@@ -25,7 +25,7 @@ class Volunteer(db.Model):
       return self.name
 
     return self.volunteer.nickname
-
+  
   def get_quote(self):
     if self.quote:
       return self.quote
@@ -56,6 +56,26 @@ class Volunteer(db.Model):
   def followers_len(self):
     return len(self.followers())
 
+  # both following and follower
+  def friends(self):
+    fr = []
+    for following in self.following():
+      for follower in self.followers():
+        if following.key().id() == follower.key().id():
+          fr.append(following)
+    return (f for f in fr)
+
+  def friends_len(self):
+    return len(self.friends())
+
+  def followers_only(self):
+      friends = dict([(f.key().id(),1) for f in self.friends()])
+      return (f for f in self.followers() if f.key().id() not in friends)
+
+  def following_only(self):
+      friends = dict([(f.key().id(),1) for f in self.friends()])
+      return (f for f in self.following() if f.key().id() not in friends)
+
   def events_past_count(self):
     return len(self.events_past())
 
@@ -73,18 +93,6 @@ class Volunteer(db.Model):
     else:
       return []
         
-  # both following and follower
-  def friends(self):
-    fr = []
-    for following in self.following():
-      for follower in self.followers():
-        if following.key().id() == follower.key().id():
-          fr.append(following)
-    return (f for f in fr)
-
-  def friends_len(self):
-    return len(self.friends())
-
   def check_session_id(self, form_session_id):
     return form_session_id == self.session_id
     
