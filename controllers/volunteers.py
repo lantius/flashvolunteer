@@ -49,11 +49,14 @@ class VolunteersPage(webapp.RequestHandler):
     volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
                       volunteer=page_volunteer, follower=volunteer).get()
                       
-                      
+    volunteerfollowing = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
+                      volunteer=volunteer, follower=page_volunteer).get()
+                                            
     event_access = page_volunteer.event_access(volunteer = volunteer) 
                       
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                         'volunteerfollower' : volunteerfollower,
+                        'volunteerfollowing' : volunteerfollowing,
                         'page_volunteer': page_volunteer,
                         'volunteer' : volunteer,
                         'event_access': event_access,
@@ -94,7 +97,9 @@ class FollowVolunteer(webapp.RequestHandler):
           volunteerfollower = VolunteerFollower(volunteer=to_follow, follower=volunteer)
           volunteerfollower.put()
 
-    self.redirect('/volunteers/' + url_data)
+    #self.redirect('/volunteers/' + url_data)
+    self.redirect(self.request.referrer)
+
     return
 
 
