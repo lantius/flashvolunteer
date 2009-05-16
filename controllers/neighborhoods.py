@@ -17,7 +17,7 @@ class NeighborhoodsPage(webapp.RequestHandler):
     
     template_values = {
         'volunteer': volunteer,
-        'neighborhoods': Neighborhood.all()
+        'neighborhoods': sorted(Neighborhood.all(), lambda a,b:cmp(a.name,b.name))
       }
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')
