@@ -1,0 +1,16 @@
+
+<div id="settings_operations" class="actionlist">   
+
+	<form action="/settings" method="post"> 
+		<input class="operation" type="submit" value="&raquo; Reset your picture" />
+		<input type=hidden name="delete_avatar" value="true" />
+		<input type=hidden name="session_id" value="{{ session_id }}" />
+  	</form>
+
+    <form action="/delete" method="post"> 
+	    <input class="operation" type="submit" value="&raquo; Delete your account" id="s_delete_account"/></li>
+        <input type=hidden name="is_delete" value="true" />
+        <input type=hidden name="session_id" value="{{ session_id }}" />
+    </form>
+
+</div>

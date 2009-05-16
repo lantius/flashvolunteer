@@ -62,7 +62,7 @@ class VolunteersPage(webapp.RequestHandler):
                         'event_access': event_access,
                         'session_id' : volunteer.session_id
                         }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteer.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
     self.response.out.write(template.render(path, template_values))
 
 

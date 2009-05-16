@@ -4,22 +4,34 @@
 	<div class="moduletitle"><h3>Event Attendees</h3></div>
 	<ul>
 		<li class="tallerlistitem" >
-		{% if eventvolunteer %}
+		  {% if eventvolunteer %}
+            You are attending!
+          {% endif %}
+          <a>&raquo Invite a friend to this event</a>
+		</li>
+		
+		<li>  
+		    <ul id="imagenamelinklist">
+				{% for page_volunteer in attendies_friends %}
+					{% include "../volunteers/person_lists/_image_name_link_family.html" %}
+	            {% endfor %}
 
-		{% else %}
-			<form class="noindentform" action="{{event.url}}/volunteer" method="post">
-				<input type=hidden name="session_id" value="{{ session_id }}" />
-				<input class="nobuttonsubmit" type=submit value="volunteer" />
-			</form>
-		{% endif %}</li>
-		<li class="tallerlistitem" ><a>&raquo Invite a friend to this event</a></li>
-		<li><ul id="imagenamelinklist">
-			{% for v in displayable_attendies %}
-				{% include "../volunteers/_image_name_link.html" %}
-            {% endfor %}
-            {% for v in anonymous_attendies %}
-                {% include "../volunteers/_image_name_link_anonymous.html" %}
-			{% endfor %}
-		</ul></li>
+                {% for page_volunteer in attendies_following %}
+                    {% include "../volunteers/person_lists/_image_name_link_following.html" %}
+                {% endfor %}
+
+                {% for page_volunteer in attendies_followers %}
+                    {% include "../volunteers/person_lists/_image_name_link_followers.html" %}
+                {% endfor %}
+
+                {% for page_volunteer in attendies_unknown %}
+                    {% include "../volunteers/person_lists/_image_name_link_unknown.html" %}
+                {% endfor %}
+                                
+	            {% for page_volunteer in attendies_anonymous %}
+	                {% include "../volunteers/person_lists/_image_name_link_anonymous.html" %}
+				{% endfor %}
+		    </ul>
+		</li>
 	</ul>
 </div><!--end eventdescription-->

@@ -1,0 +1,11 @@
+
+<div id="personinformation" class="softmodule">
+	<div class="moduletitle">
+		<h3>My <span class="flashtext">Flash</span>Family</h3>
+	</div>
+	<ul id="imagenamelinklist">
+		{% for page_volunteer in volunteer.friends %}
+			{% include "person_lists/_image_name_link_family.html" %}
+		{% endfor %}
+	</ul>
+</div>

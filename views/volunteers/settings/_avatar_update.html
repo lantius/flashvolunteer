@@ -1,12 +1,7 @@
 <div id="personblock" class="softmodule">
-    <img id="nameavatar" src="
-            {% if volunteer.avatar %}
-                {{ volunteer.url }}/avatar
-            {% else %}
-            /stylesheets/default-profile-pic.png
-            {% endif %}"  
-        alt="{{ volunteer.get_name|striptags }}"
-    />
+    <div class="moduletitle">
+        <h3>Change picture</h3>
+    </div>
    	<form action="/settings" method="post" enctype="multipart/form-data">
 	<input type=hidden name="session_id" value="{{ session_id }}">
        <ul>

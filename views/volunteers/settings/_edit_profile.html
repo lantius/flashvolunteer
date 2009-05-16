@@ -8,8 +8,8 @@
     <ul>
         <li><span class="label">Name:</span> <input type="text" name="name" value="{{ volunteer.name|striptags }}"  /></li>
         <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
-        <li><span class="label">I live in:</span> {% include "../volunteers/_select_home_neighborhood.html" %}
-        <li><span class="label">I work in:</span> {% include "../volunteers/_select_work_neighborhood.html" %} </li>
+        <li><span class="label">I live in:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
+        <li><span class="label">I work in:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
     </ul>
 </div>
     
@@ -19,7 +19,7 @@
     </div>
     
     <ul>
-        <li><span class="label">Interest Categories:</span> {% include "../interestcategories/_interestcategories.html" %}</li>
+        <li>{% include "../interestcategories/_interestcategories.html" %}</li>
     </ul>
 </div>
 

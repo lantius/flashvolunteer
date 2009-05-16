@@ -13,12 +13,15 @@ Volunteer Settings
 
 {% block content %}
 <div id="leftthird">
-	{% include "../volunteers/_avatar_update.html" %}
-    {% include "../volunteers/_account_actions.html" %}   
+    <div id="personblock" class="softmodule">
+	    {% include "../volunteers/home/_narrow_name.html" %}   
+	    {% include "../volunteers/settings/_operations.html" %}   
+    </div>
+    {% include "../volunteers/settings/_avatar_update.html" %}
 </div>
 	
 <div id="middlethird">
-	{% include "../volunteers/_edit_profile.html" %}
+	{% include "../volunteers/settings/_edit_profile.html" %}
 </div>
 
 <div id="rightthird">

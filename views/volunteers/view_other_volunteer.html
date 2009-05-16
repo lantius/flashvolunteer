@@ -3,12 +3,22 @@
 {{ page_volunteer.get_name }}'s public page
 {% endblock title %}
 
+{% block pagespectitle %}
+    <h1>{{ page_volunteer.name }}</h1>
+{% endblock %}
+
+
 {% block content %}
 
+
+
 <div id="leftthird">
-    {% include "../volunteers/_volunteer_narrow_name.html" %}
-    {% include "../volunteers/_volunteer_information.html" %}
-    {% include "../volunteers/_volunteer_list_brief.html" %}
+    <div id="personblock" class="softmodule">
+	    {% include "../volunteers/view_other_volunteer/_narrow_name.html" %}
+	    {% include "../volunteers/view_other_volunteer/_operations.html" %}
+    </div>
+    {% include "../volunteers/view_other_volunteer/_information.html" %}
+    {% include "../volunteers/view_other_volunteer/_list_brief.html" %}
 
 
 </div><!--end leftthird-->

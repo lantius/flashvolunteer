@@ -1,0 +1,20 @@
+
+<div id="personinformation" class="softmodule">
+	<div class="moduletitle">
+		<h3>My <span class="flashtext">Flash</span>Neighbors</h3>
+	</div>
+	<ul id="imagenamelinklist">
+		{% for page_volunteer in volunteer.followers_only %}
+			{% include "person_lists/_image_name_link_follower.html" %}
+		{% endfor %}
+
+        {% for page_volunteer in volunteer.following_only %}
+            {% include "person_lists/_image_name_link_following.html" %}
+        {% endfor %}
+        
+<!--        {% ifequal volunteer.following_len "0" %}
+            <li>No neighbors yet!</li>
+        {% endifequal %}-->
+        
+    </ul>
+</div>

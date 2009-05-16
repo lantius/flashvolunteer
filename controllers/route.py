@@ -48,7 +48,7 @@ def main():
                                      ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
                                      ('/events(|/\d+|/new|/search)', EventsPage),
                                      ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
-                                     ('/friends', FriendsPage),
+                                     ('/team', FriendsPage),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),
                                      ('/volunteers(|/\d+)', VolunteersPage),

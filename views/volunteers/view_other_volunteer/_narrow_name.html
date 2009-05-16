@@ -1,0 +1,16 @@
+
+<img id="nameavatar" src="
+        {% if page_volunteer.avatar %}
+            {{ page_volunteer.url }}/avatar
+        {% else %}
+        /stylesheets/default-profile-pic.png
+        {% endif %}"  
+    alt="{{ page_volunteer.get_name|striptags }}"
+/>
+<ul>
+<!--    <li id="personname">{{ page_volunteer.get_name|striptags }}</li>-->
+    {% if page_volunteer.quote|striptags %}
+        <li id="personstatement">{{ page_volunteer.quote|striptags }}</li>
+    {% endif %}
+</ul>
+  

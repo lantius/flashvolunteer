@@ -86,19 +86,42 @@ class EventsPage(webapp.RequestHandler):
                          volunteer=volunteer, event=event).get()
       session_id = volunteer.session_id
                            
-    disp_attendies = []
-    anonymous_attendies = []
+    friends = dict([(f.key().id(),1) for f in volunteer.friends()])
+    followers = dict([(f.key().id(),1) for f in volunteer.followers()])
+    following = dict([(f.key().id(),1) for f in volunteer.following()])
+    
+    attendies_anonymous = []
+    attendies_friends = []
+    attendies_followers = []
+    attendies_following = []
+    attendies_unknown = []
+    
     for v in event.volunteers():
-        if v.event_access(volunteer = volunteer): disp_attendies.append(v)
-        else: anonymous_attendies.append(v)
+        id = v.key().id()
+        if id == volunteer.key().id(): continue
+        
+        if v.event_access(volunteer = volunteer): 
+            if id in friends:
+                attendies_friends.append(v)
+            elif id in followers:
+                attendies_followers.append(v)
+            elif id in following:
+                attendies_following.append(v)
+            else:
+                attendies_unknown.append(v)
+        else: 
+            attendies_anonymous.append(v)
 
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'owners': owners, 
                         'volunteer': volunteer, 
                         'session_id': session_id,
-                        'displayable_attendies': disp_attendies,
-                        'anonymous_attendies': anonymous_attendies
+                        'attendies_friends': attendies_friends,
+                        'attendies_followers': attendies_followers,
+                        'attendies_following': attendies_following,
+                        'attendies_anonymous': attendies_anonymous,
+                        'attendies_unknown': attendies_unknown
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))
