@@ -16,6 +16,7 @@ class FriendsPage(webapp.RequestHandler):
     
     template_values = {
         'volunteer': volunteer,
+        'session_id' : volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'friends.html')
     self.response.out.write(template.render(path, template_values))
