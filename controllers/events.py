@@ -46,9 +46,9 @@ class EventsPage(webapp.RequestHandler):
       self.delete(url_data[1:], volunteer)
       self.redirect("/events")
       return
-
-    self.create(params, volunteer)
-    self.redirect("/events")
+  
+    id = self.create(params, volunteer)
+    self.redirect("/events/" + str(int(id)))
     return
 
   ################################################################################
