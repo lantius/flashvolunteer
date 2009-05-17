@@ -15,7 +15,6 @@ class CreateEvent(LoginFirst_Organization):
   instructions = 'please show up'
   neighborhood = 'West Seattle'
   address = 'Seattle'
-  stop_selenium_on_completion = False
 
   def create_event_basic(self):
     
@@ -60,7 +59,7 @@ class CreateEvent(LoginFirst_Organization):
     try:
       self.failUnless(sel.is_text_present("Event: %s"%self.event_name))
       self.failUnless(sel.is_text_present("Neighborhood: %s"%self.neighborhood))
-      self.failUnless(sel.is_text_present("Date: Wednesday, 13 May 2019"))
+      self.failUnless(sel.is_text_present("Date: Monday, 13 May 2019"))
     
       events = [e for e in get_events(name = self.event_name)]
       self.assertTrue(len(events) == 1) #Make sure we only created one event
