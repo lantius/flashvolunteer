@@ -15,6 +15,7 @@ class CreateEvent(LoginFirst_Organization):
   instructions = 'please show up'
   neighborhood = 'West Seattle'
   address = 'Seattle'
+  stop_selenium_on_completion = False
 
   def create_event_basic(self):
     
@@ -26,8 +27,10 @@ class CreateEvent(LoginFirst_Organization):
     sel.click("//a[@id='l_create_event']")
     sel.wait_for_page_to_load("30000")
     sel.type("eventname", self.event_name)
-    sel.click("link=Choose date")
-    sel.click("//div[@id='dp-popup']/div[3]/table/tbody/tr[3]/td[3]")
+    #sel.click("link=Choose date")
+    #sel.click("//div[@id='dp-popup']/div[3]/table/tbody/tr[3]/td[3]")
+    sel.type("eventdate", '05/13/2019')
+    
     sel.select("time", "label=%s"%self.time)
     sel.select("neighborhood", "label=%s"%self.neighborhood)
     sel.type("address1", self.address)
@@ -47,14 +50,17 @@ class CreateEvent(LoginFirst_Organization):
     sel = self.selenium
     
     events = [e for e in get_events(name = self.event_name)]
-    self.assertTrue(len(events) == 0) #Make sure we there aren't any events already created.
-    
+    try:
+        self.assertTrue(len(events) == 0) #Make sure we there aren't any events already created.
+    except:
+        delete_event(name = self.event_name)
+        
     self.create_event_basic()
     sel.wait_for_page_to_load("30000")
     try:
       self.failUnless(sel.is_text_present("Event: %s"%self.event_name))
       self.failUnless(sel.is_text_present("Neighborhood: %s"%self.neighborhood))
-      self.failUnless(sel.is_text_present("Date: Wednesday, 13 May 2009"))
+      self.failUnless(sel.is_text_present("Date: Wednesday, 13 May 2019"))
     
       events = [e for e in get_events(name = self.event_name)]
       self.assertTrue(len(events) == 1) #Make sure we only created one event

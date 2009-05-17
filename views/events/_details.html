@@ -4,6 +4,7 @@
 		<li><span class="label">Event:</span> {{ event.name }}</li>
 		<li><span class="label">Date:</span> {{ event.get_date }}</li>
 		<li><span class="label">Time:</span> {{ event.get_time }}</li>
+		<li><span class="label">Neighborhood:</span> {{ event.neighborhood.name }}</li>
 		<li><span class="label">Host:</span> 
 			{% for owner in owners %}
 				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a> 

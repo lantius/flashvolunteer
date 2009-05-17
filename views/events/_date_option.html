@@ -32,7 +32,7 @@
 <script type="text/javascript" src="/stylesheets/date_picker/jquery.datePicker.js"></script>
 <link rel="stylesheet" type="text/css" href="/stylesheets/date_picker/datePicker.css" />
 
-<input type="text" name="date" class="date-pick dp-applied" value="{{ event.date|date:"m/d/Y" }}" />
+<input type="text" name="date" id="eventdate" class="date-pick dp-applied" value="{{ event.date|date:"m/d/Y" }}" />
 <script type="text/javascript">
 $(function()
 {
