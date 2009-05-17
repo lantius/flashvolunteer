@@ -48,6 +48,11 @@ class EventsPage(webapp.RequestHandler):
       return
   
     id = self.create(params, volunteer)
+    if id is None:
+        self.redirect('/events')
+        return
+    
+    
     self.redirect("/events/" + str(int(id)))
     return
 
@@ -170,7 +175,7 @@ class EventsPage(webapp.RequestHandler):
     
     if not volunteer.can_create_events():
       self.redirect("/events") #TODO REDIRECT to error page
-      return
+      return None
     
     if not event.validate(params):    
       return None
