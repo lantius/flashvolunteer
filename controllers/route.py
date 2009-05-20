@@ -5,7 +5,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 from controllers.home import MainPage
-from controllers.events import EventsPage, VolunteerForEvent, EditEventPage
+from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, VerifyEventAttendance
 from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import InitializeStore
@@ -46,6 +46,7 @@ def main():
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),
                                      ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
+                                     ('/events/(\d+)/verify', VerifyEventAttendance),
                                      ('/events(|/\d+|/new|/search)', EventsPage),
                                      ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
                                      ('/team', FriendsPage),

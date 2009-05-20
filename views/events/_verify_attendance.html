@@ -1,0 +1,29 @@
+<div id='verify_attendance' class='hardmodule'>
+Stuff!
+	<form action='/events/{{event.key.id}}/verify' id='f_verify' method="post">
+		<input type=hidden name="session_id" value="{{ session_id }}" />
+		{% for ev in event.eventvolunteers %}
+		
+		<div class="volunteer_summary_pic">
+            <a href="{{ ev.volunteer.url }}" >
+            <img id="smallavatar" src="
+            {% if ev.volunteer.avatar %}
+                {{ ev.volunteer.url }}/avatar
+            {% else %}
+                /stylesheets/default-profile-pic-small.png
+            {% endif %}
+            " alt="{{ ev.volunteer.get_name }}" /></a>
+        </div>
+		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true'/>
+		<label for='i_verify_{{ev.key.id}}_true'>Attended</label>
+		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'/>
+		<label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
+		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'/>
+		<label for='i_verify_{{ev.key.id}}_unknown'> Don't Know</label>
+		<BR clear="ALL">
+		{% endfor %}
+		<BR clear="ALL">
+		
+		<input type="submit" id="s_verify" value="submit"/>
+	</form>
+</div>

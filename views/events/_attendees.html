@@ -12,23 +12,23 @@
 		
 		<li>  
 		    <ul id="imagenamelinklist">
-				{% for page_volunteer in attendies_friends %}
+				{% for page_volunteer in attendees_friends %}
 					{% include "../volunteers/person_lists/_image_name_link_family.html" %}
 	            {% endfor %}
 
-                {% for page_volunteer in attendies_following %}
+                {% for page_volunteer in attendees_following %}
                     {% include "../volunteers/person_lists/_image_name_link_following.html" %}
                 {% endfor %}
 
-                {% for page_volunteer in attendies_followers %}
+                {% for page_volunteer in attendees_followers %}
                     {% include "../volunteers/person_lists/_image_name_link_followers.html" %}
                 {% endfor %}
 
-                {% for page_volunteer in attendies_unknown %}
+                {% for page_volunteer in attendees_unknown %}
                     {% include "../volunteers/person_lists/_image_name_link_unknown.html" %}
                 {% endfor %}
                                 
-	            {% for page_volunteer in attendies_anonymous %}
+	            {% for page_volunteer in attendees_anonymous %}
 	                {% include "../volunteers/person_lists/_image_name_link_anonymous.html" %}
 				{% endfor %}
 		    </ul>

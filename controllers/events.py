@@ -95,11 +95,11 @@ class EventsPage(webapp.RequestHandler):
     followers = dict([(f.key().id(),1) for f in volunteer.followers()])
     following = dict([(f.key().id(),1) for f in volunteer.following()])
     
-    attendies_anonymous = []
-    attendies_friends = []
-    attendies_followers = []
-    attendies_following = []
-    attendies_unknown = []
+    attendees_anonymous = []
+    attendees_friends = []
+    attendees_followers = []
+    attendees_following = []
+    attendees_unknown = []
     
     for v in event.volunteers():
         id = v.key().id()
@@ -107,26 +107,26 @@ class EventsPage(webapp.RequestHandler):
         
         if v.event_access(volunteer = volunteer): 
             if id in friends:
-                attendies_friends.append(v)
+                attendees_friends.append(v)
             elif id in followers:
-                attendies_followers.append(v)
+                attendees_followers.append(v)
             elif id in following:
-                attendies_following.append(v)
+                attendees_following.append(v)
             else:
-                attendies_unknown.append(v)
+                attendees_unknown.append(v)
         else: 
-            attendies_anonymous.append(v)
+            attendees_anonymous.append(v)
 
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'owners': owners, 
                         'volunteer': volunteer, 
                         'session_id': session_id,
-                        'attendies_friends': attendies_friends,
-                        'attendies_followers': attendies_followers,
-                        'attendies_following': attendies_following,
-                        'attendies_anonymous': attendies_anonymous,
-                        'attendies_unknown': attendies_unknown
+                        'attendees_friends': attendees_friends,
+                        'attendees_followers': attendees_followers,
+                        'attendees_following': attendees_following,
+                        'attendees_anonymous': attendees_anonymous,
+                        'attendees_unknown': attendees_unknown
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))
@@ -273,7 +273,64 @@ class VolunteerForEvent(webapp.RequestHandler):
     self.redirect('/events/' + url_data)
     return
 
+################################################################################
+# VolunteerForEvent
+################################################################################
+class VerifyEventAttendance(webapp.RequestHandler):
 
+  def post(self, url_data):
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
+
+    params = Parameters.parameterize(self.request)
+    params['id'] = url_data
+
+    self.update(params, volunteer)
+
+    self.redirect("/events/" + url_data)
+  
+  def update(self, params, volunteer):
+    event = Event.get_by_id(int(params['id']))
+
+    if not event:
+      return
+    
+    owner = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
+                        volunteer=volunteer, event=event).get()
+    
+    if not owner:
+      return
+      
+    for key in params.keys():
+      if key.startswith('event_volunteer_'):
+        i = len('event_volunteer_')
+        event_volunteer_id = key[i:]
+        attended = params[key]
+        self.update_volunteer_attendance(event_volunteer_id, attended)
+        
+    
+  def update_volunteer_attendance(self, event_volunteer_id, attended):
+
+    eventvolunteer = EventVolunteer.get_by_id(int(event_volunteer_id))
+    if not eventvolunteer:
+      return
+    
+    # Verify attendance is a valid value
+    #if attended <= 1 and attended >= -1
+    
+    if attended == 'True':
+      eventvolunteer.attended = True
+    elif attended == 'False':
+      eventvolunteer.attended = False
+    else:
+      eventvolunteer.attended = False
+    #eventvolunteer.attended = True
+    eventvolunteer.put()
+
+  
+    
 ################################################################################
 # EditEventPage
 ################################################################################

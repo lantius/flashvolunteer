@@ -159,3 +159,25 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(fromdate, None)    
     self.assertEqual(todate, None)    
     self.assertEqual(len(events), 3)
+
+  # VERIFY
+  def test_event_verify_attendance(self):
+    event = self.test_event_create()
+    attender = Volunteer()
+    attender.put()
+    
+    eventvolunteer = EventVolunteer(volunteer=attender, event=event, isowner=False)
+    eventvolunteer.put()
+    
+    vf = VerifyEventAttendance()
+    params = { 'id' : str(event.key().id()),
+               'event_volunteer_' + str(eventvolunteer.key().id()) : 'True' }
+    
+    vf.update(params, self.volunteer)
+    
+    eventvolunteer = EventVolunteer.get_by_id(eventvolunteer.key().id())
+    self.assertTrue(eventvolunteer.attended)
+    
+    
+    
+    

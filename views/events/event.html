@@ -27,5 +27,9 @@ class="current"
 	{% include "../events/_attendees.html" %}
 </div>
 
+{% if event.inpast %}
+	{% include "../events/_verify_attendance.html" %}
+{% endif %}
+
 {% endblock content %}
 
