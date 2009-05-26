@@ -28,7 +28,7 @@ class TestEnv(object):
 
 class BaseTestCase(unittest.TestCase):
   populate = False 
-  stop_selenium_on_completion = True
+  stop_selenium_on_completion = False
   
   def setUp(self):
     try: 
@@ -39,6 +39,13 @@ class BaseTestCase(unittest.TestCase):
     if self.test_env.fv_environment is not None:
       self.test_objects = create_environment(name = self.test_env.fv_environment,
                                              session_id='test')
+      self.test_object_index = []
+      for k,v in self.test_objects.items():
+          try:
+              self.test_object_index += [(o.name, o) for o in v]
+          except: pass
+          
+      self.test_object_index = dict(self.test_object_index)
 
     self.selenium = selenium("localhost", 4444, "*chrome", "http://%s"%host)
     self.selenium.start()
@@ -58,7 +65,7 @@ class BaseTestCase(unittest.TestCase):
       sel.open("/_ah/login?action=Logout")
       sel.wait_for_page_to_load("30000")
     except Exception, e:
-      print 'Could not logout of seleniumn: ' + e 
+      print 'Could not logout of seleniumn: ' + str(e) 
       pass
     
     if self.stop_selenium_on_completion == True:
@@ -67,7 +74,7 @@ class BaseTestCase(unittest.TestCase):
     try:
         armageddon(test_objects = self.test_objects)
     except Exception, e:
-        raise 'Test environment cleanup failure: ' + e
+        raise 'Test environment cleanup failure: ' + str(e)
     
 
   def login_as_new_user(self):
@@ -94,8 +101,6 @@ class BaseTestCase(unittest.TestCase):
         set_create_rights(name = self.test_env.login_name)
         self.selenium.refresh()
         self.selenium.wait_for_page_to_load("30000")  
-                
-    
     
   
   def login_as_existing_user(self):
