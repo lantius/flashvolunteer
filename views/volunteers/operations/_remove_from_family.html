@@ -1,5 +1,5 @@
 <form action="{{page_volunteer.url}}/follow" method="post">
     <input type=hidden name="session_id" value="{{ session_id }}">
     <input type=hidden name="delete" value="true">
-    <input class="operation" type=submit value="&raquo; Remove from family">
+    <input id="operation_remove_from_family[{{ page_volunteer.key.id }}]" class="operation" type=submit value="&raquo; Remove from family">
 </form>
