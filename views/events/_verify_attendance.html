@@ -1,5 +1,10 @@
 <div id='verify_attendance' class='hardmodule'>
-	<form action='/events/{{event.key.id}}/verify' id='f_verify' method="post">
+	
+	{% if eventvolunteer %}
+	<a href="{{event.url}}/verify">Get a receipt!</a>
+	{% endif %}
+	
+	<form action='{{event.url}}/verify' id='f_verify' method="post">
 		<input type=hidden name="session_id" value="{{ session_id }}" />
 		{% for ev in event.eventvolunteers %}
 		
@@ -13,13 +18,18 @@
             {% endif %}
             " alt="{{ ev.volunteer.get_name }}" /></a>
         </div>
-		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true'/>
+		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true' 
+		{% if ev.attended %} checked {% endif %}/>
 		<label for='i_verify_{{ev.key.id}}_true'>Attended</label>
 		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'/>
 		<label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
 		<input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'/>
 		<label for='i_verify_{{ev.key.id}}_unknown'> Don't Know</label><BR/>
-		<input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" /> hours
+		<input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" 
+		{% if ev.hours %}
+		value="{{ev.hours}}"
+		{% endif %}
+		/> hours
 		<BR clear="ALL">
 		{% endfor %}
 		<BR clear="ALL">

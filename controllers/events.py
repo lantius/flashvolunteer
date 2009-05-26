@@ -277,7 +277,22 @@ class VolunteerForEvent(webapp.RequestHandler):
 # VolunteerForEvent
 ################################################################################
 class VerifyEventAttendance(webapp.RequestHandler):
+  
+  ################################################################################
+  # GET
+  def get(self, url_data):
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
 
+    params = Parameters.parameterize(self.request)
+    params['id'] = url_data
+
+    self.show(params, volunteer)
+
+  ################################################################################
+  # POST
   def post(self, url_data):
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
@@ -290,7 +305,33 @@ class VerifyEventAttendance(webapp.RequestHandler):
     self.update(params, volunteer)
 
     self.redirect("/events/" + url_data)
-  
+
+  ################################################################################
+  # SHOW
+  def show(self, params, volunteer):
+    event = Event.get_by_id(int(params['id']))    
+    if not event:
+      self.redirect("/events/" + url_data)
+      return
+    
+    ev = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
+                        volunteer=volunteer, event=event).get()
+    if not ev:
+      self.redirect("/events/" + url_data)
+      return
+    
+    template_values = {
+        'eventvolunteer': ev,
+        'volunteer' : ev.volunteer,
+        'event' : ev.event,
+        'now' : datetime.datetime.now().strftime("%A, %d %B %Y"),
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'receipt.html')
+    self.response.out.write(template.render(path, template_values))
+    
+    
+  ################################################################################
+  # UPDATE
   def update(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
 
@@ -341,7 +382,6 @@ class EditEventPage(webapp.RequestHandler):
   
   ################################################################################
   # GET
-  ################################################################################
   def get(self, url_data):
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
@@ -351,7 +391,6 @@ class EditEventPage(webapp.RequestHandler):
 
   ################################################################################
   # POST
-  ################################################################################
   def post(self, url_data):
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
@@ -367,7 +406,6 @@ class EditEventPage(webapp.RequestHandler):
     
   ################################################################################
   # EDIT (is the get)
-  ################################################################################
   def edit(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
     
@@ -394,7 +432,6 @@ class EditEventPage(webapp.RequestHandler):
   
   ################################################################################
   # UPDATE
-  ################################################################################
   def update(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
     

@@ -1,0 +1,37 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Receipt for {{eventvolunteer.volunteer.name}} attending {{eventvolunteer.event.name}}
+{% endblock title %}
+
+{% block eventsactive %}
+class="current"
+{% endblock %}
+
+
+{% block content %}
+
+<p>{{now}}</p>
+
+{% if eventvolunteer.attended %}
+
+  <p>{{event.hosts}} certifies that 
+
+  {{volunteer.name}}
+
+  attended 
+
+  {{event.name}}, held in {{event.neighborhood.name}} on {{event.get_date}}.</p>
+
+  {% if eventvolunteer.hours %}
+  <p>{{volunteer.name}} volunteered for {{eventvolunteer.hours}} hours.</p>
+  {% endif %}
+
+<hr>
+  <p>Receipt provided by FlashVolunteer (http://flashvolunteer.org).  FlashVolunteer makes no claims to the accuracy of this receipt. For further information, please contact the event host.</p>
+{% else %}
+
+  {{event.hosts}} has not yet certified that you attended the event.
+
+{% endif %}
+
+{% endblock %}
