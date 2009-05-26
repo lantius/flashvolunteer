@@ -31,6 +31,7 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/01/2009',
                'time' : '03:00',
+               'duration' : '2',               
                'description' : 'test description\non the internet with two lines!',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',
@@ -48,6 +49,7 @@ class EventsTest(unittest.TestCase):
     self.assertTrue(owner.isowner)
     self.assertEqual(event.name, params['name'])
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])
+    self.assertEqual(event.duration, int(params['duration']))
     self.assertEqual(event.date.strftime("%H:%M"), params['time'])
     self.assertEqual(event.description, params['description'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
@@ -79,6 +81,7 @@ class EventsTest(unittest.TestCase):
                'name' : 'edit unit test -- edited',
                'date' : '01/02/2009',
                'time' : '13:00',
+               'duration' : '2',               
                'description' : 'test description -- edited',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
@@ -114,6 +117,7 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/01/2009',
                'time' : '15:00',
+               'duration' : '2',
                'description' : 'test description',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
@@ -125,6 +129,7 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/02/2010',
                'time' : '23:01',
+               'duration' : '3',
                'description' : 'test description',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
@@ -136,6 +141,7 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 3,
                'date' : '05/05/2008',
                'time' : '12:01',   
+               'duration' : '1',
                'description' : 'test description',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',

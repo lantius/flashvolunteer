@@ -63,7 +63,6 @@ class EventsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
-    
 
     template_values = {
         'volunteer': volunteer,
@@ -182,6 +181,7 @@ class EventsPage(webapp.RequestHandler):
       
     event.name = params['name']
     event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
+    event.duration = int(params['duration'])
     event.description = params['description']
     event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
     event.address = params['address']
@@ -443,6 +443,7 @@ class EditEventPage(webapp.RequestHandler):
     if eventvolunteer:
       event.name = params['name']
       event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
+      event.duration = int(params['duration'])
       event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
       event.description = params['description']
       event.address = params['address']
