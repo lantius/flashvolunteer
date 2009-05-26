@@ -1,12 +1,17 @@
 from selenium import selenium
 import unittest, time, re
 
-from gui_integration_tests.test_cases import BaseTestCase
+from gui_integration_tests.test_cases import BaseTestCase, TestEnv
 
 from gui_integration_tests.datastore_interface import check_if_user_exists, delete_user
 
 class NewAccount(BaseTestCase):
     name = "volunteer0@test.org"
+    
+    test_env = TestEnv(
+         login_email = None
+         )
+    
     def test_new(self):
         sel = self.selenium
         sel.open("/")
@@ -18,8 +23,7 @@ class NewAccount(BaseTestCase):
         sel.click("tosagree")
         sel.click("//input[@id='s_create_account']")
         sel.wait_for_page_to_load("30000")
-        try: self.failUnless(sel.is_text_present("Welcome, %s"%self.name))
-        except AssertionError, e: self.verificationErrors.append(str(e))
+        self.failUnless(sel.is_text_present("Welcome, %s"%self.name))
         self.assertEqual("Flash Volunteer", sel.get_title())
     
         self.assertTrue(check_if_user_exists(name = self.name))

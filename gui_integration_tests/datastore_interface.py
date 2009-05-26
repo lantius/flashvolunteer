@@ -11,11 +11,15 @@ os.environ['USER_EMAIL'] = ''
 from google.appengine.ext.remote_api import remote_api_stub
 from google.appengine.ext import db
 from google.appengine.api.users import User
+from google.appengine.ext.db import put, delete
 
 from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
+from models.volunteerfollower import VolunteerFollower
+
+import datetime, copy
 
 
 def auth_func():
@@ -23,6 +27,120 @@ def auth_func():
     #raw_input('Username:'), getpass.getpass('Password:')
 
 remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
+
+
+def create_environment(name, session_id):
+    exec('from gui_integration_tests.test_environments.%s import my_env'%name)
+
+    (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
+    
+    for k,v in neighborhoods.items():
+        n = Neighborhood(
+             name = v['name'],
+             session_id = session_id,
+        )
+        neighborhoods[k] = n
+    put(neighborhoods.values())
+        
+    for k,v in volunteers.items():
+        email = k.replace(' ', '_').lower() + '@volunteer.org'
+        u = User(email)
+    
+        v = Volunteer(
+          name = k,
+          user = u,
+          avatar = v['avatar'],
+          quote = v['quote'],
+          #twitter = None,
+          home_neighborhood = neighborhoods[v['home_neighborhood']],
+          work_neighborhood = neighborhoods[v['work_neighborhood']],
+          session_id = session_id,
+          create_rights = v['create_rights'])    
+    
+        volunteers[k] = v
+    put(volunteers.values())
+        
+    for k,v in organizations.items():
+        email = k.replace(' ', '_').lower() + '@organization.org'
+        u = User(email)
+    
+        v = Volunteer(
+          name = k,
+          user = u,
+          avatar = v['avatar'],
+          quote = v['quote'],
+          #twitter = None,
+          home_neighborhood = neighborhoods[v['home_neighborhood']],
+          work_neighborhood = neighborhoods[v['work_neighborhood']],
+          session_id = session_id,
+          create_rights = v['create_rights'])    
+    
+        organizations[k] = v
+    put(organizations.values())
+        
+    for k,v in events.items():
+        date = datetime.datetime.strptime(v['time'] + " " + v['date'], "%H:%M %m/%d/%Y")
+        try:
+            date_created = datetime.datetime.strptime(v['time'] + " " + v['date_created'], "%H:%M %m/%d/%Y").date()
+        except:
+            date_created = date.date()
+
+        
+                    
+        e = Event(
+          name = k,
+          neighborhood = neighborhoods[v['neighborhood']],
+          date_created = date_created,
+          date = date,
+          description = v['description'],
+          special_instructions = v['special_instructions'],
+          address = v['address']
+                  
+        )
+        e.put()
+        events[k] = e
+ 
+    put(events.values())
+    
+    ev_volunteers = []
+    for k,v in event_volunteers.items():
+        for vol in v:
+            volunteer = volunteers[vol['volunteer']]
+            ev = EventVolunteer(
+                event = events[k],
+                volunteer = volunteer,
+                isowner = 'is_owner' in vol and vol['is_owner']
+            )
+            ev_volunteers.append(ev)
+            
+    put(ev_volunteers)
+    
+    friends = social_network['friends']
+    followers = social_network['followers']
+                
+    for follower, followed in friends:
+        followers += [(follower, followed), (followed, follower)]
+    
+    volunteer_followers = []
+    for follower, followed in followers:
+        vf = VolunteerFollower(
+           follower = volunteers[follower],
+           volunteer = volunteers[followed]
+        )
+        volunteer_followers.append(vf)
+
+    put(volunteer_followers)
+    
+    test_objects = {
+       'organizations': organizations.values(),
+       'volunteers': volunteers.values(),
+       'events': events.values(),
+       'volunteerfollowers': volunteer_followers,
+       'eventvolunteers': ev_volunteers,
+       'neighborhoods': neighborhoods.values()
+    }
+
+    return test_objects
 
 # populates the FV datastore with some elements for use in the testing environment    
 def populate(sessionid):
@@ -71,13 +189,11 @@ def populate(sessionid):
 #        )
             
 # eliminates all datastore items with the given sessionid
-def armageddon(sessionid):
+def armageddon(test_objects):
     print 'De-populating FV...'
 
-    vols = db.GqlQuery('SELECT * from Volunteer WHERE session_id = :session_id',
-                session_id = sessionid)
-    for v in vols:
-        v.delete()
+    for k,v in test_objects.items():
+        delete(v)
 
 def check_if_user_exists(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
@@ -85,6 +201,13 @@ def check_if_user_exists(name):
     v = [v.name for v in vols]
     return v != []            
 
+def set_create_rights(name):
+    vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
+                name = name)
+    for v in vols:
+        v.create_rights = True
+        v.put()
+        
 def delete_user(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
                 name = name)
@@ -110,6 +233,8 @@ def delete_event(name):
       e.delete()
         
 if __name__ == '__main__':
-    populate(sessionid = 'test')
-    armageddon(sessionid = 'test')
+
+    test_objects = create_environment(name = 'revolutionary_war', session_id = 'test')
+
+#    armageddon(test_objects = test_objects)
         

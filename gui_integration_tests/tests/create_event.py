@@ -1,12 +1,18 @@
-from gui_integration_tests.test_cases import LoginFirst_Organization
+from gui_integration_tests.test_cases import BaseTestCase, TestEnv
 
 from gui_integration_tests.datastore_interface import get_events, delete_event
 
 from selenium import selenium
 import unittest
 
-class CreateEvent(LoginFirst_Organization):
-
+class CreateEvent(BaseTestCase):
+  test_env = TestEnv(
+     organization = True,
+     create_new_user = False,
+     login_email = 'john_hancock@volunteer.org',
+     login_name = 'John Hancock'
+     )
+  
   event_name = 'test event'
   time = '7pm'
   maxattend = '1'
