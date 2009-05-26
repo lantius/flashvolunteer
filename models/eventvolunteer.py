@@ -13,3 +13,5 @@ class EventVolunteer(db.Model):
                                     collection_name = 'eventvolunteers')
   isowner = db.BooleanProperty(required = True)
   attended = db.BooleanProperty(default = False)
+  hours = db.IntegerProperty()
+  

@@ -308,17 +308,15 @@ class VerifyEventAttendance(webapp.RequestHandler):
         i = len('event_volunteer_')
         event_volunteer_id = key[i:]
         attended = params[key]
-        self.update_volunteer_attendance(event_volunteer_id, attended)
-        
-    
-  def update_volunteer_attendance(self, event_volunteer_id, attended):
+        hours = None
+        if 'hours_' + event_volunteer_id in params.keys():
+          hours = params['hours_' + event_volunteer_id]
+        self.update_volunteer_attendance(event_volunteer_id, attended, hours)
 
+  def update_volunteer_attendance(self, event_volunteer_id, attended, hours):
     eventvolunteer = EventVolunteer.get_by_id(int(event_volunteer_id))
     if not eventvolunteer:
       return
-    
-    # Verify attendance is a valid value
-    #if attended <= 1 and attended >= -1
     
     if attended == 'True':
       eventvolunteer.attended = True
@@ -326,10 +324,15 @@ class VerifyEventAttendance(webapp.RequestHandler):
       eventvolunteer.attended = False
     else:
       eventvolunteer.attended = False
-    #eventvolunteer.attended = True
+      
+    if hours:
+      try:
+        eventvolunteer.hours = int(hours)
+      except exceptions.ValueError:
+        eventvolunteer.hours = None
+      
     eventvolunteer.put()
 
-  
     
 ################################################################################
 # EditEventPage

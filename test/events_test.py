@@ -171,12 +171,31 @@ class EventsTest(unittest.TestCase):
     
     vf = VerifyEventAttendance()
     params = { 'id' : str(event.key().id()),
-               'event_volunteer_' + str(eventvolunteer.key().id()) : 'True' }
+               'event_volunteer_' + str(eventvolunteer.key().id()) : 'True',
+               'hours_' + str(eventvolunteer.key().id()) : '3'  }
     
     vf.update(params, self.volunteer)
     
     eventvolunteer = EventVolunteer.get_by_id(eventvolunteer.key().id())
     self.assertTrue(eventvolunteer.attended)
+    self.assertEqual(3, eventvolunteer.hours)
+    
+    attender = Volunteer()
+    attender.put()
+    
+    eventvolunteer = EventVolunteer(volunteer=attender, event=event, isowner=False)
+    eventvolunteer.put()
+    
+    vf = VerifyEventAttendance()
+    params = { 'id' : str(event.key().id()),
+               'event_volunteer_' + str(eventvolunteer.key().id()) : 'True'  }
+    
+    vf.update(params, self.volunteer)
+    
+    eventvolunteer = EventVolunteer.get_by_id(eventvolunteer.key().id())
+    self.assertTrue(eventvolunteer.attended)
+    self.assertEqual(None, eventvolunteer.hours)
+    
     
     
     
