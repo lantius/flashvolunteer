@@ -494,6 +494,9 @@ neighborhoods =     {
     'Maryland':{
             'name': 'Maryland',
         },
+    'Maine':{
+            'name': 'Maine',
+        },
 }
 
 events = {
@@ -541,6 +544,17 @@ events = {
         'special_instructions': '',
         'address': '',
         'time': '08:00'
+        },
+        
+    'Penobscot Expedition': {
+        'neighborhood': 'Maine',
+        'date_created': '',
+        'date': '7/24/2079',
+        'description': '',
+        'special_instructions': '',
+        'address': 'Penobscot Bay, Maine',
+        'time': '08:00',
+        'duration': '456'
         },
 }
 

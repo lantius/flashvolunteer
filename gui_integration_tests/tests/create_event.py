@@ -18,6 +18,7 @@ class CreateEvent(BaseTestCase):
   maxattend = '1'
   minattend = '50'
   description = 'my test event'
+  duration = '2'
   instructions = 'please show up'
   neighborhood = 'West Seattle'
   address = 'Seattle'
@@ -38,6 +39,7 @@ class CreateEvent(BaseTestCase):
     
     sel.select("time", "label=%s"%self.time)
     sel.select("neighborhood", "label=%s"%self.neighborhood)
+    sel.type("eventduration", self.duration)
     sel.type("address1", self.address)
     sel.type("maxattend", self.maxattend)
     sel.type("minattend", self.minattend)

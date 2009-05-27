@@ -85,13 +85,16 @@ def create_environment(name, session_id):
         except:
             date_created = date.date()
 
-        
-                    
+        try:
+            duration = int(v['duration'])
+        except:
+            duration = None  
         e = Event(
           name = k,
           neighborhood = neighborhoods[v['neighborhood']],
           date_created = date_created,
           date = date,
+          duration = duration,
           description = v['description'],
           special_instructions = v['special_instructions'],
           address = v['address']
@@ -199,7 +202,13 @@ def check_if_user_exists(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
                 name = name)
     v = [v.name for v in vols]
-    return v != []            
+    return v != []          
+    
+def get_users(name):
+    users = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
+                name = name)
+    return users
+    
 
 def set_create_rights(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
@@ -218,6 +227,12 @@ def get_events(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',
                 name = name)
     return events
+
+def get_eventvolunteers(volunteer, event):
+    eventvolunteers = db.GqlQuery('SELECT * from EventVolunteer WHERE volunteer = :volunteer AND event = :event',
+                volunteer = volunteer, event = event)
+    return eventvolunteers
+
     
 def delete_event(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',
@@ -231,6 +246,18 @@ def delete_event(name):
       #  for ei in e.eventinterestcategories:
       #    ei.delete()
       e.delete()
+      
+def delete_eventvolunteer(volunteer, event):
+  volunteers = db.GqlQuery('SELECT * from Volunteer WHERE name = :name', name = volunteer)
+  events = db.GqlQuery('SELECT * from Event WHERE name = :name', name = event)
+
+  for vol in volunteers:
+    for ev in events:
+      eventvolunteers = db.GqlQuery('SELECT * from EventVolunteer WHERE volunteer = :volunteer AND event = :event',
+                    volunteer = vol, event = ev)
+      for evvol in eventvolunteers:
+        evvol.delete()
+     
         
 if __name__ == '__main__':
 
