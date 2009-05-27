@@ -20,16 +20,20 @@ class="current"
 	{% include "../events/_details.html" %}
 	{% include "../events/_description.html" %}
 	{% include "../events/_special_instructions.html" %}
+    {% include "../events/_event_map.html" %}
+	
 </div>
 
 <div id="righthalf">
-	{% include "../events/_event_map.html" %}
-	{% include "../events/_attendees.html" %}
+	{% if event.inpast and eventvolunteer.isowner %}
+       {% include "../events/_attendees_past_owner.html" %}
+    {% else %}
+	   {% include "../events/_attendees.html" %}
+    {% endif %}
+    
 </div>
 
-{% if event.inpast %}
-	{% include "../events/_verify_attendance.html" %}
-{% endif %}
+
 
 {% endblock content %}
 

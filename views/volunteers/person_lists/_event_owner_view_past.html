@@ -1,0 +1,44 @@
+<li class="imagenameli" >
+    <div class="volunteer_summary_family">
+
+        <div class="volunteer_summary_pic">
+            <a href="{{ ev.volunteer.url }}" >
+            <img id="smallavatar" src="
+            {% if ev.volunteer.avatar %}
+                {{ ev.volunteer.url }}/avatar
+            {% else %}
+                /stylesheets/default-profile-pic-small.png
+            {% endif %}
+            " alt="{{ ev.volunteer.get_name }}" /></a>
+        </div>
+        
+        <div class="volunteer_summary_desc">
+            <div class="volunteer_summary_name">
+             <a id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
+            </div>
+
+            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true' 
+                {% if ev.attended %} 
+                 checked 
+                {% endif %}
+            />
+            
+            <label for='i_verify_{{ev.key.id}}_true'>Attended</label>
+            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'/>
+            <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
+            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'/>
+            <label for='i_verify_{{ev.key.id}}_unknown'> Don't Know</label><BR/>
+            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" 
+                {% if ev.hours %}
+                    value="{{ev.hours}}"
+                {% else %}  
+                    value="{{event.duration}}"
+                {% endif %}
+            /> 
+            hours
+            <BR clear="ALL">
+        </div>
+        
+    </div>
+        <br/>
+</li>

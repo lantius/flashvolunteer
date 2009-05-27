@@ -4,11 +4,16 @@
 	<div class="moduletitle"><h3>Event Attendees</h3></div>
 	<ul>
 		<li class="tallerlistitem" >
+    
 		  {% if eventvolunteer %}
-            You are attending!
+		      {% if event.inpast %}
+		        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
+		      {% else %}
+                You are attending!		      
+		      {% endif %}
           {% endif %}
-          <a>&raquo Invite a friend to this event</a>
-		</li>
+          <!--<a>&raquo Invite a friend to this event</a>-->		
+        </li>
 		
 		<li>  
 		    <ul id="imagenamelinklist">
@@ -29,9 +34,19 @@
                 {% endfor %}
                                 
 	            {% for page_volunteer in attendees_anonymous %}
-	                {% include "../volunteers/person_lists/_image_name_link_anonymous.html" %}
-				{% endfor %}
+                    {% if eventvolunteer and event.inpast %}
+                        {% include "../volunteers/person_lists/_image_name_link_unknown.html" %}
+                    {% else %}
+                        {% if eventvolunteer.isowner %}
+                            {% include "../volunteers/person_lists/_image_name_link_unknown.html" %}
+                        {% else %}
+                            {% include "../volunteers/person_lists/_image_name_link_anonymous.html" %}
+                        {% endif %}
+                    {% endif %}				
+                {% endfor %}
+                    
 		    </ul>
 		</li>
 	</ul>
+	
 </div><!--end eventdescription-->

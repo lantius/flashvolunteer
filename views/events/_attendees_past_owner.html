@@ -1,0 +1,28 @@
+
+
+<div id="eventattendees" class="hardmodule">
+	<div class="moduletitle"><h3>Event Attendees</h3></div>
+	<ul>
+		<li class="tallerlistitem" >
+    
+		  {% if eventvolunteer %}
+		        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
+          {% endif %}
+          <!--<a>&raquo Invite a friend to this event</a>-->		
+        </li>
+		
+		<li>  
+        <form action='{{event.url}}/verify' id='f_verify' method="post">
+            <input type=hidden name="session_id" value="{{ session_id }}" />
+            <ul id="imagenamelinklist">
+            
+            {% for ev in event.eventvolunteers %}
+                {% include "../volunteers/person_lists/_event_owner_view_past.html" %}
+            {% endfor %}
+            </ul>
+            
+            <input type="submit" id="s_verify" value="submit"/>
+        </form> 
+		</li>
+	</ul>
+</div><!--end eventdescription-->
