@@ -7,9 +7,10 @@ function showAddress(address) {
     geocoder.getLatLng(
       address,
       function(point) {
-        if (!point) {
-          alert(address + " not found");
-        } else {
+//        if (!point) {
+//          alert(address + " not found");
+//        } else {
+        if (point) {
           map.setCenter(point, 13);
           var marker = new GMarker(point);
           map.addOverlay(marker);
