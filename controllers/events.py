@@ -82,6 +82,11 @@ class EventsPage(webapp.RequestHandler):
     event = Event.get_by_id(int(event_id))
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     
+    if len(owners) > 0:
+        event_contact = owners[0].volunteer
+    else:
+        event_contact = None
+        
     eventvolunteer = ""
     session_id = ''
     
@@ -119,6 +124,7 @@ class EventsPage(webapp.RequestHandler):
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'owners': owners, 
+                        'contact': event_contact,
                         'volunteer': volunteer, 
                         'session_id': session_id,
                         'attendees_friends': attendees_friends,
