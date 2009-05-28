@@ -20,11 +20,11 @@ class="current"
 	{% include "../events/_details.html" %}
 	{% include "../events/_description.html" %}
 	{% include "../events/_special_instructions.html" %}
-    {% include "../events/_event_map.html" %}
 	
 </div>
 
 <div id="righthalf">
+	{% include "../events/_event_map.html" %}
 	{% if event.inpast and eventvolunteer.isowner %}
        {% include "../events/_attendees_past_owner.html" %}
     {% else %}
