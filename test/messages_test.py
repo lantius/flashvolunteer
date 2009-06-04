@@ -29,7 +29,6 @@ class MessagesTest(unittest.TestCase):
     m = MessagesPage()
     params = { 'title' : 'test message', 
                'content' : 'lorum ipsum\ndolor sit amet',
-               'recipient_object' : None,
                'recipient' : None }
     message_id = m.create(params, self.volunteer)
     message = Message.get_by_id(int(message_id))
@@ -77,5 +76,19 @@ class MessagesTest(unittest.TestCase):
     self.assertEqual(self.volunteer.sent_messages.count(), 1)
     self.assertEqual(event.messages.count(), 1)
     self.assertEqual(self.volunteer.messages.count(), 0)
+
+  def test_message_sendemail(self):
+    message = self.test_message_create()
+    volunteer = Volunteer()
+    volunteer.user = users.get_current_user()
+    volunteer.name = "Test Volunteer"
+    volunteer.put()
+    message.recipient = volunteer
+    message.put()
+    
+    message.sendemail()
+    
+    
+    
     
   

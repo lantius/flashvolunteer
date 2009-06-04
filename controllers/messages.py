@@ -50,7 +50,7 @@ class MessagesPage(webapp.RequestHandler):
     message.recipient = params['recipient']
     
     message.put()
-    
+        
     return message.key().id()
     
   ################################################################################

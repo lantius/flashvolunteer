@@ -1,4 +1,5 @@
 from google.appengine.ext import db
+from google.appengine.api import mail
 
 from models.volunteer import *
 
@@ -15,3 +16,9 @@ class Message(db.Model):
 
   def url(self):
     return self.recipient.url() + '/messages/' + str(self.key().id())
+    
+  def sendemail(self):
+    mail.send_mail(sender="noreply@flashvolunteer.org",
+                  to= self.recipient.name + "<" + self.recipient.user.email() + ">",
+                  subject=self.title,
+                  body=self.content)
