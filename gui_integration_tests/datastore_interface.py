@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys,os
+import sys,os, getopt
 from gui_integration_tests.test_settings import PYTHON_LIB, app_id, host, auth_user, auth_psswd, auth_domain
 
 sys.path.append(PYTHON_LIB)
@@ -30,6 +30,7 @@ remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
 
 
 def create_environment(name, session_id):
+    print 'Populating FV...'
     exec('from gui_integration_tests.test_environments.%s import my_env'%name)
 
     (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
@@ -197,6 +198,39 @@ def armageddon(test_objects):
 
     for k,v in test_objects.items():
         delete(v)
+        
+def manual_armageddon(name):
+    "removes population from datastore, slowly"
+    print 'Bye-bye population'
+    exec('from gui_integration_tests.test_environments.%s import my_env'%name)
+
+    (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
+    
+    for k,v in neighborhoods.items():
+        neighborhoods = db.GqlQuery("SELECT * FROM Neighborhood WHERE name = :name", 
+                                   name = k)
+        for n in neighborhoods:
+          n.delete()
+        
+    for k,v in volunteers.items():
+      delete_user(k)
+      
+    for k,v in organizations.items():
+      delete_user(k)
+       
+    for k,v in events.items():
+      delete_event(k)
+    
+    #TODO: destroy relationships, follower, followed etc.
+    friends = social_network['friends']
+    followers = social_network['followers']
+                
+    for follower, followed in friends:
+      pass
+    
+    volunteer_followers = []
+    for follower, followed in followers:
+      pass
 
 def check_if_user_exists(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
@@ -221,7 +255,10 @@ def delete_user(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
                 name = name)
     for v in vols:
-        v.delete()
+      if v.eventvolunteers:
+        for ev in v.eventvolunteers:
+          ev.delete()
+      v.delete()
         
 def get_events(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',
@@ -260,8 +297,28 @@ def delete_eventvolunteer(volunteer, event):
      
         
 if __name__ == '__main__':
-
-    test_objects = create_environment(name = 'revolutionary_war', session_id = 'test')
+    #have create, delete options"
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "cd", ["create", "delete"])
+    except getopt.GetoptError, err:
+        # print help information and exit:
+        print str(err) # will print something like "option -a not recognized"
+        sys.exit(2)
+    opt_create = True
+    opt_delete = False
+    for o, a in opts:
+      if o in ("-c", "--create"):
+        opt_create = True
+      elif o in ("-d", "--delete"):
+        opt_create = False
+        opt_delete = True
+      else:
+        assert False, "unhandled option"
+                    
+    if opt_create:      
+      test_objects = create_environment(name = 'revolutionary_war', session_id = 'test')
+    if opt_delete:             
+      manual_armageddon(name = 'revolutionary_war')
 
 #    armageddon(test_objects = test_objects)
         
