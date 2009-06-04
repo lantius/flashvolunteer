@@ -1,4 +1,6 @@
 import os, string, datetime
+import exceptions
+
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
@@ -90,36 +92,37 @@ class EventsPage(webapp.RequestHandler):
     eventvolunteer = ""
     session_id = ''
     
-    if volunteer:
-      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                         volunteer=volunteer, event=event).get()
-      session_id = volunteer.session_id
-                           
-    friends = dict([(f.key().id(),1) for f in volunteer.friends()])
-    followers = dict([(f.key().id(),1) for f in volunteer.followers()])
-    following = dict([(f.key().id(),1) for f in volunteer.following()])
-    
     attendees_anonymous = []
     attendees_friends = []
     attendees_followers = []
     attendees_following = []
     attendees_unknown = []
     
-    for v in event.volunteers():
-        id = v.key().id()
-        if id == volunteer.key().id(): continue
-        
-        if v.event_access(volunteer = volunteer): 
-            if id in friends:
-                attendees_friends.append(v)
-            elif id in followers:
-                attendees_followers.append(v)
-            elif id in following:
-                attendees_following.append(v)
-            else:
-                attendees_unknown.append(v)
-        else: 
-            attendees_anonymous.append(v)
+    if volunteer:
+      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
+                         volunteer=volunteer, event=event).get()
+      session_id = volunteer.session_id
+                           
+      friends = dict([(f.key().id(),1) for f in volunteer.friends()])
+      followers = dict([(f.key().id(),1) for f in volunteer.followers()])
+      following = dict([(f.key().id(),1) for f in volunteer.following()])
+    
+      for v in event.volunteers():
+          id = v.key().id()
+          if id == volunteer.key().id(): 
+            continue
+          
+          if v.event_access(volunteer = volunteer): 
+              if id in friends:
+                  attendees_friends.append(v)
+              elif id in followers:
+                  attendees_followers.append(v)
+              elif id in following:
+                  attendees_following.append(v)
+              else:
+                  attendees_unknown.append(v)
+          else: 
+              attendees_anonymous.append(v)
 
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
@@ -370,7 +373,7 @@ class VerifyEventAttendance(webapp.RequestHandler):
     elif attended == 'False':
       eventvolunteer.attended = False
     else:
-      eventvolunteer.attended = False
+      eventvolunteer.attended = None
       
     if hours:
       try:
