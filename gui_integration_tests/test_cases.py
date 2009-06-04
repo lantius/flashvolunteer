@@ -52,21 +52,24 @@ class BaseTestCase(unittest.TestCase):
     
     if self.test_env.login_email is not None:
         if self.test_env.create_new_user:
-            self.login_as_new_user()
+            self.login_as_new_user(self.test_env)
         else:
-            self.login_as_existing_user()
+            self.login_as_existing_user(self.test_env)
             
-            
-  def tearDown(self):
+  def logout(self):          
     sel = self.selenium
-    
-    #always logout at end of unit test
     try:
       sel.open("/_ah/login?action=Logout")
       sel.wait_for_page_to_load("30000")
     except Exception, e:
       print 'Could not logout of seleniumn: ' + str(e) 
       pass
+            
+  def tearDown(self):
+    sel = self.selenium
+    
+    #always logout at end of unit test
+    self.logout()
     
     if self.stop_selenium_on_completion == True:
       sel.stop()
@@ -77,18 +80,18 @@ class BaseTestCase(unittest.TestCase):
         raise 'Test environment cleanup failure: ' + str(e)
     
 
-  def login_as_new_user(self):
+  def login_as_new_user(self, env):
     #login
     try:
-        delete_user(name = self.test_env.login_email)
+        delete_user(name = env.login_email)
     except:
         pass
     
     self.selenium.open("/")
     self.selenium.click("//span[@id='l_create_account']")
     self.selenium.wait_for_page_to_load("30000")
-    self.selenium.type("email", self.test_env.login_email)
-    if self.test_env.organization:
+    self.selenium.type("email", env.login_email)
+    if env.organization:
       self.selenium.click("admin")
     self.selenium.click("submit-login")
 
@@ -98,24 +101,24 @@ class BaseTestCase(unittest.TestCase):
     self.selenium.wait_for_page_to_load("30000")   
     
     if self.test_env.organization: 
-        set_create_rights(name = self.test_env.login_name)
+        set_create_rights(name = env.login_name)
         self.selenium.refresh()
         self.selenium.wait_for_page_to_load("30000")  
     
   
-  def login_as_existing_user(self):
+  def login_as_existing_user(self, env):
     #login
     self.selenium.open("/")
     self.selenium.click("//span[@id='l_login']")
     self.selenium.wait_for_page_to_load("30000")
-    self.selenium.type("email", self.test_env.login_email)
-    if self.test_env.organization:
+    self.selenium.type("email", env.login_email)
+    if env.organization:
       self.selenium.click("admin")
     self.selenium.click("submit-login")
     self.selenium.wait_for_page_to_load("30000")  
 
     if self.test_env.organization:      
-      set_create_rights(name = self.test_env.login_name)
+      set_create_rights(name = env.login_name)
       self.selenium.refresh()
       self.selenium.wait_for_page_to_load("30000")   
           

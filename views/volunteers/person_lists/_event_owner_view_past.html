@@ -18,22 +18,40 @@
             </div>
 
             <input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true' 
+			   	onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'
                 {% if ev.attended %} 
                  checked 
                 {% endif %}
             />
             
             <label for='i_verify_{{ev.key.id}}_true'>Attended</label>
-            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'/>
-            <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
-            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'/>
-            <label for='i_verify_{{ev.key.id}}_unknown'> Don't Know</label><BR/>
-            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" 
-                {% if ev.hours %}
-                    value="{{ev.hours}}"
-                {% else %}  
-                    value="{{event.duration}}"
+            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'
+               	onclick='var text_id = this.id.replace(/false/, "text"); document.getElementById(text_id).disabled = true;'
+                {% if not ev.attended %} 
+                 checked 
                 {% endif %}
+            />
+            <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
+            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'
+               	onclick='var text_id = this.id.replace(/unknown/, "text"); document.getElementById(text_id).disabled = true;'
+                {% ifequal ev.attended None %} 
+                 checked 
+                {% endifequal  %}
+            />
+            <label for='i_verify_{{ev.key.id}}_unknown'>Don't Know</label><BR/>
+            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" id='i_verify_{{ev.key.id}}_text'
+                {% if not ev.attended %} 
+                	disabled="true"
+                {% endif %}
+                {% ifequal ev.hours None %}
+                	{% ifequal event.duration None %}
+                    	value=""
+                	{% else %}  
+                    	value="{{event.duration}}"
+	                {% endifequal %}
+                {% else %}  
+                    value="{{ev.hours}}"
+                {% endifequal %}
             /> 
             hours
             <BR clear="ALL">
