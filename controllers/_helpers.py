@@ -28,7 +28,15 @@ class InitializeStore():
       self.initialize_store()
 
   def initialize_store(self):
-    neighborhoods = ("Capitol Hill", "West Seattle", "University District", "Wedgewood")
+    neighborhoods = (
+      'Ballard','Beacon Hill','Belltown','Capitol Hill','Central District/ Madison Valley',
+      'Columbia City','Downtown','Eastlake','First Hill','Fremont','Georgetown','Green Lake',
+      'Greenwood','Interbay','International District','Haller Lake/ Bitter Lake','Lake City',
+      'Laurelhurst','Leschi','Madison Park','Madrona','Magnolia','Maple Leaf','Montlake',
+      'Mount Baker','Northgate','Phinney Ridge','Pioneer Square','Queen Anne','Rainier Valley',
+      'Ravenna','Roosevelt','Sand Point','Seattle Center / Lower Queen Anne','SoDo',
+      'South Lake Union','South Park','University District','View Ridge','Wallingford',
+      'Wedgwood','West Seattle')
     for neighborhood_name in neighborhoods:
       n = Neighborhood(name=neighborhood_name)
       n.put()
