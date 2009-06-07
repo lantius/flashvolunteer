@@ -1,7 +1,7 @@
 		
   {% if event_access %}		
 		<div id="personupcomingevents" class="softmodule">
-			<div class="moduletitle"><h3>{{ page_volunteer.name }}'s Upcoming Events</h3></div>
+			<div id="volunteer_upcoming_events" class="moduletitle"><h3>{{ page_volunteer.name }}'s Upcoming Events</h3></div>
 			{% for event in page_volunteer.events_future %}
 				{% include "../events/_upcoming_brief.html" %}
 			{% endfor %}
