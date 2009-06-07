@@ -517,7 +517,7 @@ events = {
     'Boston Tea Party Reunion': {
         'neighborhood': 'Massachusetts',
         'date_created': '',
-        'date': '12/16/2073',
+        'date': '12/16/2023',
         'description': '',
         'special_instructions': '',
         'address': '',
@@ -547,7 +547,7 @@ events = {
     'Battle of Lexington and Concord Reunion': {
         'neighborhood': 'Massachusetts',
         'date_created': '',
-        'date': '4/19/2075',
+        'date': '4/19/2025',
         'description': '',
         'special_instructions': '',
         'address': '',
@@ -587,7 +587,7 @@ events = {
     'Four-hundred year Signing reunion': {
         'neighborhood': 'Pennsylvania',
         'date_created': '',
-        'date': '7/4/2076',
+        'date': '7/4/2026',
         'description': '',
         'special_instructions': '',
         'address': '',
@@ -609,7 +609,7 @@ events = {
     'Penobscot Expedition Reunion': {
         'neighborhood': 'Maine',
         'date_created': '',
-        'date': '7/24/2079',
+        'date': '7/24/2029',
         'description': '',
         'special_instructions': '',
         'address': 'Penobscot Bay, Maine',
