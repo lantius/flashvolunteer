@@ -87,7 +87,7 @@ class CreateEvent(BaseTestCase):
     finally:
       delete_event(name = self.event_name)
   
-  def soon_test_delete_event_basic(self):
+  def test_delete_event_basic(self):
 
     sel = self.selenium
 
@@ -99,17 +99,17 @@ class CreateEvent(BaseTestCase):
     try:
       events = [e for e in get_events(name = self.event_name)]
       self.assertTrue(len(events) == 1)
-      delete_event(name = self.event_name)
-      
+            
       e = events[0]
     
-      id = str(e.key().id())
+      id = e.key().id()
       sel.open("/events") #TODO WHY DOES THIS BREAK EVERYTHING!?!
       sel.wait_for_page_to_load("30000")
       #l_event_1175
-      sel.click("//a[@id='l_event_" + id + "']")
+      sel.click("//a[@id='event_upcoming[%i]']"%id)
       sel.wait_for_page_to_load("30000")
       sel.click("//input[@id='s_cancel_event']")
+      sel.wait_for_page_to_load("30000")
 
       self.failIf(sel.is_text_present("Event: %s"%self.event_name))
     
