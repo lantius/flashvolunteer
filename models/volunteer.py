@@ -87,19 +87,14 @@ class Volunteer(db.Model):
     return len(self.events_past())
 
   def events_past(self):
-    future_filter = lambda x: x.date < datetime.datetime.today()
-    return filter(future_filter, self.events())
+    return [e for e in self.events() if e.date < datetime.datetime.today() ]
   
   def events_future_count(self):
     return len(self.events_future())
 
   def events_future(self):
-    future_filter = lambda x: x.date >= datetime.datetime.today()
-    if self.events_future_count > 0: #TODO make more efficient
-      return filter(future_filter, self.events())
-    else:
-      return []
-        
+    return [e for e in self.events() if e.date >= datetime.datetime.today() ]
+  
   def check_session_id(self, form_session_id):
     return form_session_id == self.session_id
     
