@@ -4,6 +4,8 @@ import exceptions
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
+from google.appengine.ext import db
+
 from models.volunteer import *
 from models.event import *
 from models.eventvolunteer import *
@@ -58,6 +60,8 @@ class EventsPage(webapp.RequestHandler):
     self.redirect("/events/" + str(int(id)))
     return
 
+
+
   ################################################################################
   # LIST
   def list(self):
@@ -66,16 +70,38 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
 
+    recommended_events = self._get_recommended_events(volunteer = volunteer)
     template_values = {
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'recommended_events': recommended_events,
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
-    
+
+  def _get_recommended_events(self,volunteer):
+    #TODO make more efficient
+    vol_events = volunteer.events()
+    neighborhoods = [volunteer.work_neighborhood.name, volunteer.home_neighborhood.name]
+            
+    vol_interests = set([ic.name for ic in volunteer.interestcategories()])
+    events = [e for e in Event.all() if 
+            #recommend future events 
+            not e.inpast() and 
+            # recommend non rsvp'd events
+            not e in vol_events and  
+            #recommend events in home or work neighborhood
+            (e.neighborhood.name in neighborhoods or  
+             #recommend events in interest categories
+            len(vol_interests.intersection(
+                   set([ic.name for ic in e.interestcategories()]))
+                ) > 0)
+            ]
+    return events
+
   ################################################################################
   # SHOW A SINGLE EVENT
   def show(self, event_id):
