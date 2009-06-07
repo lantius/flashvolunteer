@@ -563,6 +563,17 @@ events = {
         'address': '',
         'time': '08:00'
         },
+        
+    'Battle of Bunker Hill Reunion': {
+        'neighborhood': 'Massachusetts',
+        'date_created': '',
+        'date': '6/19/1975',
+        'description': '',
+        'special_instructions': '',
+        'address': '',
+        'time': '08:00'
+        },
+        
     'Sign the Declaration of Independence': {
         'neighborhood': 'Pennsylvania',
         'date_created': '',
@@ -812,6 +823,12 @@ di = [
     },
 ]
 
+s = [
+    {
+       'volunteer': 'Samuel Adams',
+       'is_owner': True
+    },
+]
 
 #for k,v in volunteers.items():
 #    line = []
@@ -828,6 +845,9 @@ event_volunteers = {
 #    'Gaspee Affair': ga,
 #    'Battle of Lexington and Concord': lc, 
 #    'Battle of Bunker Hill': bh,
+    'Boston Tea Party Reunion': s,
+    'Battle of Lexington and Concord Reunion': s, 
+    'Battle of Bunker Hill Reunion': s,
     'Sign the Declaration of Independence': di,
     'Four-hundred year Signing reunion': di,
 }
