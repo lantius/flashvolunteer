@@ -124,6 +124,8 @@ class SettingsPage(webapp.RequestHandler):
       volunteer.name  = params['name']
     if 'delete_avatar' in params:
       volunteer.avatar = None
+    if 'email' in params:
+      volunteer.preferred_email = params['email']
     
     if 'twitter' in params and volunteer.twitter != params['twitter']:
       volunteer.twitter = params['twitter']

@@ -7,6 +7,7 @@
     <input type="hidden" name="session_id" value="{{ session_id }}">
     <ul>
         <li><span class="label">Name:</span> <input type="text" name="name" value="{{ volunteer.name|striptags }}"  /></li>
+        <li><span class="label">Preferred email:</span> <input type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
         <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
         <li><span class="label">I live in:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
         <li><span class="label">I work in:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>

@@ -17,7 +17,8 @@ class Volunteer(db.Model):
   work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
   session_id = db.StringProperty()
   create_rights = db.BooleanProperty(default=False)
-
+  preferred_email = db.StringProperty(default=None)
+  
   privacy__event_attendance = db.StringProperty(default='friends')
 
   def get_name(self):
@@ -25,6 +26,12 @@ class Volunteer(db.Model):
       return self.name
 
     return self.volunteer.nickname
+
+  def get_email(self):
+    if self.preferred_email is None:
+      return self.user.email()
+    else:
+      return self.preferred_email
   
   def get_quote(self):
     if self.quote:
