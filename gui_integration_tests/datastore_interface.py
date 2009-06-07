@@ -41,12 +41,18 @@ def create_environment(name, session_id):
              session_id = session_id,
         )
         neighborhoods[k] = n
+
     put(neighborhoods.values())
-        
+
     for k,v in volunteers.items():
         email = k.replace(' ', '_').lower() + '@volunteer.org'
         u = User(email)
     
+        if 'privacy__event_attendance' in v:
+            privacy__event_attendance = v['privacy__event_attendance']
+        else:
+            privacy__event_attendance = 'friends'
+            
         v = Volunteer(
           name = k,
           user = u,
@@ -56,10 +62,11 @@ def create_environment(name, session_id):
           home_neighborhood = neighborhoods[v['home_neighborhood']],
           work_neighborhood = neighborhoods[v['work_neighborhood']],
           session_id = session_id,
-          create_rights = v['create_rights'])    
+          create_rights = v['create_rights'],
+          privacy__event_attendance = privacy__event_attendance)    
     
         volunteers[k] = v
-    put(volunteers.values())
+
         
     for k,v in organizations.items():
         email = k.replace(' ', '_').lower() + '@organization.org'
@@ -77,7 +84,6 @@ def create_environment(name, session_id):
           create_rights = v['create_rights'])    
     
         organizations[k] = v
-    put(organizations.values())
         
     for k,v in events.items():
         date = datetime.datetime.strptime(v['time'] + " " + v['date'], "%H:%M %m/%d/%Y")
@@ -103,8 +109,11 @@ def create_environment(name, session_id):
         )
         e.put()
         events[k] = e
+
+    put(events.values() + \
+        organizations.values() + \
+        volunteers.values())
  
-    put(events.values())
     
     ev_volunteers = []
     for k,v in event_volunteers.items():
@@ -117,7 +126,6 @@ def create_environment(name, session_id):
             )
             ev_volunteers.append(ev)
             
-    put(ev_volunteers)
     
     friends = social_network['friends']
     followers = social_network['followers']
@@ -133,7 +141,6 @@ def create_environment(name, session_id):
         )
         volunteer_followers.append(vf)
 
-    put(volunteer_followers)
     
     test_objects = {
        'organizations': organizations.values(),
@@ -144,60 +151,18 @@ def create_environment(name, session_id):
        'neighborhoods': neighborhoods.values()
     }
 
+    put(volunteer_followers + ev_volunteers)
+
     return test_objects
 
-# populates the FV datastore with some elements for use in the testing environment    
-def populate(sessionid):
-    print 'Populating FV...'
-    
-    neighborhoods = dict([(n.name, n) for n in db.GqlQuery('SELECT * from Neighborhood')])
-    
-    for i in range(3):
-        email = 'volunteer%i@test.org'%i
-        u = User(email)
-
-        v = Volunteer(
-          name = email,
-          user = u,
-          #avatar = None,
-          #quote = 'test quote',
-          #twitter = None,
-          home_neighborhood = neighborhoods['Capitol Hill'],
-          #work_neighborhood = None,
-          session_id = sessionid,
-          create_rights = False)
-        
-        v.put()      
-
-    for i in range(3):
-        email = 'organization%i@test.org'%i
-        u = User(email)
-
-        v = Volunteer(
-          name = email,
-          user = u,
-          #avatar = None,
-          #quote = 'test quote',
-          #twitter = None,
-          home_neighborhood = neighborhoods['Capitol Hill'],
-          #work_neighborhood = None,
-          session_id = sessionid,
-          create_rights = True)
-        
-        v.put()      
-
-
-#    for i in range(5):
-#        e = Event(
-#                  
-#        )
-            
 # eliminates all datastore items with the given sessionid
 def armageddon(test_objects):
     print 'De-populating FV...'
 
+    all_objects = []
     for k,v in test_objects.items():
-        delete(v)
+        all_objects += v
+    delete(all_objects)
         
 def manual_armageddon(name):
     "removes population from datastore, slowly"

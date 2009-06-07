@@ -393,6 +393,7 @@ volunteers = {
             'avatar': '',
             'quote': '',
             'create_rights': False,
+            'privacy__event_attendance': 'everyone'
         },
 
     'Alexander Hamilton':{
@@ -401,6 +402,7 @@ volunteers = {
             'avatar': '',
             'quote': '',
             'create_rights': False,
+            'privacy__event_attendance': 'everyone'
         },
 
     'James Madison':{
@@ -417,6 +419,7 @@ volunteers = {
             'avatar': '',
             'quote': '',
             'create_rights': False,
+            'privacy__event_attendance': 'noone'
         },
         
     'Aaron Burr':{
@@ -425,6 +428,7 @@ volunteers = {
             'avatar': '',
             'quote': '',
             'create_rights': False,
+            'privacy__event_attendance': 'everyone'
         },
 }
 
@@ -509,6 +513,18 @@ events = {
         'address': '',
         'time': '08:00'
         },
+
+    'Boston Tea Party Reunion': {
+        'neighborhood': 'Massachusetts',
+        'date_created': '',
+        'date': '12/16/2073',
+        'description': '',
+        'special_instructions': '',
+        'address': '',
+        'time': '08:00'
+        },
+
+    
     'Gaspee Affair': {
         'neighborhood': 'Rhode Island',
         'date_created': '6/9/1972',
@@ -527,6 +543,17 @@ events = {
         'address': '',
         'time': '08:00'
         }, 
+        
+    'Battle of Lexington and Concord Reunion': {
+        'neighborhood': 'Massachusetts',
+        'date_created': '',
+        'date': '4/19/2075',
+        'description': '',
+        'special_instructions': '',
+        'address': '',
+        'time': '08:00'
+        }, 
+        
     'Battle of Bunker Hill': {
         'neighborhood': 'Massachusetts',
         'date_created': '',
@@ -545,8 +572,30 @@ events = {
         'address': '',
         'time': '08:00'
         },
+
+    'Four-hundred year Signing reunion': {
+        'neighborhood': 'Pennsylvania',
+        'date_created': '',
+        'date': '7/4/2076',
+        'description': '',
+        'special_instructions': '',
+        'address': '',
+        'time': '08:00'
+        },
         
+                
     'Penobscot Expedition': {
+        'neighborhood': 'Maine',
+        'date_created': '',
+        'date': '7/24/1979',
+        'description': '',
+        'special_instructions': '',
+        'address': 'Penobscot Bay, Maine',
+        'time': '08:00',
+        'duration': '456'
+        },
+
+    'Penobscot Expedition Reunion': {
         'neighborhood': 'Maine',
         'date_created': '',
         'date': '7/24/2079',
@@ -575,6 +624,10 @@ friends = [
     ('George Wythe', 'Thomas Jefferson'),
     ('James Madison', 'Thomas Jefferson'),
     ('James Madison', 'George Washington'),    
+    ('Thomas Jefferson', 'George Washington'), 
+    ('Thomas Jefferson', 'Thomas McKean'), 
+    ('Samuel Adams', 'George Washington'), 
+
 ]
 
 social_network = {
@@ -776,6 +829,7 @@ event_volunteers = {
 #    'Battle of Lexington and Concord': lc, 
 #    'Battle of Bunker Hill': bh,
     'Sign the Declaration of Independence': di,
+    'Four-hundred year Signing reunion': di,
 }
 
 my_env = (volunteers, organizations, neighborhoods, events, event_volunteers, social_network)

@@ -28,7 +28,7 @@ class TestEnv(object):
 
 class BaseTestCase(unittest.TestCase):
   populate = False 
-  stop_selenium_on_completion = False
+  stop_selenium_on_completion = True
   
   def setUp(self):
     try: 
