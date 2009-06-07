@@ -2,7 +2,8 @@ from selenium import selenium
 import unittest, time, re
 
 from gui_integration_tests.test_settings import host 
-from gui_integration_tests.datastore_interface import create_environment, armageddon, delete_user, set_create_rights
+from gui_integration_tests.datastore_interface import \
+    create_environment, armageddon, delete_user, set_create_rights, get_interestcategories
 
 
 class TestEnv(object):
@@ -12,7 +13,7 @@ class TestEnv(object):
                  login_name = None,
                  organization = False, 
                  fv_environment = 'revolutionary_war',
-                 create_new_user = None):
+                 create_new_user = True):
 
         self.login_email = login_email
         if login_name is None: 
@@ -29,6 +30,7 @@ class TestEnv(object):
 class BaseTestCase(unittest.TestCase):
   populate = False 
   stop_selenium_on_completion = True
+  interestcategories = None
   
   def setUp(self):
     try: 
@@ -79,11 +81,13 @@ class BaseTestCase(unittest.TestCase):
     except Exception, e:
         raise 'Test environment cleanup failure: ' + str(e)
     
+    if self.test_env.create_new_user:
+        delete_user(name = self.test_env.login_name)
 
   def login_as_new_user(self, env):
     #login
     try:
-        delete_user(name = env.login_email)
+        delete_user(name = env.login_name)
     except:
         pass
     
@@ -121,5 +125,19 @@ class BaseTestCase(unittest.TestCase):
       set_create_rights(name = env.login_name)
       self.selenium.refresh()
       self.selenium.wait_for_page_to_load("30000")   
-          
-          
+      
+  ################ HELPER METHODS FOR COMMON SELENIUM ACTIONS ##############
+  def _verify_interestcategory(self, name, checked = True):
+      if self.interestcategories is None:
+          self.interestcategories = get_interestcategories()
+
+      id = self.interestcategories[name].key().id()
+      self.failUnless(
+          self.selenium.is_checked("//input[@name='interestcategory[%i]' and @value='%i' and @type='checkbox']"%(id,int(checked))))
+
+  def _click_interestcategory(self, name, checked = True):
+      if self.interestcategories is None:
+          self.interestcategories = get_interestcategories()
+
+      id = self.interestcategories[name].key().id()
+      self.selenium.click("//input[@name='interestcategory[%i]' and @value='%i' and @type='checkbox']"%(id,int(checked)))

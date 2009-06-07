@@ -23,6 +23,8 @@ class CreateEvent(BaseTestCase):
   neighborhood = 'West Seattle'
   address = 'Seattle'
 
+  interest_categories = ['Animals', 'Hunger', 'Senior Citizens']
+  
   def create_event_basic(self):
     
     sel = self.selenium
@@ -45,10 +47,10 @@ class CreateEvent(BaseTestCase):
     sel.type("minattend", self.minattend)
     sel.type("description", self.description)
     sel.type("special_instructions", self.instructions)
-    sel.click("//input[@name='interestcategory[5]' and @value='1' and @type='checkbox']")
-    sel.click("//input[@name='interestcategory[10]' and @value='1' and @type='checkbox']")
-    sel.click("//input[@name='interestcategory[8]' and @value='1' and @type='checkbox']")
-    sel.click("//input[@name='interestcategory[6]' and @value='1' and @type='checkbox']")
+    
+    for interest in self.interest_categories:
+        self._click_interestcategory(name = interest, checked = True)
+        
     sel.click("submit")
     
 
@@ -79,6 +81,9 @@ class CreateEvent(BaseTestCase):
       self.assertEqual(e.special_instructions, self.instructions)
       self.assertEqual(e.address, self.address)
     
+      #TODO: when interest categories show up on event pages (Issue 60), add this in...
+#      for interest in self.interest_categories:
+#          self._verify_interestcategory(name = interest, checked = True)  
     finally:
       delete_event(name = self.event_name)
   
@@ -99,8 +104,8 @@ class CreateEvent(BaseTestCase):
       e = events[0]
     
       id = str(e.key().id())
-      #sel.open("/events") #TODO WHY DOES THIS BREAK EVERYTHING!?!
-      #sel.wait_for_page_to_load("30000")
+      sel.open("/events") #TODO WHY DOES THIS BREAK EVERYTHING!?!
+      sel.wait_for_page_to_load("30000")
       #l_event_1175
       sel.click("//a[@id='l_event_" + id + "']")
       sel.wait_for_page_to_load("30000")

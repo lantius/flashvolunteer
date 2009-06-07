@@ -55,17 +55,15 @@ class UpdateProfileTest(BaseTestCase):
 
             self.assertEqual('mypreferredemail@testtest.com', sel.get_value("email"))
             
-            sel.click("//input[@name='interestcategory[5]' and @value='1' and @type='checkbox']")
-            sel.click("//input[@name='interestcategory[9]' and @value='1' and @type='checkbox']")
-            sel.click("//input[@name='interestcategory[12]' and @value='1' and @type='checkbox']")
-            sel.click("//input[@name='interestcategory[14]' and @value='1' and @type='checkbox']")
+            interests = ['Animals', 'Hunger', 'Senior Citizens']
+            for interest in interests:
+                self._click_interestcategory(name = interest, checked = True)
             
             sel.click("//input[@id='s_update_profile']")
-            
-            self.failUnless(sel.is_checked("//input[@name='interestcategory[5]' and @value='1' and @type='checkbox']"))
-            self.failUnless(sel.is_checked("//input[@name='interestcategory[9]' and @value='1' and @type='checkbox']"))
-            self.failUnless(sel.is_checked("//input[@name='interestcategory[12]' and @value='1' and @type='checkbox']"))
-            self.failUnless(sel.is_checked("//input[@name='interestcategory[14]' and @value='1' and @type='checkbox']"))
+
+            for interest in interests:
+                self._verify_interestcategory(name = interest, checked = True)   
+                             
         finally:
             
             delete_user(name = 'selenium test')

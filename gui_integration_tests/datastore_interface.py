@@ -235,6 +235,10 @@ def get_eventvolunteers(volunteer, event):
                 volunteer = volunteer, event = event)
     return eventvolunteers
 
+def get_interestcategories():
+    ics = db.GqlQuery('SELECT * from InterestCategory')
+    return dict([(ic.name,ic) for ic in ics])
+        
     
 def delete_event(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',

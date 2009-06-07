@@ -48,10 +48,12 @@ class TestEditEvent__Owner(BaseTestCase):
         sel.type("minattend", "50")
         sel.type("description", desc)
         sel.type("special_instructions", special_instr)
-        #sel.click("//input[@name='interestcategory[267]' and @value='1' and @type='checkbox']")
+        self._click_interestcategory(name = '', checked = True)
+
         sel.click("submit")
         sel.wait_for_page_to_load("30000")
         
+        self._verify_interestcategory_checked(name = '', checked = True)
         self.failUnless(sel.is_text_present("exact:Duration: 16 hours"))
         self.failUnless(sel.is_text_present("exact:Address: Convention center"))
         self.failUnless(sel.is_text_present(desc))
