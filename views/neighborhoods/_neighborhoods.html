@@ -5,7 +5,7 @@
 			</div>
 			<ul>	
 				{% for neighborhood in neighborhoods %}
-					<li>{{neighborhood.name}}</li>
+					<li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
