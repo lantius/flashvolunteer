@@ -85,8 +85,12 @@ class EventsPage(webapp.RequestHandler):
   def _get_recommended_events(self,volunteer):
     #TODO make more efficient
     vol_events = volunteer.events()
-    neighborhoods = [volunteer.work_neighborhood.name, volunteer.home_neighborhood.name]
-            
+    neighborhoods = []
+    if volunteer.work_neighborhood is not None:
+        neighborhoods.append(volunteer.work_neighborhood.name)
+    if volunteer.home_neighborhood is not None:
+        neighborhoods.append(volunteer.home_neighborhood.name)
+                    
     vol_interests = set([ic.name for ic in volunteer.interestcategories()])
     events = [e for e in Event.all() if 
             #recommend future events 
@@ -152,6 +156,7 @@ class EventsPage(webapp.RequestHandler):
 
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
+                        'event_categories': ','.join(event.interestcategories()),
                         'owners': owners, 
                         'contact': event_contact,
                         'volunteer': volunteer, 
