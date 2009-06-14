@@ -9,9 +9,16 @@
 		      {% if event.inpast %}
 		        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
 		      {% else %}
-                You are attending!		      
+		        {% ifequal volunteers_count 1 %}
+		          You are signed up for this event!
+		        {% else %}
+		          {{ volunteers_count }} volunteers are signed up (including you!)
+                {% endifequal %}
 		      {% endif %}
+          {% else %}
+              {{ volunteers_count }} volunteers are signed up
           {% endif %}
+          
           <!--<a>&raquo Invite a friend to this event</a>-->		
         </li>
 		

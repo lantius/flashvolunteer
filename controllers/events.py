@@ -157,6 +157,7 @@ class EventsPage(webapp.RequestHandler):
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'event_categories': ', '.join([ic.name for ic in event.interestcategories()]),
+                        'volunteers_count': len([v for v in event.volunteers()]),
                         'owners': owners, 
                         'contact': event_contact,
                         'volunteer': volunteer, 
