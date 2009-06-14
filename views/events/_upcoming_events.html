@@ -1,0 +1,8 @@
+        <div id="upcomingevents" class="hardmodule">
+            <div class="moduletitle"><h3>Upcoming Events</h3></div>
+            <ul>            
+                {% for event in upcoming_events %}
+                    {% include "../events/_event_list_item.html" %}
+                {% endfor %}
+            </ul>
+        </div>
