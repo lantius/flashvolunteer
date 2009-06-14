@@ -1,7 +1,6 @@
 
 <div id="eventdetails" class="hardmodule">
 	<ul>
-		<li><span class="label">Event:</span> {{ event.name }}</li>
 		<li><span class="label">Date:</span> {{ event.get_date }}</li>
 		<li><span class="label">Time:</span> {{ event.get_time }}</li>
 		<li><span class="label">Duration:</span> {{ event.duration }} hours</li>
@@ -11,6 +10,12 @@
 				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a> 
 			{% endfor %}</li>
 		<li><span class="label">Address:</span> {{ event.address }}</li>
+		<li><span class="label">Categories:</span> 
+		    {% ifequal event_categories '' %}
+		        None selected
+		    {% else %}
+    		    {{ event_categories }}
+            {% endifequal %}</li>
 		<li id="eventactionbutton">
 		{% if eventvolunteer %}
 			{% if eventvolunteer.isowner %}
