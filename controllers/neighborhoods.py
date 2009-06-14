@@ -24,3 +24,39 @@ class NeighborhoodsPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
     return
     
+class NeighborhoodDetailPage(webapp.RequestHandler):
+  ################################################################################
+  # GET
+  def get(self, url_data):
+    if url_data:
+      self.show(url_data)
+    else:
+      self.list() 
+
+  ################################################################################
+  # POST
+
+  ################################################################################
+  # SHOW
+  def show(self, neighborhood_id):
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+    except:
+      return
+
+    neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
+
+    vl = []
+    vw = []
+    ue = []
+    template_values = {
+        'volunteer': volunteer,
+        'neighborhood': neighborhood,
+        'volunteers_living': vl,
+        'volunteers_working': vw,
+        'upcoming_events': ue
+      }
+
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
+    self.response.out.write(template.render(path, template_values))
+    return

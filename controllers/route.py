@@ -9,7 +9,7 @@ from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, Ver
 from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import InitializeStore
-from controllers.neighborhoods import NeighborhoodsPage
+from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage
 from controllers.help import HelpPage
 from controllers.settings import SettingsPage
@@ -48,7 +48,8 @@ def main():
                                      ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
                                      ('/events/(\d+)/verify', VerifyEventAttendance),
                                      ('/events(|/\d+|/new|/search)', EventsPage),
-                                     ('/neighborhoods(|/\d+)', NeighborhoodsPage),     
+                                     ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
+                                     ('/neighborhoods(|)', NeighborhoodsPage),     
                                      ('/team', FriendsPage),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),

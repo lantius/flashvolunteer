@@ -1,0 +1,7 @@
+
+<div id="neighborvolunteers" class="hardmodule">
+    <h3 class="moduletitle">Flash Volunteers living in {{ neighborhood.name }}</h3>
+    <ul id="imagenamelinklist">{% for page_volunteer in neighborhood.volunteers_living_here %}
+        {% include "../volunteers/person_lists/_image_name_link_unknown.html" %}
+    {% endfor %}</ul>
+</div>

@@ -1,0 +1,27 @@
+{% extends "../_layout.html" %}
+{% block title %}
+{{ neighborhood.get_name }}
+{% endblock title %}
+
+{% block pagespectitle %}
+    <h1>{{ neighborhood.name }}</h1>
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<div id="lefthalf">
+    {% include "../neighborhoods/neighborhood_detail/_upcoming_events.html" %}
+<!--    {% include "../neighborhoods/neighborhood_detail/_statistics.html" %}-->
+
+</div>
+
+<div id="righthalf">
+    {% include "../neighborhoods/neighborhood_detail/_volunteer_work.html" %}
+    {% include "../neighborhoods/neighborhood_detail/_volunteer_live.html" %}
+</div>
+
+
+{% endblock content %}
