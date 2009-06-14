@@ -1,6 +1,17 @@
 <div id="neighborhoodupcomingevents" class="hardmodule">
     <div class="moduletitle"><h3>Upcoming Events</h3></div>
-    {% for event in volunteer.events_future %}
-        {% include "../events/_event_list_item.html" %}
+    {% for event in neighborhood.events %}
+        {% if not event.inpast %}
+            {% include "../events/_event_list_item.html" %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div id="neighborhoodpastevents" class="hardmodule">
+    <div class="moduletitle"><h3>Past Events</h3></div>
+    {% for event in neighborhood.events %}
+        {% if event.inpast %}
+            {% include "../events/_event_list_item.html" %}
+        {% endif %}
     {% endfor %}
 </div>
