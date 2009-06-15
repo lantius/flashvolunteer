@@ -1,0 +1,30 @@
+<li class="imagenameli" >
+    <div class="volunteer_summary_family">
+
+        <div class="volunteer_summary_pic">
+            <a href="{{ page_volunteer.url }}" >
+            <img id="smallavatar" src="
+            {% if page_volunteer.avatar %}
+                {{ page_volunteer.url }}/avatar
+            {% else %}
+                /stylesheets/default-profile-pic-small.png
+            {% endif %}
+            " alt="{{ page_volunteer.get_name }}" /></a>
+        </div>
+        <div class="volunteer_summary_name">
+            <div>
+	             <a id="volunteer_link[{{ page_volunteer.key.id }}]" href="{{ page_volunteer.url }}" >
+	                {{ page_volunteer.get_first_name }}
+	                <br/>
+	                {{ page_volunteer.get_last_name }}
+	             </a>
+	             
+	            <form title="Add to your Team" action="{{page_volunteer.url}}/follow" method="post">
+	                <input type=hidden name="session_id" value="{{ session_id }}">
+	                <input id="operation_add_to_family[{{ page_volunteer.key.id }}]" class="operation" type=submit value="(+)"/>
+	            </form>
+            </div>
+        </div>
+                
+    </div>
+</li>

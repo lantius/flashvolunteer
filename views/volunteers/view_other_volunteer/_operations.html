@@ -1,17 +1,9 @@
 <div id="volunteer_operations" class="actionlist">
 
-	{% if volunteerfollower and volunteerfollowing %}
+	{% if volunteerfollower %}
     	{% include "../volunteers/operations/_remove_from_family.html" %}
     {% else %} 
-        {% if volunteerfollower %}
-            {% include "../volunteers/operations/_remove_as_friend.html" %}
-        {% else %} 
-            {% if volunteerfollowing %}
-                {% include "../volunteers/operations/_add_to_family.html" %}
-        	{% else %}
-                {% include "../volunteers/operations/_add_as_friend.html" %}        
-	        {% endif %}
-	    {% endif %}
+        {% include "../volunteers/operations/_add_to_family.html" %}
 	{% endif %}
 	
 </div>

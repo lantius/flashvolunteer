@@ -27,6 +27,12 @@ class Volunteer(db.Model):
 
     return self.volunteer.nickname
 
+  def get_first_name(self):
+      return ' '.join(self.get_name().split(' ')[:-1])
+  
+  def get_last_name(self):
+      return self.get_name().split(' ')[-1]
+  
   def get_email(self):
     if self.preferred_email is None:
       return self.user.email()

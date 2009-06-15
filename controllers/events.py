@@ -78,6 +78,7 @@ class EventsPage(webapp.RequestHandler):
         'recommended_events': recommended_events,
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id,
+        'upcoming_events': self._get_upcoming_events()
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
@@ -92,9 +93,7 @@ class EventsPage(webapp.RequestHandler):
         neighborhoods.append(volunteer.home_neighborhood.name)
                     
     vol_interests = set([ic.name for ic in volunteer.interestcategories()])
-    events = [e for e in Event.all() if 
-            #recommend future events 
-            not e.inpast() and 
+    events = (e for e in self._get_upcoming_events() if
             # recommend non rsvp'd events
             not e in vol_events and  
             #recommend events in home or work neighborhood
@@ -103,8 +102,14 @@ class EventsPage(webapp.RequestHandler):
             len(vol_interests.intersection(
                    set([ic.name for ic in e.interestcategories()]))
                 ) > 0)
-            ]
+            )
     return events
+
+  def _get_upcoming_events(self):
+    events = (e for e in Event.all() if 
+            #recommend future events 
+            not e.inpast())
+    return sorted(events, lambda e,e2: cmp(e.date,e2.date))
 
   ################################################################################
   # SHOW A SINGLE EVENT

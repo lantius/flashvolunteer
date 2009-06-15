@@ -23,8 +23,25 @@
                  checked 
                 {% endif %}
             />
+            <label for='i_verify_{{ev.key.id}}_true'>Attended for </label>
             
-            <label for='i_verify_{{ev.key.id}}_true'>Attended</label>
+            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" id='i_verify_{{ev.key.id}}_text'
+                {% if not ev.attended %} 
+                    disabled="true"
+                {% endif %}
+                {% ifequal ev.hours None %}
+                    {% ifequal event.duration None %}
+                        value=""
+                    {% else %}  
+                        value="{{event.duration}}"
+                    {% endifequal %}
+                {% else %}  
+                    value="{{ev.hours}}"
+                {% endifequal %}
+            /> hours
+            
+            
+            <br/>
             <input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'
                	onclick='var text_id = this.id.replace(/false/, "text"); document.getElementById(text_id).disabled = true;'
                 {% if not ev.attended %} 
@@ -32,28 +49,15 @@
                 {% endif %}
             />
             <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
+            <br/>
             <input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'
                	onclick='var text_id = this.id.replace(/unknown/, "text"); document.getElementById(text_id).disabled = true;'
                 {% ifequal ev.attended None %} 
                  checked 
                 {% endifequal  %}
             />
-            <label for='i_verify_{{ev.key.id}}_unknown'>Don't Know</label><BR/>
-            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" id='i_verify_{{ev.key.id}}_text'
-                {% if not ev.attended %} 
-                	disabled="true"
-                {% endif %}
-                {% ifequal ev.hours None %}
-                	{% ifequal event.duration None %}
-                    	value=""
-                	{% else %}  
-                    	value="{{event.duration}}"
-	                {% endifequal %}
-                {% else %}  
-                    value="{{ev.hours}}"
-                {% endifequal %}
-            /> 
-            hours
+            <label for='i_verify_{{ev.key.id}}_unknown'>?</label><BR/>
+             
             <BR clear="ALL">
         </div>
         

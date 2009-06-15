@@ -2,17 +2,16 @@
 <div id="personinformation" class="softmodule">
 	<div class="moduletitle">
 		<h3>Information</h3>
-		<a href="/settings">edit</a>
 	</div>
 	<ul>
 	  {% if page_volunteer.home_neighborhood %}
-		<li><span class="label">Lives in:</span> <a href="{{ page_volunteer.home_neighborhood.url }}">{{ page_volunteer.home_neighborhood.name }}</a></li>
+		<li><span class="label">Lives in</span> <a href="{{ page_volunteer.home_neighborhood.url }}">{{ page_volunteer.home_neighborhood.name }}</a></li>
 		{% endif %}
 {% if page_volunteer.work_neighborhood %}
-		<li><span class="label">Works in:</span> <a href="{{ page_volunteer.work_neighborhood.url }}">{{ page_volunteer.work_neighborhood.name }}</a></li>
+		<li><span class="label">Works in</span> <a href="{{ page_volunteer.work_neighborhood.url }}">{{ page_volunteer.work_neighborhood.name }}</a></li>
 {% endif %}
-		<li><span class="label">FV member for:</span> {{ page_volunteer.joinedon|timesince }}</li>
-		<li><span class="label">Has volunteered at:</span> {{ page_volunteer.events_past_count }} event(s)</li>
-		<li><span class="label">Is signed up for:</span> {{ page_volunteer.events_future_count }} upcoming event(s)</li>
+		<li><span class="label">Member for</span> {{ page_volunteer.joinedon|timesince }}</li>
+		<li><span class="label">Volunteered at</span> {{ page_volunteer.events_past_count }} event(s)</li>
+		<li><span class="label">Signed up for</span> {{ page_volunteer.events_future_count }} event(s)</li>
 	</ul>
 </div><!--end information-->

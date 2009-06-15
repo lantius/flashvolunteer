@@ -336,7 +336,7 @@ volunteers = {
             'work_neighborhood': 'Massachusetts',
             'avatar': '',
             'quote': '',
-            'create_rights': False,
+            'create_rights': True,
         },
     'Edward Rutledge':{
             'home_neighborhood': 'South Carolina',
