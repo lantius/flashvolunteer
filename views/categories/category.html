@@ -1,0 +1,24 @@
+{% extends "../_layout.html" %}
+{% block title %}
+{{ category.get_name }}
+{% endblock title %}
+
+{% block pagespectitle %}
+    <h1>{{ category.name }}</h1>
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<div id="lefthalf">
+    {% include "../categories/category_detail/_events.html" %}
+</div>
+
+<div id="righthalf">
+    {% include "../categories/category_detail/_volunteers.html" %}
+</div>
+
+
+{% endblock content %}

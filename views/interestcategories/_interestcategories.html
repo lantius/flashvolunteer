@@ -3,7 +3,8 @@
   <li>
   	<input type="hidden" name="interestcategory[{{ic.key.id}}]" value="1" />
   	<input class="checkbox" type="checkbox" name="interestcategory[{{ic.key.id}}]" value="1" {% if ic.selected %} checked {% endif %} />
-  	<label class="checkboxlabel" for="interestcategory[{{ic.key.id}}]" >{{ic.name}}</label>
+  	<label class="checkboxlabel" for="interestcategory[{{ic.key.id}}]" ><a id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a></label>
+  	
   </li>
 {% endfor %}
 </ul>

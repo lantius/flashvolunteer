@@ -13,6 +13,7 @@ from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage
 from controllers.help import HelpPage
 from controllers.settings import SettingsPage
+from controllers.interest_categories import CategoryPage
 
 ################################################################################
 # Timeout page
@@ -54,6 +55,7 @@ def main():
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),
                                      ('/volunteers(|/\d+)', VolunteersPage),
+                                     ('/category/(\d+)', CategoryPage),
                                      ('/help', HelpPage),
                                      ('/timeout', TimeoutPage),
                                     ],

@@ -14,7 +14,11 @@
 		    {% ifequal event_categories '' %}
 		        None selected
 		    {% else %}
-    		    {{ event_categories }}
+		        <ul style="padding-left:20px">
+	                {% for ic in event.interestcategories %}
+	                    <a id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a><br/>
+	                {% endfor %}
+	            </ul>
             {% endifequal %}</li>
 		<li id="eventactionbutton">
 		{% if eventvolunteer %}

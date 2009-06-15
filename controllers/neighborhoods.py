@@ -46,15 +46,9 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
 
     neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
 
-    vl = []
-    vw = []
-    ue = []
     template_values = {
         'volunteer': volunteer,
-        'neighborhood': neighborhood,
-        'volunteers_living': vl,
-        'volunteers_working': vw,
-        'upcoming_events': ue
+        'neighborhood': neighborhood
       }
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
