@@ -85,7 +85,7 @@ class EventsPage(webapp.RequestHandler):
 
   def _get_recommended_events(self,volunteer):
     #TODO make more efficient
-    vol_events = volunteer.events()
+    vol_events = [v.key().id() for v in volunteer.events()]
     neighborhoods = []
     if volunteer.work_neighborhood is not None:
         neighborhoods.append(volunteer.work_neighborhood.name)
@@ -95,7 +95,7 @@ class EventsPage(webapp.RequestHandler):
     vol_interests = set([ic.name for ic in volunteer.interestcategories()])
     events = (e for e in self._get_upcoming_events() if
             # recommend non rsvp'd events
-            not e in vol_events and  
+            not e.key().id() in vol_events and  
             #recommend events in home or work neighborhood
             (e.neighborhood.name in neighborhoods or  
              #recommend events in interest categories

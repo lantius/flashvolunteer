@@ -524,6 +524,15 @@ events = {
         'time': '08:00'
         },
 
+    'Boston Tea Party Reunion AFTERPARTY!!!': {
+        'neighborhood': 'Massachusetts',
+        'date_created': '',
+        'date': '12/16/2023',
+        'description': '',
+        'special_instructions': '',
+        'address': '',
+        'time': '08:00'
+        },
     
     'Gaspee Affair': {
         'neighborhood': 'Rhode Island',
@@ -825,8 +834,11 @@ di = [
 
 s = [
     {
-       'volunteer': 'Samuel Adams',
+       'volunteer': 'Robert Treat Paine',
        'is_owner': True
+    },
+    {
+       'volunteer': 'Samuel Adams',
     },
 ]
 
