@@ -27,51 +27,51 @@ class TestSocialNetworkOperations(BaseTestCase):
     following = ["Benjamin Harrison"]
 
     for friend in friends:
-        self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_family']//a[@id='volunteer_link[%i]']"%self.test_object_index[friend].key().id()))    
+        self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_team']//a[@id='volunteer_link[%i]']"%self.test_object_index[friend].key().id()))    
 
     for friend in followers:
-        self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_follower']//a[@id='volunteer_link[%i]']"%self.test_object_index[friend].key().id()))    
+        self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_neighbor']//a[@id='volunteer_link[%i]']"%self.test_object_index[friend].key().id()))    
 
     for friend in following:
-        self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_following']//a[@id='volunteer_link[%i]']"%self.test_object_index[friend].key().id()))    
+        self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_team']//a[@id='volunteer_link[%i]']"%self.test_object_index[friend].key().id()))    
     
     
-    sel.click("//input[@id='operation_add_to_family[%i]']"%self.test_object_index['Aaron Burr'].key().id())
+    sel.click("//input[@id='operation_add_to_team[%i]']"%self.test_object_index['Aaron Burr'].key().id())
     sel.wait_for_page_to_load("30000")
-    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_family']//a[@id='volunteer_link[%i]']"%self.test_object_index['Aaron Burr'].key().id()))    
-    self.failUnless(sel.is_element_present("//input[@id='operation_remove_from_family[%i]']"%self.test_object_index['Aaron Burr'].key().id()))    
+    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_team']//a[@id='volunteer_link[%i]']"%self.test_object_index['Aaron Burr'].key().id()))    
+    self.failUnless(sel.is_element_present("//input[@id='operation_remove_from_team[%i]']"%self.test_object_index['Aaron Burr'].key().id()))    
       
       
-    sel.click("//input[@id='operation_remove_as_neighbor[%i]']"%self.test_object_index['Benjamin Harrison'].key().id())
+    sel.click("//input[@id='operation_remove_from_team[%i]']"%self.test_object_index['Benjamin Harrison'].key().id())
     sel.wait_for_page_to_load("30000")
     self.failIf(sel.is_element_present("//div[@class='volunteer_summary_following']//a[@id='volunteer_link[%i]']"%self.test_object_index["Benjamin Harrison"].key().id()))    
     self.failIf(sel.is_text_present("Benjamin Harrison"))    
     
 
-    sel.click("//input[@id='operation_remove_from_family[%i]']"%self.test_object_index['George Wythe'].key().id())
+    sel.click("//input[@id='operation_remove_from_team[%i]']"%self.test_object_index['George Wythe'].key().id())
     sel.wait_for_page_to_load("30000")
-    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_follower']//a[@id='volunteer_link[%i]']"%self.test_object_index['George Wythe'].key().id()))    
-    self.failUnless(sel.is_element_present("//input[@id='operation_add_to_family[%i]']"%self.test_object_index['George Wythe'].key().id()))    
+    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_neighbor']//a[@id='volunteer_link[%i]']"%self.test_object_index['George Wythe'].key().id()))    
+    self.failUnless(sel.is_element_present("//input[@id='operation_add_to_team[%i]']"%self.test_object_index['George Wythe'].key().id()))    
     
     sel.open('/volunteers/%i'%self.test_object_index['Benjamin Harrison'].key().id())
     sel.wait_for_page_to_load('30000')
-    self.failUnless(sel.is_element_present("//input[@id='operation_add_as_neighbor[%i]']"%self.test_object_index['Benjamin Harrison'].key().id()))    
-    sel.click("//input[@id='operation_add_as_neighbor[%i]']"%self.test_object_index['Benjamin Harrison'].key().id())
+    self.failUnless(sel.is_element_present("//input[@id='operation_add_to_team[%i]']"%self.test_object_index['Benjamin Harrison'].key().id()))    
+    sel.click("//input[@id='operation_add_to_team[%i]']"%self.test_object_index['Benjamin Harrison'].key().id())
     sel.wait_for_page_to_load('30000')
-    self.failUnless(sel.is_element_present("//input[@id='operation_remove_as_neighbor[%i]']"%self.test_object_index['Benjamin Harrison'].key().id()))    
+    self.failUnless(sel.is_element_present("//input[@id='operation_remove_from_team[%i]']"%self.test_object_index['Benjamin Harrison'].key().id()))    
     sel.open('/team')
     sel.wait_for_page_to_load('30000')
-    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_following']//a[@id='volunteer_link[%i]']"%self.test_object_index['Benjamin Harrison'].key().id()))    
+    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_team']//a[@id='volunteer_link[%i]']"%self.test_object_index['Benjamin Harrison'].key().id()))    
 
     sel.open('/volunteers/%i'%self.test_object_index['James Madison'].key().id())
     sel.wait_for_page_to_load('30000')
-    self.failUnless(sel.is_element_present("//input[@id='operation_remove_from_family[%i]']"%self.test_object_index['James Madison'].key().id()))    
-    sel.click("//input[@id='operation_remove_from_family[%i]']"%self.test_object_index['James Madison'].key().id())
+    self.failUnless(sel.is_element_present("//input[@id='operation_remove_from_team[%i]']"%self.test_object_index['James Madison'].key().id()))    
+    sel.click("//input[@id='operation_remove_from_team[%i]']"%self.test_object_index['James Madison'].key().id())
     sel.wait_for_page_to_load('30000')
-    self.failUnless(sel.is_element_present("//input[@id='operation_add_to_family[%i]']"%self.test_object_index['James Madison'].key().id()))    
+    self.failUnless(sel.is_element_present("//input[@id='operation_add_to_team[%i]']"%self.test_object_index['James Madison'].key().id()))    
     sel.open('/team')
     sel.wait_for_page_to_load('30000')
-    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_follower']//a[@id='volunteer_link[%i]']"%self.test_object_index['James Madison'].key().id()))    
+    self.failUnless(sel.is_element_present("//div[@class='volunteer_summary_neighbor']//a[@id='volunteer_link[%i]']"%self.test_object_index['James Madison'].key().id()))    
 
 
 
