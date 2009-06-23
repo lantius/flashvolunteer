@@ -30,6 +30,13 @@ class="current"
     {% else %}
 	   {% include "../events/_attendees.html" %}
     {% endif %}
+
+	{% comment %}
+		show photos, and allow to add albums and photos
+	{% endcomment %}
+	{% if event.inpast %}
+       {% include "../events/_event_photos.html" %}
+    {% endif %}
     
 </div>
 

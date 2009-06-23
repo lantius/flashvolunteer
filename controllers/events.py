@@ -12,6 +12,7 @@ from models.eventvolunteer import *
 from models.neighborhood import *
 from models.interestcategory import *
 from models.eventinterestcategory import *
+from models.eventphoto import *
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
@@ -51,13 +52,24 @@ class EventsPage(webapp.RequestHandler):
       self.redirect("/events")
       return
   
-    id = self.create(params, volunteer)
-    if id is None:
-        self.redirect('/events')
-        return
+    if 'action' in params:
+      if params['action'] == 's_addexternalalbum':
+        event_id = params['eventid']
+        eventphotocontainer = EventPhoto(event=Event.get_by_id(int(event_id)), 
+                                         volunteer=volunteer,
+                                         content=params['content'], 
+                                         type=EventPhoto.RSS_ALBUM, 
+                                         status=EventPhoto.PUBLISHED
+                                         )
+        eventphotocontainer.put()
+    else: 
+      event_id = self.create(params, volunteer)
+      if event_id is None:
+          self.redirect('/events')
+          return
+      
     
-    
-    self.redirect("/events/" + str(int(id)))
+    self.redirect("/events/" + str(int(event_id)))
     return
 
 
@@ -158,7 +170,7 @@ class EventsPage(webapp.RequestHandler):
                   attendees_unknown.append(v)
           else: 
               attendees_anonymous.append(v)
-
+          
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'event_categories': ', '.join([ic.name for ic in event.interestcategories()]),
