@@ -1,4 +1,5 @@
 import datetime
+import logging
 from google.appengine.ext import db
 from models.neighborhood import *
 from models.interestcategory import *
@@ -16,6 +17,8 @@ class Event(db.Model):
   special_instructions = db.TextProperty()
   address = db.StringProperty(multiline=True)
   
+  error = {}
+  
   def get_date(self):
     if not self.date:
       return "no date set"
@@ -29,7 +32,9 @@ class Event(db.Model):
     return self.date.strftime("%I:%M%p")
   
   def url(self):
-    return '/events/' + str(self.key().id())
+    if self.is_saved():
+      return '/events/' + str(self.key().id())
+    return '/events'
     
   def volunteers(self):
      return (ev.volunteer for ev in self.eventvolunteers)
@@ -46,11 +51,61 @@ class Event(db.Model):
      return (eic.interestcategory for eic in self.eventinterestcategories)
 
   def validate(self, params):
+    self.error.clear()
+
     try:
-      datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
-      return True
+      if not 'name' in params:
+        raise Exception
+      if not len(params['name']) > 0:
+        raise Exception
+      
+      self.name = params['name']
     except:
-      return False
+      self.error['name'] = ('Name is required', params['name'])
+
+    try:
+      dateval = datetime.datetime.strptime(params['date'], "%m/%d/%Y")
+    except ValueError:
+      self.error['date'] = ('Invalid date format', params['date'])
+    
+    try:
+      time = datetime.datetime.strptime(params['time'], "%H:%M")
+    except ValueError:
+      self.error['time'] = ('Invalid time', params['time'])
+
+    if(not ('time' in self.error or 'date' in self.error)):
+      self.date = datetime.datetime.strptime(params['time'] + ' ' + params['date'], "%H:%M %m/%d/%Y")
+    
+    try:
+      self.duration = int(params['duration'])
+    except:
+      self.error['duration'] = ('Duration must be a number', params['duration'])
+    
+    try:
+      if not 'description' in params:
+        raise Exception
+      if not len(params['description']) > 0:
+        raise Exception
+      self.description = params['description']
+    except:
+      self.error['description'] = ('Description is required', params['description'])
+      
+    try:
+      self.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+    except:
+      self.error['neighborhood'] = ('Invalid neighborhood', params['neighborhood'])
+    
+    try:
+      self.address = params['address']
+    except:
+      self.error['address'] = ('Invalid address', params['address'])
+    
+    try:
+      self.special_instructions = params['special_instructions']
+    except:
+      self.error['special_instructions'] = ('Invalid special instructions', params['special_instructions'])
+    
+    return not self.error
   
   def inpast(self):
       return self.date < datetime.datetime.now()

@@ -1,6 +1,6 @@
 import os, string, datetime
 import exceptions
-
+import logging
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
@@ -28,7 +28,7 @@ class EventsPage(webapp.RequestHandler):
   def get(self, url_data):    
     if url_data:
       if '/new' == url_data:
-        self.new()
+        self.new({})
       elif '/search' == url_data:
         params = Parameters.parameterize(self.request)
         self.search(params)
@@ -52,6 +52,13 @@ class EventsPage(webapp.RequestHandler):
       self.redirect("/events")
       return
   
+    id = self.create(params, volunteer)
+    if id is None:
+      self.redirect('/events')
+      return
+    elif not id:
+      return
+
     if 'action' in params:
       if params['action'] == 's_addexternalalbum':
         event_id = params['eventid']
@@ -68,8 +75,7 @@ class EventsPage(webapp.RequestHandler):
           self.redirect('/events')
           return
       
-    
-    self.redirect("/events/" + str(int(event_id)))
+    self.redirect("/events/" + str(int(id)))
     return
 
 
@@ -98,12 +104,13 @@ class EventsPage(webapp.RequestHandler):
   def _get_recommended_events(self,volunteer):
     #TODO make more efficient
     vol_events = [v.key().id() for v in volunteer.events()]
+
     neighborhoods = []
-    if volunteer.work_neighborhood is not None:
-        neighborhoods.append(volunteer.work_neighborhood.name)
-    if volunteer.home_neighborhood is not None:
-        neighborhoods.append(volunteer.home_neighborhood.name)
-                    
+    if(volunteer.work_neighborhood):
+      neighborhoods.push(volunteer.work_neighborhood.name)
+    if(volunteer.home_neighborhood):
+      neighborhoods.push(volunteer.home_neighborhood.name)
+
     vol_interests = set([ic.name for ic in volunteer.interestcategories()])
     events = (e for e in self._get_upcoming_events() if
             # recommend non rsvp'd events
@@ -205,7 +212,7 @@ class EventsPage(webapp.RequestHandler):
 
   ################################################################################
   # NEW
-  def new(self):
+  def new(self, event):
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
@@ -216,11 +223,10 @@ class EventsPage(webapp.RequestHandler):
       return
 
     template_values = {
+        'event' : event,
         'volunteer': volunteer,
-        'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
-        'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
     self.response.out.write(template.render(path, template_values))
@@ -234,20 +240,16 @@ class EventsPage(webapp.RequestHandler):
       self.redirect("/events") #TODO REDIRECT to error page
       return None
     
-    if not event.validate(params):    
-      return None
-      
-    event.name = params['name']
-    event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
-    event.duration = int(params['duration'])
-    event.description = params['description']
-    event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
-    event.address = params['address']
-    event.special_instructions = params['special_instructions']
+    if not event.validate(params):
+      self.new(event)
+      return False
     
     # TODO: Check to make sure values are present and valid
     # TODO: transaction such that if anything throws an exception we don't litter the database
-    event.put()
+    try:
+      event.put()
+    except:
+      self.new(event)
 
     for interestcategory in InterestCategory.all():
       pic = 'interestcategory[' + str(interestcategory.key().id()) + ']'
@@ -445,7 +447,9 @@ class EditEventPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
-    self.edit({ 'id' : url_data }, volunteer)
+    
+    event = Event.get_by_id(int(url_data))
+    self.edit(event, volunteer)
 
   ################################################################################
   # POST
@@ -458,23 +462,25 @@ class EditEventPage(webapp.RequestHandler):
     params = Parameters.parameterize(self.request)
     params['id'] = url_data
     
-    self.update(params, volunteer)
-    
-    self.redirect("/events/" + url_data)
+    id = self.update(params, volunteer)
+    if id is None:
+      self.redirect('/events')
+      return
+    elif not id:
+      return
+    self.redirect("/events/" + str(int(id)))
+    return
     
   ################################################################################
-  # EDIT (is the get)
-  def edit(self, params, volunteer):
-    event = Event.get_by_id(int(params['id']))
-    
+  # EDIT
+  def edit(self, event, volunteer):    
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
     if not eventvolunteer:
-      self.redirect("/events/" + params['id'])
+      self.redirect("/events/" + event.id)
       return
     
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-    
 
     template_values = { 
       'event' : event, 
@@ -483,7 +489,6 @@ class EditEventPage(webapp.RequestHandler):
       'volunteer': volunteer, 
       'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
       'interestcategories' : InterestCategoryHelper().selected(event),
-      'session_id': volunteer.session_id,
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
     self.response.out.write(template.render(path, template_values))
@@ -492,31 +497,27 @@ class EditEventPage(webapp.RequestHandler):
   # UPDATE
   def update(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
-    
-    if not event.validate(params):
-      return None
-    
+
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
-    if eventvolunteer:
-      event.name = params['name']
-      event.date = datetime.datetime.strptime(params['time'] + " " + params['date'], "%H:%M %m/%d/%Y")
-      event.duration = int(params['duration'])
-      event.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
-      event.description = params['description']
-      event.address = params['address']
-      event.special_instructions = params['special_instructions']
-      
-      for interestcategory in InterestCategory.all():
-        param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-        eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
-                            event = event, interestcategory = interestcategory).get()
-        if params[param_name] == ['1','1'] and not eic:          
-          eic = EventInterestCategory(event = event, interestcategory = interestcategory)
-          eic.put()
-        elif params[param_name] == '1' and eic:
-          eic.delete()
-          
-      event.put()
+    if not eventvolunteer:
+      return None
+    
+    if not event.validate(params):
+      self.edit(event, volunteer)
+      return False
+    
+    for interestcategory in InterestCategory.all():
+      param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+      eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
+                          event = event, interestcategory = interestcategory).get()
+      if params[param_name] == ['1','1'] and not eic:          
+        eic = EventInterestCategory(event = event, interestcategory = interestcategory)
+        eic.put()
+      elif params[param_name] == '1' and eic:
+        eic.delete()
+        
+    event.put()
+    return event.key().id()
 
   

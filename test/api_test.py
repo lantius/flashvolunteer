@@ -6,4 +6,4 @@ class AppEngineAPITest(unittest.TestCase):
     
     def test_urlfetch(self):
         response = urlfetch.fetch('http://www.google.com')
-        self.assertEquals(0, response.content.find('<html>'))
+        self.assertNotEqual(-1, response.content.find('<html>'))

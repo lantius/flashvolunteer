@@ -1,1 +1,9 @@
-<input id="eventduration" name="duration" type="text" value="{{ event.duration }}" size="3" maxlength="3" /> hours
+<input id="eventduration" name="duration" type="text" value=
+  {% if event.error.duration %}
+   "{{event.error.duration.1}}"
+  {% else %}
+   "{{ event.duration }}"
+  {% endif %} size="3" maxlength="3" /> hours
+{% if event.error.duration %}
+<br/><strong class"error">{{event.error.duration.0}}</strong>
+{% endif %}

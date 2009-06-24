@@ -1,1 +1,5 @@
-<textarea name="description" >{{ event.description }}</textarea>	
+<textarea name="description" >{% if event.error.description %}{{event.error.description.1}}{% else %}{{ event.description }}{% endif %}</textarea>	
+
+{% if event.error.description %}
+<br/><strong class"error">{{event.error.description.0}}</strong>
+{% endif %}

@@ -1,1 +1,10 @@
-<input id="eventname" name="name" type="text" value="{{ event.name }}" />
+<input id="eventname" name="name" type="text" value=
+{% if event.error.name %}
+ "{{event.error.name.1}}"
+{% else %}
+ "{{ event.name }}"
+{% endif %}
+/>
+{% if event.error.name %}
+<br/><strong class"error">{{event.error.name.0}}</strong>
+{% endif %}

@@ -19,10 +19,18 @@ class EventsTest(unittest.TestCase):
     self.interestcategory2 = InterestCategory()
     self.interestcategory2.put()
     
+    self.neighborhood1 = Neighborhood()
+    self.neighborhood1.put()
+    
+    self.neighborhood2 = Neighborhood()
+    self.neighborhood2.put()
+    
   def tearDown(self):
     self.volunteer.delete()
     self.interestcategory1.delete()
     self.interestcategory2.delete()
+    self.neighborhood1.delete()
+    self.neighborhood2.delete()
   
   # CREATE  
   def test_event_create(self):
@@ -202,7 +210,22 @@ class EventsTest(unittest.TestCase):
     self.assertTrue(eventvolunteer.attended)
     self.assertEqual(None, eventvolunteer.hours)
     
-    
+  # VALIDATE
+  def test_event_validate(self):
+    event = Event()
+    params = { 'name' : 'create unit test',
+               'neighborhood' : str(self.neighborhood1.key().id()),
+               'date' : '01/01/2009',
+               'time' : '03:00',
+               'duration' : '2',               
+               'description' : 'test description\non the internet with two lines!',
+               'special_instructions' : 'special instructions',
+               'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',
+               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
+               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
+
+    for p in params.keys():
+      self.assertEqual(None, event.error.get(p))
     
     
     

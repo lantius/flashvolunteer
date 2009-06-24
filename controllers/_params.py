@@ -1,3 +1,5 @@
+import logging
+
 class Parameters():
   
   def parameterize(req):
@@ -5,6 +7,7 @@ class Parameters():
     for name in req.arguments():
       # TODO: if name = foo[1] then make a sub-hash of foos
       # accessed as params['foo'][1]
+
       
       params[name] = req.get_all(name)
       if len(params[name]) == 1: 

@@ -2,10 +2,10 @@
 <div id="createevent" class="softmodule">
 	<div class="moduletitle"><h3>Create An Event</h3></div>
 	
-	<form action="{% if event %}
+	<form action="{% if event.is_saved %}
 						{{event.url}}/edit
 					{% else %}
-						/events
+						/events/new
 					{% endif %}" method="post"><ul>
 		<li>
 			<div class="eventcreatelabel">Event Name:</div>
@@ -69,7 +69,7 @@
 			</div>
 		</li>
 	</ul>
-	<input type=hidden name="session_id" value="{{ session_id }}">
-	<input id="submit" type="submit" value="{% if event %}Update{% else %}Create{% endif %}"/>
+	<input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+	<input id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create{% endif %}"/>
 	</form>
 </div>
