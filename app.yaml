@@ -1,5 +1,5 @@
-application: flashvolunteer
-version: 2
+application: flashvolunteer-dev
+version: development
 runtime: python
 api_version: 1
 
@@ -21,4 +21,4 @@ handlers:
 
 - url: /.*
   script: controllers/route.py
-  #login: admin
+  login: admin
