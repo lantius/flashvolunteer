@@ -3,6 +3,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from models.neighborhood import *
 from models.interestcategory import *
+from controllers._helpers import SessionID
 
 ################################################################################
 # Volunteer
@@ -20,6 +21,34 @@ class Volunteer(db.Model):
   preferred_email = db.StringProperty(default=None)
   
   privacy__event_attendance = db.StringProperty(default='friends')
+
+  error = {}
+
+
+  def validate(self, params):
+    self.error.clear()
+    
+    # volunteer.user is set in the settings controller
+    try:
+      if not 'name' in params:
+        raise Exception
+      if not len(params['name']) > 0:        
+        raise Exception
+      self.name  = params['name']
+    except:
+      self.error['name'] = ('A name is required', params['name'])
+    
+    if (not 'tosagree' in params) or params['tosagree'] != '1':
+      self.error['tosagree'] = ('You must agree to the Terms of Service to join Flash Volunteer', 0)
+    
+    if not self.error:
+      self.session_id = SessionID().generate()
+      return True
+    else:
+      return False
+    
+    
+    
 
   def get_name(self):
     if self.name:
@@ -110,3 +139,5 @@ class Volunteer(db.Model):
   def event_access(self, volunteer):
       friends = [f.key().id() for f in self.friends()]
       return self.privacy__event_attendance == 'everyone' or (self.privacy__event_attendance == 'friends' and volunteer.key().id() in friends)
+      
+  

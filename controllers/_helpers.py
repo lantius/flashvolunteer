@@ -1,5 +1,17 @@
+import random
+
 from models.neighborhood import *
 from models.interestcategory import *
+
+class SessionID():
+  #TODO: Optimize random string generation
+  def generate(self):
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    random_string = ''
+    for count in xrange(1,64):
+      random_string += random.sample(alphabet,1)[0]
+
+    return random_string
 
 class NeighborhoodHelper():
   def selected(self, selected_neighborhood):

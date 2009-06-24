@@ -1,5 +1,4 @@
 import os
-import random
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
@@ -32,7 +31,9 @@ class SettingsPage(webapp.RequestHandler):
     if volunteer:
       self.edit(volunteer)
     else:
-      self.new()
+      volunteer = Volunteer()
+      volunteer.error.clear()
+      self.new(volunteer)
 
   ################################################################################
   # POST
@@ -45,8 +46,9 @@ class SettingsPage(webapp.RequestHandler):
 
     params = Parameters.parameterize(self.request)
     if not volunteer:
-      self.create(params)
-      self.redirect('/')
+      if self.create(params):
+        self.redirect('/')
+        
     else:
       if 'is_delete' in params and params['is_delete'] == 'true':
         self.delete(volunteer)
@@ -70,17 +72,15 @@ class SettingsPage(webapp.RequestHandler):
   
   ################################################################################
   # NEW
-  def new(self):
+  def new(self, volunteer):
     user = users.get_current_user()
 
     if not user:
       self.redirect(users.create_login_url(self.request.uri))
       return
 
-    volunteer = Volunteer()
-    volunteer.name = user.nickname()
-
     template_values = {
+        'default_name' : user.nickname(),
         'volunteer' :  volunteer,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'create.html')
@@ -97,9 +97,13 @@ class SettingsPage(webapp.RequestHandler):
 
     volunteer = Volunteer()
     volunteer.user = user
-    volunteer.name  = params['name']
-    volunteer.session_id = SettingsPage.randomString(self)
+    
+    if not volunteer.validate(params):
+      self.new(volunteer)
+      return False
+      
     volunteer.put()
+    return True
     
   ################################################################################
   # UPDATE
@@ -173,13 +177,3 @@ class SettingsPage(webapp.RequestHandler):
 
     # Finally remove the volunteer
     volunteer.delete()
-  
-  #TODO: Optimize random string generation
-  def randomString(self):
-    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    random_string = ''
-    for count in xrange(1,64):
-      random_string += random.sample(alphabet,1)[0]
-        
-    return random_string;
- 

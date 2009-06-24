@@ -5,3 +5,8 @@
 	</option>
 	{% endfor %}
 </select>
+{% if event %}
+	{% if event.error.neighborhood %}
+<br/><strong class="error">{{event.error.neighborhood.0}}</strong>
+	{% endif %}
+{% endif %}

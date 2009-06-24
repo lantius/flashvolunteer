@@ -5,8 +5,25 @@
 	<form action="/settings" method="post">
 	<input type="hidden" name="session_id" value="{{ session_id }}" />
 	<ul>
-		<li><span class="label">Your Name:</span><input id="createnameinput" type="text" name="name" value="{{ volunteer.name }}" /></li>
+		<li><span class="label">Your Name:</span><input id="createnameinput" type="text" name="name" value="
+			{% if volunteer.error.name %}
+				{{ volunteer.error.name.1 }}
+			{% else %}
+				{% if volunteer.name %}
+					{{ volunteer.name }}
+				{% else %}
+					{{ default_name }}
+				{% endif %}
+			{% endif %}
+			" /></li>
+			{% if volunteer.error.name %}
+				<br/><strong class="error">{{volunteer.error.name.0}}</strong>
+			{% endif %}
 		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/toslink">Terms of Use</a></li>
+		{% if volunteer.error.tosagree %}
+			<br/><strong class="error">{{volunteer.error.tosagree.0}}</strong>
+		{% endif %}
+		
 		<li><input type="submit" value="Create my account" id="s_create_account"/></li>
 	</ul>
 	</form>

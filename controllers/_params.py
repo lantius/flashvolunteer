@@ -11,8 +11,11 @@ class Parameters():
       
       params[name] = req.get_all(name)
       if len(params[name]) == 1: 
-        params[name] = params[name][0]
-      
+        params[name] = str(params[name][0])
+    
+    
+#    params['name'] = req.get_all('name')[0] + '!'
+    
     return params
     
   parameterize = staticmethod(parameterize)
