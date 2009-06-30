@@ -30,18 +30,123 @@
 </script>
 
 <script type="text/javascript">
-$(function() {
-	$('#addexternalbum_dialog').dialog({ autoOpen: false, modal: true, width: 485 });
-});
+	$(function() {
+		$('#addexternalbum_dialog').dialog({ 
+			autoOpen: false, 
+			modal: true, 
+			width: 485 
+			});
+	});
 	//$(document).ready(function(){
 		  //$("#addalbumdialog").dialog({ autoOpen: false, modal: true  });
 	//});
+	
+	function image_loaded(self) {
+		var MAXIMG_WIDTH = 0.4;// ratio to column width
+		self.naturalWidth = self.currentTarget.naturalWidth;
+		el_eventphotos = document.getElementById("eventphotos");
+		var img_dim = MAXIMG_WIDTH * el_eventphotos.clientWidth;
+		var img_style = "";
+		if (self.currentTarget.naturalWidth > self.currentTarget.naturalHeight) {
+			//scale images to width
+			var img_width = img_dim;
+			var img_height = self.currentTarget.naturalHeight * img_width / self.currentTarget.naturalWidth;
+			var padding = parseInt((img_dim - img_height)/2)
+			this.style.paddingBottom = padding + "px";
+			this.style.paddingTop = padding + "px";
+		} else {
+			//scale images to height
+			var img_height = img_dim;
+			var img_width  = self.currentTarget.naturalWidth * img_height / self.currentTarget.naturalHeight;
+			var padding = parseInt((img_dim - img_width)/2);
+			this.style.paddingLeft = padding + "px";
+			this.style.paddingRight = padding + "px";
+		}
+		this.style.width = parseInt(img_width) + "px";
+		this.style.height = parseInt(img_height) + "px";
+		
+	};	
+	function load_album(content, album_id, volunteer_url, volunteer_name ) {
+		var feed = new google.feeds.Feed(content);
+		feed.setResultFormat(google.feeds.Feed.MIXED_FORMAT);
+		feed.load(function(result) {
+			if (!result.error) {
+				el_eventphotos = document.getElementById("eventphotos");
+				var el_title = document.getElementById("rss_album_" + album_id + "_title");
+				el_spantitle = document.createElement('span');
+				//el_title.innerHTML = '<a href="' + result.feed.link + ' ">\'' + result.feed.title + '\'</a> posted by <a href="{{ep.volunteer.url}}">{{ep.volunteer.name}}</a>';
+				el_spantitle.innerHTML = '<a href="' + result.feed.link + ' ">\'' + result.feed.title + '\'</a> posted by <a href="' + volunteer_url + '">' + volunteer_name + '</a>';
+
+				el_bar = document.getElementById("rss_album_" + album_id + "_bar");
+				el_title.insertBefore(el_spantitle, el_bar); //appendChild
+				var el_photos = document.getElementById("rss_album_" + album_id + "_photos");
+
+				var items = result.xmlDocument.getElementsByTagName("item");
+			    //for (var ii = 0; ii < items.length; ii++) {
+					//var titleElement = items[ii].getElementsByTagName("title")[0];
+					//var title = titleElement.firstChild.nodeValue;
+					
+				el_phototable = document.createElement('table');
+				el_phototable.className = "phototable";
+
+				var el_tr;
+			    for (var ii = 0; ii < result.feed.entries.length; ii++) {
+					var entry = result.feed.entries[ii];
+					var el_content = document.createElement('span');
+					el_content.innerHTML = entry.content;
+
+					var el_img = document.createElement('img');
+					var imgs = el_content.getElementsByTagName('img');
+					var img_src = imgs[0].getAttribute("src")
+					el_img.setAttribute("src", img_src);
+					el_img.setAttribute("src", img_src);
+
+					el_img.addEventListener("load", image_loaded, false);
+
+					//var media_thumbnail = result.xmlDocument.getElementsByTagName('media:thumbnail');
+					//var thumbnail_width = thumbnail_height = 0;
+					//for (var kk = 0; kk < media_thumbnail.length; kk++) {
+					//	if (img_src==media_thumbnail[kk].getAttribute("url")) {
+					//		thumbnail_width = parseInt(media_thumbnail[kk].getAttribute("width"));
+					//		thumbnail_height = parseInt(media_thumbnail[kk].getAttribute("height"));
+					//		break;
+					//	}
+					//}
+
+					var el_a = document.createElement('a');
+					el_a.setAttribute("href", entry.link);
+					el_a.appendChild(el_img);
+
+					var el_td = document.createElement('td');
+					el_td.appendChild(el_a);
+
+					//debugger;
+					var el_caption = document.createElement('p');
+					el_caption.className = "caption";
+					el_caption.appendChild(document.createTextNode(entry.title));
+					el_td.appendChild(el_caption);
+					
+
+					if (ii%2 == 0) {//even, make a new row
+						el_tr = document.createElement('tr');
+						el_phototable.appendChild(el_tr);
+					}
+					el_tr.appendChild(el_td);
+			    }
+			    el_photos.appendChild(el_phototable);
+			}
+		});
+
+	} 
+
+
+
 </script>
 <div id="addexternalbum_dialog" title="Add External Album">
 	<form action='{{event.url}}' id='f_photo' method="post">
-	    <input type=hidden name="session_id" value="{{ session_id }}" />
-	    <input type=hidden name="eventid" value="{{ event.key.id }}" />
-	    <input type=hidden name="action" value="s_addexternalalbum" />
+	    <input type="hidden" name="session_id" value="{{ session_id }}" />
+	    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
+	    <input type="hidden" name="action" value="s_addexternalalbum" />
 	    <ul>
 	    	<li>
 				<div id="content_help">
@@ -54,6 +159,7 @@ $(function() {
 				</span>	 
 			</li>
 		</ul>
+		<input type="button" id="cancel" onclick="$('#addexternalbum_dialog').dialog('close');" value="Cancel"/>
     	<input type="submit" id="s_addexternalalbum" value="Add Album"/>
 	</form> 
 </div>
@@ -70,102 +176,30 @@ $(function() {
 	</select>
     {% endif %}
 	</div>
-	{% for ep in event.eventphotos %}
+
+
+	{% for ep in eventphotos %}
 		{% ifequal ep.status ep.PUBLISHED %}
 			{% ifequal ep.type ep.RSS_ALBUM %}
-				<div id="rss_album_{{ep.key.id}}" ><h2 id="rss_album_{{ep.key.id}}_title">RSS Album</h2>
+				<div id="rss_album_{{ep.key.id}}" >
+					<h2 id="rss_album_{{ep.key.id}}_title">
+						{% if eventvolunteer.isowner %}
+						<span id="rss_album_{{ep.key.id}}_bar" class="rss_album_bar">
+							<form action='{{event.url}}' id='f_photo' method="post">
+							    <input type="hidden" name="session_id" value="{{ session_id }}" />
+							    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
+							    <input type="hidden" name="album_id" value="{{ ep.key.id }}" />
+								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_up" value="Up" />
+								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_down" value="Down" />
+								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_remove" value="Remove" />
+							</form>
+						</span>
+					    {% endif %}
+								
+					</h2>
 				<div id="rss_album_{{ep.key.id}}_photos" ></div>
 					<script type="text/javascript">
-						var MAXIMG_WIDTH = 0.4;// ratio to column width
-						var feed = new google.feeds.Feed("{{ep.content}}");
-						feed.setResultFormat(google.feeds.Feed.MIXED_FORMAT);
-						feed.load(function(result) {
-							if (!result.error) {
-								el_eventphotos = document.getElementById("eventphotos");
-								var el_title = document.getElementById("rss_album_{{ep.key.id}}_title");
-								el_title.innerHTML = '<a href="' + result.feed.link + ' ">\'' + result.feed.title + '\'</a> posted by <a href="{{ep.volunteer.url}}">{{ep.volunteer.name}}</a>';
-								var el_photos = document.getElementById("rss_album_{{ep.key.id}}_photos");
-
-								var items = result.xmlDocument.getElementsByTagName("item");
-							    //for (var ii = 0; ii < items.length; ii++) {
-									//var titleElement = items[ii].getElementsByTagName("title")[0];
-									//var title = titleElement.firstChild.nodeValue;
-									
-								el_phototable = document.createElement('table');
-								el_phototable.className = "phototable";
-
-								var el_tr;
-							    for (var ii = 0; ii < result.feed.entries.length; ii++) {
-									var entry = result.feed.entries[ii];
-									var el_content = document.createElement('span');
-									el_content.innerHTML = entry.content;
-
-									var el_img = document.createElement('img');
-									var imgs = el_content.getElementsByTagName('img');
-									var img_src = imgs[0].getAttribute("src")
-									el_img.setAttribute("src", img_src);
-									el_img.setAttribute("src", img_src);
-
-									el_img.addEventListener("load", image_loaded, false);
-
-									//var media_thumbnail = result.xmlDocument.getElementsByTagName('media:thumbnail');
-									//var thumbnail_width = thumbnail_height = 0;
-									//for (var kk = 0; kk < media_thumbnail.length; kk++) {
-									//	if (img_src==media_thumbnail[kk].getAttribute("url")) {
-									//		thumbnail_width = parseInt(media_thumbnail[kk].getAttribute("width"));
-									//		thumbnail_height = parseInt(media_thumbnail[kk].getAttribute("height"));
-									//		break;
-									//	}
-									//}
-
-									var el_a = document.createElement('a');
-									el_a.setAttribute("href", entry.link);
-									el_a.appendChild(el_img);
-
-									var el_td = document.createElement('td');
-									el_td.appendChild(el_a);
-
-									//debugger;
-									var el_caption = document.createElement('p');
-									el_caption.className = "caption";
-									el_caption.appendChild(document.createTextNode(entry.title));
-									el_td.appendChild(el_caption);
-									
-
-									if (ii%2 == 0) {//even, make a new row
-										el_tr = document.createElement('tr');
-										el_phototable.appendChild(el_tr);
-									}
-									el_tr.appendChild(el_td);
-							    }
-							    el_photos.appendChild(el_phototable);
-							}
-						});
-
-						function image_loaded(self) {
-							self.naturalWidth = self.currentTarget.naturalWidth;
-							el_eventphotos = document.getElementById("eventphotos");
-							var img_dim = MAXIMG_WIDTH * el_eventphotos.clientWidth;
-							var img_style = "";
-							if (self.currentTarget.naturalWidth > self.currentTarget.naturalHeight) {
-								//scale images to width
-								var img_width = img_dim;
-								var img_height = self.currentTarget.naturalHeight * img_width / self.currentTarget.naturalWidth;
-								var padding = parseInt((img_dim - img_height)/2)
-								this.style.paddingBottom = padding + "px";
-								this.style.paddingTop = padding + "px";
-							} else {
-								//scale images to height
-								var img_height = img_dim;
-								var img_width  = self.currentTarget.naturalWidth * img_height / self.currentTarget.naturalHeight;
-								var padding = parseInt((img_dim - img_width)/2);
-								this.style.paddingLeft = padding + "px";
-								this.style.paddingRight = padding + "px";
-							}
-							this.style.width = parseInt(img_width) + "px";
-							this.style.height = parseInt(img_height) + "px";
-							
-						}
+						load_album("{{ep.content}}", "{{ep.key.id}}", "{{ep.volunteer.url}}", "{{ep.volunteer.name}}");
 					</script>
 					{% comment %}
 					{% endcomment %}	
