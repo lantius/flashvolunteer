@@ -107,9 +107,9 @@ class EventsPage(webapp.RequestHandler):
 
     neighborhoods = []
     if(volunteer.work_neighborhood):
-      neighborhoods.push(volunteer.work_neighborhood.name)
+      neighborhoods.append(volunteer.work_neighborhood.name)
     if(volunteer.home_neighborhood):
-      neighborhoods.push(volunteer.home_neighborhood.name)
+      neighborhoods.append(volunteer.home_neighborhood.name)
 
     vol_interests = set([ic.name for ic in volunteer.interestcategories()])
     events = (e for e in self._get_upcoming_events() if
