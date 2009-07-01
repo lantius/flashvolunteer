@@ -6,7 +6,17 @@
     </div>
     <input type="hidden" name="session_id" value="{{ session_id }}">
     <ul>
-        <li><span class="label">Name:</span> <input type="text" name="name" value="{{ volunteer.name|striptags }}"  /></li>
+	
+        <li><span class="label">Name:</span> <input type="text" name="name" value="
+		{% if volunteer.error.name %}
+			{{ volunteer.error.name.1|striptags }}
+		{% else %}
+			{{ volunteer.name|striptags }}
+		{% endif %}
+		" /></li>
+		{% if volunteer.error.name %}
+			<br/><strong class="error">{{volunteer.error.name.0}}</strong>
+		{% endif %}
         <li><span class="label">Preferred email:</span> <input type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
         <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
         <li><span class="label">I live in:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
@@ -30,7 +40,11 @@
     </div>
     
     <ul>
-        <li><span class="label">Twitter Username:</span> <input type="text" name="twitter" size="33" value="{{ volunteer.twitter|striptags }}"  /><br/>
+        <li><span class="label">Twitter Username:</span> <input type="text" name="twitter" size="33" value="
+	{% if volunteer.twitter %}
+			{{ volunteer.twitter|striptags }}
+	{% endif %}
+	"  /><br/>
   (*Note: To receive tweets, you must also follow <a href="http://twitter.com/flashvolunteer">FlashVolunteer</a> on Twitter.)
         </li>
     </ul>

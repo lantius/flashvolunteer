@@ -2,7 +2,6 @@ import os
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
-from controllers._twitter import Twitter
 
 from google.appengine.ext.webapp import template
 from google.appengine.api import users, images
@@ -54,8 +53,9 @@ class SettingsPage(webapp.RequestHandler):
         self.delete(volunteer)
         self.redirect('/')
       else:  
-        self.update(params, volunteer)
-        self.redirect('/settings')
+        if self.update(params, volunteer):
+          self.redirect('/settings')
+        
 
   ################################################################################
   # EDIT
@@ -108,32 +108,10 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # UPDATE
   def update(self, params, volunteer):
-    if 'home_neighborhood' in params:
-      if params['home_neighborhood'] == 'None':
-        volunteer.home_neighborhood = None;
-      else:
-        volunteer.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
-        
-    if 'work_neighborhood' in params:
-      if params['work_neighborhood'] == 'None':
-        volunteer.work_neighborhood = None;
-      else:
-        volunteer.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
     
-    if 'avatar' in params and params['avatar']:
-      volunteer.avatar = params['avatar']
-    if 'quote' in params:
-      volunteer.quote = "" + params['quote']
-    if 'name' in params:
-      volunteer.name  = params['name']
-    if 'delete_avatar' in params:
-      volunteer.avatar = None
-    if 'email' in params:
-      volunteer.preferred_email = params['email']
-    
-    if 'twitter' in params and volunteer.twitter != params['twitter']:
-      volunteer.twitter = params['twitter']
-      Twitter.toot("Welcome to Flash Volunteer!", volunteer.twitter)
+    if not volunteer.validate(params):
+      self.edit(volunteer)
+      return False
     
     for interestcategory in InterestCategory.all():
       param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
@@ -146,11 +124,10 @@ class SettingsPage(webapp.RequestHandler):
         vic.put()
       elif params[param_name] == '1' and vic:
         vic.delete()
+  
     
-    if 'privacy__event_attendance' in params and volunteer.privacy__event_attendance != params['privacy__event_attendance']:
-        volunteer.privacy__event_attendance = params['privacy__event_attendance']
-        
     volunteer.put()
+    return True
       
   ################################################################################
   # DELETE

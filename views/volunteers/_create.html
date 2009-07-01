@@ -10,9 +10,9 @@
 				{{ volunteer.error.name.1 }}
 			{% else %}
 				{% if volunteer.name %}
-					{{ volunteer.name }}
+					{{ volunteer.name|striptags }}
 				{% else %}
-					{{ default_name }}
+					{{ default_name|striptags }}
 				{% endif %}
 			{% endif %}
 			" /></li>

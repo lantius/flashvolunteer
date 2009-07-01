@@ -5,6 +5,11 @@ from models.neighborhood import *
 from models.interestcategory import *
 from controllers._helpers import SessionID
 
+#For verifying volunteer creation
+from controllers._twitter import Twitter 
+from models.interestcategory import *
+
+
 ################################################################################
 # Volunteer
 class Volunteer(db.Model):
@@ -38,8 +43,43 @@ class Volunteer(db.Model):
     except:
       self.error['name'] = ('A name is required', params['name'])
     
-    if (not 'tosagree' in params) or params['tosagree'] != '1':
-      self.error['tosagree'] = ('You must agree to the Terms of Service to join Flash Volunteer', 0)
+    if not self.is_saved():
+      if (not 'tosagree' in params) or params['tosagree'] != '1':
+        self.error['tosagree'] = ('You must agree to the Terms of Service to join Flash Volunteer', 0)
+   
+    # Not verifying these updates
+    if 'home_neighborhood' in params:
+      if params['home_neighborhood'] == 'None':
+        self.home_neighborhood = None;
+      else:
+        self.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+
+    if 'work_neighborhood' in params:
+      if params['work_neighborhood'] == 'None':
+        self.work_neighborhood = None;
+      else:
+        self.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
+
+    if 'avatar' in params and params['avatar']:
+      self.avatar = params['avatar']
+    if 'quote' in params:
+      self.quote = "" + params['quote']
+    if 'name' in params:
+      self.name  = params['name']
+    if 'delete_avatar' in params:
+      self.avatar = None
+    if 'email' in params:
+      self.preferred_email = params['email']
+
+    if 'twitter' in params and self.twitter != params['twitter']:
+      self.twitter = params['twitter']
+      Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
+
+      #Interest Categories updates happen in the controller
+
+    if 'privacy__event_attendance' in params and self.privacy__event_attendance != params['privacy__event_attendance']:
+        self.privacy__event_attendance = params['privacy__event_attendance']
+    
     
     if not self.error:
       self.session_id = SessionID().generate()

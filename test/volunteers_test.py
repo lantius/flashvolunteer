@@ -19,6 +19,28 @@ class VolunteersTest(unittest.TestCase):
       self.assertTrue(1)
       volunteer.delete()
   
+  def test_validate_no_name(self):
+    params = { 'name' : '' }
+    volunteer = Volunteer()
+    self.assertFalse(volunteer.validate(params))
+    params['tosagree'] = '1'
+    self.assertFalse(volunteer.validate(params))
+    self.assertFalse((not 'tosagree' in params) or params['tosagree'] != '1')
+  
+  def test_validate_no_tos(self):
+    params = { 'name' : 'a name!' }
+    volunteer = Volunteer()
+    self.assertTrue(not volunteer.is_saved())
+    self.assertFalse(volunteer.validate(params))
+    self.assertTrue((not 'tosagree' in params) or params['tosagree'] != '1')
+    
+  def test_vaidate_working(self):
+    params = { 'name' : 'A. Nameous',
+               'tosagree' : '1'}
+    volunteer = Volunteer()
+    self.assertTrue(volunteer.validate(params))
+    
+  
   def test_follow_friend(self):
     volunteer  = Volunteer()
     volunteer.put()
