@@ -14,7 +14,6 @@ function showAddress(address) {
           map.setCenter(point, 13);
           var marker = new GMarker(point);
           map.addOverlay(marker);
-          marker.openInfoWindowHtml(address);
         }
       }
     );

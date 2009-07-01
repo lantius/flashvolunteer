@@ -429,6 +429,7 @@ class VerifyEventAttendance(webapp.RequestHandler):
         'volunteer' : ev.volunteer,
         'event' : ev.event,
         'now' : datetime.datetime.now().strftime("%A, %d %B %Y"),
+        'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'receipt.html')
     self.response.out.write(template.render(path, template_values))

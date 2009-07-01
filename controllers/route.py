@@ -22,6 +22,11 @@ class TimeoutPage(webapp.RequestHandler):
     path = os.path.join(os.path.dirname(__file__), '..', 'views','session_timeout.html')
     self.response.out.write(template.render(path, {}))
 
+# flashvolunteer-dev.appspot.com
+GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
+# flashvolunteer.appspot.com
+# GOOGLE_MAPS_API_KEY = ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ
+
 ################################################################################
 # gae mojo
 
