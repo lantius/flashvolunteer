@@ -12,17 +12,15 @@
 		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
 	{% endif %}
 	<div id="navtabs">
-		<ul>
-			<li><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
-			<li><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
-			<li><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
-			<li><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">TEAM</a></li>
-			<li><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
-			<li><a href="/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
-			{% if volunteer.can_create_events %}
-			<li><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} id="l_create_event">CREATE EVENT</a></li>
-			{% endif %}
-		</ul>
+		<span id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></span>
+		<span id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></span>
+		<span id="neighborhoodslink"><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></span>
+		<span id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">TEAM</a></span>
+		<span id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></span>
+		<span id="helplink"><a href="/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></span>
+		{% if volunteer.can_create_events %}
+		<span id="createeventlink"><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} id="l_create_event">CREATE EVENT</a></span>
+		{% endif %}
 	</div>
 </div><!--end top-->
 
