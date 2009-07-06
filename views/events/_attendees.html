@@ -24,33 +24,12 @@
 		
 		<li>  
 		    <ul id="imagenamelinklist">
-				{% for page_volunteer in attendees_friends %}
-					{% include "../volunteers/person_lists/_volunteer_list_item_teammate.html" %}
+				{% for volunteer_in_list in attendees %}
+					{% include "../volunteers/person_lists/_volunteer_list_item.html" %}
 	            {% endfor %}
 
-                {% for page_volunteer in attendees_following %}
-                    {% include "../volunteers/person_lists/_volunteer_list_item_teammate.html" %}
-                {% endfor %}
-
-                {% for page_volunteer in attendees_followers %}
-                    {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-                {% endfor %}
-
-                {% for page_volunteer in attendees_unknown %}
-                    {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-                {% endfor %}
+                {% include "../volunteers/person_lists/_volunteer_list_item_anonymous.html" %}
                                 
-	            {% for page_volunteer in attendees_anonymous %}
-                    {% if eventvolunteer and event.inpast %}
-                        {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-                    {% else %}
-                        {% if eventvolunteer.isowner %}
-                            {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-                        {% else %}
-                            {% include "../volunteers/person_lists/_volunteer_list_item_anonymous.html" %}
-                        {% endif %}
-                    {% endif %}				
-                {% endfor %}
                     
 		    </ul>
 		</li>

@@ -7,13 +7,15 @@ from google.appengine.ext.webapp import template
 from controllers.home import MainPage
 from controllers.events import EventsPage, VolunteerForEvent, EditEventPage, VerifyEventAttendance
 from controllers.eventmessages import EventMessagesPage
-from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
+from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar, VolunteerTeam
 from controllers._helpers import InitializeStore
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage
 from controllers.help import HelpPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
+
+webapp.template.register_template_library('templatetags.filters')
 
 ################################################################################
 # Timeout page
@@ -60,6 +62,7 @@ def main():
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),
                                      ('/volunteers(|/\d+)', VolunteersPage),
+                                     ('/volunteers/(\d+)/team/(\d+)', VolunteerTeam),
                                      ('/category/(\d+)', CategoryPage),
                                      ('/help', HelpPage),
                                      ('/timeout', TimeoutPage),

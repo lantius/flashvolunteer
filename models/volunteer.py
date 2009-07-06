@@ -138,6 +138,9 @@ class Volunteer(db.Model):
   def followers_len(self):
     return len(self.followers())
 
+  def teammates_ids(self):
+      return dict([(v.key().id(),1) for v in self.following() ])
+
   # both following and follower
   def friends(self):
     fr = []

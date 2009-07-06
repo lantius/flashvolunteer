@@ -1,28 +1,43 @@
-<li class="imagenameli" >
-    <div class="volunteer_summary_neighbor">
 
+
+<li class="imagenameli" >
+
+    {% team_status volunteer volunteer_in_list %}    
+        
+    <div class="volunteer_summary">
+
+        
         <div class="volunteer_summary_pic">
-            <a href="{{ page_volunteer.url }}" >
+            <a href="{{ volunteer_in_list.url }}" >
             <img id="smallavatar" src="
-            {% if page_volunteer.avatar %}
-                {{ page_volunteer.url }}/avatar
+            {% if volunteer_in_list.avatar %}
+                {{ volunteer_in_list.url }}/avatar
             {% else %}
                 /stylesheets/default-profile-pic-small.png
             {% endif %}
-            " alt="{{ page_volunteer.get_name }}" /></a>
+            " alt="{{ volunteer_in_list.get_name }}" /></a>
         </div>
         <div class="volunteer_summary_name">
             <div>
-	             <a id="volunteer_link[{{ page_volunteer.key.id }}]" href="{{ page_volunteer.url }}" >
-	                {{ page_volunteer.get_first_name }}
-	                <br/>
-	                {{ page_volunteer.get_last_name }}
-	             </a>
-	             
-	            <form title="Add to your Team" action="{{page_volunteer.url}}/follow" method="post">
-	                <input type=hidden name="session_id" value="{{ session_id }}">
-	                <input id="operation_add_to_team[{{ page_volunteer.key.id }}]" class="operation" type=submit value="(+)"/>
-	            </form>
+                 <a id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
+                    {{ volunteer_in_list.get_first_name }}
+                    <br/>
+                    {{ volunteer_in_list.get_last_name }}
+                 </a>
+
+                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
+                                 
+	                <form title={% if is_teammate %}"Remove from your Team"{% else %}"Add to your Team"{%endif%} action="{{volunteer_in_list.url}}/follow" method="post">
+	                    <input type=hidden name="session_id" value="{{ session_id }}">
+	                    
+	                    {% if is_teammate %}
+	                        <input type=hidden name="delete" value="true">    
+	                        <input id="operation_remove_from_team[{{ volunteer_in_list.key.id }}]" class="operation" type=submit value="(&mdash;)"/>
+	                    {% else %}
+	                        <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation" type=submit value="(+)"/>
+	                    {% endif %}
+	                </form>
+                {% endifnotequal %}
             </div>
         </div>
                 

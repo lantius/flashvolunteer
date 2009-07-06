@@ -190,36 +190,25 @@ class EventsPage(webapp.RequestHandler):
     session_id = ''
     
     attendees_anonymous = []
-    attendees_friends = []
-    attendees_followers = []
-    attendees_following = []
-    attendees_unknown = []
+    attendees = []
     
     if volunteer:
       eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
                          volunteer=volunteer, event=event).get()
       session_id = volunteer.session_id
-                           
-      friends = dict([(f.key().id(),1) for f in volunteer.friends()])
-      followers = dict([(f.key().id(),1) for f in volunteer.followers()])
-      following = dict([(f.key().id(),1) for f in volunteer.following()])
-    
+                               
       for v in event.volunteers():
           id = v.key().id()
           if id == volunteer.key().id(): 
             continue
-          
+                    
           if v.event_access(volunteer = volunteer): 
-              if id in friends:
-                  attendees_friends.append(v)
-              elif id in followers:
-                  attendees_followers.append(v)
-              elif id in following:
-                  attendees_following.append(v)
-              else:
-                  attendees_unknown.append(v)
+              attendees.append(v)
           else: 
-              attendees_anonymous.append(v)
+              if ( eventvolunteer and ( event.inpast() or eventvolunteer.isowner )):
+                   attendees.append(v)
+              else:
+                  attendees_anonymous.append(v)
           
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
@@ -230,11 +219,8 @@ class EventsPage(webapp.RequestHandler):
                         'contact': event_contact,
                         'volunteer': volunteer, 
                         'session_id': session_id,
-                        'attendees_friends': attendees_friends,
-                        'attendees_followers': attendees_followers,
-                        'attendees_following': attendees_following,
+                        'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,
-                        'attendees_unknown': attendees_unknown
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))

@@ -1,7 +1,7 @@
 
 <div id="categoryvolunteers" class="hardmodule">
     <h3 class="moduletitle">Flash Volunteers interested in {{ category.name }}</h3>
-    <ul id="imagenamelinklist">{% for page_volunteer in category.volunteers_interested %}
+    <ul id="imagenamelinklist">{% for volunteer_in_list in category.volunteers_interested %}
         {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
     {% endfor %}</ul>
 </div>

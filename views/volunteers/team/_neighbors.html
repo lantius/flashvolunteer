@@ -4,7 +4,7 @@
 		<h3>People who added me to their team</h3>
 	</div>
 	<ul id="imagenamelinklist">
-		{% for page_volunteer in volunteer.followers_only %}
+		{% for volunteer_in_list in volunteer.followers_only %}
 			{% include "person_lists/_volunteer_list_item.html" %}
 		{% endfor %}
     </ul>

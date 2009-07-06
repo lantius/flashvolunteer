@@ -115,3 +115,62 @@ class VolunteerAvatar(webapp.RequestHandler):
       self.response.out.write(volunteer.avatar)
     else:
       self.error(404)
+      
+class VolunteerTeam(webapp.RequestHandler):
+
+  def get(self, volunteer_id, page):
+    if volunteer_id:
+      self.show(volunteer_id, int(page))
+    else:
+      self.list() 
+
+  def show(self, volunteer_id, page):
+    LIMIT = 2
+    
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
+          
+    page_volunteer = Volunteer.get_by_id(int(volunteer_id))
+
+    if not page_volunteer:
+      self.error(404)
+      self.response.out.write('404 page! boo!')
+    
+    total = page_volunteer.volunteerfollowing.count()
+    start = (page-1) * LIMIT + 1
+    
+    team = [vf.volunteer for vf in page_volunteer.volunteerfollowing.fetch(limit = LIMIT, offset=start - 1)]
+
+    
+    end = start + len(team) - 1
+                                            
+    event_access = page_volunteer.event_access(volunteer = volunteer) 
+    
+    if end == total:
+        next_page = -1
+    else: 
+        next_page = page + 1
+    
+    if page == 1:
+        prev_page = -1
+    else:
+        prev_page = page -1
+        
+    template_values = { 
+                        'page_volunteer': page_volunteer,
+                        'volunteer' : volunteer,
+                        'team': team,
+                        'session_id' : volunteer.session_id,
+                        'total': total,
+                        'start': start,
+                        'end': end,
+                        'next_page': next_page,
+                        'prev_page': prev_page
+                        }
+    
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer', 'team.html')
+    self.response.out.write(template.render(path, template_values))
+
+    
