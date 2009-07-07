@@ -226,7 +226,6 @@ class EventsPage(webapp.RequestHandler):
                         'session_id': session_id,
                         'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,
-                        'attendees_unknown': attendees_unknown,
                         'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
