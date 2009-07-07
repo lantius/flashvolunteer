@@ -8,8 +8,15 @@ from controllers.volunteers import *
 class VolunteersTest(unittest.TestCase):
   
   def setUp(self):
-    self.application = webapp.WSGIApplication([('/volunteers', VolunteersPage)], debug=True)
-
+    self.neighborhood1 = Neighborhood()
+    self.neighborhood1.put()
+    self.neighborhood2 = Neighborhood()
+    self.neighborhood2.put()
+    
+  def tearDown(self):
+    self.neighborhood1.delete()
+    self.neighborhood2.delete()
+  
   #dev_appserver.py can only handle on request at a time. Be smarter (run a second server)  
   def test_url(self):
       volunteer = Volunteer()
@@ -39,8 +46,7 @@ class VolunteersTest(unittest.TestCase):
                'tosagree' : '1'}
     volunteer = Volunteer()
     self.assertTrue(volunteer.validate(params))
-    
-  
+
   def test_follow_friend(self):
     volunteer  = Volunteer()
     volunteer.put()
@@ -89,4 +95,63 @@ class VolunteersTest(unittest.TestCase):
 
     self.assertEqual(follower.volunteerfollowers.count(), 0)
     self.assertEqual(follower.volunteerfollowing.count(), 0)
+    
+  def test_volunteer_search(self):
+    v = VolunteersPage();
+
+    search_params = { 'name' : 'testsearchy',
+                      'email' : 'foo@foo.com', 
+                      'neighborhood' : str(self.neighborhood1.key().id()), }
+
+    (name, email, neighborhood, volunteers)  = v.do_search(search_params)
+    
+    self.assertEqual(name, search_params['name'])
+    self.assertEqual(email, search_params['email'])
+    self.assertEqual(neighborhood.key().id(), int(search_params['neighborhood']))
+    self.assertEqual(len(volunteers), 0)
+    
+    # put in some test volunteers
+    volunteer1 = Volunteer(name = 'search_name',
+                          preferred_email = 'testsearch@example.com',
+                          home_neighborhood = self.neighborhood1)
+    volunteer1.put()
+    volunteer2 = Volunteer(name = 'another search_name',
+                          preferred_email = 'testsearch@examples.com',
+                          home_neighborhood = self.neighborhood2)
+    volunteer2.put()
+    volunteer3 = Volunteer(name = 'another name',
+                          preferred_email = '',
+                          home_neighborhood = self.neighborhood1)
+    volunteer3.put()
+
+    # search by name
+    search_params = { 'name' : 'search_name', }
+    (name, email, neighborhood, volunteers)  = v.do_search(search_params)
+    self.assertEqual(name, search_params['name'])
+    self.assertEqual(email, None)
+    self.assertEqual(neighborhood, None)
+    self.assertEqual(len(volunteers), 1)
+    volunteer = volunteers[0]
+    self.assertEqual(volunteer.name, search_params['name'])
+    
+    # search by email
+    search_params = { 'email' : 'testsearch@example.com', }
+    (name, email, neighborhood, volunteers)  = v.do_search(search_params)
+    self.assertEqual(name, None)
+    self.assertEqual(email, search_params['email'])
+    self.assertEqual(neighborhood, None)
+    self.assertEqual(len(volunteers), 1)
+    volunteer = volunteers[0]
+    self.assertEqual(volunteer.preferred_email, search_params['email'])
+    
+    # search by neighborhood
+    search_params = { 'neighborhood' : str(self.neighborhood1.key().id()), }
+    (name, email, neighborhood, volunteers)  = v.do_search(search_params)
+    self.assertEqual(name, None)
+    self.assertEqual(email, None)
+    self.assertEqual(neighborhood.key().id(), int(search_params['neighborhood']))
+    self.assertEqual(len(volunteers), 2)
+    volunteer = volunteers[0]
+    self.assertEqual(volunteer.home_neighborhood.key().id(),int(search_params['neighborhood']))
+    
     

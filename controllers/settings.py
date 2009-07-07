@@ -97,6 +97,7 @@ class SettingsPage(webapp.RequestHandler):
 
     volunteer = Volunteer()
     volunteer.user = user
+    volunteer.preferred_email = user.email
     
     if not volunteer.validate(params):
       self.new(volunteer)

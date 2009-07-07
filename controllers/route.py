@@ -56,7 +56,7 @@ def main():
                                      ('/team', FriendsPage),
                                      ('/volunteers/(\d+)/follow', FollowVolunteer),
                                      ('/volunteers/(\d+)/avatar', VolunteerAvatar),
-                                     ('/volunteers(|/\d+)', VolunteersPage),
+                                     ('/volunteers(|/\d+|/search)', VolunteersPage),
                                      ('/volunteers/(\d+)/team/(\d+)', VolunteerTeam),
                                      ('/category/(\d+)', CategoryPage),
                                      ('/help', HelpPage),

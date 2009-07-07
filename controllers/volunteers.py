@@ -4,6 +4,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
+from controllers._params import Parameters
 
 from models.volunteer import *
 from models.volunteerfollower import *
@@ -17,7 +18,11 @@ class VolunteersPage(webapp.RequestHandler):
   def get(self, url_data):
 
     if url_data:
-      self.show(url_data[1:])
+      if '/search' == url_data:
+        params = Parameters.parameterize(self.request)
+        self.search(params)
+      else:
+        self.show(url_data[1:])        
     else:
       self.list() 
 
@@ -70,7 +75,57 @@ class VolunteersPage(webapp.RequestHandler):
   # LIST
   def list(self):
     return
+  
+  ################################################################################
+  # SEARCH
+  def search(self, params):
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
     
+    (name, email, neighborhood, volunteers)  = self.do_search(params)
+    template_values = { 
+      'neighborhood' : neighborhood,
+      'email' : email,
+      'name' : name,
+      'volunteers' : volunteers,
+      'volunteer' : volunteer
+    }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteers_search.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def do_search(self, params):
+    volunteers_query = Volunteer.all()
+    neighborhood = None
+    name = None
+    email = None
+
+    if 'neighborhood' in params:
+      try:
+        neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
+        volunteers_query.filter('home_neighborhood =', neighborhood)
+      except:
+        pass
+
+    if 'name' in params:
+      try:
+        name = params['name']
+        volunteers_query.filter('name =', name)
+      except:
+        pass
+    
+    if 'email' in params:
+      try:
+        email = params['email']
+        volunteers_query.filter('preferred_email =', email)
+      except:
+        pass
+
+    volunteers = volunteers_query.fetch(limit = 25)
+
+    return (name, email, neighborhood, volunteers)
+
 
 ################################################################################
 # FollowVolunteer

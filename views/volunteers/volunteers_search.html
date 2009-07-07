@@ -1,0 +1,15 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Search
+{% endblock title %}
+
+{% block friendsactive %}
+	class="current"
+{% endblock friendsactive %}
+
+{%block content %}
+<div id="centerwhole">
+	{% include "../volunteers/_search_results.html" %}
+</div>
+
+{% endblock content %}
