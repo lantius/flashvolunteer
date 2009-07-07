@@ -45,6 +45,7 @@ def main():
   application = webapp.WSGIApplication(
                                     [('/', MainPage),
                                      ('/settings', SettingsPage), #handles posts as well
+                                     ('/settings/avatar', VolunteerAvatar),
                                      ('/delete', SettingsPage),
                                      ('/events/(\d+)/volunteer', VolunteerForEvent),
                                      ('/events/(\d+)/edit', EditEventPage),

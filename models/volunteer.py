@@ -60,8 +60,6 @@ class Volunteer(db.Model):
       else:
         self.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
 
-    if 'avatar' in params and params['avatar']:
-      self.avatar = params['avatar']
     if 'quote' in params:
       self.quote = "" + params['quote']
     if 'name' in params:

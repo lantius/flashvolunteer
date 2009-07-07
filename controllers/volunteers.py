@@ -170,7 +170,37 @@ class VolunteerAvatar(webapp.RequestHandler):
       self.response.out.write(volunteer.avatar)
     else:
       self.error(404)
+  
+  ################################################################################
+  # POST
+  def post(self):
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True)
+    except:
+      return
       
+    params = Parameters.parameterize(self.request)
+    
+    if 'is_delete' in params and params['is_delete'] == 'true':
+      self.delete(volunteer)
+    else:  
+      self.update(params, volunteer)
+
+    self.redirect('/settings')
+  
+  ################################################################################
+  # DELETE
+  def delete(self, volunteer):
+    volunteer.avatar = None
+    volunteer.put()
+    
+  ################################################################################
+  # UPDATE
+  def update(self, params, volunteer):
+    if 'avatar' in params and params['avatar']:
+      volunteer.avatar = params['avatar']
+      volunteer.put()
+
 class VolunteerTeam(webapp.RequestHandler):
 
   def get(self, volunteer_id, page):

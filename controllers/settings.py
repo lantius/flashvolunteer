@@ -49,7 +49,7 @@ class SettingsPage(webapp.RequestHandler):
         self.redirect('/')
         
     else:
-      if 'is_delete' in params and params['is_delete'] == 'true':
+      if 'delete_avatar' in params and params['delete_avatar'] == 'true':
         self.delete(volunteer)
         self.redirect('/')
       else:  
