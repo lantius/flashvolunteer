@@ -91,7 +91,8 @@ class VolunteersPage(webapp.RequestHandler):
       'email' : email,
       'name' : name,
       'volunteers' : volunteers,
-      'volunteer' : volunteer
+      'volunteer' : volunteer,
+      'session_id' : volunteer.session_id,
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteers_search.html')
     self.response.out.write(template.render(path, template_values))
