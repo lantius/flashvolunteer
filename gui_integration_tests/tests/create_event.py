@@ -54,6 +54,37 @@ class CreateEvent(BaseTestCase):
     sel.click("submit")
     
 
+  def test_create_event_errors(self):
+    #test that proper error messages are shown when missing information
+    
+    sel = self.selenium
+    
+    events = [e for e in get_events(name = self.event_name)]
+    try:
+        self.assertTrue(len(events) == 0) #Make sure we there aren't any events already created.
+    except:
+        delete_event(name = self.event_name)
+        
+    sel.open("/events/new")
+    sel.wait_for_page_to_load("30000")  
+    #leave everything blank
+    #misselect neighborhoods
+    sel.select("neighborhood", "label=Neighborhood...")
+
+    sel.click("submit")
+    sel.wait_for_page_to_load("30000")
+    
+    try:
+      #XPath: look for <strong class='error'/> after <div class='eventinput'/> with sibling <input id='eventname'/>
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventname']]/strong[@class='error']"))
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventdate']]/strong[@class='error']"))
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventduration']]/strong[@class='error']"))
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][select[@name='neighborhood']]/strong[@class='error']"))
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][textarea[@name='description']]/strong[@class='error']"))
+    finally:
+      delete_event(name = self.event_name)
+
+        
   def test_create_event_basic(self):
     
     sel = self.selenium

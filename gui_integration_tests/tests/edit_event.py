@@ -17,7 +17,7 @@ def navigate_to_event(sel, test_object_index, future):
 
 class TestEditEvent__Owner(BaseTestCase):
     test_env = TestEnv(
-     organization = False,
+     organization = True,
      create_new_user = False,
      login_email = 'john_hancock@volunteer.org',
      login_name = 'John Hancock'
@@ -57,8 +57,38 @@ class TestEditEvent__Owner(BaseTestCase):
         self.failUnless(sel.is_text_present("exact:Duration: 16 hours"))
         self.failUnless(sel.is_text_present("exact:Address: Convention center"))
         self.failUnless(sel.is_text_present(desc))
-        self.failUnless(sel.is_text_present(special_instr))    
-
+        self.failUnless(sel.is_text_present(special_instr))   
+         
+    def test_edit_upcoming_event_error(self):
+        #test that proper error messages are shown when missing information
+        sel = self.selenium
+        
+        navigate_to_event(sel = sel, 
+                          future = True,
+                          test_object_index = self.test_object_index)
+        
+        sel.click("//input[@id='s_edit_event']")
+        sel.wait_for_page_to_load("30000")
+        
+        sel.type("eventname", "")
+        sel.type("eventduration", "lala")
+        sel.type("eventdate", "")
+        sel.select("neighborhood", "label=Neighborhood...")
+        sel.type("description", "")
+        
+        sel.click("submit")
+        sel.wait_for_page_to_load("30000")
+        
+        try:
+          #XPath: look for <strong class='error'/> after <div class='eventinput'/> with sibling <input id='eventname'/>
+          self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventname']]/strong[@class='error']"))
+          self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventdate']]/strong[@class='error']"))
+          self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventduration']]/strong[@class='error']"))
+          self.failUnless(sel.is_element_present("//div[@class='eventinput'][select[@name='neighborhood']]/strong[@class='error']"))
+          self.failUnless(sel.is_element_present("//div[@class='eventinput'][textarea[@name='description']]/strong[@class='error']"))
+        finally:
+          pass
+        
 class TestEditEvent__NonOwner(BaseTestCase):
     test_env = TestEnv(
      organization = False,
