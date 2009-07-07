@@ -19,6 +19,11 @@ from controllers._params import Parameters
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
+# flashvolunteer-dev.appspot.com
+GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
+# flashvolunteer.appspot.com
+# GOOGLE_MAPS_API_KEY = ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ
+
 ################################################################################
 # Events page
 ################################################################################
@@ -185,7 +190,7 @@ class EventsPage(webapp.RequestHandler):
         event_contact = owners[0].volunteer
     else:
         event_contact = None
-        
+    
     eventvolunteer = ""
     session_id = ''
     
@@ -221,6 +226,8 @@ class EventsPage(webapp.RequestHandler):
                         'session_id': session_id,
                         'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,
+                        'attendees_unknown': attendees_unknown,
+                        'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))
@@ -280,6 +287,7 @@ class EventsPage(webapp.RequestHandler):
       event.put()
     except:
       self.new(event)
+      return
 
     for interestcategory in InterestCategory.all():
       pic = 'interestcategory[' + str(interestcategory.key().id()) + ']'
@@ -415,7 +423,6 @@ class VerifyEventAttendance(webapp.RequestHandler):
         'volunteer' : ev.volunteer,
         'event' : ev.event,
         'now' : datetime.datetime.now().strftime("%A, %d %B %Y"),
-        'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'receipt.html')
     self.response.out.write(template.render(path, template_values))
