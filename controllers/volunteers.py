@@ -1,4 +1,5 @@
 import os, string
+import imghdr
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
@@ -166,7 +167,7 @@ class VolunteerAvatar(webapp.RequestHandler):
   def get(self, url_data):
     volunteer = Volunteer.get_by_id(int(url_data))
     if volunteer.avatar:
-      self.response.headers['Content-Type'] = "image/jpg"
+      self.response.headers['Content-Type'] = str(volunteer.avatar_type)
       self.response.out.write(volunteer.avatar)
     else:
       self.error(404)
@@ -181,9 +182,9 @@ class VolunteerAvatar(webapp.RequestHandler):
       
     params = Parameters.parameterize(self.request)
     
-    if 'is_delete' in params and params['is_delete'] == 'true':
+    if 'delete_avatar' in params and params['delete_avatar'] == 'true':
       self.delete(volunteer)
-    else:  
+    else:
       self.update(params, volunteer)
 
     self.redirect('/settings')
@@ -198,9 +199,19 @@ class VolunteerAvatar(webapp.RequestHandler):
   # UPDATE
   def update(self, params, volunteer):
     if 'avatar' in params and params['avatar']:
+      if len(params['avatar']) > 50 * 2**10:
+        return
+        
+      content_type = imghdr.what(None, params['avatar'])
+      if not content_type:
+        return
+
+      volunteer.avatar_type = 'image/' + content_type
       volunteer.avatar = params['avatar']
       volunteer.put()
 
+################################################################################
+# VolunteerTeam
 class VolunteerTeam(webapp.RequestHandler):
 
   def get(self, volunteer_id, page):

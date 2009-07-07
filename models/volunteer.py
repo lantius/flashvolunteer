@@ -16,6 +16,8 @@ class Volunteer(db.Model):
   user = db.UserProperty()
   name = db.StringProperty()
   avatar = db.BlobProperty()
+  avatar_type = db.StringProperty()
+  
   quote = db.StringProperty()
   twitter = db.StringProperty()
   joinedon = db.DateProperty(auto_now_add=True)
@@ -84,9 +86,7 @@ class Volunteer(db.Model):
       return True
     else:
       return False
-    
-    
-    
+
 
   def get_name(self):
     if self.name:
