@@ -332,7 +332,7 @@ class EventsPage(webapp.RequestHandler):
       except:
         pass
 
-    if todate in params and params['todate']:
+    if 'todate' in params and params['todate']:
       try:
         todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
         events_query.filter('date <=', todate)
