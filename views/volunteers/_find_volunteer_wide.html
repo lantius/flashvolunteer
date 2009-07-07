@@ -1,0 +1,22 @@
+
+		<div id="findavolunteerwide" class="hardmodule">
+			<div class="moduletitle"><h3>Find A Volunteer</h3></div>
+			<form action="/volunteers/search" method="get">
+				<ul>
+					<li>
+						<span class="label">Name:</span>
+						<input name="name" type="text" value="" />
+					</li>
+					<li>
+						<span class="label">Email:</span>
+						<input name="email" type="text" value="" />
+					</li>
+					<li>
+						{% include "../neighborhoods/_select_neighborhood.html" %}
+					</li>
+					<li style="text-align:right; padding-right: 10px;">
+						<input type="submit"  value="submit" />
+					</li>
+				</ul>
+			</form>
+		</div><!--end findvolunteer-->

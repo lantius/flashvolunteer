@@ -318,21 +318,21 @@ class EventsPage(webapp.RequestHandler):
     todate = None
     fromdate = None
 
-    if params['neighborhood']:
+    if 'neighborhood' in params and params['neighborhood']:
       try:
         neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
         events_query.filter('neighborhood =', neighborhood)
       except:
         pass
 
-    if params['fromdate']:
+    if 'fromdate' in params and params['fromdate']:
       try:
         fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
         events_query.filter('date >=', fromdate)
       except:
         pass
 
-    if params['todate']:
+    if todate in params and params['todate']:
       try:
         todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
         events_query.filter('date <=', todate)

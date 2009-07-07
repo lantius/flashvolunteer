@@ -101,23 +101,23 @@ class VolunteersPage(webapp.RequestHandler):
     name = None
     email = None
 
-    if 'neighborhood' in params:
+    if 'neighborhood' in params and params['neighborhood']:
       try:
         neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
         volunteers_query.filter('home_neighborhood =', neighborhood)
       except:
         pass
 
-    if 'name' in params:
+    if 'name' in params and params['name']:
       try:
         name = params['name']
         volunteers_query.filter('name =', name)
       except:
         pass
     
-    if 'email' in params:
+    if 'email' in params and params['email']:
       try:
-        email = params['email']
+        email = params['email'] 
         volunteers_query.filter('preferred_email =', email)
       except:
         pass
