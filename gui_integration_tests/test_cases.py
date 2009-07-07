@@ -113,8 +113,9 @@ class BaseTestCase(unittest.TestCase):
   def login_as_existing_user(self, env):
     #login
     self.selenium.open("/")
-    self.selenium.click("//span[@id='l_login']")
-    self.selenium.wait_for_page_to_load("30000")
+    if (self.selenium.is_element_present("//span[@id='l_login']")):
+      self.selenium.click("//span[@id='l_login']")
+      self.selenium.wait_for_page_to_load("30000")
     self.selenium.type("email", env.login_email)
     if env.organization:
       self.selenium.click("admin")
