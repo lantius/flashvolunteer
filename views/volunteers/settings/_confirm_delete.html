@@ -1,0 +1,12 @@
+
+<p>Are you sure you want to permanently delete your account?</p>
+<p>This action cannot be undone.</p>
+<br/>
+<form action="/delete" method="post"> 
+    <input class="operation" type="submit" value="Yes, delete my account!"/>
+    <input type=hidden name="is_delete" value="true" />
+    <input type=hidden name="confirm_delete" value="true" />
+    <input type=hidden name="session_id" value="{{ session_id }}" />
+    <br/>
+    <a class="operation" href="/settings">No, I've changed my mind!</a>
+</form>

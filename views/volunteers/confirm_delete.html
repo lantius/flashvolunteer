@@ -1,0 +1,19 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Confirm Account Deletion
+{% endblock title %}
+
+{% block profileactive %}class="current"{% endblock profileactive %}
+
+
+{% block pagespectitle %}
+	<h1>{{ volunteer.name }}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="leftthird"> </div>
+<div id="middlethird">
+	{% include "../volunteers/settings/_confirm_delete.html" %}
+</div>
+<div id="rightthird"> </div>
+{% endblock content %}
