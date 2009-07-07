@@ -17,8 +17,16 @@ class Event(db.Model):
   special_instructions = db.TextProperty()
   address = db.StringProperty(multiline=True)
   
-  error = {}
-  
+  def __init__(self,
+             parent=None,
+             key_name=None,
+             _app=None,
+             _from_entity=False,
+             **kwds):
+    self.error = {} #instance object, not class object, or will be sticky
+    db.Model.__init__(self, parent, key_name, _app, _from_entity, **kwds)
+   
+    
   def get_date(self):
     if not self.date:
       return "no date set"
