@@ -49,9 +49,13 @@ class SettingsPage(webapp.RequestHandler):
         self.redirect('/')
         
     else:
-      if 'is_delete' in params and params['is_delete'] == 'true':
-        self.delete(volunteer)
-        self.redirect('/')
+      if 'is_delete' in params and params['is_delete'] == 'true':        
+        if 'confirm_delete' in params and params['confirm_delete'] == 'true':
+          self.delete(volunteer)
+          self.redirect('/')
+        else:
+          self.confirm_delete(volunteer)
+          
       else:  
         if self.update(params, volunteer):
           self.redirect('/settings')
@@ -155,3 +159,13 @@ class SettingsPage(webapp.RequestHandler):
 
     # Finally remove the volunteer
     volunteer.delete()
+  
+  ################################################################################
+  # CONFIRM_DELETE
+  def confirm_delete(self, volunteer):
+    template_values = {
+        'volunteer' : volunteer, 
+        'session_id': volunteer.session_id
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'confirm_delete.html')
+    self.response.out.write(template.render(path, template_values))
