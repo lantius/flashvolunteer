@@ -37,66 +37,13 @@ class EventsPage(webapp.RequestHandler):
       elif '/search' == url_data:
         params = Parameters.parameterize(self.request)
         self.search(params)
+      elif '/edit' == url_data[-5:]:
+        event = Event.get_by_id(int(url_data[1:-5]))
+        self.edit(event)
       else:
         self.show(url_data[1:])
     else:
       self.list()
-
-  ################################################################################
-  # all posts that deal with photo albums from the events page
-  def _handle_photos(self, params, volunteer):
-      event_id = params['event_id']
-      if params['action'] == 's_addexternalalbum':
-        last_eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight DESC", event=Event.get_by_id(int(event_id))).fetch(limit=1)
-        display_weight = 0
-        for last_eventphoto in last_eventphotos: 
-          display_weight = last_eventphoto.display_weight + 1
-        eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
-                                         volunteer=volunteer,
-                                         content=params['content'], 
-                                         display_weight = display_weight,
-                                         type=EventPhoto.RSS_ALBUM, 
-                                         status=EventPhoto.PUBLISHED
-                                         )
-        eventphoto.put()
-      elif params['action'] == 'Remove':
-        album_id = params['album_id']
-        eventphoto = EventPhoto.get_by_id(int(album_id))
-        eventphoto.delete()
-      elif params['action'] == 'Up':
-        album_id = params['album_id']
-        eventphoto = EventPhoto.get_by_id(int(album_id))
-        #look for photo with display_weight lower than curent, start with highest
-        lowers = EventPhoto.gql("WHERE event = :event AND display_weight < :cur_display_weight ORDER BY display_weight DESC", 
-                                          event=Event.get_by_id(int(event_id)), 
-                                          cur_display_weight=eventphoto.display_weight
-                                          ).fetch(limit=1)
-        #swap weights
-        for lower in lowers:
-          temp = eventphoto.display_weight
-          eventphoto.display_weight = lower.display_weight
-          eventphoto.put()
-          lower.display_weight = temp
-          lower.put()
-      elif params['action'] == 'Down':
-        album_id = params['album_id']
-        eventphoto = EventPhoto.get_by_id(int(album_id))
-        #look for photo with display_weight higher than curent, start with lowest
-        highers = EventPhoto.gql("WHERE event = :event AND display_weight > :cur_display_weight ORDER BY display_weight ASC", 
-                                          event=Event.get_by_id(int(event_id)), 
-                                          cur_display_weight=eventphoto.display_weight
-                                          ).fetch(limit=1)
-        #swap weights
-        for higher in highers:
-          temp = eventphoto.display_weight
-          eventphoto.display_weight = higher.display_weight
-          eventphoto.put()
-          higher.display_weight = temp
-          higher.put()
-          
-      if event_id and event_id != None:
-        self.redirect("/events/" + str(int(event_id)))
-
     
   ################################################################################
   # POST
@@ -107,16 +54,21 @@ class EventsPage(webapp.RequestHandler):
       return
 
     params = Parameters.parameterize(self.request)
+    event_id = None
     
-    if 'is_delete' in params and params['is_delete'] == 'true':
+    if'/edit' == url_data[-5:]:
+      params['id'] = url_data[1:-5]
+      event_id = self.update(params, volunteer)
+    elif 'is_delete' in params and params['is_delete'] == 'true':
       self.delete(url_data[1:], volunteer)
       self.redirect("/events")
       return
     elif 'action' in params: #add an event photo album
       self._handle_photos(params, volunteer)
       return
-
-    event_id = self.create(params, volunteer)
+    else:
+      event_id = self.create(params, volunteer)
+    
     if event_id is None:
       self.redirect('/events')
       return
@@ -125,8 +77,6 @@ class EventsPage(webapp.RequestHandler):
       
     self.redirect("/events/" + str(int(event_id)))
     return
-
-
 
   ################################################################################
   # LIST
@@ -280,8 +230,6 @@ class EventsPage(webapp.RequestHandler):
       self.new(event)
       return False
     
-    # TODO: Check to make sure values are present and valid
-    # TODO: transaction such that if anything throws an exception we don't litter the database
     try:
       event.put()
     except:
@@ -297,6 +245,60 @@ class EventsPage(webapp.RequestHandler):
     eventVolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=True)
     eventVolunteer.put()
     
+    return event.key().id()
+
+  ################################################################################
+  # EDIT
+  def edit(self, event): 
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return   
+
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+                           volunteer=volunteer, event=event).get()
+    if not eventvolunteer:
+      self.redirect("/events/" + event.id)
+      return
+
+    owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
+
+    template_values = { 
+      'event' : event, 
+      'eventvolunteer': eventvolunteer, 
+      'owners': owners, 
+      'volunteer': volunteer, 
+      'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
+      'interestcategories' : InterestCategoryHelper().selected(event),
+    }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
+    self.response.out.write(template.render(path, template_values))
+
+  ################################################################################
+  # UPDATE
+  def update(self, params, volunteer):
+    event = Event.get_by_id(int(params['id']))
+
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+                           volunteer=volunteer, event=event).get()
+    if not eventvolunteer:
+      return None
+
+    if not event.validate(params):
+      self.edit(event)
+      return False
+
+    for interestcategory in InterestCategory.all():
+      param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+      eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
+                          event = event, interestcategory = interestcategory).get()
+      if params[param_name] == ['1','1'] and not eic:          
+        eic = EventInterestCategory(event = event, interestcategory = interestcategory)
+        eic.put()
+      elif params[param_name] == '1' and eic:
+        eic.delete()
+
+    event.put()
     return event.key().id()
 
   ################################################################################
@@ -343,218 +345,62 @@ class EventsPage(webapp.RequestHandler):
 
     return (neighborhood, fromdate, todate, events)
 
-################################################################################
-# VolunteerForEvent
-################################################################################
-class VolunteerForEvent(webapp.RequestHandler):
-
-  def post(self, url_data):
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-    except:
-      return
-
-    event = Event.get_by_id(int(url_data))
-    
-    if event:
-      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = false AND event = :event" ,
-                          volunteer=volunteer, event=event).get()
-      if self.request.get('delete') and self.request.get('delete') == "true":
-        if eventvolunteer:
-          eventvolunteer.delete()
-      else:
-        if not eventvolunteer:
-          eventvolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=False)
-          eventvolunteer.put()
-    
-    self.redirect('/events/' + url_data)
-    return
-
-################################################################################
-# VolunteerForEvent
-################################################################################
-class VerifyEventAttendance(webapp.RequestHandler):
-  
   ################################################################################
-  # GET
-  def get(self, url_data):
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-    except:
-      return
+  # all posts that deal with photo albums from the events page
+  def _handle_photos(self, params, volunteer):
+      event_id = params['event_id']
+      if params['action'] == 's_addexternalalbum':
+        last_eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight DESC", event=Event.get_by_id(int(event_id))).fetch(limit=1)
+        display_weight = 0
+        for last_eventphoto in last_eventphotos: 
+          display_weight = last_eventphoto.display_weight + 1
+        eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
+                                         volunteer=volunteer,
+                                         content=params['content'], 
+                                         display_weight = display_weight,
+                                         type=EventPhoto.RSS_ALBUM, 
+                                         status=EventPhoto.PUBLISHED
+                                         )
+        eventphoto.put()
+      elif params['action'] == 'Remove':
+        album_id = params['album_id']
+        eventphoto = EventPhoto.get_by_id(int(album_id))
+        eventphoto.delete()
+      elif params['action'] == 'Up':
+        album_id = params['album_id']
+        eventphoto = EventPhoto.get_by_id(int(album_id))
+        #look for photo with display_weight lower than curent, start with highest
+        lowers = EventPhoto.gql("WHERE event = :event AND display_weight < :cur_display_weight ORDER BY display_weight DESC", 
+                                          event=Event.get_by_id(int(event_id)), 
+                                          cur_display_weight=eventphoto.display_weight
+                                          ).fetch(limit=1)
+        #swap weights
+        for lower in lowers:
+          temp = eventphoto.display_weight
+          eventphoto.display_weight = lower.display_weight
+          eventphoto.put()
+          lower.display_weight = temp
+          lower.put()
+      elif params['action'] == 'Down':
+        album_id = params['album_id']
+        eventphoto = EventPhoto.get_by_id(int(album_id))
+        #look for photo with display_weight higher than curent, start with lowest
+        highers = EventPhoto.gql("WHERE event = :event AND display_weight > :cur_display_weight ORDER BY display_weight ASC", 
+                                          event=Event.get_by_id(int(event_id)), 
+                                          cur_display_weight=eventphoto.display_weight
+                                          ).fetch(limit=1)
+        #swap weights
+        for higher in highers:
+          temp = eventphoto.display_weight
+          eventphoto.display_weight = higher.display_weight
+          eventphoto.put()
+          higher.display_weight = temp
+          higher.put()
 
-    params = Parameters.parameterize(self.request)
-    params['id'] = url_data
+      if event_id and event_id != None:
+        self.redirect("/events/" + str(int(event_id)))
 
-    self.show(params, volunteer)
 
-  ################################################################################
-  # POST
-  def post(self, url_data):
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-    except:
-      return
 
-    params = Parameters.parameterize(self.request)
-    params['id'] = url_data
 
-    self.update(params, volunteer)
 
-    self.redirect("/events/" + url_data)
-
-  ################################################################################
-  # SHOW
-  def show(self, params, volunteer):
-    event = Event.get_by_id(int(params['id']))    
-    if not event:
-      self.redirect("/events/" + url_data)
-      return
-    
-    ev = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                        volunteer=volunteer, event=event).get()
-    if not ev:
-      self.redirect("/events/" + url_data)
-      return
-    
-    template_values = {
-        'eventvolunteer': ev,
-        'volunteer' : ev.volunteer,
-        'event' : ev.event,
-        'now' : datetime.datetime.now().strftime("%A, %d %B %Y"),
-      }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'receipt.html')
-    self.response.out.write(template.render(path, template_values))
-    
-    
-  ################################################################################
-  # UPDATE
-  def update(self, params, volunteer):
-    event = Event.get_by_id(int(params['id']))
-
-    if not event:
-      return
-    
-    owner = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
-                        volunteer=volunteer, event=event).get()
-    
-    if not owner:
-      return
-      
-    for key in params.keys():
-      if key.startswith('event_volunteer_'):
-        i = len('event_volunteer_')
-        event_volunteer_id = key[i:]
-        attended = params[key]
-        hours = None
-        if 'hours_' + event_volunteer_id in params.keys():
-          hours = params['hours_' + event_volunteer_id]
-        self.update_volunteer_attendance(event_volunteer_id, attended, hours)
-
-  def update_volunteer_attendance(self, event_volunteer_id, attended, hours):
-    eventvolunteer = EventVolunteer.get_by_id(int(event_volunteer_id))
-    if not eventvolunteer:
-      return
-    
-    if attended == 'True':
-      eventvolunteer.attended = True
-    elif attended == 'False':
-      eventvolunteer.attended = False
-    else:
-      eventvolunteer.attended = None
-      
-    if hours:
-      try:
-        eventvolunteer.hours = int(hours)
-      except exceptions.ValueError:
-        eventvolunteer.hours = None
-      
-    eventvolunteer.put()
-
-    
-################################################################################
-# EditEventPage
-################################################################################
-class EditEventPage(webapp.RequestHandler):
-  
-  ################################################################################
-  # GET
-  def get(self, url_data):
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-    except:
-      return
-    
-    event = Event.get_by_id(int(url_data))
-    self.edit(event, volunteer)
-
-  ################################################################################
-  # POST
-  def post(self, url_data):
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-    except:
-      return
-      
-    params = Parameters.parameterize(self.request)
-    params['id'] = url_data
-    
-    id = self.update(params, volunteer)
-    if id is None:
-      self.redirect('/events')
-      return
-    elif not id:
-      return
-    self.redirect("/events/" + str(int(id)))
-    return
-    
-  ################################################################################
-  # EDIT
-  def edit(self, event, volunteer):    
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
-                           volunteer=volunteer, event=event).get()
-    if not eventvolunteer:
-      self.redirect("/events/" + event.id)
-      return
-    
-    owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-
-    template_values = { 
-      'event' : event, 
-      'eventvolunteer': eventvolunteer, 
-      'owners': owners, 
-      'volunteer': volunteer, 
-      'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
-      'interestcategories' : InterestCategoryHelper().selected(event),
-    }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
-    self.response.out.write(template.render(path, template_values))
-  
-  ################################################################################
-  # UPDATE
-  def update(self, params, volunteer):
-    event = Event.get_by_id(int(params['id']))
-
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
-                           volunteer=volunteer, event=event).get()
-    if not eventvolunteer:
-      return None
-    
-    if not event.validate(params):
-      self.edit(event, volunteer)
-      return False
-    
-    for interestcategory in InterestCategory.all():
-      param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-      eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
-                          event = event, interestcategory = interestcategory).get()
-      if params[param_name] == ['1','1'] and not eic:          
-        eic = EventInterestCategory(event = event, interestcategory = interestcategory)
-        eic.put()
-      elif params[param_name] == '1' and eic:
-        eic.delete()
-        
-    event.put()
-    return event.key().id()
-
-  
