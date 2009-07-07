@@ -110,19 +110,19 @@ class EventsTest(unittest.TestCase):
   # SEARCH
   def test_event_search(self):
     e = EventsPage()
-    search_params = { 'neighborhood' : '1',
+    search_params = { 'neighborhood' : str(self.neighborhood1.key().id()),
                       'fromdate' : '12/12/2008', 
                       'todate' : '01/01/2010', }
     (neighborhood, fromdate, todate, events) = e.do_search(search_params)
     
-    self.assertEqual(neighborhood, Neighborhood.get_by_id(int(search_params['neighborhood'])))
+    self.assertEqual(neighborhood.key().id(), int(search_params['neighborhood']))
     self.assertEqual(fromdate.strftime("%m/%d/%Y"), search_params['fromdate'])    
     self.assertEqual(todate.strftime("%m/%d/%Y"), search_params['todate'])    
     self.assertEqual(len(events), 0)    
     
     # insert 3 events to play with
     event_params = { 'name' : 'create unit test',
-               'neighborhood' : 1,
+               'neighborhood' : str(self.neighborhood1.key().id()),
                'date' : '01/01/2009',
                'time' : '15:00',
                'duration' : '2',
@@ -134,7 +134,7 @@ class EventsTest(unittest.TestCase):
     event_id = e.create(event_params, self.volunteer)
 
     event_params = { 'name' : 'create unit test',
-               'neighborhood' : 1,
+               'neighborhood' : str(self.neighborhood1.key().id()),
                'date' : '01/02/2010',
                'time' : '23:01',
                'duration' : '3',
@@ -146,7 +146,7 @@ class EventsTest(unittest.TestCase):
     event_id = e.create(event_params, self.volunteer)
 
     event_params = { 'name' : 'create unit test',
-               'neighborhood' : 3,
+               'neighborhood' : str(self.neighborhood2.key().id()),
                'date' : '05/05/2008',
                'time' : '12:01',   
                'duration' : '1',
@@ -161,7 +161,7 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(len(events), 1)
     
     event = events[0]
-    self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(search_params['neighborhood'])) )
+    self.assertEqual(event.neighborhood.key().id(), int(search_params['neighborhood']))
     self.assertTrue(event.date >= fromdate)
     self.assertTrue(event.date <= todate)
     
