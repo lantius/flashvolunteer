@@ -52,7 +52,7 @@ class EventsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
-
+    
     params = Parameters.parameterize(self.request)
     event_id = None
     
@@ -77,7 +77,7 @@ class EventsPage(webapp.RequestHandler):
       
     self.redirect("/events/" + str(int(event_id)))
     return
-
+  
   ################################################################################
   # LIST
   def list(self):
@@ -85,7 +85,7 @@ class EventsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
-
+    
     recommended_events = self._get_recommended_events(volunteer = volunteer)
     template_values = {
         'volunteer': volunteer,
@@ -98,17 +98,17 @@ class EventsPage(webapp.RequestHandler):
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
-
+  
   def _get_recommended_events(self,volunteer):
     #TODO make more efficient
     vol_events = [v.key().id() for v in volunteer.events()]
-
+    
     neighborhoods = []
     if(volunteer.work_neighborhood):
       neighborhoods.append(volunteer.work_neighborhood.name)
     if(volunteer.home_neighborhood):
       neighborhoods.append(volunteer.home_neighborhood.name)
-
+    
     vol_interests = set([ic.name for ic in volunteer.interestcategories()])
     events = (e for e in self._get_upcoming_events() if
             # recommend non rsvp'd events
