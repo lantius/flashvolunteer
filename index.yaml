@@ -13,7 +13,23 @@ indexes:
   properties:
   - name: neighborhood
   - name: date
-  
+
+- kind: Eventvolunteer
+  properties:
+  - name: isowner
+  - name: event
+
+- kind: Eventvolunteer
+  properties:
+  - name: volunteer
+  - name: event
+
+- kind: Eventvolunteer
+  properties:
+  - name: volunteer
+  - name: event
+  - name: isowner
+
 - kind: EventPhoto
   properties: 
   - name: event

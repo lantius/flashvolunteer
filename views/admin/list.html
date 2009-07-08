@@ -1,0 +1,27 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Flash Volunteer Admin
+{% endblock title %}
+
+{% block content %}
+<form method='post' action='/admin'>
+Email address: <input type='text' name='email'>
+Create rights: <select name='create_rights'>
+  <option value='true'>True</option>
+  <option value='false'>False</option>
+  </select>
+  <input type='submit' value='Update'>
+  <input type='hidden' name='session_id' value='{{session_id}}'>
+  </form>
+
+<br/><strong>Volunteers with create_rights:</strong><br/>
+{% if volunteers %}
+<ol>
+	{% for volunteer_in_list in volunteers %}
+		{% include "../volunteers/person_lists/_volunteer_list_item.html" %}
+	{% endfor %}
+</ol>
+{% else %}
+<p>No volunteers with create_rights.</p>
+{% endif %}
+{% endblock content %}

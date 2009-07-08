@@ -194,7 +194,7 @@ class EventsPage(webapp.RequestHandler):
   def delete(self, event_id, volunteer):
     event = Event.get_by_id(int(event_id))
     
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner = true" ,
                         volunteer=volunteer, event=event).get()
     if eventvolunteer:
       for ev in event.eventvolunteers:

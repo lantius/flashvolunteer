@@ -16,6 +16,7 @@ from controllers.friends import FriendsPage, AllFriendsPage
 from controllers.static import StaticPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
+from controllers.admin import AdminPage
 
 webapp.template.register_template_library('templatetags.filters')
 
@@ -45,30 +46,30 @@ def main():
   init.init()
   logging.getLogger().setLevel(logging.DEBUG)
   application = webapp.WSGIApplication(
-        [('/', MainPage),
-         ('/settings', SettingsPage), #handles posts as well
-         ('/settings/avatar', VolunteerAvatar),
-         ('/delete', SettingsPage),
-         ('/events/(\d+)/volunteer', VolunteerForEvent),
-         ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
-         ('/events/(\d+)/verify', VerifyEventAttendance),
-         ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
-         ('/events/(\d+)/attendees/(\d+)', EventAttendeesPage),
-         ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
-         ('/neighborhoods/(\d+)/volunteers_work/(\d+)', NeighborhoodVolunteerWorkPage),
-         ('/neighborhoods/(\d+)/volunteers_live/(\d+)', NeighborhoodVolunteerHomePage),
-         ('/neighborhoods(|)', NeighborhoodsPage),     
-         ('/team', FriendsPage),
-         ('/team/(\d+)', AllFriendsPage),
-         ('/volunteers/(\d+)/follow', FollowVolunteer),
-         ('/volunteers/(\d+)/avatar', VolunteerAvatar),
-         ('/volunteers(|/\d+|/search)', VolunteersPage),
-         ('/volunteers/(\d+)/team/(\d+)', VolunteerTeam),
-         ('/category/(\d+)', CategoryPage),
-         ('/static/(\w+)', StaticPage),
-         ('/timeout', TimeoutPage),
-        ],
-        debug=True)
+                                    [('/', MainPage),
+                                     ('/admin', AdminPage),
+                                     ('/settings', SettingsPage),
+                                     ('/settings/avatar', VolunteerAvatar),
+                                     ('/delete', SettingsPage),
+                                     ('/events/(\d+)/volunteer', VolunteerForEvent),
+                                     ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
+                                     ('/events/(\d+)/verify', VerifyEventAttendance),
+                                     ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
+                                     ('/events/(\d+)/attendees/(\d+)', EventAttendeesPage),
+                                     ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
+                                     ('/neighborhoods(|)', NeighborhoodsPage),     
+                                     ('/team', FriendsPage),
+                                     ('/team/(\d+)', AllFriendsPage),
+                                     ('/volunteers/(\d+)/follow', FollowVolunteer),
+                                     ('/volunteers/(\d+)/avatar', VolunteerAvatar),
+                                     ('/volunteers(|/\d+|/search)', VolunteersPage),
+                                     ('/volunteers/(\d+)/team/(\d+)', VolunteerTeam),
+                                     ('/category/(\d+)', CategoryPage),
+                                     ('/static/(\w+)', StaticPage),
+                                     ('/timeout', TimeoutPage),
+                                    ],
+                                    debug=True)
+
   wsgiref.handlers.CGIHandler().run(application)
 
 if __name__ == "__main__":
