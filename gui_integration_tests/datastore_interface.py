@@ -18,6 +18,8 @@ from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
 from models.volunteerfollower import VolunteerFollower
+from models.volunteerinterestcategory import VolunteerInterestCategory
+from models.interestcategory import InterestCategory
 
 import datetime, copy
 
@@ -115,7 +117,20 @@ def create_environment(name, session_id):
         volunteers.values())
  
     
-    ev_volunteers = []
+    cat = InterestCategory(name = 'test_ic')
+    cat.put()
+
+    ic_volunteers = []    
+    for k,v in volunteers.items():
+        ic = VolunteerInterestCategory(
+            interestcategory = cat,
+            volunteer = v,
+        )
+        ic_volunteers.append(ic)
+        
+    put(ic_volunteers)
+
+    ev_volunteers = []    
     for k,v in event_volunteers.items():
         for vol in v:
             volunteer = volunteers[vol['volunteer']]
