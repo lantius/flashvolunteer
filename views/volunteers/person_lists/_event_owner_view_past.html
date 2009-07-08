@@ -1,5 +1,5 @@
 <li class="imagenameli" >
-    <div class="volunteer_summary_team">
+    <div id="volunteer_summary_team" class="volunteer_summary_team">
 
         <div class="volunteer_summary_pic">
             <a href="{{ ev.volunteer.url }}" >
@@ -12,7 +12,7 @@
             " alt="{{ ev.volunteer.get_name }}" /></a>
         </div>
         
-        <div class="volunteer_summary_desc">
+        <div id="volunteer_summary_desc" class="volunteer_summary_desc">
             <div class="volunteer_summary_name">
              <a id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
             </div>

@@ -1,11 +1,8 @@
-
-
-
-<div id="personinformation" class="softmodule">
+<div id="friends_and_following" class="softmodule">
 	<div class="moduletitle">
 		<h3>My <span class="flashtext">Flash</span>Team</h3>
 	</div>
-	<ul id="imagenamelinklist">
+	<ul class="imagenamelinklist">
 		{% for volunteer_in_list in friends %}
 			{% include "person_lists/_volunteer_list_item.html" %}
 		{% endfor %}

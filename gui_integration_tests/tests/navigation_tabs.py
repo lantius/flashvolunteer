@@ -9,6 +9,9 @@ class TestOrganizationNavigation(BaseTestCase):
      organization = True,
      create_new_user = True)
   
+  
+  #TODO: This is bad, we don't want to test again copy. We should be IDs on the fields
+  #      it looks for and look for those instead.
   def test_nav_menu(self):
     
     
@@ -24,7 +27,7 @@ class TestOrganizationNavigation(BaseTestCase):
     
     sel.click("//a[@id='l_friends']")
     sel.wait_for_page_to_load("30000")
-    self.failUnless(sel.is_text_present("Family"))
+    self.failUnless(sel.is_text_present("My FlashTeam"))
     
     sel.click("//a[@id='l_help']")
     sel.wait_for_page_to_load("30000")
@@ -54,7 +57,7 @@ class TestVolunteerNavigation(BaseTestCase):
     
     sel.click("//a[@id='l_friends']")
     sel.wait_for_page_to_load("30000")
-    self.failUnless(sel.is_text_present("Family"))
+    self.failUnless(sel.is_text_present("My FlashTeam"))
     
     sel.click("//a[@id='l_help']")
     sel.wait_for_page_to_load("30000")

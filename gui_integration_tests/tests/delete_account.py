@@ -8,14 +8,16 @@ import unittest
 class DeleteAccount(BaseTestCase):
     test_env = TestEnv(create_new_user = True)
     
-    def test_new(self):    
+    def test_confirm_delete_user(self):    
         sel = self.selenium
         sel.wait_for_page_to_load("30000")
         sel.click("//a[@id='l_profile']")
         sel.wait_for_page_to_load("30000")
         sel.click("//input[@id='s_delete_account']")
         sel.wait_for_page_to_load("30000")
-        
+        self.assertTrue(check_if_user_exists(name = self.test_env.login_name))
+        sel.click("//input[@id='l_confirm_delete']")
+        sel.wait_for_page_to_load("30000")                
         self.assertFalse(check_if_user_exists(name = self.test_env.login_name))
         
 if __name__ == "__main__":

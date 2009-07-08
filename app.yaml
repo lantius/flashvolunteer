@@ -25,4 +25,4 @@ handlers:
 
 - url: /.*
   script: controllers/route.py
-  login: admin
+

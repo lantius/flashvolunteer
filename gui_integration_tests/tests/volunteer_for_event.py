@@ -13,7 +13,7 @@ class VolunteerForEventTestCase(BaseTestCase):
      login_email = 'john_hancock@volunteer.org',
      login_name = 'John Hancock'
      )
-  event_name = 'Penobscot Expedition'
+  event_name = 'Penobscot Expedition Reunion'
 
   def setUp(self):
     "unittest override"

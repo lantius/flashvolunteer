@@ -44,8 +44,9 @@ class TestEditEvent__Owner(BaseTestCase):
         sel.type("eventduration", "16")
         sel.select("time", "label=7am")
         sel.type("address1", "Convention center")
-        sel.type("maxattend", "45")
-        sel.type("minattend", "50")
+        #Removed from the UI
+        #sel.type("maxattend", "45")
+        #sel.type("minattend", "50")
         sel.type("description", desc)
         sel.type("special_instructions", special_instr)
         self._click_interestcategory(name = '', checked = True)

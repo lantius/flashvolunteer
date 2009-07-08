@@ -43,8 +43,9 @@ class CreateEvent(BaseTestCase):
     sel.select("neighborhood", "label=%s"%self.neighborhood)
     sel.type("eventduration", self.duration)
     sel.type("address1", self.address)
-    sel.type("maxattend", self.maxattend)
-    sel.type("minattend", self.minattend)
+    #Removed from the UI
+    #sel.type("maxattend", self.maxattend)
+    #sel.type("minattend", self.minattend)
     sel.type("description", self.description)
     sel.type("special_instructions", self.instructions)
     
