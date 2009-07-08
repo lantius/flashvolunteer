@@ -1,0 +1,30 @@
+{% extends "../../_layout.html" %}
+{% block title %}
+My FlashTeam
+{% endblock title %}
+
+{% block pagespectitle %}
+    <h1>My FlashTeam</h1>
+{% endblock %}
+
+{% block content %}
+
+<div id="personinformation" class="softmodule">
+    <ul id="imagenamelinklist">
+        {% for volunteer_in_list in team %}
+            {% include "../person_lists/_volunteer_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="pagination">
+    {% ifnotequal prev_page -1 %} 
+        <a href="/team/{{prev_page}}">&laquo;  </a>
+    {% endifnotequal %}
+    {{ start }} - {{end}} of {{ total }}
+    {% ifnotequal next_page -1 %} 
+        <a href="/team/{{next_page}}">  &raquo;</a>
+    {% endifnotequal %}
+</div>
+
+{% endblock content %}
