@@ -1,6 +1,6 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-import os
+import os, random
 
 from controllers._auth import Authorize
 from models.neighborhood import Neighborhood
@@ -39,16 +39,20 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
   ################################################################################
   # SHOW
   def show(self, neighborhood_id):
+    LIMIT = 4
     try:
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
       return
 
     neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
-
+    
+    
     template_values = {
         'volunteer': volunteer,
-        'neighborhood': neighborhood
+        'neighborhood': neighborhood,
+        'volunteers_living_here': random.sample(list(neighborhood.volunteers_living_here()), LIMIT), 
+        'volunteers_working_here': random.sample(list(neighborhood.volunteers_working_here()), LIMIT), 
       }
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
