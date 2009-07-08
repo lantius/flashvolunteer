@@ -113,7 +113,7 @@ class EventsPage(webapp.RequestHandler):
     events = (e for e in self._get_upcoming_events() if
             # recommend non rsvp'd events
             not e.key().id() in vol_events and  
-            #recommend events in home or work neighborhood
+            #recommend events in home or work neighborhood  
             (e.neighborhood.name in neighborhoods or  
              #recommend events in interest categories
             len(vol_interests.intersection(
@@ -348,57 +348,57 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   # all posts that deal with photo albums from the events page
   def _handle_photos(self, params, volunteer):
-      event_id = params['event_id']
-      if params['action'] == 's_addexternalalbum':
-        last_eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight DESC", event=Event.get_by_id(int(event_id))).fetch(limit=1)
-        display_weight = 0
-        for last_eventphoto in last_eventphotos: 
-          display_weight = last_eventphoto.display_weight + 1
-        eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
-                                         volunteer=volunteer,
-                                         content=params['content'], 
-                                         display_weight = display_weight,
-                                         type=EventPhoto.RSS_ALBUM, 
-                                         status=EventPhoto.PUBLISHED
-                                         )
+    event_id = params['event_id']
+    if params['action'] == 's_addexternalalbum':
+      last_eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight DESC", event=Event.get_by_id(int(event_id))).fetch(limit=1)
+      display_weight = 0
+      for last_eventphoto in last_eventphotos: 
+        display_weight = last_eventphoto.display_weight + 1
+      eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
+                                       volunteer=volunteer,
+                                       content=params['content'], 
+                                       display_weight = display_weight,
+                                       type=EventPhoto.RSS_ALBUM, 
+                                       status=EventPhoto.PUBLISHED
+                                       )
+      eventphoto.put()
+    elif params['action'] == 'Remove':
+      album_id = params['album_id']
+      eventphoto = EventPhoto.get_by_id(int(album_id))
+      eventphoto.delete()
+    elif params['action'] == 'Up':
+      album_id = params['album_id']
+      eventphoto = EventPhoto.get_by_id(int(album_id))
+      #look for photo with display_weight lower than curent, start with highest
+      lowers = EventPhoto.gql("WHERE event = :event AND display_weight < :cur_display_weight ORDER BY display_weight DESC", 
+                                        event=Event.get_by_id(int(event_id)), 
+                                        cur_display_weight=eventphoto.display_weight
+                                        ).fetch(limit=1)
+      #swap weights
+      for lower in lowers:
+        temp = eventphoto.display_weight
+        eventphoto.display_weight = lower.display_weight
         eventphoto.put()
-      elif params['action'] == 'Remove':
-        album_id = params['album_id']
-        eventphoto = EventPhoto.get_by_id(int(album_id))
-        eventphoto.delete()
-      elif params['action'] == 'Up':
-        album_id = params['album_id']
-        eventphoto = EventPhoto.get_by_id(int(album_id))
-        #look for photo with display_weight lower than curent, start with highest
-        lowers = EventPhoto.gql("WHERE event = :event AND display_weight < :cur_display_weight ORDER BY display_weight DESC", 
-                                          event=Event.get_by_id(int(event_id)), 
-                                          cur_display_weight=eventphoto.display_weight
-                                          ).fetch(limit=1)
-        #swap weights
-        for lower in lowers:
-          temp = eventphoto.display_weight
-          eventphoto.display_weight = lower.display_weight
-          eventphoto.put()
-          lower.display_weight = temp
-          lower.put()
-      elif params['action'] == 'Down':
-        album_id = params['album_id']
-        eventphoto = EventPhoto.get_by_id(int(album_id))
-        #look for photo with display_weight higher than curent, start with lowest
-        highers = EventPhoto.gql("WHERE event = :event AND display_weight > :cur_display_weight ORDER BY display_weight ASC", 
-                                          event=Event.get_by_id(int(event_id)), 
-                                          cur_display_weight=eventphoto.display_weight
-                                          ).fetch(limit=1)
-        #swap weights
-        for higher in highers:
-          temp = eventphoto.display_weight
-          eventphoto.display_weight = higher.display_weight
-          eventphoto.put()
-          higher.display_weight = temp
-          higher.put()
-      
-      if event_id and event_id != None:
-        self.redirect("/events/" + str(int(event_id)))
+        lower.display_weight = temp
+        lower.put()
+    elif params['action'] == 'Down':
+      album_id = params['album_id']
+      eventphoto = EventPhoto.get_by_id(int(album_id))
+      #look for photo with display_weight higher than curent, start with lowest
+      highers = EventPhoto.gql("WHERE event = :event AND display_weight > :cur_display_weight ORDER BY display_weight ASC", 
+                                        event=Event.get_by_id(int(event_id)), 
+                                        cur_display_weight=eventphoto.display_weight
+                                        ).fetch(limit=1)
+      #swap weights
+      for higher in highers:
+        temp = eventphoto.display_weight
+        eventphoto.display_weight = higher.display_weight
+        eventphoto.put()
+        higher.display_weight = temp
+        higher.put()
+    
+    if event_id and event_id != None:
+      self.redirect("/events/" + str(int(event_id)))
 
 
 

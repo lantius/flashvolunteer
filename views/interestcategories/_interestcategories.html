@@ -3,9 +3,7 @@
   <li>
   	<input type="hidden" name="interestcategory[{{ic.key.id}}]" value="1" />
   	<input class="checkbox" type="checkbox" id="interestcategory[{{ic.key.id}}]" name="interestcategory[{{ic.key.id}}]" value="1" {% if ic.selected %} checked {% endif %} />
-  	<label class="checkboxlabel" for="interestcategory[{{ic.key.id}}]" ><span onclick="
-		document.getElementById("interestcategory[{{ic.key.id}}]").checked=!document.getElementById("interestcategory[{{ic.key.id}}]").checked">
-		{{ ic.name }}</span></label>
+  	<label class="checkboxlabel" for="interestcategory[{{ic.key.id}}]" >{{ ic.name }}</label>
   	
   </li>
 {% endfor %}
