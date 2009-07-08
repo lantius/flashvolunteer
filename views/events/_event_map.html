@@ -1,33 +1,28 @@
 
 <div id="eventmap" class="hardmodule">
 		
-  <script type="text/javascript" src="http://www.google.com/jsapi?key={{GOOGLE_MAPS_API_KEY}}"></script>
-	<script src="/stylesheets/google_maps.js"></script>
-	
+  <script type="text/javascript" src="http://www.google.com/jsapi?key={{GOOGLE_MAPS_API_KEY}}"></script>	
 	<script type="text/javascript">
     google.load("maps", "2", {"other_params":"sensor=false"});
-	
-	  function loadMap() {
-	      showAddress("{{event.address}}");
-	  }
-	  
+
 	  // Call this function when the page has been loaded
-      function initialize() {
-        var map = new google.maps.Map2(document.getElementById("map_canvas"));
-         map.setUIToDefault();    
-          geocoder.getLatLng(
-            address,
-            function(point) {
-              if (point) {
-                map.setCenter(point, 13);
-                var marker = new GMarker(point);
-                map.addOverlay(marker);
-              }
+    function initialize() {
+      var map = new google.maps.Map2(document.getElementById("map_canvas"));
+      var geocoder = new google.maps.ClientGeocoder();
+      map.setUIToDefault();    
+   
+       geocoder.getLatLng(
+          '{{event.address}}',
+          function(point) {
+            if (point) {
+              map.setCenter(point, 13);
+              var marker = new GMarker(point);
+              map.addOverlay(marker);
             }
-      }
-      google.setOnLoadCallback(initialize);
-	  
-	  window.onload = loadMap;
+          }
+      );  
+    }
+    google.setOnLoadCallback(initialize);
 	</script>
 	<div id="map_canvas"></div>
 </div><!--end eventmap-->
