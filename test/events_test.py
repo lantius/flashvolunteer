@@ -3,6 +3,7 @@ from webtest import TestApp
 from google.appengine.ext import webapp
 
 from controllers.events import *
+from controllers.eventattendance import *
 
 class EventsTest(unittest.TestCase):
   
@@ -82,7 +83,7 @@ class EventsTest(unittest.TestCase):
     
   # UPDATE  
   def test_event_update(self):
-    ee = EditEventPage()
+    e = EventsPage()
     event = self.test_event_create()
 
     params = { 'id' : event.key().id() , 
@@ -97,7 +98,7 @@ class EventsTest(unittest.TestCase):
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1',
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'],
     }
-    ee.update(params, self.volunteer)
+    e.update(params, self.volunteer)
     
     event = Event.get_by_id(int(event.key().id() ))
     self.assertEqual(event.name, params['name'])
