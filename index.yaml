@@ -18,3 +18,9 @@ indexes:
   properties: 
   - name: event
   - name: display_weight
+  
+- kind: EventPhoto
+  properties:
+  - name: event
+  - name: display_weight
+    direction: desc

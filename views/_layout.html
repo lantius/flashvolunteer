@@ -19,7 +19,7 @@
 		<span id="neighborhoodslink"><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></span>
 		<span id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">TEAM</a></span>
 		<span id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></span>
-		<span id="helplink"><a href="/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></span>
+		<span id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></span>
 		{% if volunteer.can_create_events %}
 		<span id="createeventlink"><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} id="l_create_event">CREATE EVENT</a></span>
 		{% endif %}
@@ -40,11 +40,11 @@
 </div><!--end columns-->
 <div id="footer">
 	<ul>
-		<li><a href="aboutsvilink">About SVI</a></li>
-		<li><a href="feedbacklink">Give Us Feedback</a></li>
-		<li><a href="donatelink">Donate</a></li>
-		<li><a href="privacypolicylink">Privacy Policy</a></li>
-		<li><a href="toslink">Terms of Use</a></li>
+		<li><a href="/static/about">About FlashVolunteer</a></li>
+		<li><a href="/static/feedback">Give Us Feedback</a></li>
+		<li><a href="/static/donate">Donate</a></li>
+		<li><a href="/static/privacy">Privacy Policy</a></li>
+		<li><a href="/static/tos">Terms of Use</a></li>
 	</ul>
 	<div id="copyright">Copyright &copy; 2009 Organization Name. All Rights Reserved.</div>
 </div><!--end footer-->

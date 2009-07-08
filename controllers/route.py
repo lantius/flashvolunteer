@@ -13,7 +13,7 @@ from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAva
 from controllers._helpers import InitializeStore
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage
-from controllers.help import HelpPage
+from controllers.static import StaticPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
 
@@ -62,7 +62,7 @@ def main():
                                      ('/volunteers(|/\d+|/search)', VolunteersPage),
                                      ('/volunteers/(\d+)/team/(\d+)', VolunteerTeam),
                                      ('/category/(\d+)', CategoryPage),
-                                     ('/help', HelpPage),
+                                     ('/static/(\w+)', StaticPage),
                                      ('/timeout', TimeoutPage),
                                     ],
                                     debug=True)

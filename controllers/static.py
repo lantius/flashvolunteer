@@ -7,8 +7,8 @@ from controllers._auth import Authorize
 ################################################################################
 # Help page
 ################################################################################
-class HelpPage(webapp.RequestHandler):
-  def get(self):    
+class StaticPage(webapp.RequestHandler):
+  def get(self, urldata):    
     
     try:
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
@@ -18,6 +18,6 @@ class HelpPage(webapp.RequestHandler):
     template_values = {
         'volunteer': volunteer,
       }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'help', 'help.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'static', urldata + '.html')
     self.response.out.write(template.render(path, template_values))
     return
