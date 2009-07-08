@@ -133,7 +133,7 @@ class EventsPage(webapp.RequestHandler):
   def show(self, event_id):
 
     #number of attendees to show in list
-    LIMIT = 104
+    LIMIT = 12
     offset = 0
     
     volunteer = Authorize.login(self)
