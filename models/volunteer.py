@@ -142,10 +142,11 @@ class Volunteer(db.Model):
   # both following and follower
   def friends(self):
     fr = []
-    for following in self.following():
-      for follower in self.followers():
-        if following.key().id() == follower.key().id():
-          fr.append(following)
+    
+    following = dict([(f.key().id(),1) for f in self.following()])
+    for follower in self.followers():
+        if follower.key().id() in following:            
+          fr.append(follower)
     return (f for f in fr)
 
   def friends_len(self):
