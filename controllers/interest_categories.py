@@ -21,7 +21,7 @@ class CategoryPage(webapp.RequestHandler):
   ################################################################################
   # SHOW
   def show(self, category_id):
-    LIMIT = 1
+    LIMIT = 10
     try:
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
@@ -53,7 +53,7 @@ class CategoryVolunteerPage(webapp.RequestHandler):
 
   def show(self, category_id, page):
     
-    LIMIT = 2
+    LIMIT = 10
 
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')

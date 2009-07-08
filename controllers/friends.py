@@ -12,7 +12,7 @@ from controllers._helpers import NeighborhoodHelper
 ################################################################################
 class FriendsPage(webapp.RequestHandler):
   def get(self): 
-    LIMIT = 2
+    LIMIT = 10
    
     try:
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
@@ -41,7 +41,7 @@ class AllFriendsPage(webapp.RequestHandler):
       self.show(int(page))
 
   def show(self, page):
-    LIMIT = 2
+    LIMIT = 10
     
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')

@@ -39,7 +39,7 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
   ################################################################################
   # SHOW
   def show(self, neighborhood_id):
-    LIMIT = 4
+    LIMIT = 10
     try:
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
@@ -64,7 +64,7 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
 # Pagination
 
 def get_page_template(self, neighborhood_id, page):
-    LIMIT = 2
+    LIMIT = 10
 
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')

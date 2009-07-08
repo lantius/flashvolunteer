@@ -126,7 +126,7 @@ class EventAttendeesPage(webapp.RequestHandler):
       self.list() 
 
   def show(self, event_id, page):
-    LIMIT = 2
+    LIMIT = 10
 
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
