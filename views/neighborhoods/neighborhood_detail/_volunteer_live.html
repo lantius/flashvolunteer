@@ -4,7 +4,11 @@
     <ul id="imagenamelinklist">{% for volunteer_in_list in neighborhood.volunteers_living_here %}
         {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
     {% endfor %}
-        <li class="tallerlistitem"><a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_live/1">&raquo; View everyone</a></li>
+        
     
     </ul>
+</div>
+
+<div>
+<a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_live/1">&raquo; View everyone</a>
 </div>

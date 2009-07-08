@@ -2,8 +2,11 @@
     <div class="moduletitle"><h3>Flash Volunteers working in {{ neighborhood.name }}</h3></div>
     <ul>{% for volunteer_in_list in neighborhood.volunteers_working_here %}
         {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-    {% endfor %}
-        <li class="tallerlistitem"><a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_work/1">&raquo; View everyone</a></li>
-    
+    {% endfor %}    
     </ul>
+</div>
+
+<div>
+    <a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_work/1">&raquo; View everyone</a>
+
 </div>
