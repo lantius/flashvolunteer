@@ -1,0 +1,31 @@
+{% extends "../../_layout.html" %}
+{% block title %}
+Interested in {{ category.name }} 
+{% endblock title %}
+
+{% block pagespectitle %}
+    <h1>Flash Volunteers interested in {{ category.name }}</h1>
+{% endblock %}
+
+{% block content %}
+
+<div id="personfriends" class="softmodule">
+    <ul>
+        {% for volunteer_in_list in team %}
+            {% include "../../volunteers/person_lists/_volunteer_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="pagination">
+    {% ifnotequal prev_page -1 %} 
+        <a href="/category/{{category.key.id}}/volunteers/{{prev_page}}">&laquo;  </a>
+    {% endifnotequal %}
+    {{ start }} - {{end}} of {{ total }}
+    {% ifnotequal next_page -1 %} 
+        <a href="/category/{{category.key.id}}/volunteers/{{next_page}}">  &raquo;</a>
+    {% endifnotequal %}
+</div>
+
+
+{% endblock content %}
