@@ -18,12 +18,14 @@ class FriendsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
     except:
       return
+    candidates = list(volunteer.friends())
     
+    friends = random.sample(candidates,min(len(candidates),LIMIT))
     template_values = {
         'volunteer': volunteer,
         'session_id' : volunteer.session_id,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-        'friends': random.sample(list(volunteer.friends()),LIMIT),
+        'friends': friends,
         'following_only': volunteer.following_only()
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'team.html')

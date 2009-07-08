@@ -47,12 +47,14 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
 
     neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
     
+    candidates_living = list(neighborhood.volunteers_living_here())
+    candidates_working = list(neighborhood.volunteers_working_here())
     
     template_values = {
         'volunteer': volunteer,
         'neighborhood': neighborhood,
-        'volunteers_living_here': random.sample(list(neighborhood.volunteers_living_here()), LIMIT), 
-        'volunteers_working_here': random.sample(list(neighborhood.volunteers_working_here()), LIMIT), 
+        'volunteers_living_here': random.sample(candidates_living, min(len(candidates_living),LIMIT)), 
+        'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 
       }
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
