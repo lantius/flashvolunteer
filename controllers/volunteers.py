@@ -242,9 +242,7 @@ class VolunteerTeam(webapp.RequestHandler):
 
     
     end = start + len(team) - 1
-                                            
-    event_access = page_volunteer.event_access(volunteer = volunteer) 
-    
+                                                
     if end == total:
         next_page = -1
     else: 

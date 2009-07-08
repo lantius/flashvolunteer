@@ -1,0 +1,30 @@
+{% extends "../_layout.html" %}
+{% block title %}
+{{ event.name }}'s Attendees
+{% endblock title %}
+
+{% block pagespectitle %}
+    <h1>{{ event.name }}'s Attendees</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="softmodule">
+    <ul>
+        {% for volunteer_in_list in attendees %}
+            {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="pagination">
+    {% ifnotequal prev_page -1 %} 
+        <a href="/events/{{ event.key.id }}/attendees/{{prev_page}}">&laquo;  </a>
+    {% endifnotequal %}
+    {{ start }} - {{end}} of {{ total }}
+    {% ifnotequal next_page -1 %} 
+        <a href="/events/{{ event.key.id }}/attendees/{{next_page}}">  &raquo;</a>
+    {% endifnotequal %}
+</div>
+
+{% endblock content %}

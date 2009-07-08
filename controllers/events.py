@@ -131,6 +131,11 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   # SHOW A SINGLE EVENT
   def show(self, event_id):
+
+    #number of attendees to show in list
+    LIMIT = 4
+    offset = 0
+    
     volunteer = Authorize.login(self)
     
     event = Event.get_by_id(int(event_id))
@@ -148,22 +153,25 @@ class EventsPage(webapp.RequestHandler):
     attendees = []
     
     if volunteer:
-      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                         volunteer=volunteer, event=event).get()
+
       session_id = volunteer.session_id
-                               
-      for v in event.volunteers():
-          id = v.key().id()
-          if id == volunteer.key().id(): 
-            continue
-                    
-          if v.event_access(volunteer = volunteer): 
-              attendees.append(v)
-          else: 
-              if ( eventvolunteer and ( event.inpast() or eventvolunteer.isowner )):
-                   attendees.append(v)
+      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
+                         volunteer=volunteer, event=event).get() 
+                         
+      if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
+        # randomize this...
+        attendees = [ev.volunteer for ev in event.eventvolunteers.fetch(limit = LIMIT)]
+      else:
+          public_attendees = []
+          for v in event.volunteers():
+              if v.key().id() == volunteer.key().id(): continue
+              if v.event_access(volunteer=volunteer):
+                  public_attendees.append(v)
               else:
                   attendees_anonymous.append(v)
+          
+          attendees = public_attendees[offset:offset+LIMIT]
+
           
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
