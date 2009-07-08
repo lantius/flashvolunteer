@@ -3,7 +3,7 @@
 		<h3>Search Results</h3>
 	</div>
 	<div id="eventyousearchedfor" >
-		<span class="label">You have searched for volunteers in
+		<ul><li><span class="label">You have searched for volunteers in
 		{% if neighborhood %}
 			{{neighborhood.name}}
 		{% else %}
@@ -15,8 +15,8 @@
 		{% if email %}
 		and the email address {{email}}
 		{% endif %}.
-</span>
-	</div>
+</span></li>
+	</ul>
 	{% if volunteers %}
 	<ol>
 		{% for volunteer_in_list in volunteers %}
@@ -24,6 +24,7 @@
 		{% endfor %}
 	</ol>
 	{% else %}
-	<p>No search results found.</p>
+	<ul><li>No search results found.</li></ul>
 	{% endif %}
+	</div>
 </div>

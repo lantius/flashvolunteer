@@ -13,17 +13,17 @@
 	{%if volunteer %}
 		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
 	{% endif %}
-	<div id="navtabs">
-		<span id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></span>
-		<span id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></span>
-		<span id="neighborhoodslink"><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></span>
-		<span id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">TEAM</a></span>
-		<span id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></span>
-		<span id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></span>
+	<ul id="navtabs">
+		<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
+		<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
+		<li id="neighborhoodslink"><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
+		<li id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">TEAM</a></li>
+		<li id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
+		<li id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
 		{% if volunteer.can_create_events %}
-		<span id="createeventlink"><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} id="l_create_event">CREATE EVENT</a></span>
+		<li id="createeventlink"><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} id="l_create_event">CREATE EVENT</a></li>
 		{% endif %}
-	</div>
+	</ul>
 </div><!--end top-->
 
 <div id="bottom">

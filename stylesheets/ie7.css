@@ -1,1 +1,1 @@
-#container {	position: absolute;	left: 50%;	margin-left: -420px;}#bottom {	left: 50%;	margin-left: -420px;}#columns {	margin-left: -1095px;	margin-top: -190px;}#navtabs span a {	float: none;	display: inline;}
+#container {	margin-left: -420px;	left: 50%;	position: absolute;}#pagespectitle {	height: 50px;}#columns {	position: relative;	left: -1086px;	top: -190px;	padding-bottom: 100px;}#footer {	position: relative;	left: 0px;	text-align: right;	width: 840px;}#navtabs li {	height: 41px;}
