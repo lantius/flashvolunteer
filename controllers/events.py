@@ -13,6 +13,7 @@ from models.neighborhood import *
 from models.interestcategory import *
 from models.eventinterestcategory import *
 from models.eventphoto import *
+from models.interestcategory import InterestCategory
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
@@ -23,6 +24,37 @@ from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
 # flashvolunteer.appspot.com
 # GOOGLE_MAPS_API_KEY = ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ
+
+
+def _get_upcoming_events():
+    events = (e for e in Event.all() if 
+            #recommend future events 
+        not e.inpast())
+    return sorted(events, lambda e,e2: cmp(e.date,e2.date))
+
+def _get_recommended_events(volunteer):
+    #TODO make more efficient
+    vol_events = [v.key().id() for v in volunteer.events()]
+    
+    neighborhoods = []
+    if(volunteer.work_neighborhood):
+      neighborhoods.append(volunteer.work_neighborhood.name)
+    if(volunteer.home_neighborhood):
+      neighborhoods.append(volunteer.home_neighborhood.name)
+    
+    vol_interests = set([ic.name for ic in volunteer.interestcategories()])
+    events = (e for e in _get_upcoming_events() if
+            # recommend non rsvp'd events
+            not e.key().id() in vol_events and  
+            #recommend events in home or work neighborhood  
+            (e.neighborhood.name in neighborhoods or  
+             #recommend events in interest categories
+            len(vol_interests.intersection(
+                   set([ic.name for ic in e.interestcategories()]))
+                ) > 0)
+            )
+    return events
+
 
 ################################################################################
 # Events page
@@ -86,7 +118,7 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
     
-    recommended_events = self._get_recommended_events(volunteer = volunteer)
+    recommended_events = _get_recommended_events(volunteer = volunteer)
     template_values = {
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
@@ -94,39 +126,14 @@ class EventsPage(webapp.RequestHandler):
         'recommended_events': recommended_events,
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id,
-        'upcoming_events': self._get_upcoming_events()
+        'upcoming_events': _get_upcoming_events()
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
   
-  def _get_recommended_events(self,volunteer):
-    #TODO make more efficient
-    vol_events = [v.key().id() for v in volunteer.events()]
-    
-    neighborhoods = []
-    if(volunteer.work_neighborhood):
-      neighborhoods.append(volunteer.work_neighborhood.name)
-    if(volunteer.home_neighborhood):
-      neighborhoods.append(volunteer.home_neighborhood.name)
-    
-    vol_interests = set([ic.name for ic in volunteer.interestcategories()])
-    events = (e for e in self._get_upcoming_events() if
-            # recommend non rsvp'd events
-            not e.key().id() in vol_events and  
-            #recommend events in home or work neighborhood  
-            (e.neighborhood.name in neighborhoods or  
-             #recommend events in interest categories
-            len(vol_interests.intersection(
-                   set([ic.name for ic in e.interestcategories()]))
-                ) > 0)
-            )
-    return events
+
   
-  def _get_upcoming_events(self):
-    events = (e for e in Event.all() if 
-            #recommend future events 
-            not e.inpast())
-    return sorted(events, lambda e,e2: cmp(e.date,e2.date))
+
   
   ################################################################################
   # SHOW A SINGLE EVENT
@@ -407,8 +414,208 @@ class EventsPage(webapp.RequestHandler):
     
     if event_id and event_id != None:
       self.redirect("/events/" + str(int(event_id)))
+      
+#################################
+#### Event lists  
 
 
+
+class BaseEventListPage(webapp.RequestHandler):
+  LIST_LIMIT = 2
+    
+  def set_context(self):  
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      self.volunteer = volunteer
+    except:
+      return
+    
+    LIST_LIMIT = BaseEventListPage.LIST_LIMIT
+
+    page = self.page
+    generator, extract_style = self._get_event_generator()
+    
+    
+    start = (page-1) * LIST_LIMIT + 1
+    offset = start - 1 
+    if isinstance(generator, list):
+        total = len(generator)
+        
+        if extract_style == 'direct':
+            events = generator[offset:offset+LIST_LIMIT]      
+        else:
+            events = [e.event for e in generator[offset:offset+LIST_LIMIT]]      
+
+    else:
+        total = generator.count()
+        
+        if extract_style == 'direct':
+            events = [e for e in generator.fetch(limit = LIST_LIMIT, offset = offset)]        
+        else:
+            events = [e.event for e in generator.fetch(limit = LIST_LIMIT, offset = offset)]
+
+        
+        
+    
+    end = start + len(events) - 1
+                                                
+    if end == total:
+        next_page = -1
+    else: 
+        next_page = page + 1
+    
+    if page == 1:
+        prev_page = -1
+    else:
+        prev_page = page -1
+        
+    template_values = { 
+                        'title' : self._get_title(),
+                        'volunteer' : volunteer,
+                        'events': events,
+                        'session_id' : volunteer.session_id,
+                        'total': total,
+                        'start': start,
+                        'end': end,
+                        'next_page': next_page,
+                        'prev_page': prev_page,
+                        'url': self._get_url()
+                        }
+    
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_list.html')
+    self.response.out.write(template.render(path, template_values))
+
+class EventUpcomingPage(BaseEventListPage):
+  
+  def get(self, page):
+      self.page = int(page)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (_get_upcoming_events(), 'direct')
+ 
+  def _get_title(self):
+     return 'Upcoming Events'
+ 
+  def _get_url(self):
+     return '/events/upcoming/'
+ 
+ 
+class EventRecommendedPage(BaseEventListPage):
+  def get(self, page):
+      self.page = int(page)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (list(_get_recommended_events(volunteer = self.volunteer)), 'direct')
+ 
+  def _get_title(self):
+     return 'Recommended Events'
+ 
+  def _get_url(self):
+     return '/events/recommended/'
+
+
+class EventVolunteerCompletedPage(BaseEventListPage):
+  def get(self, volunteerid, page):
+      self.page = int(page)
+      self.volunteerid = int(volunteerid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (self.volunteer.events_past(), 'direct')
+ 
+  def _get_title(self):
+     if self.volunteer.key().id() == self.volunteerid:
+         return 'My Completed Events'
+     else:
+         return '%s\'s Completed Events'%self.volunteer.name
+ 
+  def _get_url(self):
+     return '/events/past/volunteer/%i/'%self.volunteerid
+
+
+class EventCategoryCompletedPage(BaseEventListPage):
+  def get(self, categoryid, page):
+      self.page = int(page)
+      self.categoryid = int(categoryid)
+      self.category = InterestCategory.get_by_id(self.categoryid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (list(self.category.past_events()), 'direct')
+ 
+  def _get_title(self):
+     return '%s\'s Past Events'%self.category.name
+ 
+  def _get_url(self):
+     return '/events/past/category/%i/'%self.categoryid
+
+
+class EventNeighborhoodCompletedPage(BaseEventListPage):
+  def get(self, neighborhoodid, page):
+      self.page = int(page)
+      self.neighborhoodid = int(neighborhoodid)
+      self.neighborhood = Neighborhood.get_by_id(self.neighborhoodid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (self.neighborhood.events_past(), 'direct')
+ 
+  def _get_title(self):
+     return '%s\'s Completed Events'%self.neighborhood.name
+ 
+  def _get_url(self):
+     return '/events/past/neighborhood/%i/'%self.neighborhoodid
+
+
+class EventVolunteerUpcomingPage(BaseEventListPage):
+  def get(self, volunteerid, page):
+      self.page = int(page)
+      self.volunteerid = int(volunteerid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (self.volunteer.events_future(), 'direct')
+ 
+  def _get_title(self):
+     return '%s\'s Upcoming Events'%self.volunteer.name
+ 
+  def _get_url(self):
+     return '/events/upcoming/volunteer/%i/'%self.volunteerid
+ 
+
+class EventNeighborhoodUpcomingPage(BaseEventListPage):
+  def get(self, neighborhoodid, page):
+      self.page = int(page)
+      self.neighborhoodid = int(neighborhoodid)
+      self.neighborhood = Neighborhood.get_by_id(self.neighborhoodid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (self.neighborhood.events_future(), 'direct')
+ 
+  def _get_title(self):
+     return '%s\'s Upcoming Events'%self.neighborhood.name
+ 
+  def _get_url(self):
+     return '/events/upcoming/neighborhood/%i/'%self.neighborhoodid
+
+class EventCategoryUpcomingPage(BaseEventListPage):
+  def get(self, categoryid, page):
+      self.page = int(page)
+      self.categoryid = int(categoryid)
+      self.category = InterestCategory.get_by_id(self.categoryid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (list(self.category.upcoming_events()), 'direct')
+ 
+  def _get_title(self):
+     return '%s\'s Upcoming Events'%self.category.name
+ 
+  def _get_url(self):
+     return '/events/upcoming/category/%i/'%self.categoryid
 
 
 

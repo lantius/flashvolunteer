@@ -5,9 +5,17 @@
     {% endfor %}
 </div>
 
+<div>
+    <a href="/events/upcoming/category/{{category.key.id}}/1">&raquo; View all upcoming events</a>
+</div>
+
 <div id="categorypastevents" class="hardmodule">
     <div class="moduletitle"><h3>Past Events</h3></div>
     {% for event in category.upcoming_events %}
         {% include "../events/_event_list_item.html" %}
     {% endfor %}
+</div>
+
+<div>
+    <a href="/events/past/category/{{category.key.id}}/1">&raquo; View all past events</a>
 </div>

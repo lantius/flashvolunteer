@@ -1,0 +1,30 @@
+{% extends "../_layout.html" %}
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block pagespectitle %}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block content %}
+
+<div id="upcomingevents" class="hardmodule">
+    <ul>            
+        {% for event in events %}
+            {% include "../events/_event_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="pagination">
+    {% ifnotequal prev_page -1 %} 
+        <a href="{{url}}{{prev_page}}">&laquo;  </a>
+    {% endifnotequal %}
+    {{ start }} - {{end}} of {{ total }}
+    {% ifnotequal next_page -1 %} 
+        <a href="{{url}}{{next_page}}">  &raquo;</a>
+    {% endifnotequal %}
+</div>
+
+{% endblock content %}

@@ -164,13 +164,13 @@ class Volunteer(db.Model):
     return len(self.events_past())
 
   def events_past(self):
-    return [e for e in self.events() if e.date < datetime.datetime.today() ]
+    return [e for e in self.events() if e.inpast() ]
   
   def events_future_count(self):
     return len(self.events_future())
 
   def events_future(self):
-    return [e for e in self.events() if e.date >= datetime.datetime.today() ]
+    return [e for e in self.events() if e.inpast() ]
   
   def check_session_id(self, form_session_id):
     return form_session_id == self.session_id

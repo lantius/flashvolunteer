@@ -6,6 +6,9 @@
         {% endif %}
     {% endfor %}
 </div>
+<div>
+    <a href="/events/upcoming/neighborhood/{{neighborhood.key.id}}/1">&raquo; View all upcoming events</a>
+</div>
 
 <div id="neighborhoodpastevents" class="hardmodule">
     <div class="moduletitle"><h3>Past Events</h3></div>
@@ -14,4 +17,8 @@
             {% include "../events/_event_list_item.html" %}
         {% endif %}
     {% endfor %}
+    
+</div>
+<div>
+    <a href="/events/past/neighborhood/{{neighborhood.key.id}}/1">&raquo; View all past events</a>
 </div>
