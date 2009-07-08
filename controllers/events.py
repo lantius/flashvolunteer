@@ -121,18 +121,18 @@ class EventsPage(webapp.RequestHandler):
                 ) > 0)
             )
     return events
-
+  
   def _get_upcoming_events(self):
     events = (e for e in Event.all() if 
             #recommend future events 
             not e.inpast())
     return sorted(events, lambda e,e2: cmp(e.date,e2.date))
-
+  
   ################################################################################
   # SHOW A SINGLE EVENT
   def show(self, event_id):
     volunteer = Authorize.login(self)
-
+    
     event = Event.get_by_id(int(event_id))
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
@@ -195,7 +195,7 @@ class EventsPage(webapp.RequestHandler):
       for ei in event.eventinterestcategories:
         ei.delete()
       event.delete()
-
+  
   ################################################################################
   # NEW
   def new(self, event):
@@ -203,11 +203,11 @@ class EventsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
-
+    
     if not volunteer.can_create_events():
       self.redirect("/events") #TODO REDIRECT to error page
       return
-
+    
     template_values = {
         'event' : event,
         'volunteer': volunteer,
@@ -216,7 +216,7 @@ class EventsPage(webapp.RequestHandler):
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
     self.response.out.write(template.render(path, template_values))
-
+  
   ################################################################################
   # CREATE
   def create(self, params, volunteer):
@@ -235,18 +235,18 @@ class EventsPage(webapp.RequestHandler):
     except:
       self.new(event)
       return
-
+    
     for interestcategory in InterestCategory.all():
       pic = 'interestcategory[' + str(interestcategory.key().id()) + ']'
       if params[pic] == ['1','1']: 
         eic = EventInterestCategory(event = event, interestcategory = interestcategory)
         eic.put()
-
+    
     eventVolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=True)
     eventVolunteer.put()
     
     return event.key().id()
-
+  
   ################################################################################
   # EDIT
   def edit(self, event): 
@@ -254,15 +254,15 @@ class EventsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return   
-
+    
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
     if not eventvolunteer:
       self.redirect("/events/" + event.id)
       return
-
+    
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-
+    
     template_values = { 
       'event' : event, 
       'eventvolunteer': eventvolunteer, 
@@ -273,21 +273,21 @@ class EventsPage(webapp.RequestHandler):
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
     self.response.out.write(template.render(path, template_values))
-
+  
   ################################################################################
   # UPDATE
   def update(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
-
+    
     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
                            volunteer=volunteer, event=event).get()
     if not eventvolunteer:
       return None
-
+    
     if not event.validate(params):
       self.edit(event)
       return False
-
+    
     for interestcategory in InterestCategory.all():
       param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
       eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
@@ -297,10 +297,10 @@ class EventsPage(webapp.RequestHandler):
         eic.put()
       elif params[param_name] == '1' and eic:
         eic.delete()
-
+    
     event.put()
     return event.key().id()
-
+  
   ################################################################################
   # SEARCH
   def search(self, params):
@@ -313,38 +313,38 @@ class EventsPage(webapp.RequestHandler):
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
     self.response.out.write(template.render(path, template_values))
-
+  
   def do_search(self, params):
     events_query = Event.all()
     neighborhood = None
     todate = None
     fromdate = None
-
+    
     if 'neighborhood' in params and params['neighborhood']:
       try:
         neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
         events_query.filter('neighborhood =', neighborhood)
       except:
         pass
-
+    
     if 'fromdate' in params and params['fromdate']:
       try:
         fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
         events_query.filter('date >=', fromdate)
       except:
         pass
-
+    
     if 'todate' in params and params['todate']:
       try:
         todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
         events_query.filter('date <=', todate)
       except:
         pass
-
+    
     events = events_query.fetch(limit = 25)
-
+    
     return (neighborhood, fromdate, todate, events)
-
+  
   ################################################################################
   # all posts that deal with photo albums from the events page
   def _handle_photos(self, params, volunteer):
@@ -396,7 +396,7 @@ class EventsPage(webapp.RequestHandler):
           eventphoto.put()
           higher.display_weight = temp
           higher.put()
-
+      
       if event_id and event_id != None:
         self.redirect("/events/" + str(int(event_id)))
 
