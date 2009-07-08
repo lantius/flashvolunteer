@@ -3,5 +3,8 @@
     <h3 class="moduletitle">Flash Volunteers living in {{ neighborhood.name }}</h3>
     <ul id="imagenamelinklist">{% for volunteer_in_list in neighborhood.volunteers_living_here %}
         {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-    {% endfor %}</ul>
+    {% endfor %}
+        <li class="tallerlistitem"><a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_live/1">&raquo; View everyone</a></li>
+    
+    </ul>
 </div>

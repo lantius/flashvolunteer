@@ -54,3 +54,81 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
     self.response.out.write(template.render(path, template_values))
     return
+
+
+################################################################################
+# Pagination
+
+def get_page_template(self, neighborhood_id, page):
+    LIMIT = 2
+
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
+          
+    neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
+
+    if not neighborhood:
+      self.error(404)
+      self.response.out.write('404 page! boo!')
+    
+    total = neighborhood.work_neighborhood.count()
+    start = (page-1) * LIMIT + 1
+    
+    team = [v for v in neighborhood.work_neighborhood.fetch(limit = LIMIT, offset=start - 1)]
+
+    end = start + len(team) - 1
+                                                
+    if end == total:
+        next_page = -1
+    else: 
+        next_page = page + 1
+    
+    if page == 1:
+        prev_page = -1
+    else:
+        prev_page = page -1
+        
+    template_values = { 
+                        'neighborhood': neighborhood,
+                        'volunteer' : volunteer,
+                        'team': team,
+                        'session_id' : volunteer.session_id,
+                        'total': total,
+                        'start': start,
+                        'end': end,
+                        'next_page': next_page,
+                        'prev_page': prev_page
+                        }
+    return template_values
+
+
+class NeighborhoodVolunteerWorkPage(webapp.RequestHandler):
+
+  def get(self, neighborhood_id, page):
+    if neighborhood_id:
+      self.show(neighborhood_id, int(page))
+    else:
+      self.list() 
+
+  def show(self, neighborhood_id, page):
+    
+    template_values = get_page_template(self = self, neighborhood_id = neighborhood_id, page = page)
+    
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood_volunteer_work_page.html')
+    self.response.out.write(template.render(path, template_values))
+
+
+class NeighborhoodVolunteerHomePage(webapp.RequestHandler):
+
+  def get(self, neighborhood_id, page):
+    if neighborhood_id:
+      self.show(neighborhood_id, int(page))
+    else:
+      self.list() 
+
+  def show(self, neighborhood_id, page):
+    template_values = get_page_template(self = self, neighborhood_id = neighborhood_id, page = page)
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood_volunteer_home_page.html')
+    self.response.out.write(template.render(path, template_values))

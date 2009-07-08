@@ -11,7 +11,7 @@ from controllers.eventattendance import VerifyEventAttendance, EventAttendeesPag
 from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar, VolunteerTeam
 from controllers._helpers import InitializeStore
-from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
+from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage, NeighborhoodVolunteerWorkPage, NeighborhoodVolunteerHomePage
 from controllers.friends import FriendsPage, AllFriendsPage
 from controllers.static import StaticPage
 from controllers.settings import SettingsPage
@@ -55,6 +55,8 @@ def main():
          ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
          ('/events/(\d+)/attendees/(\d+)', EventAttendeesPage),
          ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
+         ('/neighborhoods/(\d+)/volunteers_work/(\d+)', NeighborhoodVolunteerWorkPage),
+         ('/neighborhoods/(\d+)/volunteers_live/(\d+)', NeighborhoodVolunteerHomePage),
          ('/neighborhoods(|)', NeighborhoodsPage),     
          ('/team', FriendsPage),
          ('/team/(\d+)', AllFriendsPage),
