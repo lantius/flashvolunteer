@@ -50,8 +50,8 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
     candidates_living = list(neighborhood.volunteers_living_here())
     candidates_working = list(neighborhood.volunteers_working_here())
     
-    past_events = list(neighborhood.past_events()) 
-    upcoming_events = list(neighborhood.upcoming_events())    
+    past_events = list(neighborhood.events_past()) 
+    upcoming_events = list(neighborhood.events_future())    
     
     template_values = {
         'volunteer': volunteer,

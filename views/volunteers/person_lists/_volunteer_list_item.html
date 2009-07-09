@@ -32,7 +32,7 @@
 	                    
 	                    {% if is_teammate %}
 	                        <input type=hidden name="delete" value="true">    
-	                        <input id="operation_remove_from_team[{{ volunteer_in_list.key.id }}]" class="operation" type=submit value="(&mdash;)"/>
+	                        <input id="operation_remove_from_team[{{ volunteer_in_list.key.id }}]" class="operation" type=submit value="(-)"/>
 	                    {% else %}
 	                        <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation" type=submit value="(+)"/>
 	                    {% endif %}
