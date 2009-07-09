@@ -121,8 +121,10 @@ class NeighborhoodVolunteerWorkPage(webapp.RequestHandler):
   def show(self, neighborhood_id, page):
     
     template_values = get_page_template(self = self, neighborhood_id = neighborhood_id, page = page)
+    template_values['url'] = '/neighborhoods/%i/volunteers_work/'%template_values['neighborhood'].key().id()
+    template_values['title'] = 'Working in %s'%template_values['neighborhood'].name
     
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood_volunteer_work_page.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'person_lists', '_paginated_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))
 
 
@@ -136,5 +138,8 @@ class NeighborhoodVolunteerHomePage(webapp.RequestHandler):
 
   def show(self, neighborhood_id, page):
     template_values = get_page_template(self = self, neighborhood_id = neighborhood_id, page = page)
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood_volunteer_home_page.html')
+    template_values['url'] = '/neighborhoods/%i/volunteers_home/'%template_values['neighborhood'].key().id()
+    template_values['title'] = 'Living in %s'%template_values['neighborhood'].name
+    
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'person_lists', '_paginated_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))

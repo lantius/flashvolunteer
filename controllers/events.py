@@ -421,7 +421,7 @@ class EventsPage(webapp.RequestHandler):
 
 
 class BaseEventListPage(webapp.RequestHandler):
-  LIST_LIMIT = 2
+  LIST_LIMIT = 12
     
   def set_context(self):  
     try:
@@ -482,7 +482,7 @@ class BaseEventListPage(webapp.RequestHandler):
                         'url': self._get_url()
                         }
     
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_list.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'paginated_event_page.html')
     self.response.out.write(template.render(path, template_values))
 
 class EventUpcomingPage(BaseEventListPage):

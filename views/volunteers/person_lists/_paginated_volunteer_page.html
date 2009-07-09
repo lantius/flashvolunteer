@@ -1,10 +1,10 @@
 {% extends "../../_layout.html" %}
 {% block title %}
-My FlashTeam
+{{ title }}
 {% endblock title %}
 
 {% block pagespectitle %}
-    <h1>My FlashTeam</h1>
+    <h1>{{ title }}</h1>
 {% endblock %}
 
 {% block content %}
@@ -19,11 +19,11 @@ My FlashTeam
 
 <div class="pagination">
     {% ifnotequal prev_page -1 %} 
-        <a href="/team/{{prev_page}}">&laquo;  </a>
+        <a href="{{url}}{{prev_page}}">&laquo;  </a>
     {% endifnotequal %}
     {{ start }} - {{end}} of {{ total }}
     {% ifnotequal next_page -1 %} 
-        <a href="/team/{{next_page}}">  &raquo;</a>
+        <a href="{{url}}{{next_page}}">  &raquo;</a>
     {% endifnotequal %}
 </div>
 

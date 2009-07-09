@@ -78,7 +78,9 @@ class AllFriendsPage(webapp.RequestHandler):
                         'prev_page': prev_page,
 
                         'team': team,
+                        'title': 'My FlashTeam',
+                        'url': '/team/'
                         }
     
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'home', 'all_team.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'person_lists', '_paginated_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))

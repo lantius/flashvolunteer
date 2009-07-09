@@ -93,7 +93,9 @@ class CategoryVolunteerPage(webapp.RequestHandler):
                         'start': start,
                         'end': end,
                         'next_page': next_page,
-                        'prev_page': prev_page
+                        'prev_page': prev_page,
+                        'title': 'Interested in %s'%category.name,
+                        'url': '/category/%i/volunteers/'%category.key().id()
                         }    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'categories', 'category_detail', 'category_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))

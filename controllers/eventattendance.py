@@ -168,15 +168,17 @@ class EventAttendeesPage(webapp.RequestHandler):
         
     template_values = { 'event': event,
                         'volunteer' : volunteer,
-                        'attendees': attendees,
+                        'team': attendees,
                         'session_id' : volunteer.session_id,
                         'total': total,
                         'start': start,
                         'end': end,
                         'next_page': next_page,
-                        'prev_page': prev_page
+                        'prev_page': prev_page,
+                        'title': '%s\'s Attendees'%event.name,
+                        'url': '/events/%i/attendees/'%event.key().id()
                         }
     
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_attendees_page.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'person_lists', '_paginated_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))
 

@@ -259,10 +259,12 @@ class VolunteerTeam(webapp.RequestHandler):
                         'start': start,
                         'end': end,
                         'next_page': next_page,
-                        'prev_page': prev_page
+                        'prev_page': prev_page,
+                        'title':'%s\'s FlashTeam'%page_volunteer.name,
+                        'url': '/volunteers/%i/team/'%page_volunteer.key().id()
                         }
     
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer', 'team.html')
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'person_lists', '_paginated_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))
 
     
