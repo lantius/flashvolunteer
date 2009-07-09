@@ -1,11 +1,11 @@
-        <div id="upcomingevents" class="hardmodule">
-            <div class="moduletitle"><h3>Upcoming Events</h3></div>
-            <ul>            
-                {% for event in upcoming_events %}
-                    {% include "../events/_event_list_item.html" %}
-                {% endfor %}
-            </ul>
-        </div>
-        <div>
-            <a href="/events/upcoming/1">&raquo; View all upcoming events</a>
-        </div>
+<div id="upcomingevents" class="hardmodule">
+    <div class="moduletitle"><h3>Upcoming Events</h3></div>
+    <ul>            
+        {% for event in upcoming_events %}
+            {% include "../events/_event_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+<div class="pagination_entry">
+    <a href="/events/upcoming/1">&raquo; View all upcoming events</a>
+</div>

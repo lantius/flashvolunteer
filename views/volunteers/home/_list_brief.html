@@ -1,12 +1,15 @@
 
-		<div id="personfriends" class="softmodule">
-			<div class="moduletitle">
-				<h3>My <span class="flashtext">Flash</span>Team</h3>
-			</div>
-			<ul>
-				{% for f in volunteer.friends %}
-					<li><a href="{{f.url}}">{{ f.get_name }}</a></li>
-				{% endfor %}
-				<li class="tallerlistitem"><a href="/team">&raquo; View whole team</a></li>
-			</ul>
-		</div><!--end friends-->
+<div id="personfriends" class="softmodule">
+	<div class="moduletitle">
+		<h3>My <span class="flashtext">Flash</span>Team</h3>
+	</div>
+	<ul>
+		{% for f in volunteer.friends %}
+			<li><a href="{{f.url}}">{{ f.get_name }}</a></li>
+		{% endfor %}
+	</ul>
+</div><!--end friends-->
+
+<div class="pagination_entry">
+    <a href="/team">&raquo; View whole team</a>
+</div>

@@ -1,13 +1,15 @@
 
-		<div id="personfriends" class="softmodule">
-			<div class="moduletitle">
-                <h3><span class="flashtext">Flash</span>Team</h3>
-			</div>
-			<ul>
-				{% for volunteer_in_list in page_volunteer.friends %}
-					<li><a href="{{volunteer_in_list.url}}">{{ volunteer_in_list.get_name }}</a></li>
-				{% endfor %}
-                <li class="tallerlistitem"><a href="/volunteers/{{page_volunteer.key.id}}/team/1">&raquo; View whole team</a></li>
-				
-			</ul>
-		</div><!--end friends-->
+<div id="personfriends" class="softmodule">
+	<div class="moduletitle">
+        <h3><span class="flashtext">Flash</span>Team</h3>
+	</div>
+	<ul>
+		{% for volunteer_in_list in page_volunteer.friends %}
+			<li><a href="{{volunteer_in_list.url}}">{{ volunteer_in_list.get_name }}</a></li>
+		{% endfor %}
+	</ul>
+</div><!--end friends-->
+
+<div class="pagination_entry">  
+    <a href="/volunteers/{{page_volunteer.key.id}}/team/1">&raquo; View whole team</a>
+</div>

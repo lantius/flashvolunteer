@@ -1,10 +1,10 @@
 		
-		<div id="personupcomingevents" class="softmodule">
-			<div class="moduletitle"><h3>My Upcoming Events</h3></div>
-			{% for event in my_future_events %}
-				{% include "../events/_event_list_item.html" %}
-			{% endfor %}
-		</div><!--end profileupcomingevents-->
-        <div>
-            <a href="/events/upcoming/volunteer/{{volunteer.key.id}}/1">&raquo; View all of my upcoming events</a>
-        </div>
+<div id="personupcomingevents" class="softmodule">
+	<div class="moduletitle"><h3>My Upcoming Events</h3></div>
+	{% for event in my_future_events %}
+		{% include "../events/_event_list_item.html" %}
+	{% endfor %}
+</div><!--end profileupcomingevents-->
+<div class="pagination_entry">
+    <a href="/events/upcoming/volunteer/{{volunteer.key.id}}/1">&raquo; View all of my upcoming events</a>
+</div>

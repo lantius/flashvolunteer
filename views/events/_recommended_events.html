@@ -1,11 +1,11 @@
-		<div id="recommendedevents" class="hardmodule">
-			<div class="moduletitle"><h3>Recommended Events</h3></div>
-			<ul>            
-				{% for event in recommended_events %}
-				    {% include "../events/_event_list_item.html" %}
-				{% endfor %}
-			</ul>
-		</div><!--end recommended events-->
-        <div>
-            <a href="/events/recommended/1">&raquo; View all recommended events</a>
-        </div>
+<div id="recommendedevents" class="hardmodule">
+	<div class="moduletitle"><h3>Recommended Events</h3></div>
+	<ul>            
+		{% for event in recommended_events %}
+		    {% include "../events/_event_list_item.html" %}
+		{% endfor %}
+	</ul>
+</div><!--end recommended events-->
+<div class="pagination_entry">
+    <a href="/events/recommended/1">&raquo; View all recommended events</a>
+</div>

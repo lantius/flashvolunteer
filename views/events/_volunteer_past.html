@@ -1,12 +1,12 @@
 		
-		<div id="personpastevents" class="softmodule">
-			<div class="moduletitle"><h3>My Completed Events</h3></div>
-			<ul>
-				{% for event in my_past_events %}
-					<li><a id="event_past[{{event.key.id}}]" href="{{ event.url }}" >{{ event.date }}:</a> {{ event.name }}</li>
-				{% endfor %}
-			</ul>
-		</div><!--end personpastevents-->
-        <div>
-            <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all past events</a>
-        </div>
+<div id="personpastevents" class="softmodule">
+	<div class="moduletitle"><h3>My Completed Events</h3></div>
+	<ul>
+		{% for event in my_past_events %}
+			<li><a id="event_past[{{event.key.id}}]" href="{{ event.url }}" >{{ event.date }}:</a> {{ event.name }}</li>
+		{% endfor %}
+	</ul>
+</div><!--end personpastevents-->
+<div class="pagination_entry">
+    <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all past events</a>
+</div>
