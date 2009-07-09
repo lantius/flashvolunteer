@@ -415,10 +415,11 @@ class EventsPage(webapp.RequestHandler):
     if event_id and event_id != None:
       self.redirect("/events/" + str(int(event_id)))
       
+      
+      
+      
 #################################
-#### Event lists  
-
-
+#### Paginated event lists  
 
 class BaseEventListPage(webapp.RequestHandler):
   LIST_LIMIT = 12
@@ -617,5 +618,5 @@ class EventCategoryUpcomingPage(BaseEventListPage):
   def _get_url(self):
      return '/events/upcoming/category/%i/'%self.categoryid
 
-
-
+### end paginated event lists
+###################################

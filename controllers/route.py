@@ -11,17 +11,21 @@ from controllers.events import EventsPage, \
 
 from controllers.home import MainPage
 from controllers.eventvolunteers import VolunteerForEvent
-from controllers.eventattendance import VerifyEventAttendance, EventAttendeesPage
+from controllers.eventattendance import VerifyEventAttendance
 from controllers.eventmessages import EventMessagesPage
-from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar, VolunteerTeam
+from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers._helpers import InitializeStore
-from controllers.neighborhoods import \
-    NeighborhoodsPage, NeighborhoodDetailPage, \
-    NeighborhoodVolunteerWorkPage, NeighborhoodVolunteerHomePage
-from controllers.friends import FriendsPage, AllFriendsPage
+from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
+from controllers.friends import FriendsPage 
+
+from controllers.paginated_volunteer_pages import \
+    PaginatedTeamPage, PaginatedVolunteerCategoryPage, \
+    PaginatedNeighborhoodVolunteerWorkPage, PaginatedNeighborhoodVolunteerHomePage, \
+    PaginatedVolunteerTeam, PaginatedEventAttendeesPage
+
 from controllers.static import StaticPage
 from controllers.settings import SettingsPage
-from controllers.interest_categories import CategoryPage,CategoryVolunteerPage
+from controllers.interest_categories import CategoryPage
 from controllers.admin import AdminPage
 
 
@@ -62,7 +66,7 @@ def main():
          ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
          ('/events/(\d+)/verify', VerifyEventAttendance),
          ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
-         ('/events/(\d+)/attendees/(\d+)', EventAttendeesPage),
+         ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),
 
          ('/events/past/volunteer/(\d+)/(\d+)', EventVolunteerCompletedPage),    
          ('/events/past/neighborhood/(\d+)/(\d+)', EventNeighborhoodCompletedPage),
@@ -75,17 +79,17 @@ def main():
          ('/events/recommended/(\d+)', EventRecommendedPage),
          
          ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
-         ('/neighborhoods/(\d+)/volunteers_work/(\d+)', NeighborhoodVolunteerWorkPage),
-         ('/neighborhoods/(\d+)/volunteers_live/(\d+)', NeighborhoodVolunteerHomePage),
+         ('/neighborhoods/(\d+)/volunteers_work/(\d+)', PaginatedNeighborhoodVolunteerWorkPage),
+         ('/neighborhoods/(\d+)/volunteers_live/(\d+)', PaginatedNeighborhoodVolunteerHomePage),
          ('/neighborhoods(|)', NeighborhoodsPage),     
          ('/team', FriendsPage),
-         ('/team/(\d+)', AllFriendsPage),
+         ('/team/(\d+)', PaginatedTeamPage),
          ('/volunteers/(\d+)/follow', FollowVolunteer),
          ('/volunteers/(\d+)/avatar', VolunteerAvatar),
          ('/volunteers(|/\d+|/search)', VolunteersPage),
-         ('/volunteers/(\d+)/team/(\d+)', VolunteerTeam),
+         ('/volunteers/(\d+)/team/(\d+)', PaginatedVolunteerTeam),
          ('/category/(\d+)', CategoryPage),
-         ('/category/(\d+)/volunteers/(\d+)', CategoryVolunteerPage),
+         ('/category/(\d+)/volunteers/(\d+)', PaginatedVolunteerCategoryPage),
          ('/static/(\w+)', StaticPage),
          ('/timeout', TimeoutPage),
         ],
