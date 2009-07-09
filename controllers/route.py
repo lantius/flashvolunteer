@@ -4,10 +4,13 @@ import cgi, logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
-from controllers.events import EventsPage, \
-    EventVolunteerCompletedPage, EventNeighborhoodCompletedPage, EventCategoryCompletedPage, \
-    EventVolunteerUpcomingPage, EventNeighborhoodUpcomingPage, EventCategoryUpcomingPage, \
-    EventUpcomingPage, EventRecommendedPage         
+from controllers.events import EventsPage
+
+from controllers.paginated_event_pages import \
+    PaginatedVolunteerCompletedPage, PaginatedNeighborhoodCompletedPage, \
+    PaginatedCategoryCompletedPage, PaginatedVolunteerUpcomingPage, \
+    PaginatedNeighborhoodUpcomingPage, PaginatedCategoryUpcomingPage, \
+    PaginatedUpcomingPage, PaginatedRecommendedPage         
 
 from controllers.home import MainPage
 from controllers.eventvolunteers import VolunteerForEvent
@@ -68,15 +71,15 @@ def main():
          ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
          ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),
 
-         ('/events/past/volunteer/(\d+)/(\d+)', EventVolunteerCompletedPage),    
-         ('/events/past/neighborhood/(\d+)/(\d+)', EventNeighborhoodCompletedPage),
-         ('/events/past/category/(\d+)/(\d+)', EventCategoryCompletedPage),                  
+         ('/events/past/volunteer/(\d+)/(\d+)', PaginatedVolunteerCompletedPage),    
+         ('/events/past/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodCompletedPage),
+         ('/events/past/category/(\d+)/(\d+)', PaginatedCategoryCompletedPage),                  
               
-         ('/events/upcoming/volunteer/(\d+)/(\d+)', EventVolunteerUpcomingPage),
-         ('/events/upcoming/neighborhood/(\d+)/(\d+)', EventNeighborhoodUpcomingPage),
-         ('/events/upcoming/category/(\d+)/(\d+)', EventCategoryUpcomingPage),         
-         ('/events/upcoming/(\d+)', EventUpcomingPage),
-         ('/events/recommended/(\d+)', EventRecommendedPage),
+         ('/events/upcoming/volunteer/(\d+)/(\d+)', PaginatedVolunteerUpcomingPage),
+         ('/events/upcoming/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodUpcomingPage),
+         ('/events/upcoming/category/(\d+)/(\d+)', PaginatedCategoryUpcomingPage),         
+         ('/events/upcoming/(\d+)', PaginatedUpcomingPage),
+         ('/events/recommended/(\d+)', PaginatedRecommendedPage),
          
          ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
          ('/neighborhoods/(\d+)/volunteers_work/(\d+)', PaginatedNeighborhoodVolunteerWorkPage),
