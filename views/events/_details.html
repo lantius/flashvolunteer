@@ -24,11 +24,11 @@
 		{% if eventvolunteer %}
 			{% if eventvolunteer.isowner %}
 					<form action="/events/{{event.key.id}}/edit">
-						<input type="submit" value="Edit this event" id="s_edit_event"/>
+						<input type="submit" class="operation" value="! Edit this event" id="s_edit_event"/>
 					</form>
   			{% if not event.inpast %}
 					<form action="/events/{{event.key.id}}" method="post">
-						<input type="submit" value="Cancel this event" id="s_cancel_event"/>
+						<input type="submit" class="operation" value="! Cancel this event" id="s_cancel_event"/>
 						<input type=hidden name="session_id" value="{{ session_id }}" />
 						<input type=hidden name="is_delete" value="true" />
 					</form>
@@ -38,7 +38,7 @@
 					<form action="{{event.url}}/volunteer" method="post" >
 						<input type=hidden name="delete" value="true" />
 						<input type=hidden name="session_id" value="{{ session_id }}" />
-						<input type=submit value="unvolunteer" id="s_unvolunteer" />
+						<input type=submit class="operation" value="! Unvolunteer" id="s_unvolunteer" />
 					</form>
 				{% endif %}
 			{% endif %}
@@ -46,7 +46,7 @@
 			{% if not event.inpast %}
 				<form action="{{event.url}}/volunteer" method="post">
 					<input type=hidden name="session_id" value="{{ session_id }}" />
-					<input type=submit value="volunteer" id="s_volunteer"/>
+					<input type=submit class="operation" value="! Volunteer" id="s_volunteer"/>
 				</form>
 			{% endif %}
 		{% endif %}

@@ -8,7 +8,7 @@
 	<ul>
 		<li>{% if event.special_instructions and event.special_instructions|length %}{{ event.special_instructions }}{% endif %}</li>
 		{% if not eventvolunteer.isowner %}
-		  <li class="tallerlistitem"><a href="mailto:{{ contact.user.email }}">&raquo; Contact Event Host</a></li>
+		  <li class="tallerlistitem"><a href="mailto:{{ contact.user.email }}" class="operation">! Contact Event Host</a></li>
         {% endif %}
 	</ul>
 </div><!--end profileupcomingevents-->
