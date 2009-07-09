@@ -15,9 +15,17 @@ class NeighborhoodsPage(webapp.RequestHandler):
     except:
       return
     
+    neighborhoods = sorted(Neighborhood.all(), lambda a,b:cmp(a.name,b.name))
+    cnt = len(neighborhoods)
+    col1 = neighborhoods[:cnt/3]
+    col2 = neighborhoods[cnt/3:2*cnt/3]
+    col3 = neighborhoods[2*cnt/3:]
+    
     template_values = {
         'volunteer': volunteer,
-        'neighborhoods': sorted(Neighborhood.all(), lambda a,b:cmp(a.name,b.name))
+        'neighborhoods1': col1,
+        'neighborhoods2': col2,
+        'neighborhoods3': col3 
       }
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')

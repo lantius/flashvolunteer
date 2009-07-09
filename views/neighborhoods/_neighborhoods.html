@@ -1,12 +1,36 @@
 
-		<div id="supported_neighborhoods" class="hardmodule">
-			<div class="moduletitle">
-				<h3>Supported Neighborhoods</h3>
-			</div>
-			<ul>	
-				{% for neighborhood in neighborhoods %}
-					<li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
-				{% endfor %}
-			</ul>
+    <div class="hardmodule">
+		<div class="moduletitle">
+		    <h3>Supported Neighborhoods</h3>
 		</div>
+		<div id="leftthirdequi">
+			<div id="supported_neighborhoods">
 		
+				<ul>	
+					{% for neighborhood in neighborhoods1 %}
+						<li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div id="middlethirdequi">
+		    <div id="supported_neighborhoods">
+		
+		        <ul>    
+		            {% for neighborhood in neighborhoods2 %}
+		                <li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
+		            {% endfor %}
+		        </ul>
+		    </div>
+		</div>		
+		<div id="rightthirdequi">
+		    <div id="supported_neighborhoods">
+		
+		        <ul>    
+		            {% for neighborhood in neighborhoods3 %}
+		                <li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
+		            {% endfor %}
+		        </ul>
+		    </div>
+		</div>    
+	</div>  
