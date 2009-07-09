@@ -166,7 +166,7 @@ class EventsPage(webapp.RequestHandler):
                          volunteer=volunteer, event=event).get() 
                          
       if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
-        # randomize this...
+        # TODO: randomize this...
         attendees = [ev.volunteer for ev in event.eventvolunteers.fetch(limit = LIMIT)]
       else:
           public_attendees = []
@@ -184,13 +184,13 @@ class EventsPage(webapp.RequestHandler):
                         'eventvolunteer': eventvolunteer, 
                         'eventphotos': eventphotos,
                         'event_categories': ', '.join([ic.name for ic in event.interestcategories()]),
-                        'volunteers_count': len([v for v in event.volunteers()]),
                         'owners': owners, 
                         'contact': event_contact,
                         'volunteer': volunteer, 
                         'session_id': session_id,
                         'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,
+                        'num_anon': len(attendees_anonymous),
                         'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')

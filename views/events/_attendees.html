@@ -9,14 +9,14 @@
 		      {% if event.inpast %}
 		        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
 		      {% else %}
-		        {% ifequal volunteers_count 1 %}
+		        {% ifequal event.eventvolunteers.count 1 %}
 		          You are signed up for this event!
 		        {% else %}
-		          {{ volunteers_count }} volunteers are signed up (including you!)
+		          {{ event.eventvolunteers.count }} volunteers are signed up (including you!)
                 {% endifequal %}
 		      {% endif %}
           {% else %}
-              {{ volunteers_count }} volunteers are signed up
+              {{ event.eventvolunteers.count }} volunteers are signed up
           {% endif %}
           
           <!--<a>&raquo Invite a friend to this event</a>-->		
@@ -27,9 +27,9 @@
 				{% for volunteer_in_list in attendees %}
 					{% include "../volunteers/person_lists/_volunteer_list_item.html" %}
 	            {% endfor %}
-
-                {% include "../volunteers/person_lists/_volunteer_list_item_anonymous.html" %}
-                                
+                {% ifnotequal 0 num_anon %}
+                    {% include "../volunteers/person_lists/_volunteer_list_item_anonymous.html" %}
+                {% endifnotequal %}                            
                     
 		    </ul>
 		</li>		
