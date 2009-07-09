@@ -1,4 +1,4 @@
-import os, string, datetime
+import os, string, datetime, random
 import exceptions
 import logging
 
@@ -60,6 +60,7 @@ def _get_recommended_events(volunteer):
 # Events page
 ################################################################################
 class EventsPage(webapp.RequestHandler):
+  LIMIT = 12
   ################################################################################
   # GET
   def get(self, url_data):    
@@ -118,21 +119,25 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
     
-    recommended_events = _get_recommended_events(volunteer = volunteer)
+    recommended_events = list(_get_recommended_events(volunteer = volunteer))
+    upcoming_events = list(_get_upcoming_events())
+    my_future_events = volunteer.events_future()[:EventsPage.LIMIT]
+    my_past_events = volunteer.events_past()[-EventsPage.LIMIT:]
+    my_past_events.reverse()
+    
     template_values = {
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-        'recommended_events': recommended_events,
+        'recommended_events': random.sample(recommended_events,min(len(recommended_events),EventsPage.LIMIT)),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id,
-        'upcoming_events': _get_upcoming_events()
+        'upcoming_events': random.sample(upcoming_events,min(len(upcoming_events),EventsPage.LIMIT)),
+        'my_future_events': my_future_events,
+        'my_past_events': my_past_events
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
-  
-
-  
 
   
   ################################################################################
@@ -140,7 +145,7 @@ class EventsPage(webapp.RequestHandler):
   def show(self, event_id):
 
     #number of attendees to show in list
-    LIMIT = 12
+    
     offset = 0
     
     volunteer = Authorize.login(self)
@@ -167,7 +172,7 @@ class EventsPage(webapp.RequestHandler):
                          
       if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
         # TODO: randomize this...
-        attendees = [ev.volunteer for ev in event.eventvolunteers.fetch(limit = LIMIT)]
+        attendees = [ev.volunteer for ev in event.eventvolunteers.fetch(limit = EventsPage.LIMIT)]
       else:
           public_attendees = []
           for v in event.volunteers():
@@ -177,7 +182,7 @@ class EventsPage(webapp.RequestHandler):
               else:
                   attendees_anonymous.append(v)
           
-          attendees = public_attendees[offset:offset+LIMIT]
+          attendees = public_attendees[offset:offset+EventsPage.LIMIT]
 
           
     template_values = { 'event' : event, 

@@ -187,8 +187,8 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
      if eventvolunteer and (eventvolunteer.isowner or self.event.inpast()): 
         return (self.event.eventvolunteers,'indirect')        
 
-     return ([v for v in event.volunteers() \
-              if v.event_access(volunteer=volunteer) and \
+     return ([v for v in self.event.volunteers() \
+              if v.event_access(volunteer=self.volunteer) and \
                  v.key().id() != self.volunteer.key().id()],
             'direct')
  

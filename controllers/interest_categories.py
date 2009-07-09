@@ -30,10 +30,16 @@ class CategoryPage(webapp.RequestHandler):
     category = InterestCategory.get_by_id(int(category_id))
 
     candidates = list(category.volunteers_interested())
+
+    past_events = list(category.past_events())        
+    upcoming_events = list(category.upcoming_events())        
+    
     template_values = {
         'volunteer': volunteer,
         'category': category,
-        'volunteers_interested': random.sample(candidates, min(len(candidates), LIMIT))
+        'volunteers_interested': random.sample(candidates, min(len(candidates), LIMIT)),
+        'past_events': random.sample(past_events, min(len(past_events),LIMIT)),
+        'upcoming_events':random.sample(upcoming_events, min(len(upcoming_events),LIMIT)),
       }
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'categories', 'category.html')

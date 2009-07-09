@@ -13,7 +13,7 @@ from models.volunteerfollower import *
 ################################################################################
 # Volunteers page
 class VolunteersPage(webapp.RequestHandler):
-
+  LIMIT = 12
   ################################################################################
   # GET
   def get(self, url_data):
@@ -57,13 +57,15 @@ class VolunteersPage(webapp.RequestHandler):
                                             
     event_access = page_volunteer.event_access(volunteer = volunteer) 
                       
+    future_events = page_volunteer.events_future()[:VolunteersPage.LIMIT]
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                         'volunteerfollower' : volunteerfollower,
                         'volunteerfollowing' : volunteerfollowing,
                         'page_volunteer': page_volunteer,
                         'volunteer' : volunteer,
                         'event_access': event_access,
-                        'session_id' : volunteer.session_id
+                        'session_id' : volunteer.session_id,
+                        'future_events': future_events
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
     self.response.out.write(template.render(path, template_values))
