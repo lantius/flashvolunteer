@@ -5,7 +5,12 @@
 		    {% include "../events/_event_list_item.html" %}
 		{% endfor %}
 	</ul>
-</div><!--end recommended events-->
+</div>
+
+{% if recommended_events %}
+{% ifnotequal recommended_events|length 0 %}
 <div class="pagination_entry">
     <a href="/events/recommended/1">&raquo; View all recommended events</a>
 </div>
+{% endifnotequal %}
+{% endif %}

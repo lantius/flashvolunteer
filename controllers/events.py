@@ -31,6 +31,7 @@ def _get_upcoming_events():
             #recommend future events 
         not e.inpast())
     return sorted(events, lambda e,e2: cmp(e.date,e2.date))
+                  
 
 def _get_recommended_events(volunteer):
     #TODO make more efficient
@@ -119,8 +120,8 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
     
-    recommended_events = list(_get_recommended_events(volunteer = volunteer))
-    upcoming_events = list(_get_upcoming_events())
+    recommended_events = list(_get_recommended_events(volunteer = volunteer))[:EventsPage.LIMIT]
+    upcoming_events = list(_get_upcoming_events())[:EventsPage.LIMIT]
     my_future_events = volunteer.events_future()[:EventsPage.LIMIT]
     my_past_events = volunteer.events_past()[-EventsPage.LIMIT:]
     my_past_events.reverse()
@@ -129,10 +130,10 @@ class EventsPage(webapp.RequestHandler):
         'volunteer': volunteer,
         'eventvolunteer': volunteer.eventvolunteers,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-        'recommended_events': random.sample(recommended_events,min(len(recommended_events),EventsPage.LIMIT)),
+        'recommended_events': recommended_events,
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'session_id': volunteer.session_id,
-        'upcoming_events': random.sample(upcoming_events,min(len(upcoming_events),EventsPage.LIMIT)),
+        'upcoming_events': upcoming_events,
         'my_future_events': my_future_events,
         'my_past_events': my_past_events
       }

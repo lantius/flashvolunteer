@@ -36,8 +36,11 @@
 	</ul>
 	
 </div>
+
+{% if attendees %}
+{% ifnotequal attendees|length 0 %}
 <div class="pagination_entry">
-  <a href="/events/{{event.key.id}}/attendees/1">
-      &raquo; View all public attendees
-  </a>
+  <a href="/events/{{event.key.id}}/attendees/1">&raquo; View all public attendees</a>
 </div>
+{% endifnotequal %}
+{% endif %}

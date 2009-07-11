@@ -16,6 +16,10 @@
     {% endfor %}
 </div>
 
+{% if upcoming_events %}
+{% ifnotequal upcoming_events|length 0 %}
 <div class="pagination_entry">
     <a href="/events/past/category/{{category.key.id}}/1">&raquo; View all past events</a>
 </div>
+{% endifnotequal %}
+{% endif %}

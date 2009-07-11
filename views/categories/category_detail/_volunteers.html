@@ -6,6 +6,11 @@
     {% endfor %}</ul>
 </div>
 
+{% if volunteers_interested %}
+{% ifnotequal volunteers_interested|length 0 %}
 <div class="pagination_entry">
     <a href="/category/{{category.key.id}}/volunteers/1">&raquo; View everyone</a>
-</div>    
+</div>
+{% endifnotequal %}
+{% endif %}
+  

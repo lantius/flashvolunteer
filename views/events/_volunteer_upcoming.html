@@ -5,6 +5,11 @@
 		{% include "../events/_event_list_item.html" %}
 	{% endfor %}
 </div><!--end profileupcomingevents-->
-<div class="pagination_entry">
-    <a href="/events/upcoming/volunteer/{{volunteer.key.id}}/1">&raquo; View all of my upcoming events</a>
-</div>
+
+{% if my_future_events %}
+    {% ifnotequal my_future_events|length 0 %}
+    <div class="pagination_entry">
+        <a href="/events/upcoming/volunteer/{{volunteer.key.id}}/1">&raquo; View all of my upcoming events</a>
+    </div>
+    {% endifnotequal %}
+{% endif %}

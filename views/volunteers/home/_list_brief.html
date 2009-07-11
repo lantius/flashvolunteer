@@ -10,6 +10,10 @@
 	</ul>
 </div><!--end friends-->
 
-<div class="pagination_entry">
+{% if volunteer.friends %}
+    {% ifnotequal volunteer.friends|length 0 %}
+    <div class="pagination_entry">
     <a href="/team">&raquo; View whole team</a>
-</div>
+    </div>
+    {% endifnotequal %}
+{% endif %}

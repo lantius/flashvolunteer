@@ -7,6 +7,11 @@
 		{% endfor %}
 	</ul>
 </div><!--end personpastevents-->
-<div class="pagination_entry">
-    <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all past events</a>
-</div>
+
+{% if my_past_events %}
+	{% ifnotequal my_past_events|length 0 %}
+	<div class="pagination_entry">
+	    <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all past events</a>
+	</div>
+	{% endifnotequal %}
+{% endif %}

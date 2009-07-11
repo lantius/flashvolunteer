@@ -9,6 +9,10 @@
     </ul>
 </div>
 
-<div class="pagination_entry">
+{% if volunteers_living_here %}
+    {% ifnotequal volunteers_living_here|length 0 %}
+    <div class="pagination_entry">
     <a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_live/1">&raquo; View everyone</a>
-</div>
+    </div>
+    {% endifnotequal %}
+{% endif %}

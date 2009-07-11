@@ -6,12 +6,13 @@
 		{% for volunteer_in_list in friends %}
 			{% include "person_lists/_volunteer_list_item.html" %}
 		{% endfor %}
-        {% for volunteer_in_list in following_only %}
-            {% include "person_lists/_volunteer_list_item.html" %}
-        {% endfor %}
 	</ul>
 </div>
 
-<div class="pagination_entry">
+{% if friends %}
+    {% ifnotequal friends|length 0 %}
+    <div class="pagination_entry">
     <a href="/team/1">&raquo; View whole team</a>
-</div>            
+    </div>
+    {% endifnotequal %}
+{% endif %}

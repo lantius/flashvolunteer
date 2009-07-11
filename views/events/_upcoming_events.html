@@ -6,6 +6,10 @@
         {% endfor %}
     </ul>
 </div>
-<div class="pagination_entry">
+{% if upcoming_events %}
+    {% ifnotequal upcoming_events|length 0 %}
+    <div class="pagination_entry">
     <a href="/events/upcoming/1">&raquo; View all upcoming events</a>
-</div>
+    </div>
+    {% endifnotequal %}
+{% endif %}
