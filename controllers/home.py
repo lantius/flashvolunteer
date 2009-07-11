@@ -14,7 +14,7 @@ from models.interestcategory import *
 ################################################################################
 # MainPage
 class MainPage(webapp.RequestHandler):
-  
+  LIMIT = 12 
   def get(self):
     try:
       volunteer = Authorize.login(self, requireVolunteer=False)
@@ -56,9 +56,11 @@ class MainPage(webapp.RequestHandler):
       if ic.events():
         byinterest.append(ic)
   
+    my_future_events = volunteer.events_future()[:MainPage.LIMIT]
     template_values = {
         'volunteer' : volunteer,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'my_future_events': my_future_events,
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
     self.response.out.write(template.render(path, template_values))
