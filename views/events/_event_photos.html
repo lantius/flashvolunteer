@@ -1,9 +1,14 @@
 <script language="JavaScript" type="text/javascript">
 <!-- 
 	function addalbum_onchange() {
-		sel = document.getElementById('addalbum')
+	el_error = document.getElementById("content_error");
+	el_error.style.visibility = 'hidden';
+	el_checking = document.getElementById("content_checking");
+	el_checking.style.visibility = 'hidden';
+		sel = document.getElementById('eventphotos_addalbum')
 		if (sel.selectedIndex==1) {
-			$("#addexternalbum_dialog").dialog( 'open' )
+			$("#addexternalbum_dialog").dialog( 'open' );
+			$("#addexternalbum_dialog").css("height", "170px");//hack for ie
 			sel.selectedIndex = 0;
 		} else if (sel.selectedIndex==2) {
 			alert("2");
@@ -29,57 +34,127 @@
   google.load("feeds", "1");
 </script>
 
-<script type="text/javascript">
+<script type="text/javascript"><!--
 	$(function() {
 		$('#addexternalbum_dialog').dialog({ 
 			autoOpen: false, 
 			modal: true, 
-			width: 485 
+			resizable: false,
+			draggable: false,
+			width: 485,
+			height: 170
 			});
+
+
 	});
 	//$(document).ready(function(){
 		  //$("#addalbumdialog").dialog({ autoOpen: false, modal: true  });
 	//});
+	var feed;
+	var startcheck = 0;
+	function verify_externalalbum() {
+		checkstart = new Date().getTime();
+		document.feed_status = 0;
+		el_content = document.getElementById("addexternalbum_dialog_content");
+		feed = new google.feeds.Feed(el_content.value);
+		feed.load(feed_load);
+		
+		check_feed_loaded();
+
+		el_checking = document.getElementById("content_checking");
+		el_checking.style.visibility = 'visible';
+		
+		return false;//avoid submission by returning false
+	}
+	
+	function feed_load(result) {
+		el_error = document.getElementById("content_error");
+		if (result.error) {
+			el_error.style.visibility = 'visible';
+			document.feed_status = 2;//error
+			el_checking = document.getElementById("content_checking");
+			el_checking.style.visibility = 'hidden';
+		} else {
+			el_error.style.visibility = 'hidden';
+			document.feed_status = 1;//success
+		}
+	}
+	function check_feed_loaded() {
+		if (document.feed_status == 0) {//no answer yet
+			if (new Date().getTime() - checkstart < 15000) {//do it again
+				setTimeout(check_feed_loaded, 1000);
+			}
+		} else {
+			if (document.feed_status == 1) {//success
+				document.form_addexternalalbumphoto_name.submit();
+			}
+		}
+	}
+
 	
 	function image_loaded(self) {
 		var MAXIMG_WIDTH = 0.4;// ratio to column width
-		self.naturalWidth = self.currentTarget.naturalWidth;
+		//debugger;
+		//<IMG height=216 src="http://lh6.ggpht.com/_ieb_vmBkw-w/SjbpWYUWvaI/AAAAAAAAAWM/GRdzvyW6r5c/s288/DSCF0085.jpg" width=288 jQuery1247208796828="17">
+		//self.naturalWidth = self.currentTarget.naturalWidth;
+		var naturalWidth = 100, naturalHeight = 100;
+		if (typeof(self.currentTarget.naturalWidth) != 'undefined') {	
+			naturalWidth = self.currentTarget.naturalWidth;
+			naturalHeight = self.currentTarget.naturalHeight;
+		} else {//hack for ie
+				var reg = /width\s*=\s*([0-9]+)/ig;//parse for width
+				naturalWidth = parseInt(reg.exec(self.currentTarget.outerHTML)[1]);
+				reg = /height\s*=\s*([0-9]+)/ig;//parse for height
+				naturalHeight = parseInt(reg.exec(self.currentTarget.outerHTML)[1]);
+		}
+
 		el_eventphotos = document.getElementById("eventphotos");
 		var img_dim = MAXIMG_WIDTH * el_eventphotos.clientWidth;
-		var img_style = "";
-		if (self.currentTarget.naturalWidth > self.currentTarget.naturalHeight) {
+		if (naturalWidth > naturalHeight) {
 			//scale images to width
 			var img_width = img_dim;
-			var img_height = self.currentTarget.naturalHeight * img_width / self.currentTarget.naturalWidth;
+			var img_height = naturalHeight * img_width / naturalWidth;
 			var padding = parseInt((img_dim - img_height)/2)
-			this.style.paddingBottom = padding + "px";
-			this.style.paddingTop = padding + "px";
+			this.style.marginBottom = padding + "px";
+			this.style.marginTop = padding + "px";
+			this.style.marginLeft = "0px";
+			this.style.marginRight = "0px";
 		} else {
 			//scale images to height
 			var img_height = img_dim;
-			var img_width  = self.currentTarget.naturalWidth * img_height / self.currentTarget.naturalHeight;
+			var img_width  = naturalWidth * img_height / naturalHeight;
 			var padding = parseInt((img_dim - img_width)/2);
-			this.style.paddingLeft = padding + "px";
-			this.style.paddingRight = padding + "px";
+			this.style.marginLeft = padding + "px";
+			this.style.marginRight = padding + "px";
+			this.style.marginBottom = "0px";
+			this.style.marginTop = "0px";
 		}
 		this.style.width = parseInt(img_width) + "px";
 		this.style.height = parseInt(img_height) + "px";
 		
 	};	
-	function load_album(content, album_id, volunteer_url, volunteer_name ) {
-		var feed = new google.feeds.Feed(content);
+	function load_album(album_id, more) {
+		var feed = new google.feeds.Feed(albums[album_id].content);
 		feed.setResultFormat(google.feeds.Feed.MIXED_FORMAT);
+		if (more) {
+			feed.setNumEntries(-1);
+		}
 		feed.load(function(result) {
 			if (!result.error) {
 				el_eventphotos = document.getElementById("eventphotos");
 				var el_title = document.getElementById("rss_album_" + album_id + "_title");
-				el_spantitle = document.createElement('span');
-				//el_title.innerHTML = '<a href="' + result.feed.link + ' ">\'' + result.feed.title + '\'</a> posted by <a href="{{ep.volunteer.url}}">{{ep.volunteer.name}}</a>';
-				el_spantitle.innerHTML = '<a href="' + result.feed.link + ' ">\'' + result.feed.title + '\'</a> posted by <a href="' + volunteer_url + '">' + volunteer_name + '</a>';
 
-				el_bar = document.getElementById("rss_album_" + album_id + "_bar");
-				el_title.insertBefore(el_spantitle, el_bar); //appendChild
+				var el_spantitle = document.getElementById("spantitle_" + album_id);
+				var el_bar = document.getElementById("rss_album_" + album_id + "_bar");
+				if (!el_spantitle) {
+					el_spantitle = document.createElement('span');
+					el_spantitle.id = "spantitle_" + album_id;
+					el_title.insertBefore(el_spantitle, el_bar); //appendChild
+				}
+				el_spantitle.innerHTML = '<a href="' + result.feed.link + ' ">\'' + result.feed.title + '\'</a> posted by <a href="' + albums[album_id].volunteer_url + '">' + albums[album_id].volunteer_name + '</a>';
+
 				var el_photos = document.getElementById("rss_album_" + album_id + "_photos");
+				el_photos.innerHTML = "";//clear
 
 				var items = result.xmlDocument.getElementsByTagName("item");
 			    //for (var ii = 0; ii < items.length; ii++) {
@@ -89,20 +164,23 @@
 				el_phototable = document.createElement('table');
 				el_phototable.className = "phototable";
 
+				el_tbody = document.createElement('tbody');
+				el_phototable.appendChild(el_tbody);
+				
 				var el_tr;
 			    for (var ii = 0; ii < result.feed.entries.length; ii++) {
 					var entry = result.feed.entries[ii];
 					var el_content = document.createElement('span');
 					el_content.innerHTML = entry.content;
 
-					var el_img = document.createElement('img');
 					var imgs = el_content.getElementsByTagName('img');
-					var img_src = imgs[0].getAttribute("src")
-					el_img.setAttribute("src", img_src);
-					el_img.setAttribute("src", img_src);
+					var img_src = imgs[0].getAttribute("src");
 
-					el_img.addEventListener("load", image_loaded, false);
+					var el_img = document.createElement('img');
+					$(el_img).bind("load", image_loaded);
+					el_img.setAttribute("src", img_src);//must be after bind, or ie will not trigger load again
 
+					
 					//var media_thumbnail = result.xmlDocument.getElementsByTagName('media:thumbnail');
 					//var thumbnail_width = thumbnail_height = 0;
 					//for (var kk = 0; kk < media_thumbnail.length; kk++) {
@@ -129,7 +207,7 @@
 
 					if (ii%2 == 0) {//even, make a new row
 						el_tr = document.createElement('tr');
-						el_phototable.appendChild(el_tr);
+						el_tbody.appendChild(el_tr);
 					}
 					el_tr.appendChild(el_td);
 			    }
@@ -139,11 +217,35 @@
 
 	} 
 
+	var showmore_id = -1;
+	function showmore(album_id, more) {
+		if (showmore_id >= 0) {
+			//show more, hide less in old id
+			el = document.getElementById("more_" + showmore_id);
+			el.style.display = "block";
+			el = document.getElementById("less_" + showmore_id);
+			el.style.display = "none";
+			//reload this album with all
+			load_album(showmore_id, false);
+		}
+		if (more) {
+			showmore_id = album_id;
+			//show less, hide more in new id
+			el = document.getElementById("more_" + showmore_id);
+			el.style.display = "none";
+			el = document.getElementById("less_" + showmore_id);
+			el.style.display = "block";
+			load_album(showmore_id, true);
+		} else {
+			showmore_id = -1;
+		}
+	}
 
-
-</script>
+	var albums = [];
+--></script>
 <div id="addexternalbum_dialog" title="Add External Album">
-	<form action='{{event.url}}' id='f_photo' method="post">
+	<form action='{{event.url}}' id='form_addexternalalbumphoto' name="form_addexternalalbumphoto_name" onsubmit="return verify_externalalbum()" method="post">
+		<!--   onclick="verify_externalalbum"  -->
 	    <input type="hidden" name="session_id" value="{{ session_id }}" />
 	    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
 	    <input type="hidden" name="action" value="s_addexternalalbum" />
@@ -153,38 +255,50 @@
 				Paste the RSS link for an album hosted on picasa or flickr. 
 				Get the link from your image website by clicking on the RSS icon at the image website and copying the link from the browser bar.
 				</div>
-				<span id="content_text"  class="eventcreatelabel">RSS Feed link</span>
-				<span id="content_input" class="eventinput">
-					<input id="addexternalbum_dialog_content" type="text" value="" name="content"/>
-				</span>	 
+				<div id="content_line" >
+				RSS Feed link
+				<input id="addexternalbum_dialog_content" type="text" value="" name="content"/>
+				</div>
+				<div id="content_checking" class="error" >Checking input...</div>
+				<div id="content_error" class="error" >Link is not a valid RSS feed</div>
 			</li>
 		</ul>
-		<input type="button" id="cancel" onclick="$('#addexternalbum_dialog').dialog('close');" value="Cancel"/>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
     	<input type="submit" id="s_addexternalalbum" value="Add Album"/>
+		<input type="button" class="cancel" onclick="$('#addexternalbum_dialog').dialog('close');" value="Cancel"/>
 	</form> 
 </div>
 
 
 <div id="eventphotos" class="hardmodule">
-	<div class="moduletitle"><h3>Event Photos</h3>
-	{% if eventvolunteer.isowner %}
-	<select id="addalbum" name="addalbum" onChange = "addalbum_onchange()">
-		<option value="default">Add...</option>
-		<option value="add_external_album">Add External Album...</option>
-		<option value="add_internal_album">Add Internal Album...</option>
-		<option value="add_photo">Add Photo...</option>
-	</select>
-    {% endif %}
+	<div class="moduletitle" id="eventphotos_module">
+		<h3 id="eventphotos_title" >Event Photos</h3>
+		{% if eventvolunteer.isowner %}
+		<select id="eventphotos_addalbum" name="addalbum" onChange = "addalbum_onchange()">
+			<option value="default">Add...</option>
+			<option value="add_external_album">Add External Album...</option>
+			<!-- <option value="add_internal_album">Add Internal Album...</option> -->
+			<!-- <option value="add_photo">Add Photo...</option> -->
+		</select>
+	    {% endif %}
 	</div>
-
 
 	{% for ep in eventphotos %}
 		{% ifequal ep.status ep.PUBLISHED %}
 			{% ifequal ep.type ep.RSS_ALBUM %}
-				<div id="rss_album_{{ep.key.id}}" >
-					<h2 id="rss_album_{{ep.key.id}}_title">
+				<script type="text/javascript">
+					albums[{{ep.key.id}}] = {content: "{{ep.content}}", volunteer_url:"{{ep.volunteer.url}}", volunteer_name: "{{ep.volunteer.name}}"}
+					load_album("{{ep.key.id}}", showmore_id=={{ep.key.id}});
+				
+					function showmore_{{ep.key.id}}(more) {
+						showmore("{{ep.key.id}}", more);
+					}
+				</script>
+				<div id="rss_album_{{ep.key.id}}" class="rss_album">
+					<h2 id="rss_album_{{ep.key.id}}_title" class="rss_album_title" >
 						{% if eventvolunteer.isowner %}
-						<span id="rss_album_{{ep.key.id}}_bar" class="rss_album_bar">
+						<div id="rss_album_{{ep.key.id}}_bar" class="rss_album_bar">
 							<form action='{{event.url}}' id='f_photo' method="post">
 							    <input type="hidden" name="session_id" value="{{ session_id }}" />
 							    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
@@ -193,17 +307,19 @@
 								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_down" value="Down" />
 								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_remove" value="Remove" />
 							</form>
-						</span>
+						</div>
 					    {% endif %}
-								
 					</h2>
-				<div id="rss_album_{{ep.key.id}}_photos" ></div>
-					<script type="text/javascript">
-						load_album("{{ep.content}}", "{{ep.key.id}}", "{{ep.volunteer.url}}", "{{ep.volunteer.name}}");
-					</script>
-					{% comment %}
-					{% endcomment %}	
+					<div id="rss_album_{{ep.key.id}}_photos" >
+						{% comment %}
+						{% endcomment %}	
+					</div>
+					<div class="more_or_less">
+						<a id="more_{{ep.key.id}}" href="javascript: showmore_{{ep.key.id}}(true);">&raquo; View more photos</a>
+						<a id="less_{{ep.key.id}}" class="more_hidden" href="javascript: showmore_{{ep.key.id}}(false);">&raquo; View less photos</a>
+					</div>
 				</div>
+				
 			{% endifequal %}
 		{% endifequal %}
 	{% endfor %}
