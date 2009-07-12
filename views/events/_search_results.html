@@ -8,7 +8,7 @@
 			{{neighborhood.name}}
 		{% else %}
 			any neighborhood
-		{% endif %}, 
+		{% endif %}
 		{% if fromdate %}
 		on or after {{fromdate|date:"F jS, Y" }}
 		{% endif %}
@@ -22,16 +22,25 @@
 		{% endif %}
 		
 		{% if not fromdate and not todate %}
-			at any time
-		{% endif %}</span>
+		{% endif %}
+
+        {% if interestcategory %}
+            , of type {{ interestcategory.name}}.
+        {% else %}
+            , of any type.
+        {% endif %}
+
+        </span>
 	</div>
-	{% if events %}
-	<ol>
-		{% for event in events %}
-			{% include "../events/_event_list_item.html" %}
-		{% endfor %}
-	</ol>
-	{% else %}
-	<p>No search results found.</p>
-	{% endif %}
+	<div class="search_results">
+		{% if events %}
+		<ol>
+			{% for event in events %}
+				{% include "../events/_event_list_item.html" %}
+			{% endfor %}
+		</ol>
+		{% else %}
+		<p>No search results found.</p>
+		{% endif %}
+    </div>
 </div>

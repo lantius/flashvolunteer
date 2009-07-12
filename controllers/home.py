@@ -61,6 +61,7 @@ class MainPage(webapp.RequestHandler):
         'volunteer' : volunteer,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'my_future_events': my_future_events,
+        'interest_categories': InterestCategory.all()
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
     self.response.out.write(template.render(path, template_values))

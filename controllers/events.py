@@ -135,7 +135,8 @@ class EventsPage(webapp.RequestHandler):
         'session_id': volunteer.session_id,
         'upcoming_events': upcoming_events,
         'my_future_events': my_future_events,
-        'my_past_events': my_past_events
+        'my_past_events': my_past_events,
+        'interest_categories' : InterestCategory.all()
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values))
@@ -325,12 +326,13 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   # SEARCH
   def search(self, params):
-    (neighborhood, fromdate, todate, events)  = self.do_search(params)
+    (neighborhood, fromdate, todate, events, interestcategory)  = self.do_search(params)
     template_values = { 
       'neighborhood' : neighborhood,
       'fromdate' : fromdate,
       'todate' : todate,
-      'events' : events
+      'events' : events,
+      'interestcategory': interestcategory
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
     self.response.out.write(template.render(path, template_values))
@@ -340,6 +342,7 @@ class EventsPage(webapp.RequestHandler):
     neighborhood = None
     todate = None
     fromdate = None
+    interestcategory = None
     
     if 'neighborhood' in params and params['neighborhood']:
       try:
@@ -348,23 +351,36 @@ class EventsPage(webapp.RequestHandler):
       except:
         pass
     
-    if 'fromdate' in params and params['fromdate']:
-      try:
-        fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
-        events_query.filter('date >=', fromdate)
-      except:
-        pass
-    
-    if 'todate' in params and params['todate']:
-      try:
-        todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
-        events_query.filter('date <=', todate)
-      except:
-        pass
+#    if 'fromdate' in params and params['fromdate']:
+#      try:
+#        fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
+#        events_query.filter('date >=', fromdate)
+#      except:
+#        pass
+#    
+#    if 'todate' in params and params['todate']:
+#      try:
+#        todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
+#        events_query.filter('date <=', todate)
+#      except:
+#        pass
     
     events = events_query.fetch(limit = 25)
     
-    return (neighborhood, fromdate, todate, events)
+    if 'eventtype' in params and params['eventtype'] and params['eventtype'] != 'default':
+#        try:
+            catid = int(params['eventtype'])
+            interestcategory = InterestCategory.get_by_id(catid)
+            filtered_events = []
+            for event in events:
+                cats = [ic.interestcategory.key().id() for ic in event.eventinterestcategories]
+                if catid in cats:
+                    filtered_events.append(event)
+            events = filtered_events
+#        except:
+#            pass
+                
+    return (neighborhood, fromdate, todate, events, interestcategory)
   
   ################################################################################
   # all posts that deal with photo albums from the events page
