@@ -20,36 +20,39 @@
 	                {% endfor %}
 	            </ul>
             {% endifequal %}</li>
-		<li id="eventactionbutton">
-		{% if eventvolunteer %}
-			{% if eventvolunteer.isowner %}
-					<form action="/events/{{event.key.id}}/edit">
-						<input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
-					</form>
-  			{% if not event.inpast %}
-					<form action="/events/{{event.key.id}}" method="post">
-						<input type="submit" title="Cancel this event" class="operation" value="&raquo; Cancel this event" id="s_cancel_event"/>
-						<input type=hidden name="session_id" value="{{ session_id }}" />
-						<input type=hidden name="is_delete" value="true" />
-					</form>
+            
+        <div class="event_operation_block">
+			<li id="eventactionbutton">
+			{% if eventvolunteer %}
+				{% if eventvolunteer.isowner %}
+						<form action="/events/{{event.key.id}}/edit">
+							<input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
+						</form>
+	  			{% if not event.inpast %}
+						<form action="/events/{{event.key.id}}" method="post">
+							<input type="submit" title="Cancel this event" class="operation" value="&raquo; Cancel this event" id="s_cancel_event"/>
+							<input type=hidden name="session_id" value="{{ session_id }}" />
+							<input type=hidden name="is_delete" value="true" />
+						</form>
+					{% endif %}
+				{% else %}
+					{% if not event.inpast %}
+						<form action="{{event.url}}/volunteer" method="post" >
+							<input type=hidden name="delete" value="true" />
+							<input type=hidden name="session_id" value="{{ session_id }}" />
+							<input type=submit title="Unvolunteer for this event" class="operation" value="&raquo; Unvolunteer" id="s_unvolunteer" />
+						</form>
+					{% endif %}
 				{% endif %}
 			{% else %}
 				{% if not event.inpast %}
-					<form action="{{event.url}}/volunteer" method="post" >
-						<input type=hidden name="delete" value="true" />
+					<form action="{{event.url}}/volunteer" method="post">
 						<input type=hidden name="session_id" value="{{ session_id }}" />
-						<input type=submit title="Unvolunteer for this event" class="operation" value="&raquo; Unvolunteer" id="s_unvolunteer" />
+						<input type=submit title="Volunteer for this event" class="volunteer_button" value="Sign me up!" id="s_volunteer"/>
 					</form>
 				{% endif %}
 			{% endif %}
-		{% else %}
-			{% if not event.inpast %}
-				<form action="{{event.url}}/volunteer" method="post">
-					<input type=hidden name="session_id" value="{{ session_id }}" />
-					<input type=submit title="Volunteer for this event" class="volunteer_button" value="Sign me up!" id="s_volunteer"/>
-				</form>
-			{% endif %}
-		{% endif %}
-		</li>
+			</li>
+    </div>
 	</ul>
 </div><!--end eventdetails-->
