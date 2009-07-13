@@ -128,6 +128,7 @@ class BaseTestCase(unittest.TestCase):
       self.selenium.wait_for_page_to_load("30000")   
       
   ################ HELPER METHODS FOR COMMON SELENIUM ACTIONS ##############
+  #verify on page with checkboxes
   def _verify_interestcategory(self, name, checked = True):
       if self.interestcategories is None:
           self.interestcategories = get_interestcategories()
@@ -136,9 +137,18 @@ class BaseTestCase(unittest.TestCase):
       self.failUnless(
           self.selenium.is_checked("//input[@name='interestcategory[%i]' and @value='%i' and @type='checkbox']"%(id,int(checked))))
 
-  def _click_interestcategory(self, name, checked = True):
+  #verify on page with link, not checkboxes
+  def _verify_interestcategory_nonedit(self, name):
       if self.interestcategories is None:
           self.interestcategories = get_interestcategories()
 
+      id = self.interestcategories[name].key().id()
+      self.failUnless(
+          self.selenium.is_element_present("//a[@id='category[%i]']" % id))
+
+  #select
+  def _click_interestcategory(self, name, checked = True):
+      if self.interestcategories is None:
+          self.interestcategories = get_interestcategories()
       id = self.interestcategories[name].key().id()
       self.selenium.click("//input[@name='interestcategory[%i]' and @value='%i' and @type='checkbox']"%(id,int(checked)))

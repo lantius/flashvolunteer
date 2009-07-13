@@ -17,11 +17,13 @@ def navigate_to_event(sel, test_object_index, future):
 
 class TestEditEvent__Owner(BaseTestCase):
     test_env = TestEnv(
-     organization = True,
-     create_new_user = False,
-     login_email = 'john_hancock@volunteer.org',
-     login_name = 'John Hancock'
-     )
+      organization = True,
+      create_new_user = False,
+      login_email = 'john_hancock@volunteer.org',
+      login_name = 'John Hancock'
+    )
+    interest_categories = ['Animals', 'Hunger', 'Senior Citizens']
+
         
     ### TODO: what should be the proper behavior here? (Issue 57)
 #    def test_edit_past_event(self):
@@ -49,12 +51,14 @@ class TestEditEvent__Owner(BaseTestCase):
         #sel.type("minattend", "50")
         sel.type("description", desc)
         sel.type("special_instructions", special_instr)
-        self._click_interestcategory(name = '', checked = True)
+        for interest in self.interest_categories:
+          self._click_interestcategory(name = interest, checked = True)
 
         sel.click("submit")
         sel.wait_for_page_to_load("30000")
         
-        self._verify_interestcategory_checked(name = '', checked = True)
+        for interest in self.interest_categories:
+          self._verify_interestcategory_nonedit(name = interest)
         self.failUnless(sel.is_text_present("exact:Duration: 16 hours"))
         self.failUnless(sel.is_text_present("exact:Address: Convention center"))
         self.failUnless(sel.is_text_present(desc))
