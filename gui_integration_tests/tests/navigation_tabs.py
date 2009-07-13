@@ -31,7 +31,7 @@ class TestOrganizationNavigation(BaseTestCase):
     
     sel.click("//a[@id='l_help']")
     sel.wait_for_page_to_load("30000")
-    self.failUnless(sel.is_text_present("Temporary Help Information"))
+    self.failUnless(sel.is_element_present("//div[@class='moduletitle']")) # for now, check only that page is there
     
     sel.click("//a[@id='l_profile']") # Go to the profile page last
     sel.wait_for_page_to_load("30000")
@@ -61,7 +61,7 @@ class TestVolunteerNavigation(BaseTestCase):
     
     sel.click("//a[@id='l_help']")
     sel.wait_for_page_to_load("30000")
-    self.failUnless(sel.is_text_present("Temporary Help Information"))
+    self.failUnless(sel.is_element_present("//div[@class='moduletitle']")) # for now, check only that page is there
     
     sel.click("//a[@id='l_profile']") # Go to the profile page last
     sel.wait_for_page_to_load("30000")
