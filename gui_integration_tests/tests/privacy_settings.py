@@ -41,14 +41,45 @@ class TestPrivacySettingsBase(BaseTestCase):
         #always see event creator
         self.failUnless(sel.is_text_present("John Hancock"))    
 
-        # people attendee should be able to see
-        for volunteer in permission_for:
-            self.failUnless(sel.is_element_present("//a[@id='volunteer_link[%i]']"%self.test_object_index[volunteer].key().id()))    
 
-        # people attendee should not be able to see
-        for volunteer in no_permission_for:
-            self.failIf(sel.is_element_present("//a[@id='volunteer_link[%i]']"%self.test_object_index[volunteer].key().id()))    
         
+        if sel.is_element_present("//div[@class='pagination_entry']"):
+          sel.open('/events/%i/attendees/1' % self.test_object_index[event].key().id())  
+          sel.wait_for_page_to_load("30000")
+          morepages = True
+          pagenum = 1
+          while (morepages):
+            # people attendee should not be able to see
+            for volunteer in no_permission_for:
+                self.failIf(sel.is_element_present("//a[@id='volunteer_link[%i]']" % self.test_object_index[volunteer].key().id()))    
+  
+            # people attendee should be able to see
+            # we remove everybody we see from permission_for, and then at the end, permission_for should be empty
+            seen = []
+            for volunteer in permission_for:
+              if (sel.is_element_present("//a[@id='volunteer_link[%i]']" % self.test_object_index[volunteer].key().id())):
+                seen.append(self.test_object_index[volunteer].name)
+            #remove the ones we have seen from the original list
+            for volunteer in seen:
+              permission_for.remove(self.test_object_index[volunteer].name)
+            
+            if (sel.is_element_present("//a[@href='/events/%i/attendees/%i']" % (self.test_object_index[event].key().id(), pagenum+1))): 
+              #goto next page
+              pagenum = pagenum + 1
+              sel.open('/events/%i/attendees/%i' % (self.test_object_index[event].key().id(), pagenum))  
+              sel.wait_for_page_to_load("30000")
+            else:
+              morepages = False
+          self.failUnless(len(permission_for) == 0)
+        else:
+          # people attendee should be able to see
+          for volunteer in permission_for:
+              self.failUnless(sel.is_element_present("//a[@id='volunteer_link[%i]']"%self.test_object_index[volunteer].key().id()))    
+  
+          # people attendee should not be able to see
+          for volunteer in no_permission_for:
+              self.failIf(sel.is_element_present("//a[@id='volunteer_link[%i]']"%self.test_object_index[volunteer].key().id()))    
+
         
 ### for event attender Thomas Jefferson
 # Jefferson is friends with Geirge Whythe, James Madison
