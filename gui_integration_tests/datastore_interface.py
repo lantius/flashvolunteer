@@ -17,6 +17,7 @@ from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
+from models.eventphoto import EventPhoto
 from models.volunteerfollower import VolunteerFollower
 from models.volunteerinterestcategory import VolunteerInterestCategory
 from models.interestcategory import InterestCategory
@@ -249,6 +250,11 @@ def get_eventvolunteers(volunteer, event):
     eventvolunteers = db.GqlQuery('SELECT * from EventVolunteer WHERE volunteer = :volunteer AND event = :event',
                 volunteer = volunteer, event = event)
     return eventvolunteers
+
+def get_eventphotos(event_name):
+    events = get_events(event_name)
+    eventphotos = db.GqlQuery('SELECT * from EventPhoto WHERE event = :event', event = events[0])
+    return eventphotos
 
 def get_interestcategories():
     ics = db.GqlQuery('SELECT * from InterestCategory')
