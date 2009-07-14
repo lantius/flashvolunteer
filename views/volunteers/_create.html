@@ -19,7 +19,7 @@
 			{% if volunteer.error.name %}
 				<br/><strong class="error">{{volunteer.error.name.0}}</strong>
 			{% endif %}
-		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/toslink">Terms of Use</a></li>
+		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
 		{% if volunteer.error.tosagree %}
 			<br/><strong class="error">{{volunteer.error.tosagree.0}}</strong>
 		{% endif %}
