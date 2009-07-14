@@ -1,0 +1,14 @@
+<div id="eventmessagescreate" class="hardmodule">
+	<div class="moduletitle"><h3>Create a message for {{event.name}}</h3></div>
+	
+	<form action="{{event.url}}/messages" method="post">
+		
+		<div id="emcreatesubject"><span class="label">Subject:</span> <input type="text" name="title"/><div>
+		
+		<div id="emcreatebody"><span class="label">Message:</span> <textarea name="content">{{message.content}}</textarea></div>
+	    
+		<div id="emcreatesubmit"><input type="submit" value="Send message">
+		<input type=hidden name="session_id" value="{{ session_id }}"></div>
+		
+	</form>
+</div>

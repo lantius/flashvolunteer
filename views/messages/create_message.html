@@ -10,14 +10,8 @@ class="current"
 {% block content %}
 
 <div id="middlewhole">
-  <h1>Send a message to {{event.name}}</h1>
-  <form action="{{event.url}}/messages" method="post">
-		Subject:<input type="text" name="title"/><BR>
-		<p>Body:<br/><textarea name="content">{{message.content}}</textarea></p>
-    	
-		<input type="submit" value="Send message">
-		<input type=hidden name="session_id" value="{{ session_id }}">
-	</form>
-	
+
+	{% include "../events/_message_creator.html" %}
+
 </div><!--end middlewhole-->
 {% endblock %}

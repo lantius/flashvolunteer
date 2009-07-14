@@ -22,3 +22,6 @@ class Message(db.Model):
                   to= self.recipient.name + "<" + self.recipient.user.email() + ">",
                   subject=self.title,
                   body=self.content)
+    
+  def get_sent_time(self):
+    return self.sent.strftime("%d %B %Y %I:%M%p")

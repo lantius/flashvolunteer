@@ -10,6 +10,10 @@ class="current"
 
 {% block content %}
 
+<div id="middlewhole">
+    {% include "../events/_message_viewer.html" %}
+    
+    
 <h1>Messages for {{event.name}}</h1>
 {% for message in event.messages %}
 	<p><strong>{{ message.title }}</strong><br/>
@@ -28,4 +32,6 @@ class="current"
 {% if eventvolunteer %}
 <a href="{{event.url}}/messages/new">Create a new message</a>
 {% endif %}
+
+<div>
 {% endblock content %}
