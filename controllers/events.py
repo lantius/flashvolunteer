@@ -157,7 +157,7 @@ class EventsPage(webapp.RequestHandler):
       self.error(404)
       return
     
-    owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
+    owners = EventVolunteer.gql("WHERE isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
     if len(owners) > 0:
         event_contact = owners[0].volunteer
@@ -189,8 +189,8 @@ class EventsPage(webapp.RequestHandler):
                   attendees_anonymous.append(v)
           
           attendees = public_attendees[offset:offset+EventsPage.LIMIT]
-
-          
+    
+    
     template_values = { 'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'eventphotos': eventphotos,
@@ -234,10 +234,14 @@ class EventsPage(webapp.RequestHandler):
       self.redirect("/events") #TODO REDIRECT to error page
       return
     
+    neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
+    if event:
+      neighborhoods = NeighborhoodHelper().selected(event.neighborhood)
+    
     template_values = {
         'event' : event,
         'volunteer': volunteer,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'neighborhoods': neighborhoods,
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
@@ -305,7 +309,7 @@ class EventsPage(webapp.RequestHandler):
   def update(self, params, volunteer):
     event = Event.get_by_id(int(params['id']))
     
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true",
                            volunteer=volunteer, event=event).get()
     if not eventvolunteer:
       return None
