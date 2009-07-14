@@ -117,8 +117,7 @@ def create_environment(name, session_id):
         organizations.values() + \
         volunteers.values())
  
-    
-    cat = InterestCategory(name = 'test_ic')
+    cat = InterestCategory(name = 'tests_ic')
     cat.put()
 
     ic_volunteers = []    
@@ -164,7 +163,9 @@ def create_environment(name, session_id):
        'events': events.values(),
        'volunteerfollowers': volunteer_followers,
        'eventvolunteers': ev_volunteers,
-       'neighborhoods': neighborhoods.values()
+       'neighborhoods': neighborhoods.values(),
+       'volunteerinterestcategories': get_volunteerinterestcategories(),
+       'interestcategories': get_testinterestcategories(),
     }
 
     put(volunteer_followers + ev_volunteers)
@@ -223,15 +224,7 @@ def get_users(name):
     users = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
                 name = name)
     return users
-    
 
-def set_create_rights(name):
-    vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
-                name = name)
-    for v in vols:
-        v.create_rights = True
-        v.put()
-        
 def delete_user(name):
     vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
                 name = name)
@@ -240,27 +233,19 @@ def delete_user(name):
         for ev in v.eventvolunteers:
           ev.delete()
       v.delete()
-        
+
+def set_create_rights(name):
+    vols = db.GqlQuery('SELECT * from Volunteer WHERE name = :name',
+                name = name)
+    for v in vols:
+        v.create_rights = True
+        v.put()
+
 def get_events(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',
                 name = name)
     return events
 
-def get_eventvolunteers(volunteer, event):
-    eventvolunteers = db.GqlQuery('SELECT * from EventVolunteer WHERE volunteer = :volunteer AND event = :event',
-                volunteer = volunteer, event = event)
-    return eventvolunteers
-
-def get_eventphotos(event_name):
-    events = get_events(event_name)
-    eventphotos = db.GqlQuery('SELECT * from EventPhoto WHERE event = :event', event = events[0])
-    return eventphotos
-
-def get_interestcategories():
-    ics = db.GqlQuery('SELECT * from InterestCategory')
-    return dict([(ic.name,ic) for ic in ics])
-        
-    
 def delete_event(name):
     events = db.GqlQuery('SELECT * from Event WHERE name = :name',
                 name = name)
@@ -273,7 +258,42 @@ def delete_event(name):
       #  for ei in e.eventinterestcategories:
       #    ei.delete()
       e.delete()
-      
+
+
+def get_eventvolunteers(volunteer, event):
+    eventvolunteers = db.GqlQuery('SELECT * from EventVolunteer WHERE volunteer = :volunteer AND event = :event',
+                volunteer = volunteer, event = event)
+    return eventvolunteers
+
+def get_eventphotos(event_name):
+    events = get_events(event_name)
+    eventphotos = db.GqlQuery('SELECT * from EventPhoto WHERE event = :event', event = events[0])
+    return eventphotos
+
+def get_interestcategories():
+  ics = db.GqlQuery('SELECT * from InterestCategory')
+  return dict([(ic.name,ic) for ic in ics])
+
+def get_testinterestcategories():
+  ics = db.GqlQuery('SELECT * from InterestCategory WHERE name=:param', param = 'test_ic')
+  return dict([(ic.name,ic) for ic in ics])
+
+
+def delete_testinterestcategories():
+  ics = db.GqlQuery('SELECT * from InterestCategory WHERE name=:name', name = 'test_ic')
+  for ic in ics:
+    ic.delete()
+
+def get_volunteerinterestcategories():
+  vics = db.GqlQuery('SELECT * from VolunteerInterestCategory')
+  return vics
+    
+def delete_volunteerinterestcategories():
+  vics = db.GqlQuery('SELECT * from VolunteerInterestCategory')
+  for vic in vics:
+    vic.delete()
+
+
 def delete_eventvolunteer(volunteer, event):
   volunteers = db.GqlQuery('SELECT * from Volunteer WHERE name = :name', name = volunteer)
   events = db.GqlQuery('SELECT * from Event WHERE name = :name', name = event)

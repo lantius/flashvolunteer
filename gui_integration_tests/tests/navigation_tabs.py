@@ -33,7 +33,7 @@ class TestOrganizationNavigation(BaseTestCase):
     sel.wait_for_page_to_load("30000")
     self.failUnless(sel.is_element_present("//div[@class='moduletitle']")) # for now, check only that page is there
     
-    sel.click("//a[@id='l_profile']") # Go to the profile page last
+    sel.click("//a[@id='l_profile']") # Go to the profile page
     sel.wait_for_page_to_load("30000")
     self.failUnless(sel.is_text_present("Change picture"))
     
@@ -63,7 +63,7 @@ class TestVolunteerNavigation(BaseTestCase):
     sel.wait_for_page_to_load("30000")
     self.failUnless(sel.is_element_present("//div[@class='moduletitle']")) # for now, check only that page is there
     
-    sel.click("//a[@id='l_profile']") # Go to the profile page last
+    sel.click("//a[@id='l_profile']") # Go to the profile page
     sel.wait_for_page_to_load("30000")
     self.failUnless(sel.is_text_present("Change picture"))
         

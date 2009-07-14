@@ -11,7 +11,7 @@ class DeleteAccount(BaseTestCase):
     def test_confirm_delete_user(self):    
         sel = self.selenium
         sel.wait_for_page_to_load("30000")
-        sel.click("//a[@id='l_profile']")
+        sel.click("//a[@id='l_profile']") # Go to the profile page
         sel.wait_for_page_to_load("30000")
         sel.click("//input[@id='s_delete_account']")
         sel.wait_for_page_to_load("30000")

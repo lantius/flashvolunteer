@@ -36,7 +36,7 @@ class BaseTestCase(unittest.TestCase):
     try: 
         env = getattr(self, "test_env")
     except:
-        raise 'FV test cases require test_env to be set (type: TestEnv)'
+        raise Exception('FV test cases require test_env to be set (type: TestEnv)')
         
     if self.test_env.fv_environment is not None:
       self.test_objects = create_environment(name = self.test_env.fv_environment,
@@ -79,7 +79,7 @@ class BaseTestCase(unittest.TestCase):
     try:
         armageddon(test_objects = self.test_objects)
     except Exception, e:
-        raise 'Test environment cleanup failure: ' + str(e)
+        raise Exception('Test environment cleanup failure: ' + str(e))
     
     if self.test_env.create_new_user:
         delete_user(name = self.test_env.login_name)

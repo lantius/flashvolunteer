@@ -30,7 +30,7 @@ class VolunteerForEventTestCase(BaseTestCase):
     sel.click("l_events")
     sel.wait_for_page_to_load("30000")
     sel.select("neighborhood", "label=Neighborhood...")
-    sel.click("//input[@value='submit']")
+    sel.click("//input[@id='s_events_wide_search']")
     sel.wait_for_page_to_load("30000")  
     
     events = [ee for ee in get_events(name = self.event_name)] 

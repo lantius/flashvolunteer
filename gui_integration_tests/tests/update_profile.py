@@ -11,7 +11,7 @@ class UpdateProfileTest(BaseTestCase):
         
         sel = self.selenium
         sel.wait_for_page_to_load("30000")
-        sel.click("//a[@id='l_profile']")
+        sel.click("//a[@id='l_profile']") # Go to the profile page
         sel.wait_for_page_to_load("30000")
         sel.type("quote", "selenium has arrived!")
         sel.click("//input[@id='s_update_profile']")
@@ -21,7 +21,7 @@ class UpdateProfileTest(BaseTestCase):
         sel.wait_for_page_to_load("30000")
         self.failUnless(sel.is_text_present("selenium has arrived!"))
         self.failUnless(sel.is_text_present(self.test_env.login_email))
-        sel.click("//a[@id='l_profile']")
+        sel.click("//a[@id='l_profile']") # Go to the profile page
         sel.wait_for_page_to_load("30000")
         try:
             sel.type("name", "selenium test")
@@ -37,7 +37,7 @@ class UpdateProfileTest(BaseTestCase):
             self.failUnless(sel.is_text_present("selenium test"))
             self.failUnless(sel.is_text_present("Capitol Hill"))
     
-            sel.click("//a[@id='l_profile']")
+            sel.click("//a[@id='l_profile']") # Go to the profile page
             sel.wait_for_page_to_load("30000")
             sel.select("home_neighborhood", "label=West Seattle")
             sel.select("work_neighborhood", "label=University District")
@@ -50,7 +50,7 @@ class UpdateProfileTest(BaseTestCase):
             self.failUnless(sel.is_text_present("West Seattle"))
             self.failUnless(sel.is_text_present("University District"))
                         
-            sel.click("//a[@id='l_profile']")
+            sel.click("//a[@id='l_profile']") # Go to the profile page
             sel.wait_for_page_to_load("30000")
 
             self.assertEqual('mypreferredemail@testtest.com', sel.get_value("email"))
