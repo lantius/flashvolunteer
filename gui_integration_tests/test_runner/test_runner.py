@@ -81,6 +81,7 @@ class _TestResult(TestResult):
     def addError(self, test, err):
         TestResult.addError(self, test, err)
         if self.showAll:
+            self.stream.writeln(self.errors[-1][1])
             self.stream.writeln(self.err_string)
         elif self.dots:
             self.stream.write('E')
@@ -88,6 +89,7 @@ class _TestResult(TestResult):
     def addFailure(self, test, err):
         TestResult.addFailure(self, test, err)
         if self.showAll:
+            self.stream.writeln(self.failures[-1][1])
             self.stream.writeln(self.fail_string)
         elif self.dots:
             self.stream.write('F')

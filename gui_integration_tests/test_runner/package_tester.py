@@ -6,5 +6,5 @@ class PackageTester(object):
     def run_all_tests_for_package(self, package):        
         loader = PackageTestLoader().load_tests_from_package               
         loader(package)
-        unittest.main(testRunner=TestRunner(package))
+        unittest.main(testRunner=TestRunner(package, descriptions=True, verbosity=2))
 
