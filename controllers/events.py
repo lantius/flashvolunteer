@@ -326,11 +326,9 @@ class EventsPage(webapp.RequestHandler):
   ################################################################################
   # SEARCH
   def search(self, params):
-    (neighborhood, fromdate, todate, events, interestcategory)  = self.do_search(params)
+    (neighborhood, events, interestcategory)  = self.do_search(params)
     template_values = { 
       'neighborhood' : neighborhood,
-      'fromdate' : fromdate,
-      'todate' : todate,
       'events' : events,
       'interestcategory': interestcategory
     }
@@ -340,8 +338,6 @@ class EventsPage(webapp.RequestHandler):
   def do_search(self, params):
     events_query = Event.all()
     neighborhood = None
-    todate = None
-    fromdate = None
     interestcategory = None
     
     if 'neighborhood' in params and params['neighborhood']:
@@ -351,36 +347,22 @@ class EventsPage(webapp.RequestHandler):
       except:
         pass
     
-#    if 'fromdate' in params and params['fromdate']:
-#      try:
-#        fromdate = datetime.datetime.strptime(params['fromdate'], "%m/%d/%Y")
-#        events_query.filter('date >=', fromdate)
-#      except:
-#        pass
-#    
-#    if 'todate' in params and params['todate']:
-#      try:
-#        todate = datetime.datetime.strptime(params['todate'], "%m/%d/%Y")
-#        events_query.filter('date <=', todate)
-#      except:
-#        pass
-    
     events = events_query.fetch(limit = 25)
     
-    if 'eventtype' in params and params['eventtype'] and params['eventtype'] != 'default':
-#        try:
-            catid = int(params['eventtype'])
-            interestcategory = InterestCategory.get_by_id(catid)
-            filtered_events = []
-            for event in events:
-                cats = [ic.interestcategory.key().id() for ic in event.eventinterestcategories]
-                if catid in cats:
-                    filtered_events.append(event)
-            events = filtered_events
-#        except:
-#            pass
+    if 'interestcategory' in params and params['interestcategory'] and params['interestcategory'] != 'default':
+      try:
+        catid = int(params['interestcategory'])
+        interestcategory = InterestCategory.get_by_id(catid)
+        filtered_events = []
+        for event in events:
+          cats = [ic.interestcategory.key().id() for ic in event.eventinterestcategories]
+          if catid in cats:
+            filtered_events.append(event)
+        events = filtered_events
+      except:
+        pass
                 
-    return (neighborhood, fromdate, todate, events, interestcategory)
+    return (neighborhood, events, interestcategory)
   
   ################################################################################
   # all posts that deal with photo albums from the events page

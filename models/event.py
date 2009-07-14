@@ -45,7 +45,7 @@ class Event(db.Model):
     return '/events'
     
   def volunteers(self):
-     return (ev.volunteer for ev in self.eventvolunteers)
+    return (ev.volunteer for ev in self.eventvolunteers)
   
   def hosts(self):
     hosts = ""
@@ -56,7 +56,7 @@ class Event(db.Model):
     return hosts
 
   def interestcategories(self):
-     return (eic.interestcategory for eic in self.eventinterestcategories)
+    return (eic.interestcategory for eic in self.eventinterestcategories)
 
   def validate(self, params):
     self.error.clear()
@@ -82,7 +82,9 @@ class Event(db.Model):
       self.error['time'] = ('Invalid time', params['time'])
 
     if(not ('time' in self.error or 'date' in self.error)):
-      self.date = datetime.datetime.strptime(params['time'] + ' ' + params['date'], "%H:%M %m/%d/%Y")
+      self.date = datetime.datetime.strptime(
+        params['time'] + ' ' + params['date'], "%H:%M %m/%d/%Y"
+      )
     
     try:
       self.duration = int(params['duration'])
@@ -96,12 +98,14 @@ class Event(db.Model):
         raise Exception
       self.description = params['description']
     except:
-      self.error['description'] = ('Description is required', params['description'])
+      self.error['description'] = ('Description is required',
+                                   params['description'])
       
     try:
       self.neighborhood = Neighborhood.get_by_id(int(params['neighborhood']))
     except:
-      self.error['neighborhood'] = ('Invalid neighborhood', params['neighborhood'])
+      self.error['neighborhood'] = ('Invalid neighborhood',
+                                    params['neighborhood'])
     
     try:
       self.address = params['address']
@@ -111,9 +115,10 @@ class Event(db.Model):
     try:
       self.special_instructions = params['special_instructions']
     except:
-      self.error['special_instructions'] = ('Invalid special instructions', params['special_instructions'])
+      self.error['special_instructions'] = ('Invalid special instructions', 
+                                            params['special_instructions'])
     
     return not self.error
   
   def inpast(self):
-      return self.date < datetime.datetime.now()
+    return self.date < datetime.datetime.now()

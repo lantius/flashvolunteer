@@ -1,4 +1,4 @@
-import unittest
+import unittest, timeit
 from webtest import TestApp
 from google.appengine.ext import webapp
 
@@ -112,14 +112,12 @@ class EventsTest(unittest.TestCase):
   def test_event_search(self):
     e = EventsPage()
     search_params = { 'neighborhood' : str(self.neighborhood1.key().id()),
-                      'fromdate' : '12/12/2008', 
-                      'todate' : '01/01/2010', }
-    (neighborhood, fromdate, todate, events) = e.do_search(search_params)
+                      'interestcategory' : str(self.interestcategory1.key().id()), }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
     
     self.assertEqual(neighborhood.key().id(), int(search_params['neighborhood']))
-    self.assertEqual(fromdate.strftime("%m/%d/%Y"), search_params['fromdate'])    
-    self.assertEqual(todate.strftime("%m/%d/%Y"), search_params['todate'])    
-    self.assertEqual(len(events), 0)    
+    self.assertEqual(interestcategory.key().id(), int(search_params['interestcategory']))
+    self.assertEqual(len(events), 0)
     
     # insert 3 events to play with
     event_params = { 'name' : 'create unit test',
@@ -142,8 +140,8 @@ class EventsTest(unittest.TestCase):
                'description' : 'test description',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
-               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
-               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
+               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'],
+               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
 
     event_params = { 'name' : 'create unit test',
@@ -154,26 +152,25 @@ class EventsTest(unittest.TestCase):
                'description' : 'test description',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
-               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
-               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
+               'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : ['1','1'],
+               'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : '1'  }
     event_id = e.create(event_params, self.volunteer)
 
-    (neighborhood, fromdate, todate, events) = e.do_search(search_params)
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
     self.assertEqual(len(events), 1)
     
     event = events[0]
     self.assertEqual(event.neighborhood.key().id(), int(search_params['neighborhood']))
-    self.assertTrue(event.date >= fromdate)
-    self.assertTrue(event.date <= todate)
-    
+    cats = [ic.interestcategory.key().id() for ic in event.eventinterestcategories]
+    self.assertTrue(self.interestcategory1.key().id() in cats)
+
     search_params = { 'neighborhood' : 'bad neighborhood',
-                      'fromdate' : 'bad fromdate', 
-                      'todate' : 'bad to date', }
-    (neighborhood, fromdate, todate, events) = e.do_search(search_params)
+                      'interestcategory' : 'bad interestcategory', 
+                      }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
     self.assertEqual(neighborhood, None)    
-    self.assertEqual(fromdate, None)    
-    self.assertEqual(todate, None)    
-    self.assertEqual(len(events), 3)
+    self.assertEqual(interestcategory, None)    
+    self.assertEqual(len(events), 3 )
 
   # VERIFY
   def test_event_verify_attendance(self):
@@ -224,9 +221,22 @@ class EventsTest(unittest.TestCase):
                'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',
                'interestcategory[' + str(self.interestcategory1.key().id()) + ']' : ['1','1'],
                'interestcategory[' + str(self.interestcategory2.key().id()) + ']' : '1'  }
-
+    event.validate(params)
     for p in params.keys():
       self.assertEqual(None, event.error.get(p))
+      
+  # RECOMMENDED EVENTS
+  def test_recommended_events(self):
+    volunteer = Volunteer()
+    #volunteer.put()
     
+    # put in a bunch of events
+    #for i in range(1, 1000):
+    #  event = Event(date = datetime.datetime.strptime('10/10/2010', "%m/%d/%Y"))
+    #  event.put()
     
+    # t = timeit.Timer("e._get_recommended_events(volunteer)", "from controllers.events import *\nfrom controllers.volunteers import *\ne = EventsPage()\nvolunteer = Volunteer()\nvolunteer.put()")
+    # self.fail(t.timeit())
+ 
+  
     
