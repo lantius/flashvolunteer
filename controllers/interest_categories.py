@@ -28,7 +28,10 @@ class CategoryPage(webapp.RequestHandler):
       return
 
     category = InterestCategory.get_by_id(int(category_id))
-
+    if not category:
+      self.error(404)
+      return
+      
     candidates = list(category.volunteers_interested())
 
     past_events = list(category.past_events())        

@@ -153,6 +153,10 @@ class EventsPage(webapp.RequestHandler):
     volunteer = Authorize.login(self)
     
     event = Event.get_by_id(int(event_id))
+    if not event:
+      self.error(404)
+      return
+    
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
     if len(owners) > 0:

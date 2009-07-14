@@ -6,16 +6,15 @@ import random
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 
-
 ################################################################################
 # Friends page
 ################################################################################
 class FriendsPage(webapp.RequestHandler):
   def get(self): 
     LIMIT = 12
-   
+    
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
     candidates = list(volunteer.friends()) + list(volunteer.following_only())

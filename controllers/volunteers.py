@@ -34,7 +34,7 @@ class VolunteersPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
     except:
       return
-      
+
     if volunteer and volunteer.key().id() == int(volunteer_id):
       self.redirect("/settings");
       return
@@ -47,7 +47,7 @@ class VolunteersPage(webapp.RequestHandler):
 
     if not page_volunteer:
       self.error(404)
-      self.response.out.write('404 page! boo!')
+      return
 
     volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
                       volunteer=page_volunteer, follower=volunteer).get()

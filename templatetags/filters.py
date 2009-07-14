@@ -15,12 +15,12 @@ class RelationshipStatusNode(template.Node):
         self.volunteer = volunteer
         self.volunteer_in_list = volunteer_in_list 
         
-        
     def render(self, context):
         volunteer = template.resolve_variable(self.volunteer,context)
         volunteer_in_list = template.resolve_variable(self.volunteer_in_list,context)
         
-        context['is_teammate'] = volunteer_in_list.key().id() in volunteer.teammates_ids()
+        if volunteer:
+          context['is_teammate'] = volunteer_in_list.key().id() in volunteer.teammates_ids()
         return ''
 
 register.tag(team_status)
