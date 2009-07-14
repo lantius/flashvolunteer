@@ -7,7 +7,7 @@
 		<option value="09:00"{% if event %}{% ifequal event.get_time "09:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>9am</option>
 		<option value="10:00"{% if event %}{% ifequal event.get_time "10:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>10am</option>
 		<option value="11:00"{% if event %}{% ifequal event.get_time "11:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>11am</option>
-		<option value="12:00"{% if event %}{% ifequal event.get_time "12:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>12pm</option>
+		<option value="12:00"{% if event %}{% ifequal event.get_time "12:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>Noon</option>
 		<option value="13:00"{% if event %}{% ifequal event.get_time "01:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>1pm</option>
 		<option value="14:00"{% if event %}{% ifequal event.get_time "02:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>2pm</option>
 		<option value="15:00"{% if event %}{% ifequal event.get_time "03:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>3pm</option>
@@ -19,4 +19,12 @@
 		<option value="21:00"{% if event %}{% ifequal event.get_time "09:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>9pm</option>
 		<option value="22:00"{% if event %}{% ifequal event.get_time "10:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>10pm</option>
 		<option value="23:00"{% if event %}{% ifequal event.get_time "11:00PM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>11pm</option>
+		<option value="00:00"{% if event %}{% ifequal event.get_time "12:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>Midnight</option>
+		<option value="01:00"{% if event %}{% ifequal event.get_time "01:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>1am</option>
+		<option value="02:00"{% if event %}{% ifequal event.get_time "02:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>2am</option>
+		<option value="03:00"{% if event %}{% ifequal event.get_time "03:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>3am</option>
+		<option value="04:00"{% if event %}{% ifequal event.get_time "04:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>4am</option>
+		<option value="05:00"{% if event %}{% ifequal event.get_time "05:00AM" %} SELECTED="SELECTED" {% endifequal %}{% endif %}>5am</option>
+
+
 </select>
