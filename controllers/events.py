@@ -27,10 +27,10 @@ GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVV
 
 
 def _get_upcoming_events():
-    events = (e for e in Event.all() if 
+    events = (e for e in Event.all().order('date') if 
             #recommend future events 
         not e.inpast())
-    return sorted(events, lambda e,e2: cmp(e.date,e2.date))
+    return events
                   
 
 def _get_recommended_events(volunteer):
@@ -355,7 +355,7 @@ class EventsPage(webapp.RequestHandler):
       except:
         pass
     
-    events = events_query.fetch(limit = 25)
+    events = events_query.order('date').fetch(limit = 25)
     
     if 'interestcategory' in params and params['interestcategory'] and params['interestcategory'] != 'default':
       try:

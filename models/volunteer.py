@@ -125,8 +125,10 @@ class Volunteer(db.Model):
     return users.create_logout_url('/')
 
   def events(self):
-    return (ev.event for ev in self.eventvolunteers)
-  
+    events = [ev.event for ev in self.eventvolunteers]
+    events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
+    return events
+
   def interestcategories(self):
     return (vic.interestcategory for vic in self.volunteerinterestcategories)
 
@@ -170,13 +172,13 @@ class Volunteer(db.Model):
     return len(self.events_past())
 
   def events_past(self):
-    return sorted([e for e in self.events() if e.inpast()], lambda e1,e2: cmp(e1.date,e2.date))
+    return [e for e in self.events() if e.inpast()]
   
   def events_future_count(self):
     return len(self.events_future())
 
   def events_future(self):
-    return sorted([e for e in self.events() if not e.inpast() ], lambda e1,e2: cmp(e1.date,e2.date))
+    return [e for e in self.events() if not e.inpast() ]
   
   def check_session_id(self, form_session_id):
     return form_session_id == self.session_id
