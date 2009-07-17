@@ -102,9 +102,9 @@ class Volunteer(db.Model):
   
   def get_last_name(self):
       if self.get_name().find('@') > -1:
-          return self.get_name().split('@')[-1]
+          return '@' + self.get_name().split('@')[-1]
       else:
-          return '@' + self.get_name().split(' ')[-1]
+          return self.get_name().split(' ')[-1]
   
   def get_email(self):
     if self.preferred_email is None:
