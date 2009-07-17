@@ -95,10 +95,16 @@ class Volunteer(db.Model):
     return self.volunteer.nickname
 
   def get_first_name(self):
-      return ' '.join(self.get_name().split(' ')[:-1])
+      if self.get_name().find('@') > -1:
+          return '@'.join(self.get_name().split('@')[:-1])
+      else:
+          return ' '.join(self.get_name().split(' ')[:-1])
   
   def get_last_name(self):
-      return self.get_name().split(' ')[-1]
+      if self.get_name().find('@') > -1:
+          return self.get_name().split('@')[-1]
+      else:
+          return '@' + self.get_name().split(' ')[-1]
   
   def get_email(self):
     if self.preferred_email is None:
