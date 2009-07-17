@@ -27,7 +27,7 @@ GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVV
 
 
 def _get_upcoming_events():
-    events = (e for e in Event.all().order('date') if 
+    events = (e for e in Event.all().order('date').fetch(limit=500) if 
             #recommend future events 
         not e.inpast())
     return events

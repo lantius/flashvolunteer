@@ -15,7 +15,7 @@ class NeighborhoodsPage(webapp.RequestHandler):
     except:
       return
     
-    neighborhoods = sorted(Neighborhood.all(), lambda a,b:cmp(a.name,b.name))
+    neighborhoods = Neighborhood.all().order('name').fetch(limit=500)
     cnt = len(neighborhoods)
     col1 = neighborhoods[:cnt/3]
     col2 = neighborhoods[cnt/3:2*cnt/3]

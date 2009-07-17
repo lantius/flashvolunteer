@@ -16,7 +16,7 @@ class SessionID():
 class NeighborhoodHelper():
   def selected(self, selected_neighborhood):
     neighborhoods = []
-    for neighborhood in Neighborhood.all():
+    for neighborhood in Neighborhood.all().order('name').fetch(limit=500):
       if selected_neighborhood:
         if neighborhood.key().id() == selected_neighborhood.key().id():
           neighborhood.selected = True
@@ -26,14 +26,14 @@ class NeighborhoodHelper():
 class InterestCategoryHelper():
   def selected(self, selector):
     interestcategories = []
-    for interestcategory in InterestCategory.all():
+    for interestcategory in InterestCategory.all().order('name').fetch(limit=500):
       for sic in selector.interestcategories():
         if sic.key().id() == interestcategory.key().id():
           interestcategory.selected = True
       interestcategories.append(interestcategory)
     return interestcategories
-    
-    
+
+
 class InitializeStore():
   def init(self):
     if not self.is_initialized():
