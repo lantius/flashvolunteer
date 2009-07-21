@@ -20,12 +20,6 @@ from controllers._params import Parameters
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
-# flashvolunteer-dev.appspot.com
-GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
-# flashvolunteer.appspot.com
-# GOOGLE_MAPS_API_KEY = ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ
-
-
 def _get_upcoming_events():
     events = (e for e in Event.all().order('date').fetch(limit=500) if 
             #recommend future events 
@@ -340,7 +334,14 @@ class EventsPage(webapp.RequestHandler):
       'events' : events,
       'interestcategory': interestcategory
     }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
+    
+
+    
+    if self.request.headers["Accept"] == "application/json":
+      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.json')
+    else:
+      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
+    
     self.response.out.write(template.render(path, template_values))
   
   def do_search(self, params):

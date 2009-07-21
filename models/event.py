@@ -1,8 +1,16 @@
 import datetime
 import logging
+import urllib
+from google.appengine.api import urlfetch
+
 from google.appengine.ext import db
 from models.neighborhood import *
 from models.interestcategory import *
+
+# flashvolunteer-dev.appspot.com
+#GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
+# flashvolunteer.appspot.com
+GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ'
 
 ################################################################################
 # Event
@@ -16,6 +24,7 @@ class Event(db.Model):
   duration = db.IntegerProperty()
   special_instructions = db.TextProperty()
   address = db.StringProperty(multiline=True)
+  location = db.GeoPtProperty() # No default  
   
   def __init__(self,
              parent=None,
@@ -57,7 +66,14 @@ class Event(db.Model):
 
   def interestcategories(self):
     return (eic.interestcategory for eic in self.eventinterestcategories)
-
+  
+  def geocode(self):
+    response = urlfetch.fetch('http://maps.google.com/maps/geo?q=' + urllib.quote_plus(self.address) + '&output=csv&oe=utf8&sensor=false&key=' + GOOGLE_MAPS_API_KEY)
+    (httpcode) = response.content.split(',')[0]
+    if '200' == httpcode:
+      (httpcode,accuracy,lat,lon) = response.content.split(',')
+      self.location = db.GeoPt(lat,lon)
+    
   def validate(self, params):
     self.error.clear()
 
@@ -111,6 +127,10 @@ class Event(db.Model):
       self.address = params['address']
     except:
       self.error['address'] = ('Invalid address', params['address'])
+    
+    # try our geocoding here
+    if self.address:
+      self.geocode()
     
     try:
       self.special_instructions = params['special_instructions']

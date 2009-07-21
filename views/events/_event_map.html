@@ -1,6 +1,5 @@
-
 <div id="eventmap" class="hardmodule">
-		
+{% if event.location %}
   <script type="text/javascript" src="http://www.google.com/jsapi?key={{GOOGLE_MAPS_API_KEY}}"></script>	
 	<script type="text/javascript">
     google.load("maps", "2", {"other_params":"sensor=false"});
@@ -8,21 +7,17 @@
 	  // Call this function when the page has been loaded
     function initialize() {
       var map = new google.maps.Map2(document.getElementById("map_canvas"));
-      var geocoder = new google.maps.ClientGeocoder();
-      map.setUIToDefault();    
-   
-       geocoder.getLatLng(
-          '{{event.address}}',
-          function(point) {
-            if (point) {
-              map.setCenter(point, 13);
-              var marker = new GMarker(point);
-              map.addOverlay(marker);
-            }
-          }
-      );  
+      map.setUIToDefault();       
+	  var point = new GLatLng({{event.location.lat}},{{event.location.lon}})
+	  map.setCenter(point, 13);
+	  var marker = new GMarker(point);
+      map.addOverlay(marker);
     }
     google.setOnLoadCallback(initialize);
 	</script>
+
 	<div id="map_canvas"></div>
+{%else%}
+No map is available for this event.
+{%endif%}
 </div><!--end eventmap-->

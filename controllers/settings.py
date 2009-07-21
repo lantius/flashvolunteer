@@ -64,6 +64,7 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # EDIT
   def edit(self, volunteer):
+    #requires a POST from the settings page, so volunteer can be assumed.
     template_values = {
         'volunteer' : volunteer, 
         'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
@@ -163,6 +164,7 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # CONFIRM_DELETE
   def confirm_delete(self, volunteer):
+    #requires a POST from the settings page, so volunteer can be assumed.
     template_values = {
         'volunteer' : volunteer, 
         'session_id': volunteer.session_id
