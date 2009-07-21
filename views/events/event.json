@@ -1,0 +1,9 @@
+{"id":"{{event.id}}",
+ "name":"{{event.name}}",
+ "neighborhood":"{{event.neighborhood.name}}",
+ "date":"{{event.date}}",
+ "description":"{{event.description}}",
+ "duration":"{{event.duration}}",
+ "special_instructions":"{{event.special_instructions}}",
+ "address":"{{event.address}}"
+}

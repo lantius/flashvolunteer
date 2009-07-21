@@ -200,7 +200,12 @@ class EventsPage(webapp.RequestHandler):
                         'num_anon': len(attendees_anonymous),
                         'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
                         }
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
+    
+    path = None
+    if self.request.headers["Accept"] == "application/json":
+      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.json')
+    else:
+      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
     self.response.out.write(template.render(path, template_values))
      
   ################################################################################
