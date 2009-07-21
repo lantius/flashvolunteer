@@ -14,6 +14,11 @@ indexes:
   - name: neighborhood
   - name: date
 
+- kind: Event
+  properties:
+  - name: geostring
+  - name: date
+
 - kind: Eventvolunteer
   properties:
   - name: isowner

@@ -183,12 +183,14 @@ class EventsTest(unittest.TestCase):
     self.assertTrue(c <= ur)
 
     event = self.test_event_create()
-    event.geostring = str(Geostring((-72,41)))
+    event.location = db.GeoPt(-72,41)
+    event.geostring = str(Geostring((event.location.lat, event.location.lon)))
     event.put()
     
     search_params = { 'ur' : '-69.99,43.01',
                       'll' : '-72.01,40.99', 
                     }
+    
     (neighborhood, events, interestcategory) = e.do_search(search_params)
     self.assertEqual(len(events),1)
 
@@ -197,10 +199,11 @@ class EventsTest(unittest.TestCase):
                     }
     (neighborhood, events, interestcategory) = e.do_search(search_params)
     self.assertEqual(len(events),0)
-
+    event.delete()
 
     event = self.test_event_create()
-    event.geostring = str(Geostring((47,-122)))
+    event.location = db.GeoPt(47,-122)
+    event.geostring = str(Geostring((event.location.lat, event.location.lon)))
     event.put()
     
     search_params = { 'ur' : '48,-121',
@@ -214,9 +217,11 @@ class EventsTest(unittest.TestCase):
                     }
     (neighborhood, events, interestcategory) = e.do_search(search_params)
     self.assertEqual(len(events),0)
+    event.delete()
 
     event = self.test_event_create()
-    event.geostring = str(Geostring((47.662503,-122.292171)))
+    event.location = db.GeoPt(47.662503,-122.292171)
+    event.geostring = str(Geostring((event.location.lat, event.location.lon)))
     event.put()
     
     search_params = { 'ur' : '48,-121',
@@ -229,7 +234,7 @@ class EventsTest(unittest.TestCase):
                       'll' : '46,-121', 
                     }
     (neighborhood, events, interestcategory) = e.do_search(search_params)
-#    self.assertEqual(len(events),0)
+    self.assertEqual(len(events),0)
 
 
 

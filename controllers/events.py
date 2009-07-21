@@ -348,6 +348,8 @@ class EventsPage(webapp.RequestHandler):
     events_query = Event.all()
     neighborhood = None
     interestcategory = None
+    ur = None
+    ll = None
     
     if ('ur' in params and params['ur']) and ('ll' in params and params['ll']):
 #      try:
@@ -370,6 +372,14 @@ class EventsPage(webapp.RequestHandler):
         pass
     
     events = events_query.order('date').fetch(limit = 25)
+    
+    if ur and ll:
+      filtered_events = []
+      for event in events:
+        if event.location.lon > ll.lon and event.location.lat > ll.lat and event.location.lon < ur.lon and event.location.lat < ur.lat:
+           filtered_events.append(event)
+      events = filtered_events
+    
     
     if 'interestcategory' in params and params['interestcategory'] and params['interestcategory'] != 'default':
       try:
