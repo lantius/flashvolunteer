@@ -1,4 +1,4 @@
-{"id":"{{event.id}}",
+{"id":"{{event.key.id}}",
  "name":"{{event.name}}",
  "neighborhood":"{{event.neighborhood.name}}",
  "date":"{{event.date}}",
