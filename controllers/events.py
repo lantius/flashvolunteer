@@ -2,6 +2,8 @@ import os, string, datetime, random
 import exceptions
 import logging
 
+from components.geostring import *
+
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext import db
@@ -335,8 +337,6 @@ class EventsPage(webapp.RequestHandler):
       'interestcategory': interestcategory
     }
     
-
-    
     if self.request.headers["Accept"] == "application/json":
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.json')
     else:
@@ -348,6 +348,19 @@ class EventsPage(webapp.RequestHandler):
     events_query = Event.all()
     neighborhood = None
     interestcategory = None
+    
+    if ('ur' in params and params['ur']) and ('ll' in params and params['ll']):
+#      try:
+        (lat,lon) = params['ur'].split(',')
+        ur = db.GeoPt(lat,lon)
+        (lat,lon) = params['ll'].split(',')
+        ll = db.GeoPt(lat,lon)
+        urstring = str(Geostring((ur.lat,ur.lon)) )
+        llstring = str(Geostring((ll.lat,ll.lon)) )
+        events_query.filter('geostring <= ', urstring).filter('geostring >= ', llstring).order('geostring')
+        #events_query.filter('geostring >= ', bbstring).order('geostring')
+#      except:
+#        pass    
     
     if 'neighborhood' in params and params['neighborhood']:
       try:

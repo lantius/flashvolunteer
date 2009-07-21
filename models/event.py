@@ -1,6 +1,7 @@
 import datetime
 import logging
 import urllib
+from components.geostring import *
 from google.appengine.api import urlfetch
 
 from google.appengine.ext import db
@@ -24,7 +25,8 @@ class Event(db.Model):
   duration = db.IntegerProperty()
   special_instructions = db.TextProperty()
   address = db.StringProperty(multiline=True)
-  location = db.GeoPtProperty() # No default  
+  location = db.GeoPtProperty() # No default
+  geostring = db.StringProperty()
   
   def __init__(self,
              parent=None,
@@ -73,6 +75,7 @@ class Event(db.Model):
     if '200' == httpcode:
       (httpcode,accuracy,lat,lon) = response.content.split(',')
       self.location = db.GeoPt(lat,lon)
+      self.geostring = str(Geostring((self.location.lat,self.location.lon)) )
     
   def validate(self, params):
     self.error.clear()

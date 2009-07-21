@@ -1,6 +1,7 @@
 import unittest, timeit
 from webtest import TestApp
 from google.appengine.ext import webapp
+from components.geostring import *
 
 from controllers.events import *
 from controllers.eventattendance import *
@@ -171,6 +172,67 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(neighborhood, None)    
     self.assertEqual(interestcategory, None)    
     self.assertEqual(len(events), 3 )
+
+  def test_event_latlong_search(self):
+    e = EventsPage()
+    
+    ll = str(Geostring((-72.01,40.99)))
+    ur = str(Geostring((-69.99,43.01)))
+    c = str(Geostring((-72,41)))
+    self.assertTrue(c >= ll)
+    self.assertTrue(c <= ur)
+
+    event = self.test_event_create()
+    event.geostring = str(Geostring((-72,41)))
+    event.put()
+    
+    search_params = { 'ur' : '-69.99,43.01',
+                      'll' : '-72.01,40.99', 
+                    }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
+    self.assertEqual(len(events),1)
+
+    search_params = { 'ur' : '-70,39',
+                      'll' : '-71,40',
+                    }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
+    self.assertEqual(len(events),0)
+
+
+    event = self.test_event_create()
+    event.geostring = str(Geostring((47,-122)))
+    event.put()
+    
+    search_params = { 'ur' : '48,-121',
+                      'll' : '46,-123', 
+                    }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
+    self.assertEqual(len(events),1)
+  
+    search_params = { 'ur' : '48,-120',
+                      'll' : '46,-121',
+                    }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
+    self.assertEqual(len(events),0)
+
+    event = self.test_event_create()
+    event.geostring = str(Geostring((47.662503,-122.292171)))
+    event.put()
+    
+    search_params = { 'ur' : '48,-121',
+                      'll' : '46,-123', 
+                    }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
+    self.assertEqual(len(events),1)
+  
+    search_params = { 'ur' : '48,-120',
+                      'll' : '46,-121', 
+                    }
+    (neighborhood, events, interestcategory) = e.do_search(search_params)
+#    self.assertEqual(len(events),0)
+
+
+
 
   # VERIFY
   def test_event_verify_attendance(self):
