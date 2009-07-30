@@ -234,7 +234,7 @@
                     
                     if (!alreadyExists && s.createButton) {
                         // create it!
-                        controller.button = $('<a href="#" class="dp-choose-date" title="' + $.dpText.TEXT_CHOOSE_DATE + '">' + $.dpText.TEXT_CHOOSE_DATE + '</a>')
+                        controller.button = $('<a href="#" class="dp-choose-date" title="' + $.dpText.TEXT_CHOOSE_DATE + '">' + $.dpText.TEXT_BUT_CHOOSE_DATE + '</a>')
                                 .bind(
                                     'click',
                                     function()
@@ -1132,6 +1132,7 @@
         TEXT_NEXT_MONTH     :   'Next month',
         TEXT_CLOSE          :   'Close',
         TEXT_CHOOSE_DATE    :   'Choose date',
+        TEXT_BUT_CHOOSE_DATE:   '<img src="/stylesheets/date_picker/calendar.png" />',
         HEADER_FORMAT       :   'mmmm yyyy'
     };
     // version

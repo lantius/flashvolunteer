@@ -53,7 +53,7 @@ class MessagesTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/01/2009',
                'time' : '03:00',
-               'duration' : '2',
+               'duration' : '120',
                'description' : 'test description\non the internet with two lines!',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St.\nSeattle, WA 98105',

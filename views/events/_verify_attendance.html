@@ -31,7 +31,7 @@
 		{% if ev.hours %}
 		value="{{ev.hours}}"
 		{% else %}
-		value="{{event.duration}}"
+		value="{{event.get_duration_hours}}"
 		{% endif %}
 		/> hours
 		<BR clear="ALL">

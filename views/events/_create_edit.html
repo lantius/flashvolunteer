@@ -13,24 +13,30 @@
 				{% include "../events/_name_input.html" %}
 			</div>
 		</li>
-		<li>
-			<div class="eventcreatelabel">Date:</div>
-			<div class="eventinput">
-				{% include "../events/_date_option.html" %}
-			</div>
-		</li>
-		<li>
-			<div class="eventcreatelabel">Duration:</div>
-			<div class="eventinput">
-				{% include "../events/_duration_input.html" %}
-			</div>
-		</li>
-		<li>
-			<div class="eventcreatelabel">Start Time:</div>
-			<div class="eventinput">
-				{% include "../events/_time_option.html" %}
-			</div>
-		</li>
+		{% comment this is replaced by _date_and_time_option.html %}
+                 		<li>
+                 			<div class="eventcreatelabel">Date:</div>
+                 			<div class="eventinput">
+                 				{% include "../events/_date_option.html" %}
+                 			</div>
+                 		</li>
+                 		<li>
+                 			<div class="eventcreatelabel">Duration:</div>
+                 			<div class="eventinput">
+                 				{% include "../events/_duration_input.html" %}
+                 			</div>
+                 		</li>
+                 		<li>
+                 			<div class="eventcreatelabel">Start Time:</div>
+                 			<div class="eventinput">
+                 				{% include "../events/_time_option.html" %}
+                 			</div>
+                 		</li>
+		{% endcomment %}
+
+		{% include "../events/_date_and_time_option.html" %}
+
+
 		<li>
 			<div class="eventcreatelabel">Neighborhood:</div>
 			<div class="eventinput">

@@ -104,7 +104,7 @@ def create_environment(name, session_id):
           neighborhood = neighborhoods[v['neighborhood']],
           date_created = date_created,
           date = date,
-          duration = duration,
+          duration_minutes = duration,
           description = v['description'],
           special_instructions = v['special_instructions'],
           address = v['address']

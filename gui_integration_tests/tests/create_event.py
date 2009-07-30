@@ -14,11 +14,14 @@ class CreateEvent(BaseTestCase):
      )
   
   event_name = 'test event'
-  time = '7pm'
-  maxattend = '1'
-  minattend = '50'
+  startdate = '05/13/2019'
+  startdate_long = 'Monday, 13 May 2019'
+  starthour = '7pm'
+  startminute = ':05'
+  enddate = '06/13/2019'
+  endhour = '10am'
+  endminute = ':00'
   description = 'my test event'
-  duration = '2'
   instructions = 'please show up'
   neighborhood = 'West Seattle'
   address = 'Seattle'
@@ -37,15 +40,16 @@ class CreateEvent(BaseTestCase):
     sel.type("eventname", self.event_name)
     #sel.click("link=Choose date")
     #sel.click("//div[@id='dp-popup']/div[3]/table/tbody/tr[3]/td[3]")
-    sel.type("eventdate", '05/13/2019')
+    sel.type("startdate", self.startdate)
+    sel.select("starthour", "label=%s"%self.starthour)
+    sel.select("startminute", "label=%s"%self.startminute)
     
-    sel.select("time", "label=%s"%self.time)
+    sel.type("enddate", self.enddate)
+    sel.select("endhour", "label=%s"%self.endhour)
+    sel.select("endminute", "label=%s"%self.endminute)
+    
     sel.select("neighborhood", "label=%s"%self.neighborhood)
-    sel.type("eventduration", self.duration)
     sel.type("address1", self.address)
-    #Removed from the UI
-    #sel.type("maxattend", self.maxattend)
-    #sel.type("minattend", self.minattend)
     sel.type("description", self.description)
     sel.type("special_instructions", self.instructions)
     
@@ -78,8 +82,8 @@ class CreateEvent(BaseTestCase):
     try:
       #XPath: look for <strong class='error'/> after <div class='eventinput'/> with sibling <input id='eventname'/>
       self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventname']]/strong[@class='error']"))
-      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventdate']]/strong[@class='error']"))
-      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventduration']]/strong[@class='error']"))
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='startdate']]/strong[@class='error']"))
+      self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='enddate']]/strong[@class='error']"))
       self.failUnless(sel.is_element_present("//div[@class='eventinput'][select[@name='neighborhood']]/strong[@class='error']"))
       self.failUnless(sel.is_element_present("//div[@class='eventinput'][textarea[@name='description']]/strong[@class='error']"))
     finally:
@@ -99,9 +103,9 @@ class CreateEvent(BaseTestCase):
     self.create_event_basic()
     sel.wait_for_page_to_load("30000")
     try:
-      self.failUnless(sel.is_text_present("Event: %s"%self.event_name))
-      self.failUnless(sel.is_text_present("Neighborhood: %s"%self.neighborhood))
-      self.failUnless(sel.is_text_present("Date: Monday, 13 May 2019"))
+      self.failUnless(sel.is_text_present("Event: %s" % self.event_name))
+      self.failUnless(sel.is_text_present("Neighborhood: %s" % self.neighborhood))
+      self.failUnless(sel.is_text_present("Date: %s" % self.startdate_long ))
     
       events = [e for e in get_events(name = self.event_name)]
       self.assertTrue(len(events) == 1) #Make sure we only created one event

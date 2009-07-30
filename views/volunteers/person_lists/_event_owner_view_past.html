@@ -33,7 +33,7 @@
                     {% ifequal event.duration None %}
                         value=""
                     {% else %}  
-                        value="{{event.duration}}"
+                        value="{{event.get_duration_hours}}"
                     {% endifequal %}
                 {% else %}  
                     value="{{ev.hours}}"

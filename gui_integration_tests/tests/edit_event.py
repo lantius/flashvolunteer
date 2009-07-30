@@ -43,12 +43,15 @@ class TestEditEvent__Owner(BaseTestCase):
         sel.click("//input[@id='s_edit_event']")
         sel.wait_for_page_to_load("30000")
 
-        sel.type("eventduration", "16")
-        sel.select("time", "label=7am")
+        sel.select("starthour", "label=7am")
+        sel.select("startminute", "label=:05")
+        
+        sel.select("endhour", "label=11pm")
+        sel.select("endminute", "label=:15")
+        
+        
         sel.type("address1", "Convention center")
-        #Removed from the UI
-        #sel.type("maxattend", "45")
-        #sel.type("minattend", "50")
+        
         sel.type("description", desc)
         sel.type("special_instructions", special_instr)
         for interest in self.interest_categories:
@@ -59,7 +62,7 @@ class TestEditEvent__Owner(BaseTestCase):
         
         for interest in self.interest_categories:
           self._verify_interestcategory_nonedit(name = interest)
-        self.failUnless(sel.is_text_present("exact:Duration: 16 hours"))
+        self.failUnless(sel.is_text_present("exact:Duration: 16:10 hours"))
         self.failUnless(sel.is_text_present("exact:Address: Convention center"))
         self.failUnless(sel.is_text_present(desc))
         self.failUnless(sel.is_text_present(special_instr))   
@@ -76,8 +79,7 @@ class TestEditEvent__Owner(BaseTestCase):
         sel.wait_for_page_to_load("30000")
         
         sel.type("eventname", "")
-        sel.type("eventduration", "lala")
-        sel.type("eventdate", "")
+        sel.type("startdate", "")
         sel.select("neighborhood", "label=Neighborhood...")
         sel.type("description", "")
         
@@ -87,8 +89,7 @@ class TestEditEvent__Owner(BaseTestCase):
         try:
           #XPath: look for <strong class='error'/> after <div class='eventinput'/> with sibling <input id='eventname'/>
           self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventname']]/strong[@class='error']"))
-          self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventdate']]/strong[@class='error']"))
-          self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='eventduration']]/strong[@class='error']"))
+          self.failUnless(sel.is_element_present("//div[@class='eventinput'][input[@id='startdate']]/strong[@class='error']"))
           self.failUnless(sel.is_element_present("//div[@class='eventinput'][select[@name='neighborhood']]/strong[@class='error']"))
           self.failUnless(sel.is_element_present("//div[@class='eventinput'][textarea[@name='description']]/strong[@class='error']"))
         finally:
