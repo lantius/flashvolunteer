@@ -2,6 +2,8 @@ import os, string, datetime, random
 import exceptions
 import logging
 
+from controllers._utils import *
+
 from components.geostring import *
 
 from google.appengine.ext.webapp import template
@@ -135,7 +137,7 @@ class EventsPage(webapp.RequestHandler):
         'interest_categories' : InterestCategory.all()
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
-    self.response.out.write(template.render(path, template_values))
+    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
 
   
   ################################################################################
@@ -206,7 +208,7 @@ class EventsPage(webapp.RequestHandler):
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.json')
     else:
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
-    self.response.out.write(template.render(path, template_values))
+    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
      
   ################################################################################
   # DELETE
@@ -246,7 +248,7 @@ class EventsPage(webapp.RequestHandler):
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
-    self.response.out.write(template.render(path, template_values))
+    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
   
   ################################################################################
   # CREATE
@@ -303,7 +305,7 @@ class EventsPage(webapp.RequestHandler):
       'interestcategories' : InterestCategoryHelper().selected(event),
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
-    self.response.out.write(template.render(path, template_values))
+    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
   
   ################################################################################
   # UPDATE
@@ -347,7 +349,7 @@ class EventsPage(webapp.RequestHandler):
     else:
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
     
-    self.response.out.write(template.render(path, template_values))
+    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
   
   def do_search(self, params):
     events_query = Event.all()
