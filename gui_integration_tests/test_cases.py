@@ -75,11 +75,12 @@ class BaseTestCase(unittest.TestCase):
     
     if self.stop_selenium_on_completion == True:
       sel.stop()
-      
-    try:
-        armageddon(test_objects = self.test_objects)
-    except Exception, e:
-        raise Exception('Test environment cleanup failure: ' + str(e))
+
+    if self.test_env.fv_environment is not None:
+      try:
+          armageddon(test_objects = self.test_objects)
+      except Exception, e:
+          raise Exception('Test environment cleanup failure: ' + str(e))
     
     if self.test_env.create_new_user:
         delete_user(name = self.test_env.login_name)

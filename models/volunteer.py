@@ -68,8 +68,10 @@ class Volunteer(db.Model):
       self.name  = params['name']
     if 'delete_avatar' in params:
       self.avatar = None
-    if 'email' in params:
+    if 'email' in params and len(params['email']):
       self.preferred_email = params['email']
+    else:
+      self.preferred_email = None
 
     if 'twitter' in params and self.twitter != params['twitter']:
       self.twitter = params['twitter']

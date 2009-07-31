@@ -10,7 +10,7 @@
         <li><span class="label">Name:</span> 
 <input type="text" name="name" value="{% if volunteer.error.name %}{{ volunteer.error.name.1|striptags }}{% else %}{{ volunteer.name|striptags }}{% endif %}" /></li>
 		{% if volunteer.error.name %}
-			<br/><strong class="error">{{volunteer.error.name.0}}</strong>
+			<br/><strong class="error" id="error_name" >{{volunteer.error.name.0}}</strong>
 		{% endif %}
         <li><span class="label">Preferred email:</span> <input type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
         <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
