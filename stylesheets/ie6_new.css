@@ -1,0 +1,31 @@
+
+
+#footer {
+	position: relative;
+	left: 0px;
+}
+
+#navtabs {
+	bottom: 5px;
+	
+}
+
+#navtabs li {
+	padding-top: 11px;	
+	padding-bottom: 11px;
+}
+
+#leftthird, #rightthird, #middlethird {
+	padding: 0px;
+	
+}
+
+#findaneventwide {
+	height: 140px;
+}
+
+
+#columns {
+	width: 100%;
+	
+}

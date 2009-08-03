@@ -1,10 +1,12 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
   <head>
 	<title>{% block title %}{% endblock title %}</title>
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset/reset-min.css"> 
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
-    <!--[if IE 7]><style type="text/css" > @import "/stylesheets/ie7.css"; </style><![endif]-->
-    <!--[if IE 6]><link type="text/css" rel="stylesheet" href="/stylesheets/ie6.css" /><![endif]-->
+	<!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>-->
+    <!--[if IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/ie7_new.css" /><![endif]-->
+    <!--[if IE 6]><link type="text/css" rel="stylesheet" href="/stylesheets/ie6_new.css" /><![endif]-->
   </head>
  <body>
 <div id="container"> 
@@ -16,7 +18,8 @@
 	<ul id="navtabs">
 		<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
 		<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
-		<li id="neighborhoodslink"><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
+		<li id="neighborhoodslink"><a href="/n
+		eighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
 		<li id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">TEAM</a></li>
 		<li id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
 		<li id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
@@ -27,16 +30,10 @@
 </div><!--end top-->
 
 <div id="bottom">
-	<div id="pagespectitle">
-	{% block pagespectitle %}
-	{% endblock pagespectitle %}
-	</div><!--end pagespectitle-->
-	
+	<div id="pagespectitle"><!--page title-->{% block pagespectitle %}{% endblock pagespectitle %}</div><!--end pagespectitle-->
 	<div id="columns">
- 
 	{% block content %}
 	{% endblock content %}
-
 </div><!--end columns-->
 <div id="footer">
 	<ul>
