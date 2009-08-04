@@ -1,13 +1,114 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
 <head>
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset/reset-min.css"> 
-	<link type="text/css" rel="stylesheet" href="/stylesheets/splash.css" />
+	<link type="text/css" rel="stylesheet" href="stylesheets/splash/style.css" />
+    <!--[if IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/ie7_new.css" /><![endif]-->
+    <!--[if lt IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/ie6_new.css" /><![endif]-->
+	<!--[if lt IE 7]><script defer type="text/javascript" src="/stylesheets/pngfix.js"></script><![endif]-->
+
 </head>
 <body>
 	<div id="container" >
+		<div id="top">
+			<div id="top-wrap">
+				<div class="float" id="fvlogo">
+					<img src="stylesheets/splash/logo.png" alt="Flash Volunteer Logo" />
+				</div>
+				<div class="float" id="beta">
+					<img src="stylesheets/splash/beta.png" alt="Flash Volunteer is in Beta" />
+				</div>
+				<div class="float" id="beta-text">
+					* Which means we are still adding new features and 
+					fixing bugs. If you have any suggestions, <a href="/static/feedback">send us feedback</a>. 
+					Please be patient while we continue to improve Flash Volunteer!
+				</div>
+			</div>
+		</div>
+		
+		<div id="bottom" >
+			<div id="bottom-wrap">
+				<div id="cols">
+					<div id="left">
+						<div id="slogan">
+							Discover. Connect. Make better.
+						</div>
+						<p>Flash Volunteer seeks to 
+						inspire neighborhood-based volunteerism in Seattle through 
+						user-friendly, barrier-free, online tools that can quickly 
+						connect people with volunteer opportunities, volunteers 
+						to neighborhoods, and nonprofits to volunteers.</p>
+						<p>Don't have a lot of time?
+						No problem. When you have some downtime, just visit Flash Volunteer and find a fun and meaningful event in your area that fits your schedule. Maybe even that minute.</p>
+					</div>
+					<div id="middle">				
+						<p>
+							<ol>
+								<li>Create an account.</li>
+								<li>Identify the neighborhoods you spend time in and your interests.</li>
+								<li>Sign up to volunteer for an event.</li>
+								<li>Attend the event.</li>
+								<li>Afterwards, become Flash Friends with other event volunteers and find more volunteer opportunities going on nearby.</li>
+								<li> Repeat steps 3-5, as necessary.</li>
+								<li>Create and organize volunteer events in your neighborhood.</li>
+							</ol>
+							
+						</p>
+					</div>
+					
+					<div id="right">
+						<div class="login_type">
+							<div class="login_style">
+								Sign up:
+							</div>			
+							<div class="login_subtext">
+								New Users
+							</div>					
+							<p>
+								Flash Volunteer uses Google accounts. The Sign Up button will take you to a Google page where you can login with your gmail account or create one.
+							</p>
+							<a class="button" href="{{account_url}}">
+								<span class="buttonleft"></span>
+								<span class="buttoncenter" id="l_create_account">Sign me up!</span>
+								<span class="buttonright"></span>
+							</a>				
+						</div>
+						<div class="login_type" id="log-in">
+							<div class="login_style">
+								Log in:
+							</div>
+							<div class="login_subtext">
+								Returning Users
+							</div>		
+							<p></p>
+							<a class="button" href="{{login_url}}">
+								<span class="buttonleft"> </span>
+								<span class="buttoncenter" id="l_login">Log In</span>
+								<span class="buttonright"> </span>
+							</a>
+						</div>
+					</div>	
+				</div>
+				<div id="footer">
+					<ul>
+						<li><a href="/static/about">About Flash Volunteer</a></li>
+						<li><a href="/static/feedback">Give Us Feedback</a></li>
+						<li><a href="/static/donate">Donate</a></li>
+						<li><a href="/static/privacy">Privacy Policy</a></li>
+						<li><a href="/static/tos">Terms of Use</a></li>
+					</ul><br>
+					<div id="copyright">Copyright &copy; 2009 Flash Volunteer. All Rights Reserved.</div>
+				</div><!--end footer-->					
+			</div>
+
+	
+		</div>
+		
+<!--
 		<div id="subcontainer" >
 			<div id="left" >
-				<img id="fvlogo" src="/stylesheets/flashvolunteer-logo.png" alt="flashvolunteer" />
+				<img id="fvlogo" src="stylesheets/splash/flashvolunteer-logo.png" alt="Flash Volunteer Logo" />
 				<div id="releaseinfo">
 					Flash Volunteer is scheduled for launch in summer 2009. Please continue to check back here frequently for updates.
 				</div>
@@ -15,24 +116,10 @@
 					If you'd like to learn more, volunteer, or help support Flash Volunteer, drop us a line at <a href="mailto:info@flashvolunteer.org">info@flashvolunteer.org</a>
 				</div>
 				<div id="fb-badge">
-				    <a href="http://www.facebook.com/pages/Flash-Volunteer/75272433226"><img src="/stylesheets/find_us_on_facebook_badge.gif" alt="Find us on Facebook"/></a>
+				    <a href="http://www.facebook.com/pages/Flash-Volunteer/75272433226"><img src="stylesheets/splash/find_us_on_facebook_badge.gif" alt="Find us on Facebook"/></a>
 				</div>
 				<div id="fb-insentive">
 					Become our fan on Facebook to see more screenshots and hear a recent interview on KEXP.
-				</div>
-				<div id="login-create">
-					<div id="buttons">
-						<a class="button" href="{{login_url}}">
-							<span class="buttonleft"> </span>
-							<span class="buttoncenter" id="l_login">Login</span>
-							<span class="buttonright"> </span>
-						</a>
-						<a class="button" href="{{account_url}}">
-							<span class="buttonleft"></span>
-							<span class="buttoncenter" id="l_create_account">Create an Account</span>
-							<span class="buttonright"></span>
-						</a>
-					</div>
 				</div>
 			</div>
 			<div id="right" >
@@ -59,14 +146,14 @@
 						<li>Access to a large pool of engaged volunteers</li>
 						<li>No cost</li>
 						<li>Use of the innovative Flash Volunteer networking platform to recruit, communicate with, organize and thank volunteers</li>
-						<li>Partnership in Flash Volunteer.org neighborhood outreach efforts</li>
+						<li>Partnership in FlashVolunteer.org neighborhood outreach efforts</li>
 						<li>Feedback on past events and access to metrics to help plan future ones</li>
 						<li>Last-minute, "on demand" event support from local volunteers</li>
 						<li>Ideal for understaffed groups that rely on volunteerism to thrive</li>
 					</ul>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 <script type="text/javascript">
