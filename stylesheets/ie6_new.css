@@ -29,3 +29,8 @@
 	width: 100%;
 	
 }
+
+img.smallavatar {
+    height: 80px;
+    width: 85px;
+}
