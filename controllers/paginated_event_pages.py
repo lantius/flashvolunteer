@@ -29,26 +29,27 @@ class BaseEventListPage(webapp.RequestHandler):
     LIST_LIMIT = BaseEventListPage.LIST_LIMIT
 
     page = self.page
-    generator, extract_style = self._get_event_generator()
+    item_list, extract_style = self._get_event_generator()
     
     
     start = (page-1) * LIST_LIMIT + 1
     offset = start - 1 
-    if isinstance(generator, list):
-        total = len(generator)
+    if isinstance(item_list, list):
+        total = len(item_list)
         
         if extract_style == 'direct':
-            events = generator[offset:offset+LIST_LIMIT]      
+            events = item_list[offset:offset+LIST_LIMIT]      
         else:
-            events = [e.event for e in generator[offset:offset+LIST_LIMIT]]      
+            events = [e.event for e in item_list[offset:offset+LIST_LIMIT]]      
 
     else:
-        total = generator.count()
+
+        #total = generator.count()
         
         if extract_style == 'direct':
-            events = [e for e in generator.fetch(limit = LIST_LIMIT, offset = offset)]        
+            events = [e for e in item_list.fetch(limit = LIST_LIMIT, offset = offset)]        
         else:
-            events = [e.event for e in generator.fetch(limit = LIST_LIMIT, offset = offset)]
+            events = [e.event for e in item_list.fetch(limit = LIST_LIMIT, offset = offset)]
 
         
         
@@ -88,7 +89,7 @@ class PaginatedUpcomingPage(BaseEventListPage):
       self.set_context()
         
   def _get_event_generator(self):
-     return (_get_upcoming_events(), 'direct')
+     return (list(_get_upcoming_events()), 'direct')
  
   def _get_title(self):
      return 'Upcoming Events'
