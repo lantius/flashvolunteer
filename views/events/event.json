@@ -5,5 +5,7 @@
  "description":"{{event.description}}",
  "duration":"{{event.duration}}",
  "special_instructions":"{{event.special_instructions}}",
- "address":"{{event.address}}"
+ "address":"{{event.address}}",
+ "lat":{{event.location.lat}},
+ "long":{{event.location.lon}}
 }
