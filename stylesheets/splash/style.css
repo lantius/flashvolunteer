@@ -103,7 +103,7 @@ body {
 }
 
 #cols {
-	height: 240px;
+	height: 260px;
 }
 #left p {
 	margin-top: 10px;
@@ -178,16 +178,23 @@ body {
 }
 
 
+#left #badges {
+	height:120px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right:auto;
+	width: 100%;
+}
+#left .badge {
+	float:left;
+	text-align: center;
+	padding-right: 20px;
+}
 
 #left #fb-badge {
-	padding-top: 40px;
-	text-align: center;
+	padding-top: 28px;
 }
 
-#left #fb-insentive {
-	padding-top: 10px;
-	font-size: 8pt;
-}
 .listlabel {
 	color: #30b003;
 	font-weight: bold;
