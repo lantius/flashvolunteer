@@ -11,7 +11,9 @@ from models.interestcategory import *
 # flashvolunteer-dev.appspot.com
 #GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
 # flashvolunteer.appspot.com
-GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ'
+#GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ'
+# flashvolunteer.org
+GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBSB3g0Y8ihXMTqIRmIruUh9vkTcixTE3ttgyqmicDGYMu-YIKDmu0Ey8g'
 
 ################################################################################
 # Event
@@ -136,6 +138,11 @@ class Event(db.Model):
         
     return ret
     
+  def message_body(self):
+      lines = ['You are invited to the event %s.'%self.name]
+      lines.append('To sign up for the event, please visit http://www.flashvolunteer.org/events/%i.'%self.key().id())
+      lines.append('Thanks!')
+      return "%0A%0A".join(lines)
   
   def url(self):
     if self.is_saved():
