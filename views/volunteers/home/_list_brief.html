@@ -12,8 +12,11 @@
 
 {% if volunteer.friends %}
     {% ifnotequal volunteer.friends|length 0 %}
-    <div class="pagination_entry">
-    <a href="/team">&raquo; View whole team</a>
-    </div>
+		{{volunteer.friends|length}}
+	    <div class="pagination_entry">
+	    <a href="/team">&raquo; View whole team</a>
+	    </div>
     {% endifnotequal %}
+{% else %}
+	<a href="/static/help#volunteers">Why is no one listed here?</a>
 {% endif %}

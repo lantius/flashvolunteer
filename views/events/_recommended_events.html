@@ -8,9 +8,12 @@
 </div>
 
 {% if recommended_events %}
-{% ifnotequal recommended_events|length 0 %}
-<div class="pagination_entry">
-    <a href="/events/recommended/1">&raquo; View all recommended events</a>
-</div>
-{% endifnotequal %}
+	{% ifnotequal recommended_events|length 0 %}
+	<div class="pagination_entry">
+	    <a href="/events/recommended/1">&raquo; View all recommended events</a>
+	</div>
+	<a href="/static/help#recommended-events">Where do recommended events come from?</a>
+	{% endifnotequal %}
+{%else%}
+	<a href="/static/help#recommended-events">Why don't I have any recommended events?</a>
 {% endif %}

@@ -157,7 +157,7 @@ class Volunteer(db.Model):
     for follower in self.followers():
         if follower.key().id() in following:            
           fr.append(follower)
-    return (f for f in fr)
+    return [f for f in fr]
 
   def friends_len(self):
     return len(self.friends())

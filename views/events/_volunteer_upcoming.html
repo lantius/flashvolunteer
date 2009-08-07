@@ -12,4 +12,6 @@
         <a href="/events/upcoming/volunteer/{{volunteer.key.id}}/1">&raquo; View all of my upcoming events</a>
     </div>
     {% endifnotequal %}
+{%else%}
+	<a href="/static/help#events">Why don't I have any upcoming events?</a>
 {% endif %}
