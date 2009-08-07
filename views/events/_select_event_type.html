@@ -1,5 +1,5 @@
 <select name="interestcategory">
-	<option value="default">Event type...</option>
+	<option value="default">Any event type...</option>
 	{% for interestcategory in interest_categories %}
 		<option value="{{ interestcategory.key.id }}">{{ interestcategory.name }}</option>
 	{% endfor %}

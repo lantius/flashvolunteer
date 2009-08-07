@@ -3,18 +3,16 @@
 		<h3>Search Results</h3>
 	</div>
 	<div id="eventyousearchedfor" >
-		<ul><li><span class="label">You have searched for volunteers in
-		{% if neighborhood %}
-			{{neighborhood.name}}
-		{% else %}
-			any neighborhood
-		{% endif %}
+		<ul><li><span class="label">You have searched for volunteers 
 		{% if name %}
-		, name matching '{{name}}'
+		 with a name matching '{{name}}'
 		{% endif %}
 		{% if email %}
-		and the email address {{email}}
-		{% endif %}.
+			and the email address {{email}}
+		{% endif %}
+		{% if neighborhood %}
+			in {{neighborhood.name}}.
+		{% endif %}
 </span></li>
 	</ul>
 	{% if volunteers %}

@@ -3,33 +3,22 @@
 		<h3>Search Results</h3>
 	</div>
 	<div id="eventyousearchedfor" >
-		<span class="label">You have searched for an event in
+		<span class="label">You have searched for events
 		{% if neighborhood %}
-			{{neighborhood.name}}
+			in {{neighborhood.name}}
 		{% else %}
-			any neighborhood
+			in all neighborhoods
 		{% endif %}
 		{% if fromdate %}
-		on or after {{fromdate|date:"F jS, Y" }}
+			on or after {{fromdate|date:"F jS, Y" }}
+			{% if todate %}
+				and on or before {{todate|date:"F jS, Y" }}
+			{% endif %}
 		{% endif %}
-		
-		{% if fromdate and todate %}
-			and
-		{% endif %}
-		
-		{% if todate %}
-		on or before {{todate|date:"F jS, Y" }}
-		{% endif %}
-		
-		{% if not fromdate and not todate %}
-		{% endif %}
-
         {% if interestcategory %}
-            , of type {{ interestcategory.name}}.
-        {% else %}
-            , of any type.
+            related to {{ interestcategory.name}}.
+		{% else %}.
         {% endif %}
-
         </span>
 	</div>
 	<div class="search_results">
