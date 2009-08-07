@@ -48,12 +48,10 @@
 					{% endif %}
 				{% endif %}
 			{% else %}
-				{% if not event.inpast %}
-					<li><form action="{{event.url}}/volunteer" method="post">
-						<input type=hidden name="session_id" value="{{ session_id }}" />
-						<input type=submit title="Volunteer for this event" class="volunteer_button" value="Sign me up!" id="s_volunteer"/>
-					</form></li>
-				{% endif %}
+				<li><form action="{{event.url}}/volunteer" method="post">
+					<input type=hidden name="session_id" value="{{ session_id }}" />
+					<input type=submit title="Volunteer for this event" class="volunteer_button" value="{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}" id="s_volunteer"/>
+				</form></li>
 			{% endif %}
 			</ul>
     </div>
