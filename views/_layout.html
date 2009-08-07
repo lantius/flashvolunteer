@@ -12,6 +12,8 @@
 <div id="container"> 
 <div id="top">
 	<div id="logo"><a href="/"><img src="/stylesheets/splash/logo.png" alt="Flash Volunteer Logo"/></a></div>
+	<div id="beta"><a href="/static/help#beta"><img style="height:70px;"src="/stylesheets/splash/beta.png" alt="Flash Volunteer is in Beta"/></a></div>
+
 	{%if volunteer %}
 		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
 	{% endif %}
