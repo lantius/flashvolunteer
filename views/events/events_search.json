@@ -1,6 +1,5 @@
 {"events":[
 {% for event in events %}
-	{"id":"{{event.key.id}}","lat":{{event.location.lat}},"long":{{event.location.lon}},
-	"name":"{{event.name}}"}{% if forloop.last %}{%else%},{%endif%}
+	{% include "event.json" %}
 {% endfor %}
 ]}

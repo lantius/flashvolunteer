@@ -3,6 +3,7 @@
  "neighborhood":"{{event.neighborhood.name}}",
  "date":"{{event.date}}",
  "description":"{{event.description}}",
+ "time": {{ event.get_time }},
  "duration":"{{event.duration}}",
  "special_instructions":"{{event.special_instructions}}",
  "address":"{{event.address}}",
