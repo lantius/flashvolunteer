@@ -154,6 +154,10 @@ class EventsPage(webapp.RequestHandler):
     if not event:
       self.error(404)
       return
+  
+    if event.address and not event.location:
+        event.geocode()
+        event.put()
     
     owners = EventVolunteer.gql("WHERE isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
@@ -378,7 +382,7 @@ class EventsPage(webapp.RequestHandler):
       except:
         pass
     
-    events = events_query.order('date').fetch(limit = 25)
+    events = events_query.order('date').fetch(limit = 100)
     
     if ur and ll:
       filtered_events = []

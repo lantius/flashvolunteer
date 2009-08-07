@@ -123,7 +123,7 @@ class VolunteersPage(webapp.RequestHandler):
       except:
         pass
 
-    volunteers = volunteers_query.fetch(limit = 25)
+    volunteers = volunteers_query.fetch(limit = 100)
 
     return (name, email, neighborhood, volunteers)
 
