@@ -1,66 +1,68 @@
-<li class="imagenameli" >
+<li class="imagenameli" id="verify_attendence" >
     <div id="volunteer_summary_team" class="volunteer_summary_team">
-
-        <div class="volunteer_summary_pic">
-            <a href="{{ ev.volunteer.url }}" >
-            <img class="smallavatar" src="
-            {% if ev.volunteer.avatar %}
-                {{ ev.volunteer.url }}/avatar
-            {% else %}
-                /stylesheets/default-profile-pic-small.png
-            {% endif %}
-            " alt="{{ ev.volunteer.get_name }}" /></a>
+		
+		<div id="left_verify">
+	        <div class="volunteer_summary_pic">
+	            <a href="{{ ev.volunteer.url }}" >
+	            <img class="smallavatar" src="
+	            {% if ev.volunteer.avatar %}
+	                {{ ev.volunteer.url }}/avatar
+	            {% else %}
+	                /stylesheets/default-profile-pic-small.png
+	            {% endif %}
+	            " alt="{{ ev.volunteer.get_name }}" /></a>
+	        </div>
+	        
+	        <div id="volunteer_summary_desc" class="volunteer_summary_desc">
+	            <div class="volunteer_summary_name">
+	             <a id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
+	            </div>
+			</div>
+		</div>
+		<div id="right_verify">
+			<ul>
+	            <li><input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true' 
+				   	onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'
+	                {% if ev.attended %} 
+	                 checked 
+	                {% endif %}
+	            />
+	            <label for='i_verify_{{ev.key.id}}_true'>Attended for </label>
+	            
+	            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" id='i_verify_{{ev.key.id}}_text'
+	                {% if not ev.attended %} 
+	                    disabled="true"
+	                {% endif %}
+	                {% ifequal ev.hours None %}
+	                    {% ifequal event.duration None %}
+	                        value=""
+	                    {% else %}  
+	                        value="{{event.get_duration_hours}}"
+	                    {% endifequal %}
+	                {% else %}  
+	                    value="{{ev.hours}}"
+	                {% endifequal %}
+	            /> hours </li>
+				
+	            <li><input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'
+	               	onclick='var text_id = this.id.replace(/false/, "text"); document.getElementById(text_id).disabled = true;'
+	                {% if not ev.attended %} 
+	                 checked 
+	                {% endif %}
+	            />
+	            <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
+	            </li>
+	            <li><input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'
+	               	onclick='var text_id = this.id.replace(/unknown/, "text"); document.getElementById(text_id).disabled = true;'
+	                {% ifequal ev.attended None %} 
+	                 checked 
+	                {% endifequal  %}
+	            />
+	            <label for='i_verify_{{ev.key.id}}_unknown'>?</label></li>
+	             
+	            <BR clear="ALL">
+			</ul>
         </div>
-        
-        <div id="volunteer_summary_desc" class="volunteer_summary_desc">
-            <div class="volunteer_summary_name">
-             <a id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
-            </div>
-
-            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true' 
-			   	onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'
-                {% if ev.attended %} 
-                 checked 
-                {% endif %}
-            />
-            <label for='i_verify_{{ev.key.id}}_true'>Attended for </label>
-            
-            <input type="text" name="hours_{{ev.key.id}}" size="3" maxlength="3" id='i_verify_{{ev.key.id}}_text'
-                {% if not ev.attended %} 
-                    disabled="true"
-                {% endif %}
-                {% ifequal ev.hours None %}
-                    {% ifequal event.duration None %}
-                        value=""
-                    {% else %}  
-                        value="{{event.get_duration_hours}}"
-                    {% endifequal %}
-                {% else %}  
-                    value="{{ev.hours}}"
-                {% endifequal %}
-            /> hours
-            
-            
-            <br/>
-            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'
-               	onclick='var text_id = this.id.replace(/false/, "text"); document.getElementById(text_id).disabled = true;'
-                {% if not ev.attended %} 
-                 checked 
-                {% endif %}
-            />
-            <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
-            <br/>
-            <input type='radio' name='event_volunteer_{{ev.key.id}}' value='unknown' id='i_verify_{{ev.key.id}}_unknown'
-               	onclick='var text_id = this.id.replace(/unknown/, "text"); document.getElementById(text_id).disabled = true;'
-                {% ifequal ev.attended None %} 
-                 checked 
-                {% endifequal  %}
-            />
-            <label for='i_verify_{{ev.key.id}}_unknown'>?</label><BR/>
-             
-            <BR clear="ALL">
-        </div>
-        
     </div>
         <br/>
 </li>

@@ -25,18 +25,18 @@ class="current"
 
 <div id="righthalf">
 	{% include "../events/_event_map.html" %}
-	{% if event.inpast and eventvolunteer.isowner %}
-       {% include "../events/_attendees_past_owner.html" %}
-    {% else %}
-	   {% include "../events/_attendees.html" %}
-    {% endif %}
-
 	{% comment %}
 		show photos, and allow to add albums and photos
 	{% endcomment %}
 	{% if event.inpast %}
        {% include "../events/_event_photos.html" %}
     {% endif %}
+	{% if event.inpast and eventvolunteer.isowner %}
+       {% include "../events/_attendees_past_owner.html" %}
+    {% else %}
+	   {% include "../events/_attendees.html" %}
+    {% endif %}
+
     
 </div>
 
