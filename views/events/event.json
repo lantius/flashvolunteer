@@ -1,12 +1,12 @@
 {"id":"{{event.key.id}}",
- "name":"{{event.name}}",
+ "name":"{{event.name|escape}}",
  "neighborhood":"{{event.neighborhood.name}}",
  "date":"{{event.date}}",
- "description":"{{event.description}}",
+ "description":"{{event.description|escape}}",
  "time": {{ event.get_time }},
  "duration":"{{event.duration}}",
- "special_instructions":"{{event.special_instructions}}",
- "address":"{{event.address}}",
+ "special_instructions":"{{event.special_instructions|escape}}",
+ "address":"{{event.address|escape}}",
  "lat":{{event.location.lat}},
  "long":{{event.location.lon}}
 }

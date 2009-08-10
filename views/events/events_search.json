@@ -1,5 +1,5 @@
 {"events":[
 {% for event in events %}
-	{% include "event.json" %},
+	{% include "event.json" %}{% if forloop.last %}{%else%},{%endif%}
 {% endfor %}
 ]}
