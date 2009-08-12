@@ -3,7 +3,6 @@
  "neighborhood":"{{event.neighborhood.name}}",
  "date":"{{event.date}}",
  "description":"{{event.description|escape}}",
- "time": {{ event.get_time }},
  "duration":"{{event.duration}}",
  "special_instructions":"{{event.special_instructions|escape}}",
  "address":"{{event.address|escape}}",
