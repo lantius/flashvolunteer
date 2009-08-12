@@ -13,7 +13,10 @@ from models.interestcategory import *
 # flashvolunteer.appspot.com
 #GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ'
 # flashvolunteer.org
-GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBSB3g0Y8ihXMTqIRmIruUh9vkTcixTE3ttgyqmicDGYMu-YIKDmu0Ey8g'
+GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBT8o8BW0NprhG7ZQBw6sHycsndbhRS7hhGpRgOy2Kssletcr3BQkAy7jg'
+#http://v01-1.latest.flashvolunteer.appspot.com
+#GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBRKcpMVieIGuRjmcVoCEVomVUOSzxQXzU7Vr92SCk5CZf8Fq_G1wz5bIA'
+
 
 ################################################################################
 # Event
