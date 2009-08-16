@@ -131,6 +131,11 @@ class Volunteer(db.Model):
     events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
     return events
 
+  def events_coordinating(self):
+    events = [ev.event for ev in self.eventvolunteers if ev.isowner and not ev.event.inpast()]
+    events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
+    return events      
+
   def interestcategories(self):
     return (vic.interestcategory for vic in self.volunteerinterestcategories)
 

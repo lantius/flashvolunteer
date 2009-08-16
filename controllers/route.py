@@ -4,7 +4,7 @@ import cgi, logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
-from controllers.events import EventsPage
+from controllers.events import EventsPage, EventAddCoordinatorPage
 
 from controllers.paginated_event_pages import \
     PaginatedVolunteerCompletedPage, PaginatedNeighborhoodCompletedPage, \
@@ -66,6 +66,7 @@ def main():
          ('/settings/avatar', VolunteerAvatar),
          ('/delete', SettingsPage),
          ('/events/(\d+)/volunteer', VolunteerForEvent),
+         ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
          ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
          ('/events/(\d+)/verify', VerifyEventAttendance),
          ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),

@@ -1,0 +1,19 @@
+		
+<div id="personupcomingevents" class="softmodule">
+	<div class="moduletitle"><h3>Events I am Coordinating</h3><a style="cursor:pointer" title="These are the events that you are currently helping to coordinate. Past events you have coordinated are listed in the Completed Events list. Go to Create Event if you want to coordinate a new event.">(?)</a></div>
+	{% for event in volunteer.events_coordinating %}
+		{% include "../events/_event_list_item.html" %}
+	{% endfor %}
+</div><!--end profileupcomingevents-->
+
+{% if volunteer.events_coordinating %}
+    {% ifnotequal volunteer.events_coordinating|length 0 %}
+    <div class="pagination_entry">
+        <a href="/events/hosted/volunteer/{{volunteer.key.id}}/1">&raquo; View all</a>
+    </div>
+    {% endifnotequal %}
+{%else%}
+	<div class="faq-link-wrapper">
+		<a class="faq-link" href="/static/help#events">Why am I not coordinating any upcoming events?</a>
+	</div>
+{% endif %}

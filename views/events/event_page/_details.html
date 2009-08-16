@@ -5,9 +5,9 @@
 		<li><span class="label">Time:</span> {{ event.get_time }}</li>
 		<li><span class="label">Duration:</span> {{ event.get_duration_string}} </li>
 		<li><span class="label">Neighborhood:</span> {{ event.neighborhood.name }}</li>
-		<li><span class="label">Host:</span> 
+		<li><span class="label">Coordinator(s):</span> 
 			{% for owner in owners %}
-				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a> 
+				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a>{% if forloop.last %}{%else%},{%endif%}
 			{% endfor %}</li>
 		<li><span class="label">Address:</span> {{ event.address }}</li>
 		<li><span class="label">Categories:</span> 
@@ -31,6 +31,9 @@
 							<input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
 						</form></li>
 		  			{% if not event.inpast %}
+							<li><form action="/events/{{event.key.id}}/add_coordinator">
+								<input type="submit" title="Add another event coordinator" class="operation" value="&raquo; Add another event coordinator" id="s_add_coordinator"/>
+							</form></li>
 							<li><form action="/events/{{event.key.id}}" method="post">
 								<input type="submit" title="Cancel this event" class="operation" value="&raquo; Cancel this event" id="s_cancel_event"/>
 								<input type=hidden name="session_id" value="{{ session_id }}" />
@@ -46,8 +49,15 @@
 							<input type=submit title="Unvolunteer for this event" class="operation" value="&raquo; Unvolunteer" id="s_unvolunteer" />
 						</form></li>
 					{% endif %}
+					{% if not event.verified %}
+						<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
+					{% endif %}
 				{% endif %}
 			{% else %}
+					{% if not event.verified %}
+						<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
+					{% endif %}
+
 				<li><form action="{{event.url}}/volunteer" method="post">
 					<input type=hidden name="session_id" value="{{ session_id }}" />
 					<input type=submit title="Volunteer for this event" class="volunteer_button" value="{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}" id="s_volunteer"/>

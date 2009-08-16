@@ -1,6 +1,6 @@
 		
 <div id="personpastevents" class="softmodule">
-	<div class="moduletitle"><h3>My Completed Events</h3></div>
+	<div class="moduletitle"><h3>My Completed Events</h3> <a style="cursor:pointer" title="These are the events that you have volunteered at and/or coordinated.">(?)</a></div>
 	<ul>
 		{% for event in my_past_events %}
 			<li><a id="event_past[{{event.key.id}}]" href="{{ event.url }}" >{{ event.date }}:</a> {{ event.name }}</li>
@@ -11,7 +11,7 @@
 {% if my_past_events %}
 	{% ifnotequal my_past_events|length 0 %}
 	<div class="pagination_entry">
-	    <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all past events</a>
+	    <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all</a>
 	</div>
 	{% endifnotequal %}
 {% endif %}

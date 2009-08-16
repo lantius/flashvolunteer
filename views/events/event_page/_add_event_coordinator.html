@@ -1,0 +1,29 @@
+{% extends "../../_layout.html" %}
+
+{% block title %}
+Add A Coordinator to {{event.name}}
+{% endblock title %}
+
+{% block eventsactive %}
+class="current"
+{% endblock %}
+
+{% block pagespectitle %}
+<h1>Add Coordinator to {{event.name}}</h1>
+{% endblock pagespectitle %}
+
+{% block content %}
+
+<div id="full100">
+	<form action="/events/{{event.key.id}}/add_coordinator" method="post">
+	
+	    <input type="hidden" name="session_id" value="{{ volunteer.session_id }}">
+	    <ul>	
+	        <li><span class="label">Volunteer:</span> {% include "_select_volunteer_event_coordinator.html"%}</li>
+			<li><input type="submit" id="s_add_coordinator" value="Add as coordinator"></li>
+		</ul>				
+	</form>
+	<p>You can only add people who have already signed up for an event. If your co-coordinator is not yet signed up, <a class="operation" href="mailto:?subject={{volunteer.name}} wants you to volunteer at {{event.name}}!&body={{event.message_body}}">invite them</a>!</p>
+</div>
+
+{% endblock content %}

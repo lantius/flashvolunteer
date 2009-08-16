@@ -1,0 +1,19 @@
+<div id="upcomingevents" class="hardmodule">
+    <div class="moduletitle"><h3>Upcoming Events <a style="cursor:pointer" title="A list of the next few upcoming events hosted by Flash Volunteers. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
+    <ul>            
+        {% for event in upcoming_events %}
+            {% include "../events/_event_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+{% if upcoming_events %}
+    {% ifnotequal upcoming_events|length 0 %}
+    <div class="pagination_entry">
+    <a href="/events/upcoming/1">&raquo; View all</a>
+    </div>
+    {% endifnotequal %}
+{%else%}
+	<div class="faq-link-wrapper">
+		<a class="faq-link" href="/static/help#events">Why don't I have any upcoming events?</a>
+	</div>
+{% endif %}

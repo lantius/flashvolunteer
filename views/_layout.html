@@ -25,9 +25,6 @@
 		<li id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
 		<li id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
 		<li id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
-		{% if volunteer.can_create_events %}
-		<li id="createeventlink"><a href="/events/new" {% block createeventactive %}{% endblock createeventactive %} id="l_create_event">CREATE EVENT</a></li>
-		{% endif %}
 	</ul>
 </div><!--end top-->
 

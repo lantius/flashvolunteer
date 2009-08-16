@@ -34,6 +34,8 @@ class Event(db.Model):
   location = db.GeoPtProperty() # No default
   geostring = db.StringProperty()
   
+  verified = db.BooleanProperty(default = False)
+  
   def __init__(self,
              parent=None,
              key_name=None,
@@ -211,8 +213,9 @@ class Event(db.Model):
         raise Exception
       if not len(params['name']) > 0:
         raise Exception
-      
-      self.name = params['name']
+      if self.name != params['name']:
+          self.name = params['name']
+          self.verified = False
     except:
       self.error['name'] = ('Name is required', params['name'])
 
@@ -254,7 +257,9 @@ class Event(db.Model):
         raise Exception
       if not len(params['description']) > 0:
         raise Exception
-      self.description = params['description']
+      if self.description != params['description']:
+          self.description = params['description']
+          self.verified = False
     except:
       self.error['description'] = ('Description is required',
                                    params['description'])
@@ -275,7 +280,9 @@ class Event(db.Model):
       self.geocode()
     
     try:
-      self.special_instructions = params['special_instructions']
+      if self.special_instructions != params['special_instructions']:
+          self.special_instructions = params['special_instructions']
+          self.verified = False
     except:
       self.error['special_instructions'] = ('Invalid special instructions', 
                                             params['special_instructions'])

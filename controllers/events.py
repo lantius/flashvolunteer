@@ -159,6 +159,10 @@ class EventsPage(webapp.RequestHandler):
         event.geocode()
         event.put()
     
+    if not event.verified:
+        event.verified = False
+        event.put()
+        
     owners = EventVolunteer.gql("WHERE isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
     if len(owners) > 0:
@@ -184,7 +188,6 @@ class EventsPage(webapp.RequestHandler):
       else:
           public_attendees = []
           for v in event.volunteers():
-              if v.key().id() == volunteer.key().id(): continue
               if v.event_access(volunteer=volunteer):
                   public_attendees.append(v)
               else:
@@ -237,9 +240,9 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
     
-    if not volunteer.can_create_events():
-      self.redirect("/events") #TODO REDIRECT to error page
-      return
+#    if not volunteer.can_create_events():
+#      self.redirect("/events") #TODO REDIRECT to error page
+#      return
     
     neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
     if event:
@@ -461,3 +464,62 @@ class EventsPage(webapp.RequestHandler):
     
     if event_id and event_id != None:
       self.redirect("/events/" + str(int(event_id)))
+      
+      
+################################################################################
+# EventAddCoordinatorPage page
+################################################################################
+class EventAddCoordinatorPage(webapp.RequestHandler):
+  LIMIT = 12
+  ################################################################################
+  # GET
+  def get(self, event_id):   
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
+    
+    event = Event.get_by_id(int(event_id))
+    
+    if event.hosts().find(str(volunteer.key().id())) == -1:
+      self.redirect("/events") #TODO REDIRECT to error page
+      return
+
+    volunteers = Event.get_by_id(int(event_id))
+    
+    template_values = {
+        'event' : event,
+        'volunteer': volunteer,
+        'volunteers': sorted(Volunteer.all(), lambda a,b: cmp(a.name,b.name))
+      }
+    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_page', '_add_event_coordinator.html')
+    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+    
+  def post(self, event_id):   
+    try:
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+    except:
+      return
+
+    params = Parameters.parameterize(self.request)
+    
+    event = Event.get_by_id(int(event_id))
+
+    if event.hosts().find(str(volunteer.key().id())) == -1:
+      self.redirect("/events") #TODO REDIRECT to error page
+      return
+  
+    try:
+        new_coord_id = int(params['volunteer_coordinator'])
+        new_coord = None
+        for ev in Volunteer.get_by_id(new_coord_id).eventvolunteers:
+            if ev.event.key().id() == event.key().id():
+                new_coord = ev
+                break
+        new_coord.isowner = True
+        new_coord.put()
+    except:
+        pass
+
+    self.redirect('/events/'+ event_id)
+    

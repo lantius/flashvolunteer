@@ -10,34 +10,32 @@ class="current"
 
 
 {% block pagespectitle %}
-<h1>Event: {{event.name}}</h1>
+<h1>Event: {{event.name}} {% if not event.verified %}<span class="verification_warning_wrapper"><a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a></span>{% endif %}</h1>
 {% endblock pagespectitle %}
 
 
 {% block content %}
 
 <div id="lefthalf">
-	{% include "../events/_details.html" %}
-	{% include "../events/_description.html" %}
-	{% include "../events/_special_instructions.html" %}
+	{% include "../events/event_page/_details.html" %}
+	{% include "../events/event_page/_description.html" %}
+	{% include "../events/event_page/_special_instructions.html" %}
 	
 </div>
 
 <div id="righthalf">
-	{% include "../events/_event_map.html" %}
+	{% include "../events/event_page/_event_map.html" %}
 	{% comment %}
 		show photos, and allow to add albums and photos
 	{% endcomment %}
 	{% if event.inpast %}
-       {% include "../events/_event_photos.html" %}
+       {% include "../events/event_page/_event_photos.html" %}
     {% endif %}
 	{% if event.inpast and eventvolunteer.isowner %}
-       {% include "../events/_attendees_past_owner.html" %}
+       {% include "../events/event_page/_attendees_past_owner.html" %}
     {% else %}
-	   {% include "../events/_attendees.html" %}
+	   {% include "../events/event_page/_attendees.html" %}
     {% endif %}
-
-    
 </div>
 
 

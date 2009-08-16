@@ -1,0 +1,55 @@
+
+<div id="createevent" class="softmodule">
+	<div class="moduletitle"><h3>Create An Event</h3></div>
+	
+	<form action="{% if event.is_saved %}
+						{{event.url}}/edit
+					{% else %}
+						/events/new
+					{% endif %}" method="post"><ul>
+		<li>
+			<div class="eventcreatelabel">Event Name:</div>
+			<div class="eventinput">
+				{% include "../events/create_event_page/_name_input.html" %}
+			</div>
+		</li>
+
+		{% include "../events/create_event_page/_date_and_time_option.html" %}
+
+
+		<li>
+			<div class="eventcreatelabel">Neighborhood:</div>
+			<div class="eventinput">
+				{% include "../neighborhoods/_select_neighborhood.html" %}
+			</div>
+		</li>
+		
+		<li>
+			<div class="eventcreatelabel">Address:</div>
+			<div class="eventinput">
+				{% include "../events/create_event_page/_enter_address.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Event Description:</div>
+			<div class="eventinput">
+				{% include "../events/create_event_page/_description_input.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Special Instructions:</div>
+			<div class="eventinput">
+				{% include "../events/create_event_page/_special_instructions_input.html" %}
+			</div>
+		</li>
+		<li>
+			<div class="eventcreatelabel">Interest Categories:</div>
+			<div class="eventinput">
+				{% include "../interestcategories/_interestcategories.html" %}
+			</div>
+		</li>
+	</ul>
+	<input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+	<input id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create{% endif %}"/>
+	</form>
+</div>

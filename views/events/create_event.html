@@ -1,20 +1,15 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Create Events
+Create Event
 {% endblock title %}
-
-{% block createeventactive %}
-class="current"
-{% endblock %}
 
 {% block content %}
 
 <div id="left75">
-	{% include "../events/_create_edit.html" %}
-	{#% include "../interestcategories/_interestcategories.html" %#}
+	{% include "../events/create_event_page/_create_edit.html" %}
 </div><!--end left75-->
 <div id="right25">
-	{% include "../events/_creation_tips.html" %}
+	{% include "../events/create_event_page/_creation_tips.html" %}
 </div><!--end right25-->
 
-{% endblock %}
+{% endblock content%}

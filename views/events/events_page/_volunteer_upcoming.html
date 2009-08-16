@@ -1,0 +1,19 @@
+		
+<div id="personupcomingevents" class="softmodule">
+	<div class="moduletitle"><h3>My Upcoming Events</h3> <a title="You can find events to volunteer for through the event search, browsing through neighborhoods, and looking at your recommended events." href="/static/help#events">(?)</a></div>
+	{% for event in my_future_events %}
+		{% include "../events/_event_list_item.html" %}
+	{% endfor %}
+</div><!--end profileupcomingevents-->
+
+{% if my_future_events %}
+    {% ifnotequal my_future_events|length 0 %}
+    <div class="pagination_entry">
+        <a href="/events/upcoming/volunteer/{{volunteer.key.id}}/1">&raquo; View all</a>
+    </div>
+    {% endifnotequal %}
+{%else%}
+	<div class="faq-link-wrapper">
+		<a class="faq-link" href="/static/help#events">Why don't I have any upcoming events?</a>
+	</div>
+{% endif %}
