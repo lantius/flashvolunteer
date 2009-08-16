@@ -7,7 +7,7 @@
 		<li><span class="label">Neighborhood:</span> {{ event.neighborhood.name }}</li>
 		<li><span class="label">Coordinator(s):</span> 
 			{% for owner in owners %}
-				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a>{% if forloop.last %}{%else%},{%endif%}
+				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a>{% if forloop.last %}{%else%}, {%endif%}
 			{% endfor %}</li>
 		<li><span class="label">Address:</span> {{ event.address }}</li>
 		<li><span class="label">Categories:</span> 

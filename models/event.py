@@ -158,11 +158,8 @@ class Event(db.Model):
     return (ev.volunteer for ev in self.eventvolunteers)
   
   def hosts(self):
-    hosts = ""
-    for ev in self.eventvolunteers:
-      if ev.isowner:
-        hosts += "<a href='" + ev.volunteer.url() + "'>" + ev.volunteer.get_name() + "</a> "
-    
+    hosts = [ev for ev in self.eventvolunteers if ev.isowner]
+
     return hosts
 
   def interestcategories(self):

@@ -1,8 +1,19 @@
 
 <div class="shortevent">
+    {% if not event.verified %}<span class="verification_warning_wrapper"><a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a></span>{% endif %}<a id="event_upcoming[{{event.key.id}}]" class="event_name" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name }}</a>
     <ul>
-        <li>{% if not event.verified %}<span class="verification_warning_wrapper"><a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a></span>{% endif %}<a id="event_upcoming[{{event.key.id}}]" class="event_name" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name }}</a></li>
         <li><span class="label">When:</span> {{ event.get_time }}, {{ event.get_startdate_long }}</li>
         <li><span class="label">Where:</span> <a href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>
+		<li><span class="label">Coordinator:</span> 
+			{% for owner in event.hosts %}
+				{% ifequal forloop.counter 1 %}
+					<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a>
+				{% else %} 
+					{%ifequal forloop.counter 2 %}
+						(...)
+					{%else%}
+					{%endifequal%}
+				{% endifequal %}
+			{% endfor %}</li>
     </ul>
 </div>
