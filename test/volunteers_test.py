@@ -77,8 +77,8 @@ class VolunteersTest(unittest.TestCase):
     self.assertEqual(volunteer.followers().next().key().id, follower.key().id )
     self.assertEqual(follower.following().next().key().id, volunteer.key().id )
     
-    self.assertEqual(volunteer.friends().next().key().id, follower.key().id )
-    self.assertEqual(follower.friends().next().key().id, volunteer.key().id )
+    self.assertEqual(volunteer.friends()[0].key().id, follower.key().id )
+    self.assertEqual(follower.friends()[0].key().id, volunteer.key().id )
 
     vf.delete()
     
