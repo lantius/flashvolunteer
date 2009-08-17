@@ -1,4 +1,4 @@
-import unittest, timeit
+import unittest, timeit, datetime
 from webtest import TestApp
 from google.appengine.ext import webapp
 from components.geostring import *
@@ -41,7 +41,7 @@ class EventsTest(unittest.TestCase):
                'neighborhood' : 1,
                'date' : '01/01/2009',
                'time' : '03:00',
-               'duration' : '120',
+               'duration' : '7200', #this is in seconds
                'startdate' : '01/01/2009',
                'starthour' : '3',
                'startminute' : '0',
@@ -65,7 +65,7 @@ class EventsTest(unittest.TestCase):
     self.assertTrue(owner.isowner)
     self.assertEqual(event.name, params['name'])
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])
-    self.assertEqual(event.duration, int(params['duration']))
+    self.assertEqual(int(event.get_duration().seconds), int(params['duration']))
     self.assertEqual(event.date.strftime("%H:%M"), params['time'])
     self.assertEqual(event.description, params['description'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
@@ -97,7 +97,13 @@ class EventsTest(unittest.TestCase):
                'name' : 'edit unit test -- edited',
                'date' : '01/02/2009',
                'time' : '13:00',
-               'duration' : '2',               
+               'duration' : '7200', #this is in seconds
+               'startdate' : '01/02/2009',
+               'starthour' : '3',
+               'startminute' : '0',
+               'enddate' : '01/02/2009',
+               'endhour' : '5',
+               'endminute' : '0',                       
                'description' : 'test description -- edited',
                'special_instructions' : 'special instructions',
                'address' : '3334 NE Blakeley St. Seattle, WA 98105',
