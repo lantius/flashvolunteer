@@ -181,6 +181,22 @@ class PaginatedVolunteerUpcomingPage(BaseEventListPage):
   def _get_url(self):
      return '/events/upcoming/volunteer/%i/'%self.volunteerid
  
+class PaginatedVolunteerHostedPage(BaseEventListPage):
+  def get(self, volunteerid, page):
+      self.page = int(page)
+      self.volunteerid = int(volunteerid)
+      self.set_context()
+        
+  def _get_event_generator(self):
+     return (self.volunteer.events_coordinating(), 'direct')
+ 
+  def _get_title(self):
+     return 'Events %s is coordinating'%self.volunteer.name
+ 
+  def _get_url(self):
+     return '/events/hosted/volunteer/%i/'%self.volunteerid
+
+
 
 class PaginatedNeighborhoodUpcomingPage(BaseEventListPage):
   def get(self, neighborhoodid, page):

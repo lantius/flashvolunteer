@@ -11,6 +11,8 @@ from models.neighborhood import *
 from models.event import *
 from models.interestcategory import *
 
+
+
 ################################################################################
 # MainPage
 class MainPage(webapp.RequestHandler):
@@ -19,7 +21,7 @@ class MainPage(webapp.RequestHandler):
     try:
       volunteer = Authorize.login(self, requireVolunteer=False)
     except:
-      return
+      return    
     
     # if volunteer is logged in, then they get their login page
     # otherwise, they get the splash page
@@ -33,12 +35,14 @@ class MainPage(webapp.RequestHandler):
   # splashpage
   def splashpage(self):
     
-    login_url = users.create_login_url(self.request.uri)      
-    account_url = users.create_login_url('/settings')
+    login_url = '/login'   
+    account_url = '/create'
+    
     
     template_values = { 
       'login_url' : login_url,
-      'account_url' : account_url
+      'account_url' : account_url,
+      'token_url' : self.request.host_url + '/rpx_response' 
     }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'splash.html')
     self.response.out.write(template.render(path, template_values))
@@ -65,9 +69,3 @@ class MainPage(webapp.RequestHandler):
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
     self.response.out.write(template.render(path, template_values))
-
-
-    
-
-
-

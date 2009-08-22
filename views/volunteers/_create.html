@@ -4,6 +4,7 @@
 	</div>
 	<form action="/settings" method="post">
 	<input type="hidden" name="session_id" value="{{ session_id }}" />
+	
 	<ul>
 		<li><span class="label">Your Name:</span><input id="createnameinput" type="text" name="name"
 			{% if volunteer.error.name %}
@@ -19,7 +20,24 @@
 			{% if volunteer.error.name %}
 				<br/><strong class="error">{{volunteer.error.name.0}}</strong>
 			{% endif %}
-		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
+		<li>
+		<li><span class="label">Preferred email:</span><input id="createnameinput" type="text" name="email"
+			{% if volunteer.error.email %}
+				value="{{ volunteer.error.email.1 }}"
+			{% else %}
+				{% if volunteer.email %}
+					value="{{ volunteer.email|striptags }}"
+				{% else %}
+					value="{{ default_email|striptags }}"
+				{% endif %}
+			{% endif %}
+			/></li>
+			{% if volunteer.error.email %}
+				<br/><strong class="error">{{volunteer.error.email.0}}</strong>
+			{% endif %}
+		<li>			
+			
+		<input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
 		{% if volunteer.error.tosagree %}
 			<br/><strong class="error">{{volunteer.error.tosagree.0}}</strong>
 		{% endif %}

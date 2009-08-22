@@ -13,6 +13,7 @@ from models.interestcategory import *
 from models.volunteerinterestcategory import *
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
+from components.sessions import Session
 
 ################################################################################
 # Settings page
@@ -22,18 +23,19 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # GET
   ################################################################################
-  def get(self):
+  def get(self):      
     try:
       volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
+              
     if volunteer:
       self.edit(volunteer)
     else:
       volunteer = Volunteer()
       volunteer.error.clear()
       self.new(volunteer)
-
+            
   ################################################################################
   # POST
   ################################################################################
@@ -42,14 +44,15 @@ class SettingsPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
-
+      
     params = Parameters.parameterize(self.request)
+
     if not volunteer:
       if self.create(params):
         self.redirect('/')
         
     else:
-      if 'is_delete' in params and params['is_delete'] == 'true':        
+      if 'is_delete' in params and params['is_delete'] == 'true':     
         if 'confirm_delete' in params and params['confirm_delete'] == 'true':
           self.delete(volunteer)
           self.redirect('/')
@@ -78,15 +81,17 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # NEW
   def new(self, volunteer):
-    user = users.get_current_user()
-
+    session = Session()
+    user = session.get('user', None)
+    
     if not user:
-      self.redirect(users.create_login_url(self.request.uri))
+      self.redirect('/login')
       return
 
     template_values = {
         'default_name' : user.nickname(),
-        'volunteer' :  volunteer,
+        'default_email': user.email(),
+        'volunteer' :  volunteer
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'create.html')
     self.response.out.write(template.render(path, template_values))
@@ -94,15 +99,15 @@ class SettingsPage(webapp.RequestHandler):
   ################################################################################
   # CREATE
   def create(self, params):
-    user = users.get_current_user()
+    session = Session()
+    user = session.get('user', None)
 
     if not user:
-      self.redirect(users.create_login_url(self.request.uri))
+      self.redirect('/create')
       return
 
     volunteer = Volunteer()
     volunteer.user = user
-    volunteer.preferred_email = user.email()
     
     if not volunteer.validate(params):
       self.new(volunteer)
@@ -160,6 +165,8 @@ class SettingsPage(webapp.RequestHandler):
 
     # Finally remove the volunteer
     volunteer.delete()
+    
+    self.redirect('/')
   
   ################################################################################
   # CONFIRM_DELETE

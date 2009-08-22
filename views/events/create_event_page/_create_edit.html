@@ -16,7 +16,6 @@
 
 		{% include "../events/create_event_page/_date_and_time_option.html" %}
 
-
 		<li>
 			<div class="eventcreatelabel">Neighborhood:</div>
 			<div class="eventinput">
@@ -49,7 +48,13 @@
 			</div>
 		</li>
 	</ul>
+
+	<div id="official_coordinator">
+		<input id="official_coordinator_checkbox" name="coordinator" type="checkbox" value="1" />
+	  	<label class="checkboxlabel" title="If you are not, please go ahead and create the event anyway. It may not immediately be shown in the Flash Volunteer system." for="coordinator">I am the official contact for this event</label>
+	</div>
+			
 	<input type=hidden name="session_id" value="{{ volunteer.session_id }}">
-	<input id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create{% endif %}"/>
+	<input id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
 	</form>
 </div>

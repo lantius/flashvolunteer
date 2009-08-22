@@ -24,8 +24,9 @@
 
         <div class="event_operation_block">
         	<ul>
-			{% if eventvolunteer %}
 				<li><a class="operation" href="mailto:?subject={{volunteer.name}} wants you to volunteer at {{event.name}}!&body={{event.message_body}}">&raquo; Invite your friends</a></li>				
+
+			{% if eventvolunteer %}
 				{% if eventvolunteer.isowner %}
 						<li><form action="/events/{{event.key.id}}/edit">
 							<input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
@@ -54,6 +55,8 @@
 					{% endif %}
 				{% endif %}
 			{% else %}
+		    		<li><a href="mailto:{{ contact.user.email }}" class="operation">&raquo; Contact Event Host</a></li>
+
 					{% if not event.verified %}
 						<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 					{% endif %}

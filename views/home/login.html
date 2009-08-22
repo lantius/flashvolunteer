@@ -21,7 +21,7 @@
 				</div>
 				<div class="float" id="beta-text">
 					* Which means we are still adding new features and 
-					fixing bugs. <a href="/static/feedback">Send us feedback</a> if you have any suggestions. 
+					fixing bugs. <a href="/static/feedback">Send us feedback</a> if you have any suggestions.
 				</div>
 			</div>
 		</div>
@@ -30,67 +30,42 @@
 			<div id="bottom-wrap">
 				<div id="cols">
 					<div id="left">
-						<div id="slogan">
-							Discover. Connect. Make better.
-						</div>
-						<p>Flash Volunteer connects Seattle-area residents to volunteer opportunities, volunteers 
-						to neighborhoods, and nonprofits to volunteers.</p>
-						<p>Don't have a lot of time?
-						No problem. When you have some downtime, just visit Flash Volunteer and find a fun and meaningful event in your area that fits your schedule. Maybe even that minute.</p>
-						
-						<div id="badges">
-							<div class="badge" id="fb-badge">
-							    <a href="http://www.facebook.com/pages/Flash-Volunteer/75272433226"><img src="stylesheets/splash/find_us_on_facebook_badge.gif" alt="Find us on Facebook"/></a>
-							</div>
-							<div class="badge" id="twitter-badge">
-								<a href="http://twitter.com/flashvolunteer"><img src="stylesheets/splash/twitter_badge.png" alt="Follow us on Twitter"/></a>						
-							</div>
-						</div>
+						<!--{% if new_account %}
+							<h1>Create a new account</h1>
+							<p>You can create a new account by using any of the providers on the right.</p>
+							<p>For example, if you already have a gmail account, you can log in to Flash Volunteer by selecting "Google".</p>
+							<p>When you click on one of the providers, the provider will prompt you to provide your log in credentials for that site. You will then be redirected back to Flash Volunteer.</p>
+						{% else %}
+							<h1>Welcome back!</h1>
+							<p>Please log in using the same provider that you did last time. Otherwise, you will create a NEW account. (Beta users: you all were using Google accounts)</p>
+							<p>If you want to change your provider, please <a href="mailto:info@flashvolunteer.org">send us an email</a>.</p>
+						{% endif %}-->
+							<div class="account_section">
+								<h1>New Users</h1>
+								<p>You can create a new Flash Volunteer account by logging in through any of the providers on the right. Just click on the one that you prefer.</p>
+								<p>If you do not already have an account with any of the providers, you can easily create one for any of the services.</p>
+							</div>	
+							<div class="account_section"> 
+								<h1>Returning Users</h1>
+								<p><span id="emph">Please use the same provider as last time.</span> Otherwise, a new Flash Volunteer account will be created for you.</p>
+								<p><a href="mailto:info@flashvolunteer.org">Send us an email</a> if you want to merge two accounts.</p>
+							</div>						
 					</div>
-					<div id="middle">				
-						<p>
-							<ol>
-								<li>Create an account.</li>
-								<li>Identify the neighborhoods you spend time in and your interests.</li>
-								<li>Sign up to volunteer for an event.</li>
-								<li>Attend the event.</li>
-								<li>Afterwards, become Flash Friends with other event volunteers and find more volunteer opportunities going on nearby.</li>
-								<li> Repeat steps 3-5, as necessary.</li>
-								<li>Create and organize volunteer events in your neighborhood.</li>
-							</ol>
-							
-						</p>
-					
+					<div id="right" style="width:400px">
+						<div class="emph">When you select a provider, you may be taken away from this site. After logging in, you will return to Flash Volunteer.</div> 
+
+						{% if not dev_server %}
+							<iframe src="https://flash-volunteer.rpxnow.com/openid/embed?token_url={{token_url}}" scrolling="no" frameBorder="no" style="width:100%;height:240px;">
+								You do not have JavaScript enabled in your browser. Please enable JavaScript, or download a web browser that supports it.					
+							</iframe>
+						{% else %}
+								<a class="button" href="{{login_url}}">
+									<span class="buttonleft"> </span>
+									<span class="buttoncenter" id="l_login">Enter local development site</span>
+									<span class="buttonright"> </span>
+								</a>						
+						{% endif %}
 					</div>
-					
-					<div id="right">
-						<div class="login_type">
-							<div class="login_style">
-								Volunteer Log in
-							</div>			
-							<div class="login_subtext">
-								New & Returning Users
-							</div>
-							<a class="button" href="{{login_url}}">
-								<span class="buttonleft"></span>
-								<span class="buttoncenter" id="l_create_account">Let me in!</span>
-								<span class="buttonright"></span>
-							</a>				
-						</div>
-						<!--<div class="login_type" id="log-in">
-							<div class="login_style">
-								Log in:
-							</div>
-							<div class="login_subtext">
-								Returning Users
-							</div>		
-							<a class="button" href="{{login_url}}">
-								<span class="buttonleft"> </span>
-								<span class="buttoncenter" id="l_login">Log In</span>
-								<span class="buttonright"> </span>
-							</a>
-						</div>-->
-					</div>	
 				</div>
 				<div id="footer">
 					<ul>
@@ -103,8 +78,6 @@
 					<div id="copyright">Copyright &copy; 2009 Flash Volunteer. All Rights Reserved.</div>
 				</div><!--end footer-->					
 			</div>
-
-	
 		</div>
 		
 <!--

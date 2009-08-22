@@ -3,7 +3,7 @@
 	<div class="moduletitle"><h3>My Completed Events</h3> <a style="cursor:pointer" title="These are the events that you have volunteered at and/or coordinated.">(?)</a></div>
 	<ul>
 		{% for event in my_past_events %}
-			<li><a id="event_past[{{event.key.id}}]" href="{{ event.url }}" >{{ event.date }}:</a> {{ event.name }}</li>
+			{% include "../events/_event_list_item.html" %}
 		{% endfor %}
 	</ul>
 </div><!--end personpastevents-->

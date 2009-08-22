@@ -1,17 +1,20 @@
 from google.appengine.api import users
-from models.volunteer import *
+from models.volunteer import Volunteer
+from components.sessions import Session
+
 import sys
 
 class Authorize():
   
   def login(req, requireVolunteer=False, redirectTo=''):
-    user = users.get_current_user()
+    session = Session()
+    user = session.get('user', None)
     
     if user:
       volunteer = Volunteer.gql("where user = :user", user=user).get()
     else:
       volunteer = None
-    
+              
     if requireVolunteer:
       if not volunteer:
         req.redirect(redirectTo)
@@ -24,7 +27,7 @@ class Authorize():
         raise TimeoutError("Session has timed out.")
         #return (None)       # shouldn't get here except in tests    
     
-    return(volunteer)
+    return volunteer
     
   login = staticmethod(login)
   

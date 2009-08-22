@@ -35,6 +35,7 @@ class Event(db.Model):
   geostring = db.StringProperty()
   
   verified = db.BooleanProperty(default = False)
+  hidden = db.BooleanProperty(default = False)
   
   def __init__(self,
              parent=None,
@@ -254,8 +255,10 @@ class Event(db.Model):
         raise Exception
       if not len(params['description']) > 0:
         raise Exception
-      if self.description != params['description']:
-          self.description = params['description']
+    
+      desc = params['description'].replace('\n','\n<br>')
+      if self.description != desc:
+          self.description = desc
           self.verified = False
     except:
       self.error['description'] = ('Description is required',
@@ -272,13 +275,16 @@ class Event(db.Model):
     except:
       self.error['address'] = ('Invalid address', params['address'])
     
+    self.hidden = not 'coordinator' in params
+      
     # try our geocoding here
     if self.address:
       self.geocode()
     
     try:
-      if self.special_instructions != params['special_instructions']:
-          self.special_instructions = params['special_instructions']
+      spi = params['special_instructions'].replace('\n','\n<br>')
+      if self.special_instructions != spi:
+          self.special_instructions = spi
           self.verified = False
     except:
       self.error['special_instructions'] = ('Invalid special instructions', 

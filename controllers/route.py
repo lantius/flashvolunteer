@@ -10,9 +10,11 @@ from controllers.paginated_event_pages import \
     PaginatedVolunteerCompletedPage, PaginatedNeighborhoodCompletedPage, \
     PaginatedCategoryCompletedPage, PaginatedVolunteerUpcomingPage, \
     PaginatedNeighborhoodUpcomingPage, PaginatedCategoryUpcomingPage, \
-    PaginatedUpcomingPage, PaginatedRecommendedPage         
+    PaginatedUpcomingPage, PaginatedRecommendedPage, PaginatedVolunteerHostedPage         
 
 from controllers.home import MainPage
+from controllers.accounts import AccountPage, RPXTokenHandler
+
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
 from controllers.eventmessages import EventMessagesPage
@@ -30,7 +32,6 @@ from controllers.static import StaticPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
 from controllers.admin import AdminPage
-
 
 webapp.template.register_template_library('templatetags.filters')
 
@@ -61,10 +62,15 @@ def main():
   logging.getLogger().setLevel(logging.DEBUG)
   application = webapp.WSGIApplication(
         [('/', MainPage),
+         ('/rpx_response', RPXTokenHandler),
+         ('/create', AccountPage),
+         ('/login', AccountPage),
+         ('/dev_login', AccountPage),
+         ('/logout', AccountPage),
+          ('/delete', SettingsPage),
          ('/admin', AdminPage),
          ('/settings', SettingsPage), #handles posts as well
          ('/settings/avatar', VolunteerAvatar),
-         ('/delete', SettingsPage),
          ('/events/(\d+)/volunteer', VolunteerForEvent),
          ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
          ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
@@ -74,8 +80,9 @@ def main():
 
          ('/events/past/volunteer/(\d+)/(\d+)', PaginatedVolunteerCompletedPage),    
          ('/events/past/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodCompletedPage),
-         ('/events/past/category/(\d+)/(\d+)', PaginatedCategoryCompletedPage),                  
+         ('/events/past/category/(\d+)/(\d+)', PaginatedCategoryCompletedPage),
               
+         ('/events/hosted/volunteer/(\d+)/(\d+)', PaginatedVolunteerHostedPage),
          ('/events/upcoming/volunteer/(\d+)/(\d+)', PaginatedVolunteerUpcomingPage),
          ('/events/upcoming/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodUpcomingPage),
          ('/events/upcoming/category/(\d+)/(\d+)', PaginatedCategoryUpcomingPage),         

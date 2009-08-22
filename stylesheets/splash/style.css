@@ -8,6 +8,14 @@ a, #slogan {
 	color: #4eA0A7;
 }
 
+h1 {
+	border-bottom: #b6e6a5 3px solid;
+	text-align: left;
+	font-size: 18pt;
+	color: #3b3b3b;
+	margin-bottom: 10px;
+}
+
 h2 {
 	font-weight: bold;
 }
@@ -122,6 +130,7 @@ body {
 
 #right .login_type {
 	float:left;
+	width: 100%;
 }
 
 #right .login_style {
@@ -249,7 +258,15 @@ li {
 	background: url(/stylesheets/buttons/green/FV_Button_Green_Right.gif) left;
 }
 
+.account_section {
+	margin-bottom: 10px;
+}
 
+.emph {
+	font-weight: bold;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
 /*
 #008c99 - blue colored text
 #5e5e5e - grey text

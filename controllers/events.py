@@ -155,6 +155,7 @@ class EventsPage(webapp.RequestHandler):
       self.error(404)
       return
   
+    ##### datastore conversion: remove when updated ######
     if event.address and not event.location:
         event.geocode()
         event.put()
@@ -162,6 +163,11 @@ class EventsPage(webapp.RequestHandler):
     if not event.verified:
         event.verified = False
         event.put()
+    
+    if not event.hidden:
+        event.hidden = False
+        event.put()
+    ###################
         
     owners = EventVolunteer.gql("WHERE isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
@@ -262,9 +268,9 @@ class EventsPage(webapp.RequestHandler):
   def create(self, params, volunteer):
     event = Event()
     
-    if not volunteer.can_create_events():
-      self.redirect("/events") #TODO REDIRECT to error page
-      return None
+#    if not volunteer.can_create_events():
+#      self.redirect("/events") #TODO REDIRECT to error page
+#      return None
     
     if not event.validate(params):
       self.new(event)
@@ -302,7 +308,9 @@ class EventsPage(webapp.RequestHandler):
       return
     
     owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-    
+    event.description = event.description.replace('\n<br>','\n')
+    event.special_instructions = event.special_instructions.replace('\n<br>','\n')
+
     template_values = { 
       'event' : event, 
       'eventvolunteer': eventvolunteer, 
@@ -480,10 +488,12 @@ class EventAddCoordinatorPage(webapp.RequestHandler):
       return
     
     event = Event.get_by_id(int(event_id))
-    
-    if event.hosts().find(str(volunteer.key().id())) == -1:
-      self.redirect("/events") #TODO REDIRECT to error page
-      return
+
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+                           volunteer=volunteer, event=event).get()
+    if not eventvolunteer:
+        self.redirect("/events") #TODO REDIRECT to error page
+        return
 
     volunteers = Event.get_by_id(int(event_id))
     
@@ -505,9 +515,11 @@ class EventAddCoordinatorPage(webapp.RequestHandler):
     
     event = Event.get_by_id(int(event_id))
 
-    if event.hosts().find(str(volunteer.key().id())) == -1:
-      self.redirect("/events") #TODO REDIRECT to error page
-      return
+    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
+                           volunteer=volunteer, event=event).get()
+    if not eventvolunteer:
+        self.redirect("/events") #TODO REDIRECT to error page
+        return
   
     try:
         new_coord_id = int(params['volunteer_coordinator'])

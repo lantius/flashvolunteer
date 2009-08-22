@@ -68,11 +68,14 @@ class Volunteer(db.Model):
       self.name  = params['name']
     if 'delete_avatar' in params:
       self.avatar = None
-    if 'email' in params and len(params['email']):
-      self.preferred_email = params['email']
-    else:
-      self.preferred_email = None
-
+      
+    try:
+      if not 'email' in params or not len(params['email']) > 0 or params['email'].find('@') == -1 :
+        raise Exception
+      self.preferred_email  = params['email']
+    except:
+      self.error['email'] = ('A valid email is required', params['email'])
+      
     if 'twitter' in params and self.twitter != params['twitter']:
       self.twitter = params['twitter']
       Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
@@ -124,7 +127,7 @@ class Volunteer(db.Model):
     return '/volunteers/' + str(self.key().id())
 
   def logout_url(self):
-    return users.create_logout_url('/')
+    return '/logout'
 
   def events(self):
     events = [ev.event for ev in self.eventvolunteers]
