@@ -160,8 +160,12 @@ class Event(db.Model):
   
   def hosts(self):
     hosts = [ev for ev in self.eventvolunteers if ev.isowner]
-
     return hosts
+
+  def get_numphotoalbums(self):
+    eventphotosphotos = [photo for photo in self.eventphotos]
+    return len(eventphotosphotos)
+    
 
   def interestcategories(self):
     return (eic.interestcategory for eic in self.eventinterestcategories)
