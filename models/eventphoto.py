@@ -35,3 +35,17 @@ class EventPhoto(db.Model):
   #None for root; parent should only be INTERNAL_ALBUM
   display_parent = db.SelfReferenceProperty(default = None,
                                             collection_name = 'eventphotoparents') 
+  
+  def can_edit(self, requester):
+    #want to know if requester can edit; 
+    
+    #can edit if the original poster
+    if (requester.key() == self.volunteer.key()):
+      return True
+    #can edit if event owner 
+    eventvolunteers_owners = self.event.hosts()
+    owner_keys = [ev.volunteer.key() for ev in eventvolunteers_owners]
+    
+    if (requester.key() in owner_keys):
+      return True
+    return False

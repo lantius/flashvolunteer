@@ -274,14 +274,14 @@
 <div id="eventphotos" class="hardmodule">
 	<div class="moduletitle" id="eventphotos_module">
 		<h3 id="eventphotos_title" >Event Photos</h3>
-		{% if eventvolunteer.isowner %}
+		{% comment %}{% if eventvolunteer.isowner %}{% endcomment %}
 		<select id="eventphotos_addalbum" name="addalbum" onChange = "addalbum_onchange()">
 			<option value="default">Add...</option>
 			<option value="add_external_album">Add External Album...</option>
 			<!-- <option value="add_internal_album">Add Internal Album...</option> -->
 			<!-- <option value="add_photo">Add Photo...</option> -->
 		</select>
-	    {% endif %}
+	    {% comment %}{% endif %}{% endcomment %}
 	</div>
 
 	{% for ep in eventphotos %}
@@ -297,7 +297,8 @@
 				</script>
 				<div id="rss_album_{{ep.key.id}}" class="rss_album">
 					<h2 id="rss_album_{{ep.key.id}}_title" class="rss_album_title" >
-						{% if eventvolunteer.isowner %}
+						{% comment %}{% if eventvolunteer.isowner %}{% endcomment %}
+						{% if ep.can_edit_now %}
 						<div id="rss_album_{{ep.key.id}}_bar" class="rss_album_bar">
 							<form action='{{event.url}}' id='f_photo' method="post">
 							    <input type="hidden" name="session_id" value="{{ session_id }}" />
@@ -308,7 +309,7 @@
 								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_remove" value="Remove" />
 							</form>
 						</div>
-					    {% endif %}
+						{% endif %}
 					</h2>
 					<div id="rss_album_{{ep.key.id}}_photos" >
 						{% comment %}

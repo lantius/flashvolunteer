@@ -171,6 +171,14 @@ class EventsPage(webapp.RequestHandler):
         
     owners = EventVolunteer.gql("WHERE isowner=true AND event = :event", event=event).fetch(limit=100)
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
+    
+    for ep in eventphotos:
+      if (ep.can_edit(volunteer)):
+        ep.can_edit_now = True
+      else:
+        ep.can_edit_now = False
+    
+    
     if len(owners) > 0:
         event_contact = owners[0].volunteer
     else:

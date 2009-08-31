@@ -20,11 +20,11 @@
 				{% ifequal event.get_numphotoalbums 0  %}	
 					{% for ev in eventvolunteer %}
 						{% ifequal event.key.id ev.event.key.id %}
-							{% if ev.isowner %}
+							{% comment %}{% if ev.isowner %}{% endcomment%}
 								<li><span class="label"></span><a id="l_event_nophotos_{{event.key.id}}" title="The event coordinator can add photo albums on the event page" href="{{ event.url }}"> No Photos added yet</a> </li>	
 								{% if eventvolunteer.isowner %}
 								{% endif %}		
-							{% endif %}
+							{% comment %}{% endif %}{% endcomment%}
 						{% endifequal %}
 					{% endfor %}
 				{% endifequal %}
