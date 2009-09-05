@@ -27,7 +27,7 @@ from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 def _get_upcoming_events():
     events = (e for e in Event.all().order('date').fetch(limit=500) if 
             #recommend future events 
-        not e.inpast())
+        not e.inpast() and not e.hidden)
     return events
                   
 
@@ -59,7 +59,7 @@ def _get_recommended_events(volunteer):
 # Events page
 ################################################################################
 class EventsPage(webapp.RequestHandler):
-  LIMIT = 12
+  LIMIT = 5
   ################################################################################
   # GET
   def get(self, url_data):    

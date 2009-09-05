@@ -1,13 +1,8 @@
-import datetime
-from google.appengine.api import users
 from google.appengine.ext import db
-from models.neighborhood import *
-from models.interestcategory import *
-from controllers._helpers import SessionID
+from models.neighborhood import Neighborhood
 
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
-from models.interestcategory import *
 
 
 ################################################################################
@@ -87,6 +82,7 @@ class Volunteer(db.Model):
     
     
     if not self.error:
+      from controllers._helpers import SessionID
       self.session_id = SessionID().generate()
       return True
     else:
@@ -130,12 +126,12 @@ class Volunteer(db.Model):
     return '/logout'
 
   def events(self):
-    events = [ev.event for ev in self.eventvolunteers]
+    events = [ev.event for ev in self.eventvolunteers if not ev.event.hidden]
     events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
     return events
 
   def events_coordinating(self):
-    events = [ev.event for ev in self.eventvolunteers if ev.isowner and not ev.event.inpast()]
+    events = [ev.event for ev in self.eventvolunteers if ev.isowner and not ev.event.inpast() and not ev.event.hidden]
     events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
     return events      
 
@@ -182,13 +178,13 @@ class Volunteer(db.Model):
     return len(self.events_past())
 
   def events_past(self):
-    return [e for e in self.events() if e.inpast()]
+    return [e for e in self.events() if e.inpast() and not e.hidden]
   
   def events_future_count(self):
     return len(self.events_future())
 
   def events_future(self):
-    return [e for e in self.events() if not e.inpast() ]
+    return [e for e in self.events() if not e.inpast() and not e.hidden]
   
   def check_session_id(self, form_session_id):
     return form_session_id == self.session_id

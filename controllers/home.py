@@ -11,12 +11,13 @@ from models.neighborhood import *
 from models.event import *
 from models.interestcategory import *
 
+from controllers.events import _get_recommended_events, _get_upcoming_events 
 
 
 ################################################################################
 # MainPage
 class MainPage(webapp.RequestHandler):
-  LIMIT = 12 
+  LIMIT = 3 
   def get(self):
     try:
       volunteer = Authorize.login(self, requireVolunteer=False)
@@ -60,10 +61,13 @@ class MainPage(webapp.RequestHandler):
       if ic.events():
         byinterest.append(ic)
   
+    recommended_events = list(_get_recommended_events(volunteer = volunteer))[:MainPage.LIMIT]
     my_future_events = volunteer.events_future()[:MainPage.LIMIT]
+
     template_values = {
         'volunteer' : volunteer,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'recommended_events': recommended_events,
         'my_future_events': my_future_events,
         'interest_categories': InterestCategory.all()
       }

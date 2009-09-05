@@ -43,15 +43,12 @@ class BaseEventListPage(webapp.RequestHandler):
             events = [e.event for e in item_list[offset:offset+LIST_LIMIT]]      
 
     else:
-
         #total = generator.count()
         
         if extract_style == 'direct':
             events = [e for e in item_list.fetch(limit = LIST_LIMIT, offset = offset)]        
         else:
             events = [e.event for e in item_list.fetch(limit = LIST_LIMIT, offset = offset)]
-
-        
         
     
     end = start + len(events) - 1

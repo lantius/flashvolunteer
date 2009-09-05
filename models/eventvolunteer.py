@@ -1,7 +1,9 @@
 from google.appengine.ext import db
 
-from models.event import *
-from models.volunteer import *
+from models.event import Event
+
+from models.volunteer import Volunteer
+
 
 ################################################################################
 class EventVolunteer(db.Model):
