@@ -1,7 +1,9 @@
 import random
 
-from models.neighborhood import *
-from models.interestcategory import *
+from models.neighborhood import Neighborhood
+from models.interestcategory import InterestCategory
+from models.eventvolunteer import EventVolunteer
+from models.eventinterestcategory import EventInterestCategory
 
 class SessionID():
   #TODO: Optimize random string generation
@@ -35,11 +37,17 @@ class InterestCategoryHelper():
 
 
 class InitializeStore():
+      
   def init(self):
     if not self.is_initialized():
       self.initialize_store()
+    else:
+      self.migrate_store()
+    
 
   def initialize_store(self):
+
+    
     neighborhoods = (
       'Ballard','Beacon Hill','Belltown','Capitol Hill','Central District', 'Madison Valley',
       'Columbia City','Downtown','Eastlake','First Hill','Fremont','Georgetown','Green Lake',
@@ -66,3 +74,17 @@ class InitializeStore():
       return True
 
     return False
+
+  def migrate_store(self):
+      
+      for ev in EventVolunteer.all():
+          try:
+              event = ev.event
+          except:
+              ev.delete()
+              
+      for ec in EventInterestCategory.all():
+          try:
+              event = ec.event
+          except:
+              ec.delete()
