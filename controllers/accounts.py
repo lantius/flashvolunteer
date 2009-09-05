@@ -96,7 +96,10 @@ class RPXTokenHandler(webapp.RequestHandler):
     if json['stat'] == 'ok':  
       login_info = json['profile']  
       if not 'email' in login_info:
-          login_info['email'] = login_info['preferredUsername'] + '@' + login_info['providerName']
+          if 'preferredUsername' in login_info:
+              login_info['email'] = login_info['preferredUsername'] + '@' + login_info['providerName']
+          elif 'identifier' in login_info:
+              login_info['email'] = login_info['identifier']
           
       session = Session()
       user = User(email = login_info['email'], _auth_domain = login_info['providerName'])
