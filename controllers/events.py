@@ -114,23 +114,37 @@ class EventsPage(webapp.RequestHandler):
   # LIST
   def list(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
-    
-    recommended_events = list(_get_recommended_events(volunteer = volunteer))[:EventsPage.LIMIT]
+
     upcoming_events = list(_get_upcoming_events())[:EventsPage.LIMIT]
-    my_future_events = volunteer.events_future()[:EventsPage.LIMIT]
-    my_past_events = volunteer.events_past()[-EventsPage.LIMIT:]
-    my_past_events.reverse()
     
+    if volunteer:
+        recommended_events = list(_get_recommended_events(volunteer = volunteer))[:EventsPage.LIMIT]
+        my_future_events = volunteer.events_future()[:EventsPage.LIMIT]
+        my_past_events = volunteer.events_past()[-EventsPage.LIMIT:]
+        my_past_events.reverse()
+        event_volunteers = volunteer.eventvolunteers
+        session_id = volunteer.session_id
+        neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
+        interest_categories = InterestCategoryHelper().selected(volunteer)
+    else: 
+        recommended_events = None
+        my_future_events = None
+        my_past_events = None
+        event_volunteers = None
+        session_id = None
+        neighborhoods = Neighborhood.all()
+        interest_categories = InterestCategory.all()
+        
     template_values = {
         'volunteer': volunteer,
-        'eventvolunteer': volunteer.eventvolunteers,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+        'eventvolunteer': event_volunteers,
+        'neighborhoods': neighborhoods,
         'recommended_events': recommended_events,
-        'interestcategories' : InterestCategoryHelper().selected(volunteer),
-        'session_id': volunteer.session_id,
+        'interestcategories' : interest_categories,
+        'session_id': session_id,
         'upcoming_events': upcoming_events,
         'my_future_events': my_future_events,
         'my_past_events': my_past_events,
@@ -210,7 +224,9 @@ class EventsPage(webapp.RequestHandler):
           attendees = public_attendees[offset:offset+EventsPage.LIMIT]
     
     
-    template_values = { 'event' : event, 
+    template_values = { 
+                       'volunteer': volunteer,
+                       'event' : event, 
                         'eventvolunteer': eventvolunteer, 
                         'eventphotos': eventphotos,
                         'event_categories': ', '.join([ic.name for ic in event.interestcategories()]),

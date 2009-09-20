@@ -13,6 +13,8 @@ from controllers.paginated_event_pages import \
     PaginatedUpcomingPage, PaginatedRecommendedPage, PaginatedVolunteerHostedPage         
 
 from controllers.home import MainPage
+from controllers.profile import ProfilePage
+
 from controllers.accounts import AccountPage, RPXTokenHandler
 
 from controllers.eventvolunteers import VolunteerForEvent
@@ -69,6 +71,7 @@ def main():
          ('/logout', AccountPage),
           ('/delete', SettingsPage),
          ('/admin', AdminPage),
+         ('/profile', ProfilePage),
          ('/settings', SettingsPage), #handles posts as well
          ('/settings/avatar', VolunteerAvatar),
          ('/events/(\d+)/volunteer', VolunteerForEvent),

@@ -3,49 +3,79 @@
   <head>
 	<title>{% block title %}{% endblock title %}</title>
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset/reset-min.css"> 
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/css/main.css" />
+	<link type="text/css" rel="stylesheet" href="/stylesheets/css/layout.css" />
+	<link type="text/css" rel="stylesheet" href="/stylesheets/css/colors_backgrounds_borders.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/css/create_event.css"> 
+    <link rel="stylesheet" type="text/css" href="/stylesheets/css/event_photos.css"> 
+
+	<link rel="shortcut icon" href="/stylesheets/favicon.ico" />
+	<link type="text/css" href="/stylesheets/jquery/css/flashvolunteer/jquery-ui-1.7.2.custom.css" rel="Stylesheet" />	
+	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-ui-1.7.2.custom.min.js"></script>
 	<!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>-->
-    <!--[if IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/ie7_new.css" /><![endif]-->
-    <!--[if lt IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/ie6_new.css" /><![endif]-->
+    <!--[if IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie7.css" /><![endif]-->
+    <!--[if lt IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie6.css" /><![endif]-->
   </head>
  <body>
-<div id="container"> 
-<div id="top">
-	<div id="logo"><a href="/"><img src="/stylesheets/splash/logo.png" alt="Flash Volunteer Logo"/></a></div>
-	<div id="beta"><a href="/static/help#beta"><img src="/stylesheets/beta.png" alt="Flash Volunteer is in Beta"/></a></div>
+ 	<div id="container">
+ 		
+	<div id="top">
+			<div id="logo-strip">
+				<div id="logo" class="fl"><a href="/"><img src="/stylesheets/media/logo.png" alt="Flash Volunteer Logo"/></a></div>
+				<div id="beta" class="fl"><a href="/static/help#beta"><img src="/stylesheets/media/beta.png" alt="Flash Volunteer is in Beta"/></a></div>		
+				{%if volunteer %}
+					<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
+				{% else %}
+					<div id="volunteerwelcome"><a href="/login" id="l_logout">Log in or signup</a></div>			
+				{% endif %}
+		    </div><!--end logo-strip-->
+    </div><!--end top-->
+    <div class="gradient"><!--empty--></div>
 
-	{%if volunteer %}
-		<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
-	{% endif %}
-	<ul id="navtabs">
-		<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
-		<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
-		<li id="neighborhoodslink"><a href="/n
-		eighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
-		<li id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
-		<li id="profilelink"><a href="/settings" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
-		<li id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
-	</ul>
-</div><!--end top-->
+	<div id="navtabs">
+		<ul>
+			<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
+            {% if volunteer %}
+                <li id="profilelink"><a href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>           
+            {% endif %}                
+			<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
+			<li id="neighborhoodslink"><a href="/n
+			eighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
+			{% if volunteer %}
+				<li id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
+			{% endif %}
+			<li id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
+		</ul>
+	</div><!--end navtabs-->
+	
+    <div class="gradient"><!--empty--></div>
 
-<div id="bottom">
-	<div id="pagespectitle"><!--page title-->{% block pagespectitle %}{% endblock pagespectitle %}</div><!--end pagespectitle-->
-	<div id="columns">
-	{% block content %}
-	{% endblock content %}
-</div><!--end columns-->
-<div id="footer">
-	<ul>
-		<li><a href="/static/about">About Flash Volunteer</a></li>
-		<li><a href="/static/feedback">Give Us Feedback</a></li>
-		<li><a href="/static/donate">Donate</a></li>
-		<li><a href="/static/privacy">Privacy Policy</a></li>
-		<li><a href="/static/tos">Terms of Use</a></li>
-	</ul>
-	<div id="copyright">Copyright &copy; 2009 Flash Volunteer. All Rights Reserved.</div>
-</div><!--end footer-->
-</div><!--end bottom-->
+<div id="content"> 
+
+	<div id="bottom">
+		<!--page title--><div id="pagespectitle">{% block pagespectitle %}{% endblock pagespectitle %}</div><!--end pagespectitle-->
+		<div id="columns">
+		{% block content %}
+		{% endblock content %}
+		<div style="clear:both"> </div>
+		</div>
+	</div><!--end bottom-->
+
 </div><!--end content-->
+<div id="clearfooter"><!--empty--></div>
+
+</div><!--end container-->
+
+<div id="footer">
+		<ul>
+			<li><a href="/static/about">About</a></li>
+			<li><a href="/static/donate">Donate</a></li>
+			<li><a href="/static/privacy">Privacy Policy</a></li>
+			<li><a href="/static/tos">Terms of Use</a></li>
+		</ul>
+		<div id="copyright">Flash Volunteer &copy; 2009</div>
+</div><!--end footer-->
 
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -56,5 +86,24 @@ try {
 var pageTracker = _gat._getTracker("UA-10613308-2");
 pageTracker._trackPageview();
 } catch(err) {}</script>
+
+<script type="text/javascript">
+  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
+  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+</script>
+<script type="text/javascript">
+UserVoice.Tab.show({ 
+  /* required */
+  key: 'flashvolunteer',
+  host: 'flashvolunteer.uservoice.com', 
+  forum: '26150', 
+  /* optional */
+  alignment: 'left',
+  background_color:'#2fb002', 
+  text_color: 'white',
+  hover_color: '#008c98',
+  lang: 'en'
+})
+</script>
 </body>
 </html>

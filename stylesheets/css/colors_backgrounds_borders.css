@@ -1,0 +1,129 @@
+/*
+======================================================
+>>COLORS & BACKGROUNDS & STYLED BORDERS
+======================================================
+Teal Text: #4eA0A7
+Body text: #555
+Dark text: #333
+Green text: #aef396
+White text: #FFF
+Gray text: #C6C6C6
+Red text: #F00
+light blue: #B3D8DB
+}
+
+White background: #FFF
+black background: #000
+Gray background: #E6E6E6
+Dark background: #3b3b3b
+Green background: #2fb002
+Blue strip: #008c98
+*/
+
+html, body {
+    background-color: #fff;
+    color: #555;
+}
+
+div#top {
+    background-color: #3b3b3b;
+    border-top: 4px solid #008c98; 
+}
+
+div.gradient {
+   background: #fff url(../media/gradient.png) repeat-x top center;
+}
+
+div#footer {
+    background-color:#E6E6E6;
+}
+
+div#footer #copyright{
+    color: #C6C6C6;
+}
+
+#navtabs {
+    background: #fff url("../media/body-top-rpt-horiz.png") repeat-x top center;
+}
+#navtabs li a.current{
+    background-color: #3b3b3b;
+    border-bottom: 1px solid #8b8b8b;
+}
+
+#pagespectitle h1 {
+    border-bottom: #b6e6a5 3px solid;
+}
+
+a.operation, a:link, a:visited, a:active, a:hover, a, 
+input.operation, input.operation_minimal {
+    color: #4eA0A7;
+}
+
+#volunteerwelcome a {
+    color: #aeF396;
+}
+
+div#volunteerwelcome {
+    color: #FFF;
+}
+            
+
+#navtabs li a{
+    color: #FFF;
+}
+
+.label {
+    color: #333;
+}
+
+.error{
+    color: #FF0000;
+}
+
+div.hardmodule .moduletitle{
+    border-color: #3b3b3b;
+    background-color: #3b3b3b;
+}
+div.moduletitle {
+    border: 1px solid #008C98;
+    -moz-border-radius: 8px;
+    -webkit-border-radius:8px;
+    color: #fff;
+    background-color: #008C98;
+}
+
+div.moduletitle a{
+    color: #DDD;
+}
+
+input.volunteer_button {
+    color: #FFFFFF;
+    background-color: #4eA0A7;
+    border: 1px solid #444;
+}
+
+a.verification_warning, 
+a.verification_warning:hover {
+    color: #ff6900;
+}
+
+div#splash-left div#slogan {
+    color: #4eA0A7;
+}
+
+#pagespectitle h1 {
+    color: #3b3b3b;
+}
+
+th {
+    color: #525252;
+}
+
+div.shortevent {
+    border-bottom: 1px solid #CCC;
+}
+
+.volunteer_summary_follower, 
+.volunteer_summary_follower .volunteer_summary_operations input.operation {
+    background: #E8E8E8;
+}

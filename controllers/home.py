@@ -23,53 +23,12 @@ class MainPage(webapp.RequestHandler):
       volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return    
-    
-    # if volunteer is logged in, then they get their login page
-    # otherwise, they get the splash page
-    
-    if not volunteer:
-      self.splashpage()
-    else:
-      self.homepage(volunteer)
-
-  ################################################################################
-  # splashpage
-  def splashpage(self):
-    
-    login_url = '/login'   
-    account_url = '/create'
-    
-    
-    template_values = { 
-      'login_url' : login_url,
-      'account_url' : account_url,
-      'token_url' : self.request.host_url + '/rpx_response' 
-    }
-    path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'splash.html')
-    self.response.out.write(template.render(path, template_values))
-
-  ################################################################################
-  # homepage
-  def homepage(self, volunteer):
-    events = { 'Your events' : volunteer.events() }
-    byinterest = []
-    
-    if volunteer.home_neighborhood:
-      events['Neighborhood events'] = volunteer.home_neighborhood.events
-    
-    for ic in volunteer.interestcategories():
-      if ic.events():
-        byinterest.append(ic)
   
-    recommended_events = list(_get_recommended_events(volunteer = volunteer))[:MainPage.LIMIT]
-    my_future_events = volunteer.events_future()[:MainPage.LIMIT]
+    upcoming_events = _get_upcoming_events()
 
     template_values = {
         'volunteer' : volunteer,
-        'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-        'recommended_events': recommended_events,
-        'my_future_events': my_future_events,
-        'interest_categories': InterestCategory.all()
+        'upcoming_events': upcoming_events,
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
     self.response.out.write(template.render(path, template_values))

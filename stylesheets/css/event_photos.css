@@ -1,0 +1,100 @@
+/* for event photos */
+#eventphotos_module {
+    height: 16px;
+}
+
+#eventphotos_title {
+    display: inline;
+    float: left;
+}
+
+#eventphotos_addalbum {
+    display: block;
+    float: right;
+    width: 160px;
+    height: 16px;
+}
+
+#addexternalbum_dialog {
+    width: 485px;
+    height: 170px;
+}
+
+#addexternalbum_dialog_content {
+    width: 365px;
+}
+
+
+#addexternalbum_dialog #content_help {
+    margin-bottom: 5px;
+}
+#addexternalbum_dialog #content_line {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    
+}
+#addexternalbum_dialog .cancel {
+    position: absolute;
+    right: 150px;
+    bottom: 10px;
+}
+#addexternalbum_dialog #s_addexternalalbum {
+    /* float: right;
+    margin-right: 20px; */
+    position: absolute;
+    right: 50px;
+    bottom: 10px;
+}
+
+#addexternalbum_dialog #content_error {
+    visibility: hidden;
+}
+
+#eventphotos h2 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    
+}
+
+#eventphotos .rss_album {
+    margin-left: -10px;
+    margin-bottom: 5px;
+    border-style: solid;
+    border-color: #444444;
+    border-bottom-width: thin;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    padding: 5px 5px 25px 5px;
+    width: 100%;
+}
+#eventphotos .rss_album_title  {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#eventphotos .rss_album_bar {
+    margin-top: 10px;
+}
+
+#eventphotos .phototable {
+}
+
+#eventphotos img {
+}
+
+#eventphotos td {
+    padding: 10px 10px 10px 10px;
+}
+#eventphotos .caption {
+    text-align: center;
+}
+
+
+#eventphotos .more_hidden {
+    display: none;
+}
+
+#eventphotos .more_or_less {
+    float: right;
+}

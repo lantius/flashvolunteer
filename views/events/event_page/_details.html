@@ -24,7 +24,7 @@
 
         <div class="event_operation_block">
         	<ul>
-				<li><a class="operation" href="mailto:?subject={{volunteer.name}} wants you to volunteer at {{event.name}}!&body={{event.message_body}}">&raquo; Invite your friends</a></li>				
+				<li><a class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://www.flashvolunteer.org/events/{{event.key.id}}. If you would like to join me, please click on the above link and sign-up!">&raquo; Invite your friends</a></li>				
 
 			{% if eventvolunteer %}
 				{% if eventvolunteer.isowner %}

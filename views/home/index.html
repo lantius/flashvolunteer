@@ -1,1 +1,54 @@
-{% include "../volunteers/home.html" %}
+{% extends "../_layout.html" %}
+{% block title %}
+Flash Volunteer
+{% endblock title %}
+
+{% block homeactive %}class="current"{% endblock homeactive %}
+
+
+{% block content %}
+			<div id="splash-left">
+				<div id="slogan">
+					Discover. Connect. Make better.
+				</div>
+				<p>Flash Volunteer connects Seattle-area residents to volunteer opportunities, volunteers 
+				to neighborhoods, and nonprofits to volunteers.</p>
+				<p>Don't have a lot of time?
+				No problem. When you have some downtime, just visit Flash Volunteer and find a fun and meaningful event in your area that fits your schedule. Maybe even that minute.</p>
+				<div id="badges">
+					<div class="badge" id="fb-badge">
+					    <a href="http://www.facebook.com/pages/Flash-Volunteer/75272433226"><img src="stylesheets/media/find_us_on_facebook_badge.gif" alt="Find us on Facebook"/></a>
+					</div>
+					<div class="badge" id="twitter-badge">
+						<a href="http://twitter.com/flashvolunteer"><img src="stylesheets/media/twitter_badge.png" alt="Follow us on Twitter"/></a>						
+					</div>
+					<form class="badge" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+					    <input type="hidden" name="cmd" value="_donations">
+					    <input type="hidden" name="business" value="brad@flashvolunteer.org">
+					    <input type="hidden" name="item_name" value="Flash Volunteer Donation">
+					    <input type="hidden" name="item_number" value="2009">
+					    <input type="hidden" name="no_shipping" value="2">
+					    <input type="hidden" name="no_note" value="0">
+					    <input type="hidden" name="currency_code" value="USD">
+					    <input type="hidden" name="tax" value="0">
+					    <input type="hidden" name="bn" value="DeveloperDonationKit">
+					    <input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/x-click-but21.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+					    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+					</form>
+				</div>			
+			
+			</div>
+			<div id="splash-right">				
+					<ol>
+						<li><a href="/login">Login or signup.</a></li>
+						<li>Identify the <a href="/neighborhoods">neighborhoods</a> you spend time in and your interests.</li>
+						<li>Sign up to volunteer for an <a href="/events">event</a>.</li>
+						<li>Attend the event.</li>
+						<li>Afterwards, become Flash Friends with other event volunteers and find more volunteer opportunities going on nearby.</li>
+						<li>Repeat steps 3-5, as necessary.</li>
+						<li>Create and organize volunteer events in your neighborhood.</li>
+					</ol>					
+			
+			</div>
+
+{% endblock content %}

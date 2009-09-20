@@ -4,6 +4,8 @@ from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
 from models.eventvolunteer import EventVolunteer
 from models.eventinterestcategory import EventInterestCategory
+from models.volunteer import Volunteer
+from models.event import Event
 
 class SessionID():
   #TODO: Optimize random string generation
@@ -49,14 +51,29 @@ class InitializeStore():
 
     
     neighborhoods = (
-      'Ballard','Beacon Hill','Belltown','Capitol Hill','Central District', 'Madison Valley',
-      'Columbia City','Downtown','Eastlake','First Hill','Fremont','Georgetown','Green Lake',
-      'Greenwood','Interbay','International District','Haller Lake', 'Bitter Lake','Lake City',
-      'Laurelhurst','Leschi','Madison Park','Madrona','Magnolia','Maple Leaf','Montlake',
-      'Mount Baker','Northgate','Phinney Ridge','Pioneer Square','Queen Anne','Rainier Valley',
-      'Ravenna','Roosevelt','Sand Point','Seattle Center', 'Lower Queen Anne','SoDo',
-      'South Lake Union','South Park','University District','View Ridge','Wallingford',
-      'Wedgwood','West Seattle')
+      'Ballard','Beacon Hill','Belltown','Capitol Hill','Central District',
+      'Downtown','Fremont','Georgetown','Green Lake',
+      'Greenwood','International District', 'Bitter Lake','Lake City',
+      'Leschi','Madison Park','Madrona','Magnolia','Maple Leaf',
+      'Northgate','Phinney Ridge','Queen Anne','Rainier Valley',
+      'Ravenna','Sand Point',
+      'Lake Union','South Park','University District','Wallingford',
+      'Wedgwood','West Seattle','Delridge','Rainier Beach', 
+                       'Shoreline',
+                        'Edmonds',
+                        'Lynnwood',
+                        'Bothell',
+                        'Kirkland',
+                        'Redmond',
+                        'Bellevue',
+                        'Mercer Island',
+                        'Tukwila',
+                        'Burien',
+                        'White Center',
+                        'Bainbridge Island',)
+    
+          
+          
     for neighborhood_name in neighborhoods:
       n = Neighborhood(name=neighborhood_name)
       n.put()
@@ -76,15 +93,58 @@ class InitializeStore():
     return False
 
   def migrate_store(self):
-      
-      for ev in EventVolunteer.all():
-          try:
-              event = ev.event
-          except:
-              ev.delete()
+
+      def migrate_neighborhoods():
+          #neighborhoods to add
+          new_hoods = []
+
+          hoods = {}
+          for n in Neighborhood.all():
+              hoods[n.name] = n
               
-      for ec in EventInterestCategory.all():
-          try:
-              event = ec.event
-          except:
-              ec.delete()
+                        
+          for n in new_hoods:
+              if not n in hoods:
+                  hood = Neighborhood(name = n)
+                  hood.put()
+                  hoods[n] = hood
+                  
+          #neighborhood transformations; 
+          #### From : To
+          n_map =  {
+                   #'South Lake Union': 'Lake Union',
+                   }     
+              
+          for v in Volunteer.all():
+              if v.work_neighborhood and v.work_neighborhood.name in n_map:
+                  v.work_neighborhood = hoods[n_map[v.work_neighborhood.name]]
+                  v.put()
+              if v.home_neighborhood and v.home_neighborhood.name in n_map:
+                  v.home_neighborhood = hoods[n_map[v.home_neighborhood.name]]
+                  v.put()
+                  
+          for e in Event.all():
+              if e.neighborhood and e.neighborhood.name in n_map:
+                  e.neighborhood = hoods[n_map[e.neighborhood.name]]
+                  e.put()
+                  
+          #neighborhoods to delete
+          hoods_to_remove = []      
+          for n in hoods_to_remove:
+              if n in hoods:
+                  hoods[n].delete()  
+              
+      def clear_stale_events():
+          for ev in EventVolunteer.all():
+              try:
+                  event = ev.event
+              except:
+                  ev.delete()
+                  
+          for ec in EventInterestCategory.all():
+              try:
+                  event = ec.event
+              except:
+                  ec.delete()
+                  
+      pass

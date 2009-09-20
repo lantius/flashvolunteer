@@ -1,0 +1,101 @@
+ul#creationtips {
+    padding-left: 15px;
+}
+
+li#creationtips li {
+    list-style: disc;
+    padding-top: 10px;
+}
+
+div.eventcreatelabel {
+    position: relative;
+    width: 100px;
+    height: 30px;
+}
+
+div.eventinput {
+    position: relative;
+    width: 465px;
+    left: 110px;
+    top: -30px; 
+}
+
+div.eventinput textarea{
+    width: 465px;
+    height: 120px;
+}
+
+div.eventinput input {
+    width: 230px;
+    margin: 1px;
+}
+
+div.eventinput input.checkbox {
+    display: inline;
+    width: 15px;
+}
+
+div.eventinput input#eventname {
+    width: 465px;
+}
+
+div.eventinput input#maxattend, 
+div.eventinput input#minattend {
+    width: 80px;
+}
+
+div.eventinput input#address1, 
+div.eventinput input#address2 {
+    width: 50%;
+}
+
+div.eventinput input#city {
+    width: 239px;
+}
+
+div.eventinput input#state {
+    width: 30px;
+}
+
+div.eventinput input#zip {
+    width: 60px;
+}
+
+div#createevent li {
+    margin-bottom: -30px;
+    padding-top: 15px;
+    vertical-align: middle;
+}
+
+div#createevent ul {
+    border-bottom: 1px #e8e8e8 solid;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+div#createevent form {
+    text-align: right;
+}
+
+div#createevent form #submit {
+    margin-right: 10px;
+}
+
+div.eventinput ul#interestselections {
+    border: none;
+    padding: 0;
+    margin: 0;
+    height: 150px;
+}
+
+div.eventinput ul#interestselections li {
+    width: 232px;
+    float: left;
+    height: 38px;
+    padding: 0 0 20px 0 ;
+}
+
+div#official_coordinator {
+    margin-bottom: 8px; 
+}   

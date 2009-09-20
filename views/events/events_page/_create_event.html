@@ -1,4 +1,8 @@
 <div id="recommendedevents" class="hardmodule">
 	<div class="moduletitle"><h3>Create An Event</h3><a style="cursor:pointer" title="This is where you can create and host a new event, in your neighborhood or elsewhere.">(?)</a></div>
-        <a class="operation" href="/events/new">&raquo; Create a new event</a>
+        {% if volunteer %}
+		<a class="operation" href="/events/new">&raquo; Create a new event</a>
+		{% else %}
+			You need to <a href="/login">login</a> to create an event. 
+		{% endif %}
 </div>

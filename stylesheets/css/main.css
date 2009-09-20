@@ -1,0 +1,676 @@
+/* Stylesheet */
+
+
+/* 
+======================================================
+>>Basic site styles
+======================================================
+*/
+
+* { 
+    margin:0; 
+    padding:0; 
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    /*to create a vertical dummy scrollbar in Firefox or Safari which 
+     * would not have a scrollbar with height 100%. If you move to and 
+     * from pages which don't have a vertical scrollbar to a page which 
+     * does, it makes the page content jump sideways without a forced 
+     * dummy scrollbar (works in Firefox and Safari but not in Opera; 
+     * IE always shows a dummy scrollbar; Opera needs min-height and 
+     * height: 101% in the container styles but it causes a standard 
+     * scrollbar, not a dummy, and is less correct.)*/
+    overflow-y: scroll; 
+
+}
+body { 
+    font-size:9pt; 
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    min-height: 100%;
+}
+
+div{
+    padding: 0;
+    margin: 0;
+}
+
+
+.bn { border:0; }
+.fl { float:left; }
+.fr { float:right; }
+.cl { clear:left; }
+.clear { clear: both; }
+
+.clearfix:after { content:"."; display:block; height:0; clear:both; visibility:hidden; }
+.clearfix {display:inline-block;}
+/* Hide from IE Mac \*/
+.clearfix {display:block;}
+/* End hide from IE Mac */
+
+
+
+
+/*
+======================================================
+>>Navigation
+
+Contains navigation list items for header and footer
+======================================================
+*/
+
+			
+#navtabs ul{ 
+    width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#navtabs li{
+    display: inline;
+    padding: 0;
+}
+
+#navtabs li a.current{
+    padding: 8px 10px 6px 10px;     
+}
+
+
+#navtabs li a{
+    height: 20px;
+    background: none;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+	padding: 0 10px;
+	position: relative;
+	top: 8px;
+}
+
+#footer ul {
+    width: 840px;
+    margin: 0px auto; 
+    display:inline;
+}
+
+#footer li{
+    padding-right: 20px;
+    font-size: 8pt;
+    display: inline;
+}
+
+
+/*
+======================================================
+>>Headers
+======================================================
+*/
+h1 { font-size: 24px; line-height: 36px; margin-bottom: 18px; }
+h2 { 
+    font-size: 110%; 
+	font-weight: bold;
+	margin: 10px 0 5px 0; 
+	line-height: 18px; 
+	margin-bottom: 18px; 
+}
+h3 {
+    font-weight:bold;
+	margin: 10px 0 5px 0;
+    font-size: 110%;
+	display: inline;
+}
+
+#pagespectitle h1 {
+    text-align: left;
+    font-size: 21pt;
+    margin: 10px 20px 20px 0px;
+}
+
+.softmodule, .hardmodule {
+    position: relative;
+    padding: 0px 10px 10px;
+    text-align: left;
+    overflow: hidden;
+    width: 100%;
+}
+
+div.moduletitle{
+    text-align: left;
+    padding: 5px 5px 5px 10px;
+    margin: 10px -10px;
+    width: 100%;
+	font-size: 8pt;
+	font-weight: lighter;
+	font-variant: small-caps;
+}
+
+h1.verification_warning {
+    font-size: 60%;
+    position:absolute;
+    top: 10px;
+    padding-left: 3px;
+}
+
+
+/*
+======================================================
+>>Paragraphs
+======================================================
+*/
+p { margin: 8px 0 0 0; }
+
+
+/*
+======================================================
+>>List Styles
+======================================================
+*/
+
+ul {
+    list-style: none;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+}
+
+ul.bullets {
+    list-style: disc;
+    text-align: left;
+    padding: 0;
+    margin: 0 0 25px 0;
+}
+
+li {
+    margin: 0;
+    padding: 6px 0 0 0;
+}
+
+ul.bullets li {
+    margin: 5px 0 5px 50px;
+    list-style-type:disc;
+}
+
+li.tallerlistitem {
+    margin: 11px 0 13px 0;
+}
+
+/*for finding events*/
+ul.formlist select, 
+ul.leftformlist select, 
+ul.rightformlist select {
+    width: 90%;
+    margin: 2%;
+}
+
+ul.formlist .daterange, 
+ul.rightformlist .daterange {
+    width: 42%;
+    margin: 1% 2%;
+}
+
+ul.formlist .narrowselect {
+    width: 50%;
+}
+
+ul.leftformlist {
+    float: left;
+    width: 49%;
+}
+
+ul.rightformlist {
+    float: right;
+    width: 49%;
+}
+
+#splash-right ol{
+    list-style-position: outside;
+}
+
+#splash-right li{
+    list-style-type:decimal;
+    margin: 5px 0 0 15px;
+    font-size: 8pt;
+}
+
+.shortevent ul li {
+    margin-left: 15px;
+}
+
+/*
+======================================================
+>>Link Styles
+======================================================
+*/
+
+a:link { }
+a:hover { }
+a:active { }
+a:visited { }
+
+a.operation, a {
+    border: none;
+    font-weight: normal;
+    text-decoration: none;
+	outline: none;
+	cursor: pointer;
+}
+
+.moduletitle a {
+    position:absolute;
+    right:15px;
+}
+
+a.event_name {
+    font-weight:bold;
+}
+
+/*
+======================================================
+>>Images Styles
+======================================================
+*/
+img{
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+img#beta {
+    width: 35px;
+
+}
+
+img#nameavatar {
+    margin: 0 0 0 -10px;
+    width: 185px;
+}
+
+img.smallavatar {
+	margin: 0 auto auto auto;
+    display: block;
+    max-height: 80px;
+    max-width: 85px;
+}
+
+
+#splash-left #badges {
+    height:120px;
+	margin: 20px auto 0 auto;
+    width: 100%;
+}
+
+#splash-left .badge {
+    display:inline;
+    text-align: center;
+    padding-right: 20px;
+}
+
+#splash-left .badge img {
+	width: 100px;
+}
+#splash-left #twitter-badge {}
+
+#splash-left #fb-badge { padding-top: 20px; }
+
+#splash-left .badge input { padding-top: 20px; }
+
+.volunteer_summary_pic {
+    height: 80px;
+}
+
+/*
+======================================================
+>>Form Styles
+======================================================
+*/
+
+/*
+label { font-weight: bold; }
+fieldset { padding:1.4em; margin: 0 0 1.5em 0; border: 1px solid #eee; }
+legend { font-weight: bold; font-size:1.2em; }
+input.text, input.title, textarea, select { margin:0.5em 0; border:1px solid #bbb; }
+input.text:focus, input.title:focus, textarea:focus, select:focus { border:1px solid #666; }
+input.text, input.title { width: 300px; padding:5px; }
+input.title { font-size:1.5em; }
+textarea { width: 390px; height: 250px; padding:5px; }
+*/
+
+input {
+    position: relative;
+    right: 0;   
+}
+
+
+input#avataruploadinput {
+    width: 150px;
+}
+
+input.volunteer_button {
+    font-weight: normal;
+    text-decoration: none;
+    margin-top: 15px;
+    padding: 5px 5px;
+    display:inline;
+    cursor: pointer;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+
+/* for lists of operations. make the links & forms look the same */
+a.operation, a:link, a:visited, a:active, a:hover, a, 
+input.operation, input.operation_minimal {
+    border: none;
+    font-weight: normal;
+    text-decoration: none;
+    /*width: 100%;*/
+}
+
+input.operation, input.operation_minimal, 
+a.operation, a.operation_minimal {
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+
+
+a.operation {
+    padding-left: 3px;
+}
+
+.volunteer_summary_neighbor input.operation, 
+.volunteer_summary_team input.operation, 
+.volunteer_summary_team a.operation {
+    border:none;
+}
+
+
+
+/*
+======================================================
+>>Table Styles
+======================================================
+*/
+table {
+    font-size: 10pt;
+    text-align: left;
+}
+
+th, td {
+    padding: 2px;
+}
+
+th {
+    font-weight: bold;
+}
+
+/*
+======================================================
+>>Miscellaneous Styles
+======================================================
+*/
+
+
+/* Search not currently enabled */
+#searchbox {
+    position: absolute;
+    padding-right: 20px;
+    padding-bottom: 4px;
+    bottom: 0;
+    right: 0;
+    height: 30px;
+    text-align: right;
+}
+
+#searchbox input {
+    width: 120px;
+}
+
+#searchbox #searchsubmit {
+    display: none;
+    visibility: hidden;
+}
+
+/*for message browsing*/
+.sender {
+    width: 30%;
+    margin-right: 2%;
+}
+
+.subject {
+    width: 60%;
+}
+
+/*for person's information */
+#personstatement:before {
+    content: open-quote
+}
+
+#personstatement:after {
+    content: close-quote;
+}
+
+/* Operations (e.g. add as flashfriend) */
+div.actionlist {
+    border: none;
+    padding:5px 0px;
+}
+
+/*for listed events*/
+div.shortevent {
+    margin-top: 10px;
+    font-size: 8pt;
+}
+
+/*for finding events*/
+
+div#findaneventwide {
+    height: 125px;
+}
+
+/*for event display*/
+div#eventdetails {
+    padding-bottom: 28px;
+}
+
+div.event_operation_block {
+    margin-top: 15px;
+}
+
+/* google maps */
+div#map_canvas {
+    width: 370px;
+    height: 169px;
+}
+
+div#eventmap {
+    padding-top: 14px;
+}
+
+/* for pagination */
+div.pagination_entry {
+    text-align: right;
+    padding-bottom: 8px;
+}
+
+/* for (?) FAQ links */
+
+div.faq-link-wrapper {
+    text-align: right;  
+}
+
+a.faq-link { font-size: 7pt;}
+
+/* for slogan on splash screen */
+div#splash-left div#slogan {
+    font-size: 215%;
+    font-family: serif;
+	margin-top: 10px;
+}
+
+/* for event warnings */
+span.verification_warning_wrapper {
+    padding-right: 5px;
+    width: 100%;
+}
+
+/* the following is for the create module */
+
+#createvolunteer .label {
+    margin-right: 10px; 
+}
+
+#createvolunteer #createnameinput {
+    width: 285px;
+}
+
+
+/******************************************************
+ * >> UNORGANIZED
+ * 
+ * TODO: INTEGRATE THE FOLLOWING INTO THE CSS SCHEME
+ * ****************************************************
+ */
+
+
+/* the following is for image name links and friend lists */
+
+li.imagenameli {
+    display: block;
+    width: 85px;
+    float: left;
+    text-align: center;
+    padding-left: 1px;
+    padding-right: 1px;
+    height: 140px;    
+}
+
+li#verify_attendence{
+    width: 100%;
+    height: 120px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+
+li#verify_attendence #left_verify,
+li#verify_attendence #right_verify {
+    float:left; 
+    }
+
+li#verify_attendence #right_verify {
+    padding-left: 25px;
+}
+
+li#verify_attendence #left_verify {
+    width: 100px;
+}
+.volunteer_summary_neighbor,
+.volunteer_summary_follower, 
+.volunteer_summary_following, 
+.volunteer_summary_team, 
+.volunteer_summary_anonymous
+{
+    padding:5px;
+    position:relative;
+    float:left;
+}
+
+.volunteer_summary_operations {
+    float:right;
+    position:relative;
+}
+
+.volunteer_summary_operations,
+.volunteer_summary_desc {
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.volunteer_summary_name input.operation,
+.volunteer_summary_name input.operation_minimal {
+    display: inline;
+}
+
+.volunteer_summary_pic {
+    height: 80px;
+}
+
+a.event_name {
+    font-weight:bold;
+}
+
+
+.shortevent ul li {
+    margin-left: 15px;
+}
+
+
+.volunteer_summary_name {
+    font-size:90%;
+    padding-bottom: 8px;
+    text-align:center;
+    overflow:hidden;
+}
+
+#volunteer_summary_home, 
+#volunteer_summary_work {
+    padding-left: 10px;
+}
+
+
+
+
+
+.button{
+    display: block;
+    height: 22px;
+    margin-top: 5px;
+    padding-right: 10px;
+    width: 70%;
+    font-size: 120%;
+    font-variant: small-caps;
+    text-align: center;
+    font-weight:bold;
+    cursor:hand;
+}
+
+span#l_login {
+    color: #222;
+}
+
+.buttonleft {
+    display: block;
+    float: left;
+    width: 10px;
+    height: 100%;
+    background: url(/stylesheets/buttons/green/FV_Button_Green_Left.gif) left;
+}
+
+.buttoncenter {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 75%;
+    padding-top: 2px;
+    background: url(/stylesheets/buttons/green/FV_Button_Green_Center.gif) repeat-x;
+}
+
+.buttonright {
+    display: block;
+    float: left;
+    width: 10px;
+    height: 100%;
+    background: url(/stylesheets/buttons/green/FV_Button_Green_Right.gif) left;
+}
+
+
+.emph {
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
