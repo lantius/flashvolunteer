@@ -39,6 +39,9 @@ div{
     margin: 0;
 }
 
+p { margin: 8px 0 0 0; }
+
+
 
 .bn { border:0; }
 .fl { float:left; }
@@ -155,14 +158,6 @@ h1.verification_warning {
     top: 10px;
     padding-left: 3px;
 }
-
-
-/*
-======================================================
->>Paragraphs
-======================================================
-*/
-p { margin: 8px 0 0 0; }
 
 
 /*

@@ -1,13 +1,17 @@
 
-<script type="text/javascript" src="/stylesheets/date_picker/date.js"></script>
 <!--[if IE]><script type="text/javascript" src="scripts/jquery/js/jquery.bgiframe.js"></script><![endif]-->
-<script type="text/javascript" src="/stylesheets/date_picker/jquery.datePicker.js"></script>
-<link rel="stylesheet" type="text/css" href="/stylesheets/date_picker/datePicker.css" />
+
+
+<script type="text/javascript">
+    $(function() {
+        $("#datepicker").datepicker();
+    });
+</script>
 
 <script type="text/javascript">
 	$(function()
-	{
-	    $('.date-pick').datePicker();
+	{		
+		$(".date-pick").datepicker();
 		$('#startdate').bind(
 				'dpClosed',
 				function(e, selectedDates)
