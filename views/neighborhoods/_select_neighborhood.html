@@ -1,8 +1,7 @@
 <select name="neighborhood">
 	<option value="none">Neighborhood...</option>
 	{% for neighborhood in neighborhoods %}
-	<option value="{{neighborhood.key.id}}">{{neighborhood.name}}
-	</option>
+    	<option value="{{neighborhood.key.id}}" {% if neighborhood.selected %}selected="selected"{% endif %}>{{neighborhood.name}}</option>
 	{% endfor %}
 </select>
 {% if event %}

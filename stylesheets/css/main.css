@@ -236,6 +236,16 @@ ul.rightformlist {
     margin-left: 15px;
 }
 
+#creationtips ul {
+	padding-left: 10px;
+}
+#creationtips li {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:disc;
+	padding-top:10px;
+}
+
 /*
 ======================================================
 >>Link Styles
@@ -668,4 +678,9 @@ span#l_login {
     font-weight: bold;
     margin-bottom: 20px;
     margin-top: 10px;
+}
+
+
+.format_help {
+	font-size: 7pt;
 }

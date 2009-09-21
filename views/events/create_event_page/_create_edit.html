@@ -8,8 +8,8 @@
 						/events/new
 					{% endif %}" method="post"><ul>
 		<li>
-			<div class="eventcreatelabel">Event Name:</div>
-			<div class="eventinput">
+			<div class="eventcreatelabel">Name:</div>
+			<div class="eventinput"> 
 				{% include "../events/create_event_page/_name_input.html" %}
 			</div>
 		</li>
@@ -30,7 +30,7 @@
 			</div>
 		</li>
 		<li>
-			<div class="eventcreatelabel">Event Description:</div>
+			<div class="eventcreatelabel">Description:</div>
 			<div class="eventinput">
 				{% include "../events/create_event_page/_description_input.html" %}
 			</div>
@@ -42,7 +42,7 @@
 			</div>
 		</li>
 		<li>
-			<div class="eventcreatelabel">Interest Categories:</div>
+			<div class="eventcreatelabel">Categories:</div>
 			<div class="eventinput">
 				{% include "../interestcategories/_interestcategories.html" %}
 			</div>
@@ -50,8 +50,12 @@
 	</ul>
 
 	<div id="official_coordinator">
-		<input id="official_coordinator_checkbox" name="coordinator" type="checkbox" value="1" />
+		<input id="official_coordinator_checkbox" name="coordinator" type="checkbox" value="1"  {% if event.coordinator %}checked="checked"{%endif%}/>
 	  	<label class="checkboxlabel" title="If you are not, please go ahead and create the event anyway. It may not immediately be shown in the Flash Volunteer system." for="coordinator">I am the official contact for this event</label>
+
+        <input id="official_coordinator_checkbox" name="show_event" type="checkbox" value="1" {% if event.hidden %}{%else%}checked="checked"{%endif%}/>
+        <label class="checkboxlabel" title="Click this if you want to wait until later to let other people browse for this event." for="show_event" >List this event</label>
+
 	</div>
 			
 	<input type=hidden name="session_id" value="{{ volunteer.session_id }}">

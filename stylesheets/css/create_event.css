@@ -35,6 +35,13 @@ div.eventinput input.checkbox {
     width: 15px;
 }
 
+div.eventinput input#startdate,
+div.eventinput input#starttime,
+div.eventinput input#enddate,
+div.eventinput input#endtime{
+    width: 90px;
+}
+
 div.eventinput input#eventname {
     width: 465px;
 }
@@ -99,3 +106,62 @@ div.eventinput ul#interestselections li {
 div#official_coordinator {
     margin-bottom: 8px; 
 }   
+
+
+/*****/
+#createevent .ui-timepickr {
+    position:relative;
+	left: 20%;
+    width:480px; 
+    z-index: 10;
+    background-color: #FFFFFF;
+}
+
+#createevent .ui-timepickr li {
+    margin-bottom: 0px;
+    padding-top: 0px;
+    vertical-align: baseline;
+}
+
+#createevent .ui-timepickr-row {
+    margin:0;
+    padding:0;
+    margin-top:2px; 
+    display:none;
+    position:relative;
+}
+
+#createevent .ui-timepickr-button {
+    float:left;
+    margin:0;
+    padding:0;
+    list-style:none;
+    list-style-type:none;
+}
+
+#createevent .ui-timepickr-button span {
+    font-size:.9em;
+    padding:4px 6px 4px 6px;
+    margin-left:2px;
+    text-align:center;
+    cursor:pointer;
+    display:block;
+    text-align:center;
+
+
+    /* system theme (default) */
+    border-width:1px;
+    border-style:solid;
+    /*border-color:ThreeDLightShadow ThreeDShadow ThreeDShadow ThreeDLightShadow;
+    color:ButtonText;
+    background:ButtonFace;*/
+}
+
+#createevent .ui-timepickr-button span.ui-state-hover {
+    /*color:HighlightText;
+    background:Highlight;*/
+}
+
+#createevent .ui-state-hover span {
+    /*background:#c30;*/
+}

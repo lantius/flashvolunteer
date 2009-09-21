@@ -2,8 +2,8 @@
 <div id="eventdetails" class="hardmodule">
 	<ul>
 		<li><span class="label">Date:</span> {{ event.get_startdate_long }}</li>
-		<li><span class="label">Time:</span> {{ event.get_time }}</li>
-		<li><span class="label">Duration:</span> {{ event.get_duration_string}} </li>
+		<li><span class="label">Start Time:</span> {{ event.get_start_time }}</li>
+		<li><span class="label">End Time:</span> {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
 		<li><span class="label">Neighborhood:</span> {{ event.neighborhood.name }}</li>
 		<li><span class="label">Coordinator(s):</span> 
 			{% for owner in owners %}

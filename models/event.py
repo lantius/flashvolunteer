@@ -24,11 +24,17 @@ class Event(db.Model):
   name = db.StringProperty()
   neighborhood = db.ReferenceProperty(Neighborhood,
                                       collection_name = 'events')
-  date_created = db.DateProperty(auto_now_add=True)
-  date = db.DateTimeProperty()
+
   description = db.TextProperty()
-  duration = db.IntegerProperty() #in hours, obsolete, use duration_minutes
-  duration_minutes = db.IntegerProperty() #full number of minutes e.g. 253 = 4 hours, 13 min, for now, total = duration * 60 + duration_minutes
+  
+  date_created = db.DateProperty(auto_now_add=True)
+  
+  date = db.DateTimeProperty() #start date
+  enddate = db.DateTimeProperty()
+
+  duration = db.IntegerProperty() #OBSOLETE; in hours, use enddate-startdate
+  duration_minutes = db.IntegerProperty() #OBSOLETE; full number of minutes e.g. 253 = 4 hours, 13 min, for now, total = duration * 60 + duration_minutes
+
   special_instructions = db.TextProperty()
   address = db.StringProperty(multiline=True)
   location = db.GeoPtProperty() # No default
@@ -36,6 +42,7 @@ class Event(db.Model):
   
   verified = db.BooleanProperty(default = False)
   hidden = db.BooleanProperty(default = False)
+  coordinator = db.BooleanProperty(default = False)
   
   def __init__(self,
              parent=None,
@@ -46,104 +53,69 @@ class Event(db.Model):
     self.error = {} #instance object, not class object, or will be sticky
     self.save = {}
     db.Model.__init__(self, parent, key_name, _app, _from_entity, **kwds)
-   
-    
-  def get_duration(self):
-    min = 0
-    if self.duration:
-      min = 60*self.duration
-    if self.duration_minutes:
-      min += self.duration_minutes
-    dur = datetime.timedelta(minutes=min)
-    return dur
   
   def get_duration_hours(self):
-    min = 0
-    if self.duration:
-      min = 60*self.duration
-    if self.duration_minutes:
-      min += self.duration_minutes
-    return((min+59)/60) #round up
-    
-    
-  def get_time(self):
-    if not self.date:
-      return "no time set"
-    return self.date.strftime("%I:%M %p")
-  
-  def get_startdate_long(self):
-    if not self.date:
-      return "no date set"
-    return self.date.strftime("%A, %d %B %Y")
-  
-  def get_startdate(self):
+      if not self.enddate:
+          min = 0
+          if self.duration:
+              min = 60*self.duration
+          if self.duration_minutes:
+              min += self.duration_minutes
+          return((min+59)/60) #round up
+      else:
+          diff = self.enddate - self.date
+          return (diff.seconds / 60 + 59 ) / 60 #round up
+ 
+  def get_start_repr(self,strftime):
     if (self.save.has_key('eventstart')):
       return self.save['eventstart']['date']
     if not self.date:
       return "no date set"
-    return self.date.strftime("%m/%d/%Y")  
+    return self.date.strftime(strftime)
+
+  def get_start_time(self):
+      return self.get_start_repr("%I:%M %p")
+  
+  def get_startdate_long(self):
+      return self.get_start_repr("%A, %d %B %Y")
+      
+  def get_startdate(self):
+    return self.get_start_repr("%m/%d/%Y")
   
   def get_starthour(self):
-    if (self.save.has_key('eventstart')):
-      return self.save['eventstart']['hour']
-    if not self.date:
-        return "no time set"
-    return self.date.strftime("%H")
+    return self.get_start_repr("%H")
   
   def get_startminute(self):
-    if (self.save.has_key('eventstart')):
-      return self.save['eventstart']['minute']
-    if not self.date:
-      return "no time set"
-    return self.date.strftime("%M")
+    return self.get_start_repr("%M")
   
-  def get_enddate(self):
+  def get_end_repr(self, strftime):
     if (self.save.has_key('eventend')):
       return self.save['eventend']['date']
     if not self.date:
-      return ""
-    end = self.date + self.get_duration()
-    return end.strftime("%m/%d/%Y")  
-  
+      return "no date set"
+    
+    if self.enddate:
+        end = self.enddate
+    else: 
+        end = self.date + self.get_duration()
+    return end.strftime(strftime)  
+
+  def get_enddate_long(self):
+    return self.get_end_repr("%A, %d %B %Y")
+
+  def get_enddate(self):
+    return self.get_end_repr("%m/%d/%Y")
+
+  def get_end_time(self):
+    return self.get_end_repr("%I:%M %p")
+
   def get_endhour(self):
-    if (self.save.has_key('eventend')):
-      return self.save['eventend']['hour']
-    if not self.date:
-      return "no time set"
-    end = self.date + self.get_duration()
-    return end.strftime("%H")
+    return self.get_end_repr("%H")
   
   def get_endminute(self):
-    if (self.save.has_key('eventend')):
-      return self.save['eventend']['minute']
-    if not self.date:
-      return "no time set"
-    end = self.date + self.get_duration()
-    return end.strftime("%M")
+    return self.get_end_repr("%M")
   
-  def get_duration_string(self):
-    dur = self.get_duration()
-    weeks, days = divmod(dur.days, 7)
-    minutes, seconds = divmod(dur.seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    if (hours > 1):
-      ret = "%02d:%02d hours" % (hours, minutes)
-    else:
-      ret = "%02d:%02d hour" % (hours, minutes)
-    if (days):
-      if (days > 1):
-        ret = ("%d days, " % days) + ret
-      else:
-        ret = ("%d day, " % days) + ret
-        
-    if (weeks):
-      if (weeks > 1):
-        ret = ("%d weeks, " % weeks) + ret
-      else:
-        ret = ("%d week, " % weeks) + ret
-        
-    return ret
-    
+
   def message_body(self):
       lines = ['You are invited to the event %s.'%self.name]
       lines.append('To sign up for the event, please visit http://www.flashvolunteer.org/events/%i.'%self.key().id())
@@ -178,31 +150,22 @@ class Event(db.Model):
       self.location = db.GeoPt(lat,lon)
       self.geostring = str(Geostring((self.location.lat,self.location.lon)) )
     
-  def validate_time(self, date, hour, minute):
+  def validate_time(self, date, time):
     save = {}
     save['date'] = date
-    save['hour'] = hour
-    save['minute'] = minute
+    save['time'] = time
     
     error_string = []
     try:
-      startdate = datetime.datetime.strptime(date, "%m/%d/%Y")
+      date_str = datetime.datetime.strptime(date, "%m/%d/%Y")
     except ValueError:
       error_string.append('Invalid date')
-
-    
-    if (minute == 'none'):
-      error_string.append('Minutes not set')
       
-    if (hour == 'none'):
-      error_string.append('Hours not set')
-
-    if (len(error_string)==0):
-      try:
-        time = datetime.datetime.strptime(hour + ":" + minute, "%H:%M")
-      except ValueError:
-        error_string.append('Invalid time')
-        
+    try:
+      time_str = datetime.datetime.strptime(time, "%I:%M %p")
+    except ValueError:
+      error_string.append('Invalid time')
+            
     return (error_string, save)    
       
     
@@ -221,35 +184,35 @@ class Event(db.Model):
     except:
       self.error['name'] = ('Name is required', params['name'])
 
+    
     #event start time
-    (eventstart_error, save) = self.validate_time(params['startdate'], params['starthour'], params['startminute'])
+    params['starttime'] = params['starttime'].upper()
+    (eventstart_error, save) = self.validate_time(params['startdate'], params['starttime'])
     self.save['eventstart'] = save
     if(len(eventstart_error) == 0):
       self.date = datetime.datetime.strptime(
-        params['starthour'] + ":" + params['startminute'] + ' ' + params['startdate'], "%H:%M %m/%d/%Y"
+        params['starttime'] + ' ' + params['startdate'], "%H:%M %p %m/%d/%Y"
       )
     else: 
       self.error['eventstart'] = eventstart_error
     
     #event end time
-    (eventend_error, save) = self.validate_time(params['enddate'], params['endhour'], params['endminute'])
+    params['endtime'] = params['endtime'].upper()
+    (eventend_error, save) = self.validate_time(params['enddate'], params['endtime'])
     self.save['eventend'] = save
     if(len(eventend_error) == 0):
       enddatetime = datetime.datetime.strptime(
-        params['endhour'] + ":" + params['endminute'] + ' ' + params['enddate'], "%H:%M %m/%d/%Y"
+        params['endtime'] + ' ' + params['enddate'], "%H:%M %p %m/%d/%Y"
       )
 
       if(len(eventstart_error) == 0):
+          
         delta = enddatetime - self.date 
+        self.enddate = enddatetime
+
         if (delta < datetime.timedelta(0)): 
           self.error['enddate_early'] = ('Event start (%s) cannot be later than' % self.date.strftime("%m/%d/%Y, %I:%M %p"),  
                                          'event end (%s)' % enddatetime.strftime("%m/%d/%Y, %I:%M %p") )
-          self.duration_minutes = 0
-        else:
-          self.duration_minutes = delta.days*1440 + delta.seconds/60
-          if (self.duration):
-            self.duration_minutes += self.duration*60 #convert legacy hour based duration
-            self.duration = 0
     else: 
       self.error['eventend'] = eventend_error
 
@@ -279,7 +242,9 @@ class Event(db.Model):
     except:
       self.error['address'] = ('Invalid address', params['address'])
     
-    self.hidden = not 'coordinator' in params
+    self.coordinator = 'coordinator' in params
+    
+    self.hidden = not 'show_event' in params
       
     # try our geocoding here
     if self.address:
@@ -298,3 +263,16 @@ class Event(db.Model):
   
   def inpast(self):
     return self.date < datetime.datetime.now()
+
+
+#########################################
+## DEPRECATED
+    
+  def get_duration(self):
+    min = 0
+    if self.duration:
+      min = 60*self.duration
+    if self.duration_minutes:
+      min += self.duration_minutes
+    dur = datetime.timedelta(minutes=min)
+    return dur

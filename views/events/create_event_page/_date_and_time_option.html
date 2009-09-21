@@ -1,132 +1,56 @@
 
 <!--[if IE]><script type="text/javascript" src="scripts/jquery/js/jquery.bgiframe.js"></script><![endif]-->
 
-
-<script type="text/javascript">
-    $(function() {
-        $("#datepicker").datepicker();
-    });
-</script>
-
 <script type="text/javascript">
 	$(function()
 	{		
-		$(".date-pick").datepicker();
-		$('#startdate').bind(
-				'dpClosed',
-				function(e, selectedDates)
-				{
-					var d = selectedDates[0];
-					if (d) {
-						d = new Date(d);
-						$('#enddate').dpSetStartDate(d.asString());//addDays(1).
-						if ($('#enddate')[0].value == "") {//init end date
-							$('#enddate')[0].value = this.value;
-						}
-					}
+        //custom time-picker from http://haineault.com/media/jquery/ui-timepickr/page/
+		$.getScript("/stylesheets/timepicker/jquery.timepickr.js", function(){
+		        $('.time-pick').timepickr({
+		            trigger: 'click',
+		            convention: 12 });
+			});
 
-				}
-			);
-		$('#enddate').bind(
-			'dpClosed',
-			function(e, selectedDates)
-			{
-				var d = selectedDates[0];
-				if (d) {
-					d = new Date(d);
-					$('#startdate').dpSetEndDate(d.asString());
-				}
-			}
+
+        //jquery ui date-picker
+		$("#startdate").datepicker({
+		  onClose: function(e, selectedDates){
+                    if (e) {
+						var date = $('#startdate').datepicker("getDate");
+                        if ($('#enddate').datepicker('getDate') == null) {//init end date
+                            $('#enddate').datepicker('setDate', date); 
+                        }
+                    }
+
+                }}
 		);
+
+        $("#enddate").datepicker({
+          onClose: function(e, selectedDates){
+                    if (e) {
+                        var date = $('#enddate').datepicker("getDate");
+                        if ($('#startdate').datepicker('getDate') == null) {//init end date
+                            $('#startdate').datepicker('setDate', date); 
+                        }
+                    }
+
+                }}
+        );
+
 		{% if event %}
-		//initialize start hour
-		var hour, minute, index;
-		hour = parseInt("{{event.get_starthour}}", 10);
-		index = hour - 5;//6am is index 1
-		if (index < 0) {
-			index += 24;
-		}
-		$('#starthour')[0].selectedIndex = index;
-
-		//initialize start minute
-		minute = parseInt("{{event.get_startminute}}", 10);
-		index = minute/5 + 1;
-		$('#startminute')[0].selectedIndex = index;
-
-		//initialize end hour
-		hour = parseInt("{{event.get_endhour}}", 10);
-		index = hour - 5;//6am is index 1
-		if (index < 0) {
-			index += 24;
-		}
-		$('#endhour')[0].selectedIndex = index;
-
-		//initialize end minute
-		minute = parseInt("{{event.get_endminute}}", 10);
-		index = minute/5 + 1;
-		$('#endminute')[0].selectedIndex = index;
 
 		{% endif %}
 
 	});
-	function starthour_onchange(ev) {
-		if ($('#endhour')[0].selectedIndex==0) {//virgin
-			$('#endhour')[0].selectedIndex = $('#starthour')[0].selectedIndex;
-		}
-	}
-	function startminute_onchange(ev) {
-		if ($('#endminute')[0].selectedIndex==0) {//virgin
-			$('#endminute')[0].selectedIndex = $('#startminute')[0].selectedIndex;
-		}
-	}
+
 </script>
 
 <li>
-	<div class="eventcreatelabel">Event Start:</div>
+	<div class="eventcreatelabel">Start Date/Time:</div>
 	<div class="eventinput">
-		<input type="text" name="startdate" id="startdate" class="date-pick dp-applied" value="{{event.get_startdate}}" />
-		<select class="narrowselect" name="starthour" id="starthour" onChange="starthour_onchange()">
-				<option value="none">Hour...</option>
-				<option value="06" >6am</option>
-				<option value="07" >7am</option>
-				<option value="08" >8am</option>
-				<option value="09" >9am</option>
-				<option value="10" >10am</option>
-				<option value="11" >11am</option>
-				<option value="12" >Noon</option>
-				<option value="13" >1pm</option>
-				<option value="14" >2pm</option>
-				<option value="15" >3pm</option>
-				<option value="16" >4pm</option>
-				<option value="17" >5pm</option>
-				<option value="18" >6pm</option>
-				<option value="19" >7pm</option>
-				<option value="20" >8pm</option>
-				<option value="21" >9pm</option>
-				<option value="22" >10pm</option>
-				<option value="23" >11pm</option>
-				<option value="00" >Midnight</option>
-				<option value="01" >1am</option>
-				<option value="02" >2am</option>
-				<option value="03" >3am</option>
-				<option value="04" >4am</option>
-				<option value="05" >5am</option>
-		</select>
-		<select class="narrowselect" name="startminute" id="startminute"  onChange="startminute_onchange()">
-				<option value="none">Min...</option>
-				<option value="00" >:00</option>
-				<option value="05" >:05</option>
-				<option value="10" >:10</option>
-				<option value="15" >:15</option>
-                <option value="20" >:20</option>
-                <option value="25" >:25</option>
-                <option value="30" >:30</option>
-                <option value="35" >:35</option>
-                <option value="40" >:40</option>
-                <option value="45" >:45</option>
-                <option value="50" >:50</option>
-                <option value="55" >:55</option>
-		</select>
+		<span class="format_help">e.g. 09/01/2009</span><input type="text" name="startdate" id="startdate" class="date-pick" value="{{ event.get_startdate }}" /> 
+        <span class="format_help">e.g. 03:00 pm</span><input type="text" name="starttime" id="starttime" class="time-pick" value="{{ event.get_start_time }}" /> 
+
 		{% if event.error.eventstart %}
 			{% for error in event.error.eventstart %}
 			<br/><strong class="error">{{error}}</strong>
@@ -135,51 +59,11 @@
 	</div>
 </li>
 <li>
-	<div class="eventcreatelabel">Event End:</div>
+	<div class="eventcreatelabel">End Date/Time:</div>
 	<div class="eventinput">
-		<input type="text" name="enddate" id="enddate" class="date-pick dp-applied" value="{{ event.get_enddate }}" />
-		<select class="narrowselect" name="endhour" id="endhour" >
-				<option value="none">Hour...</option>
-				<option value="06" >6am</option>
-				<option value="07" >7am</option>
-				<option value="08" >8am</option>
-				<option value="09" >9am</option>
-				<option value="10" >10am</option>
-				<option value="11" >11am</option>
-				<option value="12" >Noon</option>
-				<option value="13" >1pm</option>
-				<option value="14" >2pm</option>
-				<option value="15" >3pm</option>
-				<option value="16" >4pm</option>
-				<option value="17" >5pm</option>
-				<option value="18" >6pm</option>
-				<option value="19" >7pm</option>
-				<option value="20" >8pm</option>
-				<option value="21" >9pm</option>
-				<option value="22" >10pm</option>
-				<option value="23" >11pm</option>
-				<option value="00" >Midnight</option>
-				<option value="01" >1am</option>
-				<option value="02" >2am</option>
-				<option value="03" >3am</option>
-				<option value="04" >4am</option>
-				<option value="05" >5am</option>
-		</select>
-		<select class="narrowselect" name="endminute" id="endminute" >
-				<option value="none">Min...</option>
-                <option value="00" >:00</option>
-                <option value="05" >:05</option>
-                <option value="10" >:10</option>
-                <option value="15" >:15</option>
-                <option value="20" >:20</option>
-                <option value="25" >:25</option>
-                <option value="30" >:30</option>
-                <option value="35" >:35</option>
-                <option value="40" >:40</option>
-                <option value="45" >:45</option>
-                <option value="50" >:50</option>
-                <option value="55" >:55</option>
-		</select>
+		<span class="format_help">e.g. 09/01/2009</span><input type="text" name="enddate" id="enddate" class="date-pick" value="{{ event.get_enddate }}" /> 
+		<span class="format_help">e.g. 04:30 pm</span><input type="text" name="endtime" id="endtime" class="time-pick" value="{{ event.get_end_time }}" /> 
+
 		{% if event.error.eventend %}
 			{% for error in event.error.eventend %}
 				<br/><strong class="error">{{error}}</strong>
