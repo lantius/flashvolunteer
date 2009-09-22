@@ -702,7 +702,7 @@ $.extend($.ui.timepickr, {
         suffix:      ['AM', 'PM'],
         prefixVal:   false,
         suffixVal:   true,
-        rangeHour12: $.range(1, 13),
+        rangeHour12: [12,1,2,3,4,5,6,7,8,9,10,11],
         rangeHour24: [$.range(0, 12), $.range(12, 24)],
         rangeMin:    $.range(0, 60, 15),
         rangeSec:    $.range(0, 60, 15),
