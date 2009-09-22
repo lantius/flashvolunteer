@@ -52,9 +52,9 @@
 	<div id="official_coordinator">
 		<input id="official_coordinator_checkbox" name="coordinator" type="checkbox" value="1"  {% if event.coordinator %}checked="checked"{%endif%}/>
 	  	<label class="checkboxlabel" title="If you are not, please go ahead and create the event anyway. It may not immediately be shown in the Flash Volunteer system." for="coordinator">I am the official contact for this event</label>
-
+        <br>
         <input id="official_coordinator_checkbox" name="show_event" type="checkbox" value="1" {% if event.hidden %}{%else%}checked="checked"{%endif%}/>
-        <label class="checkboxlabel" title="Click this if you want to wait until later to let other people browse for this event." for="show_event" >List this event</label>
+        <label class="checkboxlabel" title="Check this if you want to wait until later to let other people browse for this event." for="show_event" >List this event</label>
 
 	</div>
 			

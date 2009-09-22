@@ -2,6 +2,8 @@ import datetime
 import logging
 import urllib
 from components.geostring import *
+from components.time_zones import Pacific
+
 from google.appengine.api import urlfetch
 
 from google.appengine.ext import db
@@ -52,8 +54,11 @@ class Event(db.Model):
              **kwds):
     self.error = {} #instance object, not class object, or will be sticky
     self.save = {}
-    db.Model.__init__(self, parent, key_name, _app, _from_entity, **kwds)
-  
+    db.Model.__init__(self, parent = parent, 
+                      key_name = key_name, 
+                      _app = _app, 
+                      _from_entity = _from_entity, **kwds)
+        
   def get_duration_hours(self):
       if not self.enddate:
           min = 0
@@ -191,7 +196,7 @@ class Event(db.Model):
     self.save['eventstart'] = save
     if(len(eventstart_error) == 0):
       self.date = datetime.datetime.strptime(
-        params['starttime'] + ' ' + params['startdate'], "%H:%M %p %m/%d/%Y"
+        params['starttime'] + ' ' + params['startdate'], "%I:%M %p %m/%d/%Y"
       )
     else: 
       self.error['eventstart'] = eventstart_error
@@ -202,7 +207,7 @@ class Event(db.Model):
     self.save['eventend'] = save
     if(len(eventend_error) == 0):
       enddatetime = datetime.datetime.strptime(
-        params['endtime'] + ' ' + params['enddate'], "%H:%M %p %m/%d/%Y"
+        params['endtime'] + ' ' + params['enddate'], "%I:%M %p %m/%d/%Y"
       )
 
       if(len(eventstart_error) == 0):
@@ -262,7 +267,8 @@ class Event(db.Model):
     return not self.error
   
   def inpast(self):
-    return self.date < datetime.datetime.now()
+    now = datetime.datetime.now(tz=Pacific).replace(tzinfo=None)
+    return self.date < now
 
 
 #########################################

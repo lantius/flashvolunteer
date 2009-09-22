@@ -698,8 +698,8 @@ $.extend($.ui.timepickr, {
         format12:    '{h:02.d}:{m:02.d} {suffix:s}',
         format24:    '{h:02.d}:{m:02.d}',
         hours:       true,
-        prefix:      ['am', 'pm'],
-        suffix:      ['am', 'pm'],
+        prefix:      ['AM', 'PM'],
+        suffix:      ['AM', 'PM'],
         prefixVal:   false,
         suffixVal:   true,
         rangeHour12: $.range(1, 13),
@@ -879,13 +879,13 @@ var Time = function() { // arguments: h, m, s, c, z, f || time string
         this.s = arguments[0].s || 0;
         this.c = arguments[0].c && ($.inArray(arguments[0].c, [12, 24]) >= 0) && arguments[0].c || 24;
         this.f = arguments[0].f || ((this.c == 12) && '{h:02.d}:{m:02.d} {z:02.d}' || '{h:02.d}:{m:02.d}');
-        this.z = arguments[0].z || 'am';
+        this.z = arguments[0].z || 'AM';
     }
     // arguments as string
     else if (arguments.length < 4 && $.isString(arguments[1])) {
         this.c = arguments[2] && ($.inArray(arguments[0], [12, 24]) >= 0) && arguments[0] || 24;
         this.f = arguments[3] || ((this.c == 12) && '{h:02.d}:{m:02.d} {z:02.d}' || '{h:02.d}:{m:02.d}');
-        this.z = arguments[4] || 'am';
+        this.z = arguments[4] || 'AM';
         
         this.h = arguments[1] || 0; // parse
         this.m = arguments[1] || 0; // parse
@@ -902,7 +902,7 @@ var Time = function() { // arguments: h, m, s, c, z, f || time string
         this.s = arguments[2] || 0;
         this.c = arguments[3] && ($.inArray(arguments[3], [12, 24]) >= 0) && arguments[3] || 24;
         this.f = this.f || ((this.c == 12) && '{h:02.d}:{m:02.d} {z:02.d}' || '{h:02.d}:{m:02.d}');
-        this.z = 'am';
+        this.z = 'AM';
     }
     return this;
 };

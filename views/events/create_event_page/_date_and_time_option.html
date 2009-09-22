@@ -37,10 +37,6 @@
                 }}
         );
 
-		{% if event %}
-
-		{% endif %}
-
 	});
 
 </script>
@@ -49,7 +45,7 @@
 	<div class="eventcreatelabel">Start Date/Time:</div>
 	<div class="eventinput">
 		<span class="format_help">e.g. 09/01/2009</span><input type="text" name="startdate" id="startdate" class="date-pick" value="{{ event.get_startdate }}" /> 
-        <span class="format_help">e.g. 03:00 pm</span><input type="text" name="starttime" id="starttime" class="time-pick" value="{{ event.get_start_time }}" /> 
+        <span class="format_help">e.g. 03:00 PM</span><input type="text" name="starttime" id="starttime" class="time-pick" value="{{ event.get_start_time }}" /> 
 
 		{% if event.error.eventstart %}
 			{% for error in event.error.eventstart %}
@@ -62,7 +58,7 @@
 	<div class="eventcreatelabel">End Date/Time:</div>
 	<div class="eventinput">
 		<span class="format_help">e.g. 09/01/2009</span><input type="text" name="enddate" id="enddate" class="date-pick" value="{{ event.get_enddate }}" /> 
-		<span class="format_help">e.g. 04:30 pm</span><input type="text" name="endtime" id="endtime" class="time-pick" value="{{ event.get_end_time }}" /> 
+		<span class="format_help">e.g. 04:30 PM</span><input type="text" name="endtime" id="endtime" class="time-pick" value="{{ event.get_end_time }}" /> 
 
 		{% if event.error.eventend %}
 			{% for error in event.error.eventend %}
@@ -73,5 +69,6 @@
 			<br/><strong class="error">{{event.error.enddate_early.0}}<br>{{event.error.enddate_early.1}}</strong>
 		{% endif %}
 	</div>
+	
 </li>
 

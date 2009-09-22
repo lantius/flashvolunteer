@@ -7,7 +7,7 @@ import sys
 
 class Authorize():
   
-  def login(req, requireVolunteer=False, redirectTo=''):
+  def login(req, requireVolunteer=False, redirectTo='/login'):
     session = Session()
     user = session.get('user', None)
     

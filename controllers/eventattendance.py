@@ -10,6 +10,7 @@ from models.eventvolunteer import *
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
+from components.time_zones import Pacific
 
 ################################################################################
 # VerifyEventAttendance
@@ -62,7 +63,7 @@ class VerifyEventAttendance(webapp.RequestHandler):
         'eventvolunteer': ev,
         'volunteer' : ev.volunteer,
         'event' : ev.event,
-        'now' : datetime.datetime.now().strftime("%A, %d %B %Y"),
+        'now' : datetime.datetime.now(Pacific).strftime("%A, %d %B %Y"),
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'receipt.html')
     self.response.out.write(template.render(path, template_values))

@@ -20,7 +20,7 @@ class ProfilePage(webapp.RequestHandler):
   LIMIT = 3 
   def get(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/login')
     except:
       return    
 

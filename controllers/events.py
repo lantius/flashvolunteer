@@ -1,4 +1,4 @@
-import os, string, datetime, random
+import os, string, random
 import exceptions
 import logging
 
@@ -303,6 +303,7 @@ class EventsPage(webapp.RequestHandler):
     try:
       event.put()
     except:
+      raise
       self.new(event)
       return
     
