@@ -3,6 +3,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from models.interestcategory import *
 from controllers._helpers import SessionID
+from models.abstractuser import AbstractUser
 
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
@@ -10,157 +11,19 @@ from controllers._twitter import Twitter
 
 ################################################################################
 # Organization
-class Organization(db.Model):
-  user = db.UserProperty()
-  name = db.StringProperty()
-  logo = db.BlobProperty()
-  logo_type = db.StringProperty()
+class Organization(AbstractUser):
   
-  quote = db.StringProperty()
-  twitter = db.StringProperty()
-  joinedon = db.DateProperty(auto_now_add=True)
-  session_id = db.StringProperty()
-  create_rights = db.BooleanProperty(default=True)
-  preferred_email = db.StringProperty(default=None)
-  
-  verified = db.BooleanProperty(default=False)
-  
-  error = {}
-
 
   def validate(self, params):
-    self.error.clear()
-    
-    # volunteer.user is set in the settings controller
-    try:
-      if not 'name' in params:
-        raise Exception
-      if not len(params['name']) > 0:        
-        raise Exception
-      self.name  = params['name']
-    except:
-      self.error['name'] = ('A name is required', params['name'])
-    
-    if not self.is_saved():
-      if (not 'tosagree' in params) or params['tosagree'] != '1':
-        self.error['tosagree'] = ('You must agree to the Terms of Service to join Flash Volunteer', 0)
-   
-    # Not verifying these updates
-    
+    AbstractUser.validate(self, params)
 
-    if 'quote' in params:
-      self.quote = "" + params['quote']
-    if 'name' in params:
-      self.name  = params['name']
-    if 'delete_logo' in params:
-      self.logo = None
-    if 'email' in params and len(params['email']):
-      self.preferred_email = params['email']
-    else:
-      self.preferred_email = None
-
-    if 'twitter' in params and self.twitter != params['twitter']:
-      self.twitter = params['twitter']
-      Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
-
-      #Interest Categories updates happen in the controller
-
-    
-    if not self.error:
-      self.session_id = SessionID().generate()
-      return True
-    else:
-      return False
-
-
-  def get_name(self):
-    if self.name:
-      return self.name
-
-    return self.volunteer.nickname
- 
-  def get_email(self):
-    if self.preferred_email is None:
-      return self.user.email()
-    else:
-      return self.preferred_email
-  
-  def get_quote(self):
-    if self.quote:
-      return self.quote
-      
-    return ''
-    
   def url(self):
     return '/organizations/' + str(self.key().id())
 
-  def logout_url(self):
-    return users.create_logout_url('/')
 
-  def events(self):
-    events = [ev.event for ev in self.eventorganizations]
-    events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
-    return events
-
-  def interestcategories(self):
-    return (vic.interestcategory for vic in self.organizationinterestcategories)
-
-#  def following(self):
-#    return (f.volunteer for f in self.volunteerfollowing)
-#
-#  def following_len(self):
-#    return len(self.following())
-
-  def followers(self):
+  def fans(self):
     return (f.follower for f in self.organizationfollowers)
 
-  def followers_len(self):
+  def fans_len(self):
     return len(self.followers())
-
-#  def teammates_ids(self):
-#      return dict([(v.key().id(),1) for v in self.following() ])
-
-#  # both following and follower
-#  def friends(self):
-#    fr = []
-#    
-#    following = dict([(f.key().id(),1) for f in self.following()])
-#    for follower in self.followers():
-#        if follower.key().id() in following:            
-#          fr.append(follower)
-#    return [f for f in fr]
-#
-#  def friends_len(self):
-#    return len(self.friends())
-#
-#  def followers_only(self):
-#      friends = dict([(f.key().id(),1) for f in self.friends()])
-#      return (f for f in self.followers() if f.key().id() not in friends)
-#
-#  def following_only(self):
-#      friends = dict([(f.key().id(),1) for f in self.friends()])
-#      return (f for f in self.following() if f.key().id() not in friends)
-
-  def events_past_count(self):
-    return len(self.events_past())
-
-  def events_past(self):
-    return [e for e in self.events() if e.inpast()]
-  
-  def events_future_count(self):
-    return len(self.events_future())
-
-  def events_future(self):
-    return [e for e in self.events() if not e.inpast() ]
-  
-  def check_session_id(self, form_session_id):
-    return form_session_id == self.session_id
-    
-  def can_create_events(self):
-    return self.create_rights
-
-  def event_access(self, volunteer):
-      friends = [f.key().id() for f in self.friends()]
-      return self.privacy__event_attendance == 'everyone' or (self.privacy__event_attendance == 'friends' and volunteer.key().id() in friends)
-      
   
