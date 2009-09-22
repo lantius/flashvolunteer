@@ -1,5 +1,6 @@
 from google.appengine.api import users
 from models.volunteer import Volunteer
+from models.organization import Organization
 from components.sessions import Session
 
 import sys
@@ -10,24 +11,26 @@ class Authorize():
     session = Session()
     user = session.get('user', None)
     
+    abstract_user = None
+    
     if user:
-      volunteer = Volunteer.gql("where user = :user", user=user).get()
-    else:
-      volunteer = None
+      abstract_user = Volunteer.gql("where user = :user", user=user).get()
+      if not abstract_user:
+          abstract_user = Organization.gql("where user = :user", user=user).get()
               
     if requireVolunteer:
-      if not volunteer:
+      if not abstract_user:
         req.redirect(redirectTo)
         raise AuthError("You must be signed in to perform this action.")
         #sys.exit(0)           # should end execution IRL
         #return (None)      # shouldn't get here except in tests
         
-      elif req.request.method == 'POST' and not volunteer.check_session_id(req.request.get('session_id')):
+      elif req.request.method == 'POST' and not abstract_user.check_session_id(req.request.get('session_id')):
         req.redirect('/timeout')
         raise TimeoutError("Session has timed out.")
         #return (None)       # shouldn't get here except in tests    
     
-    return volunteer
+    return abstract_user
     
   login = staticmethod(login)
   
