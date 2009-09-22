@@ -79,8 +79,7 @@ Contains navigation list items for header and footer
     padding: 0;
 }
 
-#navtabs li a.current{
-    padding: 8px 10px 6px 10px;     
+#navtabs li a{
 }
 
 
@@ -90,7 +89,7 @@ Contains navigation list items for header and footer
     text-decoration: none;
     font-size: 12px;
     font-weight: bold;
-	padding: 0 10px;
+    padding: 8px 10px 7px 10px;     
 	position: relative;
 	top: 8px;
 }

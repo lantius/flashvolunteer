@@ -47,9 +47,11 @@ div#footer #copyright{
 }
 #navtabs li a.current{
     background-color: #3b3b3b;
-    border-bottom: 1px solid #8b8b8b;
 }
 
+#navtabs li a:hover {
+	background: #fff url("../media/body-top-rpt-horiz_hover.png") repeat-x top center;
+}
 #pagespectitle h1 {
     border-bottom: #b6e6a5 3px solid;
 }
