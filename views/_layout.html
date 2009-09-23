@@ -2,24 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
   <head>
 	<title>{% block title %}{% endblock title %}</title>
-	
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset/reset-min.css" /> 
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset/reset-min.css"> 
     <link type="text/css" rel="stylesheet" href="/stylesheets/css/main.css" />
 	<link type="text/css" rel="stylesheet" href="/stylesheets/css/layout.css" />
 	<link type="text/css" rel="stylesheet" href="/stylesheets/css/colors_backgrounds_borders.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/css/create_event.css" /> 
-    <link rel="stylesheet" type="text/css" href="/stylesheets/css/event_photos.css" />
-     
+    <link rel="stylesheet" type="text/css" href="/stylesheets/css/event_photos.css" /> 
+
 	<link rel="shortcut icon" href="/stylesheets/favicon.ico" />
-	<link type="text/css" href="/stylesheets/jquery/css/flashvolunteer/jquery-ui-1.7.2.custom.css" rel="Stylesheet" />		
-	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-1.3.2.min.js"></script>		
-	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-ui-1.7.2.custom.min.js"></script>	
-	
+	<link type="text/css" href="/stylesheets/jquery/css/flashvolunteer/jquery-ui-1.7.2.custom.css" rel="Stylesheet" />	
+	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-ui-1.7.2.custom.min.js"></script>
 	<!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>-->
     <!--[if IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie7.css" /><![endif]-->
     <!--[if lt IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie6.css" /><![endif]-->
-    
-      
   </head>
  <body>
  	<div id="container">
@@ -74,11 +70,24 @@
 <div id="footer">
 		<ul>
 			<li><a href="/static/about">About</a></li>
-			<li><a href="/static/donate">Donate</a></li>
 			<li><a href="/static/privacy">Privacy Policy</a></li>
 			<li><a href="/static/tos">Terms of Use</a></li>
 		</ul>
-		<div id="copyright">Flash Volunteer &copy; 2009</div>
+        <div id="badges">
+        	<ul>
+	            <li class="badge" id="fb-badge">
+	                <a href="http://www.facebook.com/pages/Flash-Volunteer/75272433226"><img id="fb-badge-img" src="/stylesheets/media/find-us-on-facebook.png" alt="Find us on Facebook"/></a>
+	            </li>
+	            <li class="badge" id="twitter-badge">
+	                <a href="http://twitter.com/flashvolunteer"><img id="twitter-badge-img" src="/stylesheets/media/tw2_gif.gif" alt="Follow us on Twitter"/></a>                     
+	            </li>
+				<li class="badge" id="donate-badge">
+	                <a href="/static/donate"><img id="donate-badge-img" alt="" border="0" src="/stylesheets/media/donate.gif"></a>                     
+	            </li>
+	        </ul>          
+        </div>
+	      <div id="copyright">Flash Volunteer &copy; 2009</div>
+
 </div><!--end footer-->
 
 <script type="text/javascript">

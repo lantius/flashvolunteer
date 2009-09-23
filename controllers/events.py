@@ -59,7 +59,7 @@ def _get_recommended_events(volunteer):
 # Events page
 ################################################################################
 class EventsPage(webapp.RequestHandler):
-  LIMIT = 5
+  LIMIT = 3
   ################################################################################
   # GET
   def get(self, url_data):    
@@ -216,7 +216,7 @@ class EventsPage(webapp.RequestHandler):
       else:
           public_attendees = []
           for v in event.volunteers():
-              if v.event_access(volunteer=volunteer):
+              if v.key().id() == volunteer.key().id() or v.event_access(volunteer=volunteer):
                   public_attendees.append(v)
               else:
                   attendees_anonymous.append(v)

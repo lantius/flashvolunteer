@@ -68,7 +68,7 @@ div#container{
                 #left75, #right25,
                 #left25, #right75,
                 #middle100,
-                #splash-right, #splash-left {
+                #splash-right, #splash-left, #splash-leftmost {
                     float: left; 
                     top:0
                 }
@@ -134,25 +134,38 @@ div#container{
                     padding: 0 10px 10px 10px;
                 }       
                 
+				#splash-leftmost,
                 #splash-right {
-                    width: 45%;
-                    padding-left: 20px;
+                    padding:0px 20px;
                 }
-                
+
+                #splash-leftmost {
+                	width: 35%;
+                }
+                #splash-right {
+                    width: 25%;
+                }
+				
                 #splash-left {
-                    width: 45%;
+                    width: 30%;
                 }
         
-        div#clearfooter { height: 45px; }
+        div#clearfooter { height: 130px; }
 
 /* NOTE: the footer is NOT in the container. See http://www.wickham43.net/footerfix.php */
 div#footer { 
     width: 100%;
-    height: 45px;
-    margin: -45px auto 0 auto; 
+    height: 130px;
+    margin: -130px auto 0 auto; 
     text-align:center;
     padding-top: 15px;
 }
     div#copyright{
         font-size: 8pt;
     }
+	
+	div#badges {
+		margin: 14px 0px;
+        width: 100%;
+		padding-top: 10px;
+	}

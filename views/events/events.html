@@ -10,26 +10,22 @@ class="current"
 
 {% block content %}
 
-<script type="text/javascript">
-	$(function() {
-		$("#accordion").accordion();
-	});
-</script>
 	
 {% if volunteer %}
-	<div id="lefthalf">
+    <div id="lefthalf">
+        {% include "events_page/_create_event.html" %}
+        {% include "events_page/_upcoming_events.html" %}
+        {% include "events_page/_find_event_wide.html" %}
+    </div><!--end righthalf-->
+	<div id="righthalf">
 
 		{% include "events_page/_volunteer_hosting_events.html" %}
 		{% include "events_page/_volunteer_upcoming.html" %}
+        {% include "events_page/_recommended_events.html" %}
 		{% include "events_page/_volunteer_past.html" %}
-		{% include "events_page/_recommended_events.html" %}
 	</div><!--end lefthalf-->
 	
-	<div id="righthalf">
-		{% include "events_page/_create_event.html" %}
-		{% include "events_page/_find_event_wide.html" %}
-		{% include "events_page/_upcoming_events.html" %}
-	</div><!--end righthalf-->
+
 {% else %}
 	<div id="lefthalf">
 		{% include "events_page/_upcoming_events.html" %}

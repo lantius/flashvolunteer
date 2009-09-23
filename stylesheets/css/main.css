@@ -41,6 +41,10 @@ div{
 
 p { margin: 8px 0 0 0; }
 
+#splash-left p {
+	padding-bottom: 7px;
+	font-size: 110%;
+}
 
 
 .bn { border:0; }
@@ -102,8 +106,9 @@ Contains navigation list items for header and footer
 
 #footer li{
     padding-right: 20px;
-    font-size: 8pt;
+    font-size: 10pt;
     display: inline;
+	font-variant: small-caps;
 }
 
 
@@ -146,9 +151,8 @@ div.moduletitle{
     padding: 5px 5px 5px 10px;
     margin: 10px -10px;
     width: 100%;
-	font-size: 8pt;
+	font-size: 100%;
 	font-weight: lighter;
-	font-variant: small-caps;
 }
 
 h1.verification_warning {
@@ -228,7 +232,7 @@ ul.rightformlist {
 #splash-right li{
     list-style-type:decimal;
     margin: 5px 0 0 15px;
-    font-size: 8pt;
+    font-size: 9pt;
 }
 
 .shortevent ul li {
@@ -302,21 +306,24 @@ img.smallavatar {
 }
 
 
-#splash-left #badges {
-    height:120px;
-	margin: 20px auto 0 auto;
-    width: 100%;
-}
-
-#splash-left .badge {
-    display:inline;
-    text-align: center;
+#footer .badge {
     padding-right: 20px;
 }
 
 #splash-left .badge img {
 	width: 100px;
 }
+
+#donate-badge-img {
+}
+
+#fb-badge-img {
+	width: 125px;
+}
+#twitter-badge-img {
+	width: 90px;
+}
+
 #splash-left #twitter-badge {}
 
 #splash-left #fb-badge { padding-top: 20px; }
@@ -468,13 +475,13 @@ div.actionlist {
 /*for listed events*/
 div.shortevent {
     margin-top: 10px;
-    font-size: 8pt;
+    font-size: 9pt;
 }
 
 /*for finding events*/
 
 div#findaneventwide {
-    height: 125px;
+    height: 130px;
 }
 
 /*for event display*/
@@ -514,7 +521,8 @@ a.faq-link { font-size: 7pt;}
 div#splash-left div#slogan {
     font-size: 215%;
     font-family: serif;
-	margin-top: 10px;
+	margin: 15px 0px;
+	font-weight:bold;
 }
 
 /* for event warnings */
@@ -637,7 +645,6 @@ a.event_name {
     padding-right: 10px;
     width: 70%;
     font-size: 120%;
-    font-variant: small-caps;
     text-align: center;
     font-weight:bold;
     cursor:hand;

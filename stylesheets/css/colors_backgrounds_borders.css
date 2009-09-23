@@ -35,11 +35,10 @@ div.gradient {
 }
 
 div#footer {
-    background-color:#E6E6E6;
+    border-top: 3px solid #E6E6E6;
 }
 
 div#footer #copyright{
-    color: #C6C6C6;
 }
 
 #navtabs {
@@ -50,8 +49,16 @@ div#footer #copyright{
 }
 
 #navtabs li a:hover {
+/*
 	background: #fff url("../media/body-top-rpt-horiz_hover.png") repeat-x top center;
+*/
+    color: #eee;
 }
+
+#navtabs li a{
+    color: #FFF;
+}
+
 #pagespectitle h1 {
     border-bottom: #b6e6a5 3px solid;
 }
@@ -70,9 +77,7 @@ div#volunteerwelcome {
 }
             
 
-#navtabs li a{
-    color: #FFF;
-}
+
 
 .label {
     color: #333;
@@ -84,7 +89,7 @@ div#volunteerwelcome {
 
 div.hardmodule .moduletitle{
     border-color: #3b3b3b;
-    background-color: #3b3b3b;
+    background-color: #666;
 }
 div.moduletitle {
     border: 1px solid #008C98;
@@ -132,4 +137,8 @@ div.shortevent {
 
 .format_help {
 	color: #C6C6C6;
+}
+
+div#badges {
+	border-top: 3px solid #eee;
 }
