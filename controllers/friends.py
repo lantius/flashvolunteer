@@ -22,7 +22,6 @@ class FriendsPage(webapp.RequestHandler):
     friends = random.sample(candidates,min(len(candidates),LIMIT))
     template_values = {
         'volunteer': volunteer,
-        'session_id' : volunteer.session_id,
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'friends': friends,
       }

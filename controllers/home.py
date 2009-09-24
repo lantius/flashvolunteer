@@ -24,7 +24,7 @@ class MainPage(webapp.RequestHandler):
     except:
       return    
   
-    upcoming_events = list(_get_upcoming_events())[:MainPage.LIMIT]
+    upcoming_events = _get_upcoming_events().fetch(MainPage.LIMIT)
 
     template_values = {
         'volunteer' : volunteer,

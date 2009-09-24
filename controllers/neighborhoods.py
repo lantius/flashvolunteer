@@ -82,14 +82,9 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
     
     past_events = list(neighborhood.events_past()) 
     upcoming_events = list(neighborhood.events_future())    
-
-    session_id = ''
-    if volunteer:
-      session_id = volunteer.session_id
     
     template_values = {
         'volunteer': volunteer,
-        'session_id' : session_id,
         'neighborhood': neighborhood,
         'volunteers_living_here': random.sample(candidates_living, min(len(candidates_living),LIMIT)), 
         'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 

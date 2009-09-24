@@ -24,20 +24,21 @@
                     <br/>
                     {{ volunteer_in_list.get_last_name }}
                  </a>
-
-                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
-                                 
-	                <form title={% if is_teammate %}"Remove from your Team"{% else %}"Add to your Team"{%endif%} action="{{volunteer_in_list.url}}/follow" method="post">
-	                    <input type=hidden name="session_id" value="{{ session_id }}">
-	                    
-	                    {% if is_teammate %}
-	                        <input type=hidden name="delete" value="true">    
-	                        <input id="operation_remove_from_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=submit value="(-)"/>
-	                    {% else %}
-	                        <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=submit value="(+)"/>
-	                    {% endif %}
-	                </form>
-                {% endifnotequal %}
+                {% if volunteer %}
+	                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
+	                                 
+		                <form title={% if is_teammate %}"Remove from your Team"{% else %}"Add to your Team"{%endif%} action="{{volunteer_in_list.url}}/follow" method="post">
+		                    <input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+		                    
+		                    {% if is_teammate %}
+		                        <input type=hidden name="delete" value="true">    
+		                        <input id="operation_remove_from_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=submit value="(-)"/>
+		                    {% else %}
+		                        <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=submit value="(+)"/>
+		                    {% endif %}
+		                </form>
+	                {% endifnotequal %}
+                {% endif %}
             </div>
         </div>
                 

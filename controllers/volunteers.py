@@ -64,7 +64,6 @@ class VolunteersPage(webapp.RequestHandler):
                         'page_volunteer': page_volunteer,
                         'volunteer' : volunteer,
                         'event_access': event_access,
-                        'session_id' : volunteer.session_id,
                         'future_events': future_events
                         }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
@@ -91,7 +90,6 @@ class VolunteersPage(webapp.RequestHandler):
       'name' : name,
       'volunteers' : volunteers,
       'volunteer' : volunteer,
-      'session_id' : volunteer.session_id,
     }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteers_search.html')
     self.response.out.write(template.render(path, template_values))

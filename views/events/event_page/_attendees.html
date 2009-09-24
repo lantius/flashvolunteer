@@ -2,37 +2,41 @@
 
 <div id="eventattendees" class="hardmodule">
 	<div class="moduletitle"><h3>Volunteers</h3></div>
-	<ul>
-		<li class="tallerlistitem" >
-    
-		  {% if eventvolunteer %}
-		      {% if event.inpast %}
-		        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
-		      {% else %}
-		        {% ifequal event.eventvolunteers.count 1 %}
-		          You are signed up for this event!
-		        {% else %}
-		          {{ event.eventvolunteers.count }} volunteers are signed up (including you!)
-                {% endifequal %}
-		      {% endif %}
-          {% else %}
-              {{ event.eventvolunteers.count }} volunteers are signed up
-          {% endif %}
-          
-          <!--<a>&raquo Invite a friend to this event</a>-->		
-        </li>
-		
-		<li>  
-		    <ul class="imagenamelinklist">
-				{% for volunteer_in_list in attendees %}
-					{% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-	            {% endfor %}
-                {% ifnotequal 0 num_anon %}
-                    {% include "../volunteers/person_lists/_volunteer_list_item_anonymous.html" %}
-                {% endifnotequal %}                            
-                    
-		    </ul>
-		</li>
+	{% if volunteer %}
+		<ul>
+			<li class="tallerlistitem" >
+	    
+			  {% if eventvolunteer %}
+			      {% if event.inpast %}
+			        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
+			      {% else %}
+			        {% ifequal event.eventvolunteers.count 1 %}
+			          You are signed up for this event!
+			        {% else %}
+			          {{ event.eventvolunteers.count }} volunteers are signed up (including you!)
+	                {% endifequal %}
+			      {% endif %}
+	          {% else %}
+	              {{ event.eventvolunteers.count }} volunteers are signed up
+	          {% endif %}
+	          
+	          <!--<a>&raquo Invite a friend to this event</a>-->		
+	        </li>
+			
+			<li>  
+			    <ul class="imagenamelinklist">
+					{% for volunteer_in_list in attendees %}
+						{% include "../volunteers/person_lists/_volunteer_list_item.html" %}
+		            {% endfor %}
+	                {% ifnotequal 0 num_anon %}
+	                    {% include "../volunteers/person_lists/_volunteer_list_item_anonymous.html" %}
+	                {% endifnotequal %}                            
+	                    
+			    </ul>
+			</li>
+    {% else %}
+	   You need to <a href="/login">login</a> to see event attendees. 
+	{% endif %}
 	</ul>
 	
 </div>

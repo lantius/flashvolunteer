@@ -3,7 +3,7 @@
         <h3>Change picture</h3>
     </div>
    	<form action="/settings/avatar" method="post" enctype="multipart/form-data">
-	<input type=hidden name="session_id" value="{{ session_id }}">
+	<input type=hidden name="session_id" value="{{ volunteer.session_id }}">
        <ul>
 			<li><input type="file" name="avatar" size="10" id="avataruploadinput" /></li>
 			<li>(Less than 50kB)</li>

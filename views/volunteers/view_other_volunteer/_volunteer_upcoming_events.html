@@ -1,10 +1,14 @@
 		
-  {% if event_access %}		
 		<div id="personupcomingevents" class="softmodule">
 			<div id="volunteer_upcoming_events" class="moduletitle"><h3>{{ page_volunteer.name }}'s Upcoming Events</h3></div>
-			{% for event in future_events %}
-				{% include "../../events/_event_list_item.html" %}
-			{% endfor %}
+			  {% if event_access %}      
+
+					{% for event in future_events %}
+						{% include "../../events/_event_list_item.html" %}
+					{% endfor %}
+              {% else %}
+			     This user's privacy settings do not allow you to see their upcoming events.
+			  {% endif %}
+
 		</div><!--end profileupcomingevents-->
-  {% endif %}
 		

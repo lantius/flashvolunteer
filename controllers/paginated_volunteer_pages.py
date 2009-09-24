@@ -59,7 +59,6 @@ class BaseVolunteerListPage(webapp.RequestHandler):
                         'title' : self._get_title(),
                         'volunteer' : volunteer,
                         'team': volunteers,
-                        'session_id' : volunteer.session_id,
                         'total': total,
                         'start': start,
                         'end': end,

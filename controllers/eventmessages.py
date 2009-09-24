@@ -66,7 +66,6 @@ class EventMessagesPage(MessagesPage):
         'event' : event,
         'eventvolunteer' : eventvolunteer,
         'message' : message,
-        'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
     self.response.out.write(template.render(path, template_values))

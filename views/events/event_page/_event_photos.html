@@ -240,10 +240,12 @@
 
 	var albums = [];
 --></script>
+
+{% if volunteer %}
 <div id="addexternalbum_dialog" title="Add External Album">
 	<form action='{{event.url}}' id='form_addexternalalbumphoto' name="form_addexternalalbumphoto_name" onsubmit="return verify_externalalbum()" method="post">
 		<!--   onclick="verify_externalalbum"  -->
-	    <input type="hidden" name="session_id" value="{{ session_id }}" />
+	    <input type="hidden" name="session_id" value="{{ volunteer.session_id }}" />
 	    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
 	    <input type="hidden" name="action" value="s_addexternalalbum" />
 	    <ul>
@@ -266,6 +268,7 @@
 		<input type="button" class="cancel" onclick="$('#addexternalbum_dialog').dialog('close');" value="Cancel"/>
 	</form> 
 </div>
+{% endif %}
 
 
 <div id="eventphotos" class="hardmodule">
@@ -298,7 +301,7 @@
 						{% if ep.can_edit_now %}
 						<div id="rss_album_{{ep.key.id}}_bar" class="rss_album_bar">
 							<form action='{{event.url}}' id='f_photo' method="post">
-							    <input type="hidden" name="session_id" value="{{ session_id }}" />
+							    <input type="hidden" name="session_id" value="{{ volunteer.session_id }}" />
 							    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
 							    <input type="hidden" name="album_id" value="{{ ep.key.id }}" />
 								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_up" value="Up" />

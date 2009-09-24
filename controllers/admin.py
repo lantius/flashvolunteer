@@ -47,7 +47,6 @@ class AdminPage(webapp.RequestHandler):
     template_values = {
       'volunteers' : volunteers,
       'volunteer' : volunteer,
-      'session_id' : volunteer.session_id,
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'admin', 'list.html')
     self.response.out.write(template.render(path, template_values))

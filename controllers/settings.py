@@ -73,7 +73,6 @@ class SettingsPage(webapp.RequestHandler):
         'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
-        'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
     self.response.out.write(template.render(path, template_values))
@@ -174,7 +173,6 @@ class SettingsPage(webapp.RequestHandler):
     #requires a POST from the settings page, so volunteer can be assumed.
     template_values = {
         'volunteer' : volunteer, 
-        'session_id': volunteer.session_id
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'confirm_delete.html')
     self.response.out.write(template.render(path, template_values))

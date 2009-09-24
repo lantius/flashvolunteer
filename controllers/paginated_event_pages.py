@@ -21,8 +21,7 @@ class BaseEventListPage(webapp.RequestHandler):
     
   def set_context(self):  
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-      self.volunteer = volunteer
+      self.volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
     
@@ -48,7 +47,7 @@ class BaseEventListPage(webapp.RequestHandler):
         if extract_style == 'direct':
             events = [e for e in item_list.fetch(limit = LIST_LIMIT, offset = offset)]        
         else:
-            events = [e.event for e in item_list.fetch(limit = LIST_LIMIT, offset = offset)]
+            events = item_list.fetch(limit = LIST_LIMIT, offset = offset)
         
     
     end = start + len(events) - 1
@@ -65,9 +64,8 @@ class BaseEventListPage(webapp.RequestHandler):
         
     template_values = { 
                         'title' : self._get_title(),
-                        'volunteer' : volunteer,
+                        'volunteer' : self.volunteer,
                         'events': events,
-                        'session_id' : volunteer.session_id,
                         'total': total,
                         'start': start,
                         'end': end,
@@ -86,7 +84,7 @@ class PaginatedUpcomingPage(BaseEventListPage):
       self.set_context()
         
   def _get_event_generator(self):
-     return (list(_get_upcoming_events()), 'direct')
+     return (_get_upcoming_events(), 'generator')
  
   def _get_title(self):
      return 'Upcoming Events'

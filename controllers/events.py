@@ -25,34 +25,63 @@ from controllers._params import Parameters
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
 def _get_upcoming_events():
-    events = (e for e in Event.all().order('date').fetch(limit=500) if 
-            #recommend future events 
-        not e.inpast() and not e.hidden)
+
+    events = Event.all().filter(
+        'date >= ', datetime.datetime.now(tz=Pacific).replace(tzinfo=None)).filter(
+        'hidden = ', False).order(
+        'date')
+    
     return events
                   
 
 def _get_recommended_events(volunteer):
     #TODO make more efficient
-    vol_events = [v.key().id() for v in volunteer.events()]
     
-    neighborhoods = []
+    vol_events = set([e.key().id() for e in volunteer.events_future()])
+
+    neighborhoods = {}
     if(volunteer.work_neighborhood):
-      neighborhoods.append(volunteer.work_neighborhood.name)
+      neighborhoods[volunteer.work_neighborhood.key().id()] = 1
     if(volunteer.home_neighborhood):
-      neighborhoods.append(volunteer.home_neighborhood.name)
-    
-    vol_interests = set([ic.name for ic in volunteer.interestcategories()])
-    events = (e for e in _get_upcoming_events() if
+      neighborhoods[volunteer.home_neighborhood.key().id()] = 1
+      
+          
+    #Don't know which of these two implementations are faster
+    #############################
+    ### 1    : this one only gets ids right now
+    ##########################
+#
+#    events_in_interested_neighborhoods = []
+#    for n in neighborhoods:
+#        events_in_interested_neighborhoods += [e.key().id() for e in n.events_future()]
+#    events_in_interested_neighborhoods = set(events_in_interested_neighborhoods)
+#
+#    events_in_interest_categories = set([])
+#    for ic in volunteer.interestcategories():
+#        events_in_interest_categories.update([e.key().id() for e in ic.upcoming_events()])
+#    
+#    recommended_events = events_in_interested_neighborhoods | events_in_interest_categories - vol_events
+#
+#    return recommended_events
+
+    #########################
+    ###2
+    ####################
+
+    vol_interests = set([ic.key().id() for ic in volunteer.interestcategories()])
+    recommended_events = (e for e in _get_upcoming_events() if
             # recommend non rsvp'd events
             not e.key().id() in vol_events and  
             #recommend events in home or work neighborhood  
-            (e.neighborhood.name in neighborhoods or  
+            (e.neighborhood.key().id() in neighborhoods or  
              #recommend events in interest categories
             len(vol_interests.intersection(
-                   set([ic.name for ic in e.interestcategories()]))
+                   set([ic.key().id() for ic in e.interestcategories()]))
                 ) > 0)
             )
-    return events
+    #########
+    
+    return recommended_events
 
 
 ################################################################################
@@ -118,7 +147,7 @@ class EventsPage(webapp.RequestHandler):
     except:
       return
 
-    upcoming_events = list(_get_upcoming_events())[:EventsPage.LIMIT]
+    upcoming_events = _get_upcoming_events().fetch(EventsPage.LIMIT)
     
     if volunteer:
         recommended_events = list(_get_recommended_events(volunteer = volunteer))[:EventsPage.LIMIT]
