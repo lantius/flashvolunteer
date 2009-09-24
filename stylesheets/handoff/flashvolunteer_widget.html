@@ -184,12 +184,14 @@ function search_events() {
                     arr_date = arr[0].split("-");
                     arr_time = arr[1].split(":");
                     var date = new Date(parseInt(arr_date[0]), parseInt(arr_date[1]), parseInt(arr_date[2])
-                                        , parseInt(arr_time[0]), parseInt(arr_time[1]), parseInt(arr_time[2]));
+                                        , parseInt(arr_time[0]), parseInt(arr_time[1]));
                     var date_string = date.toString();
                     var arr_date = date_string.split(" ");
                     var date_display = arr_date[2]+" "+arr_date[1]+" "+date.getFullYear()+", "+date.toLocaleTimeString();
 
-                    item.description = item.description.replace(/<br>/g, " - ");//todo: use better line break
+                    //temporary: setting description to name
+                    //item.description = item.description.replace(/<br>/g, " - ");//todo: use better line break
+                    item.description = item.name;
 
                     //each line is: make td element, add attribute title, add as child to tr element
                     $("<td>" + date_display + "</td>").attr("title", item.description).attr("timeval", date.getTime()).appendTo(el_tr);

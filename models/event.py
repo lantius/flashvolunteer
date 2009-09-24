@@ -83,6 +83,9 @@ class Event(db.Model):
   
   def get_startdate_long(self):
       return self.get_start_repr("%A, %d %B %Y")
+
+  def get_startdatetime(self):
+      return self.get_start_repr("%Y-%m-%d %H:%M")
       
   def get_startdate(self):
     return self.get_start_repr("%m/%d/%Y")
@@ -108,6 +111,9 @@ class Event(db.Model):
   def get_enddate_long(self):
     return self.get_end_repr("%A, %d %B %Y")
 
+  def get_enddatetime(self):
+      return self.get_end_repr("%Y-%m-%d %H:%M")
+  
   def get_enddate(self):
     return self.get_end_repr("%m/%d/%Y")
 

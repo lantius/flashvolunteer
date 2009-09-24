@@ -1,11 +1,13 @@
 {"id":"{{event.key.id}}",
  "name":"{{event.name|escape}}",
  "neighborhood":"{{event.neighborhood.name}}",
- "date":"{{event.date}}",
+ "date":"{{event.get_startdatetime}}",
+ "enddate":"{{event.get_enddatetime}}",
  "description":"{{event.description|escape}}",
- "duration":"{{event.get_duration}}",
+ "contact_name":"{{contact.name}}",
+ "contact_email":"{{contact.get_email}}", 
  "special_instructions":"{{event.special_instructions|escape}}",
- "address":"{{event.address|escape}}"
- {% if event.location.lat %}, "lat":{{event.location.lat}} {% endif %}
- {% if event.location.lon %}, "long":{{event.location.lon}}{% endif %}
+ "address":"{{event.address|escape}}"{% if event.location.lat %}, 
+ "lat":{{event.location.lat}} {% endif %}{% if event.location.lon %}, 
+ "long":{{event.location.lon}}{% endif %}
 }

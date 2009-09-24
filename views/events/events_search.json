@@ -1,5 +1,13 @@
 {"events":[
 {% for event in events %}
-	{% include "event.json" %}{% if forloop.last %}{%else%},{%endif%}
+    {"id":"{{event.key.id}}",
+     "name":"{{event.name|escape}}",
+     "neighborhood":"{{event.neighborhood.name}}",
+     "date":"{{event.get_startdatetime}}",
+     "enddate":"{{event.get_enddatetime}}",
+     "address":"{{event.address|escape}}"{% if event.location.lat %}, 
+     "lat":{{event.location.lat}} {% endif %}{% if event.location.lon %}, 
+     "long":{{event.location.lon}}{% endif %}
+    }{% if forloop.last %}{%else%},{%endif%}
 {% endfor %}
 ]}

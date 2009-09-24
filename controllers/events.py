@@ -288,7 +288,6 @@ class EventsPage(webapp.RequestHandler):
                         'owners': owners, 
                         'contact': event_contact,
                         'volunteer': volunteer, 
-                        'session_id': session_id,
                         'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,
                         'num_anon': len(attendees_anonymous),
@@ -434,6 +433,7 @@ class EventsPage(webapp.RequestHandler):
   # SEARCH
   def search(self, params):
     (neighborhood, events, interestcategory)  = self.do_search(params)
+    
     template_values = { 
       'neighborhood' : neighborhood,
       'events' : events,
