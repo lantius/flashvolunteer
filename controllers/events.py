@@ -496,7 +496,7 @@ class EventsPage(webapp.RequestHandler):
       except:
         pass
     
-    events = events_query.order('date').fetch(limit = 100)
+    events = _get_upcoming_events().fetch(limit = 100)
     
     if ur and ll:
       filtered_events = []
