@@ -690,3 +690,13 @@ span#l_login {
 .format_help {
 	font-size: 7pt;
 }
+
+#partners li {
+    margin: 10px 10px;
+    padding: 2px;
+	border: 3px solid #eee;
+}
+
+#partners .logo {
+    margin-bottom: 5px;
+}
