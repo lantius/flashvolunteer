@@ -83,6 +83,32 @@ def _get_recommended_events(volunteer):
     
     return recommended_events
 
+#this is a hack: google django does not have escapejs yet - this is from there
+_base_js_escapes = (
+  ('\\', r'\x5C'),
+  ('\'', r'\x27'),
+  ('"', r'\x22'),
+  ('>', r'\x3E'),
+  ('<', r'\x3C'),
+  ('&', r'\x26'),
+  ('=', r'\x3D'),
+  ('-', r'\x2D'),
+  (';', r'\x3B'),
+  (u'\u2028', r'\u2028'),
+  (u'\u2029', r'\u2029')
+)
+
+# Escape every ASCII character with a value less than 32.
+_js_escapes = (_base_js_escapes +
+               tuple([('%c' % z, '') for z in range(32)]))
+               #tuple([('%c' % z, '\\x%02X' % z) for z in range(32)]))
+
+def escapejs(value):
+    """Hex encodes characters for use in JavaScript strings."""
+    for bad, good in _js_escapes:
+        value = value.replace(bad, good)
+    return value
+  
 
 ################################################################################
 # Events page
@@ -416,6 +442,11 @@ class EventsPage(webapp.RequestHandler):
     
     is_json = self.is_json(params)
     if is_json:
+      if (('jsoncallback' in params)):
+        for event in events:
+          event.description = escapejs(event.description)
+          event.special_instructions = escapejs(event.special_instructions)
+      
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.json')
       render_out = template.render(path, template_values, debug=is_debugging())
       if (('jsoncallback' in params)):
@@ -427,6 +458,9 @@ class EventsPage(webapp.RequestHandler):
     
     
     self.response.out.write(render_out)
+  
+  
+
   
   def is_json(self, params):
     if ((self.request.headers["Accept"] == "application/json") or 

@@ -114,14 +114,14 @@ $(document).ready(
     });
 
 
-var base_url = "http://localhost:8080";
+var base_url = "http://flashvolunteer-dev.appspot.com";
 function init_search_local() {
     var data;
     //init the neighborhood dropdown with the latest neighborhoods
     //paste 'http://www.flashvolunteer.org/neighborhoods?format=json&ver=w1' into your browser, copy and paste the result into here
     data =
     //replace following line:
-        {"neighborhoods":[ {"id":"289", "name":"Ballard", } , {"id":"290", "name":"Beacon Hill", } , {"id":"291", "name":"Belltown", } , {"id":"306", "name":"Bitter Lake", } , {"id":"292", "name":"Capitol Hill", } , {"id":"293", "name":"Central District", } , {"id":"295", "name":"Columbia City", } , {"id":"8", "name":"Connecticut", } , {"id":"3", "name":"Delaware", } , {"id":"296", "name":"Downtown", } , {"id":"297", "name":"Eastlake", } , {"id":"298", "name":"First Hill", } , {"id":"299", "name":"Fremont", } , {"id":"300", "name":"Georgetown", } , {"id":"1", "name":"Georgia", } , {"id":"301", "name":"Green Lake", } , {"id":"302", "name":"Greenwood", } , {"id":"305", "name":"Haller Lake", } , {"id":"303", "name":"Interbay", } , {"id":"304", "name":"International District", } , {"id":"307", "name":"Lake City", } , {"id":"308", "name":"Laurelhurst", } , {"id":"309", "name":"Leschi", } , {"id":"325", "name":"Lower Queen Anne", } , {"id":"310", "name":"Madison Park", } , {"id":"294", "name":"Madison Valley", } , {"id":"311", "name":"Madrona", } , {"id":"312", "name":"Magnolia", } , {"id":"14", "name":"Maine", } , {"id":"313", "name":"Maple Leaf", } , {"id":"13", "name":"Maryland", } , {"id":"11", "name":"Massachusetts", } , {"id":"314", "name":"Montlake", } , {"id":"315", "name":"Mount Baker", } , {"id":"10", "name":"New Hampshire", } , {"id":"2", "name":"New Jersey", } , {"id":"9", "name":"New York", } , {"id":"5", "name":"North Carolina", } , {"id":"316", "name":"Northgate", } , {"id":"7", "name":"Pennsylvania", } , {"id":"317", "name":"Phinney Ridge", } , {"id":"318", "name":"Pioneer Square", } , {"id":"319", "name":"Queen Anne", } , {"id":"320", "name":"Rainier Valley", } , {"id":"321", "name":"Ravenna", } , {"id":"6", "name":"Rhode Island", } , {"id":"322", "name":"Roosevelt", } , {"id":"323", "name":"Sand Point", } , {"id":"324", "name":"Seattle Center", } , {"id":"326", "name":"SoDo", } , {"id":"12", "name":"South Carolina", } , {"id":"327", "name":"South Lake Union", } , {"id":"328", "name":"South Park", } , {"id":"329", "name":"University District", } , {"id":"330", "name":"View Ridge", } , {"id":"4", "name":"Virginia", } , {"id":"331", "name":"Wallingford", } , {"id":"332", "name":"Wedgwood", } , {"id":"333", "name":"West Seattle", } ]}
+        {"neighborhoods":[ {"id":"1", "name":"Ballard", } , {"id":"2", "name":"Beacon Hill", } , {"id":"3", "name":"Belltown", } , {"id":"4", "name":"Capitol Hill", } , {"id":"5", "name":"Central District/ Madison Valley", } , {"id":"6", "name":"Columbia City", } , {"id":"7", "name":"Downtown", } , {"id":"8", "name":"Eastlake", } , {"id":"9", "name":"First Hill", } , {"id":"1001", "name":"Fremont", } , {"id":"10", "name":"Georgetown", } , {"id":"1002", "name":"Green Lake", } , {"id":"11", "name":"Greenwood", } , {"id":"13", "name":"Haller Lake/ Bitter Lake", } , {"id":"1003", "name":"Interbay", } , {"id":"12", "name":"International District", } , {"id":"14", "name":"Lake City", } , {"id":"1004", "name":"Laurelhurst", } , {"id":"15", "name":"Leschi", } , {"id":"16", "name":"Madison Park", } , {"id":"17", "name":"Madrona", } , {"id":"1005", "name":"Magnolia", } , {"id":"18", "name":"Maple Leaf", } , {"id":"19", "name":"Montlake", } , {"id":"20", "name":"Mount Baker", } , {"id":"21", "name":"Northgate", } , {"id":"22", "name":"Phinney Ridge", } , {"id":"23", "name":"Pioneer Square", } , {"id":"1006", "name":"Queen Anne", } , {"id":"1007", "name":"Rainier Valley", } , {"id":"1008", "name":"Ravenna", } , {"id":"1009", "name":"Roosevelt", } , {"id":"24", "name":"Sand Point", } , {"id":"1010", "name":"Seattle Center / Lower Queen Anne", } , {"id":"25", "name":"SoDo", } , {"id":"1011", "name":"South Lake Union", } , {"id":"26", "name":"South Park", } , {"id":"1012", "name":"University District", } , {"id":"27", "name":"View Ridge", } , {"id":"1013", "name":"Wallingford", } , {"id":"1014", "name":"Wedgwood", } , {"id":"28", "name":"West Seattle", } ]}
     //end replace
     ;
     add_neighborhood_option(data);
@@ -130,7 +130,7 @@ function init_search_local() {
     //paste 'http://www.flashvolunteer.org/category?format=json&ver=w1' into your browser, copy and paste the result into here
     data =
     //replace following line:
-        {"interestcategories":[ {"id":"334", "name":"Animals", } , {"id":"335", "name":"Arts & Culture", } , {"id":"336", "name":"Children & Youth", } , {"id":"337", "name":"Education & Literacy", } , {"id":"338", "name":"Environment", } , {"id":"339", "name":"Gay, Lesbian, Bi, & Transgender", } , {"id":"340", "name":"Homeless & Housing", } , {"id":"341", "name":"Hunger", } , {"id":"342", "name":"Justice & Legal", } , {"id":"343", "name":"Senior Citizens", } , {"id":"90", "name":"tests_ic", } ]}
+        {"interestcategories":[ {"id":"1015", "name":"Animals", } , {"id":"1016", "name":"Arts & Culture", } , {"id":"1017", "name":"Children & Youth", } , {"id":"1018", "name":"Education & Literacy", } , {"id":"1019", "name":"Environment", } , {"id":"29", "name":"Gay, Lesbian, Bi, & Transgender", } , {"id":"1020", "name":"Homeless & Housing", } , {"id":"30", "name":"Hunger", } , {"id":"31", "name":"Justice & Legal", } , {"id":"32", "name":"Senior Citizens", } ]}
     //end replace
     ;
     add_interestcategory_option(data);
@@ -172,7 +172,8 @@ function search_events() {
     $.getJSON(search_url,
         function(data) {
             $("#event_table_body tr").remove();
-            $("<thead><tr><th>Date</th><th>Event</th><th>Neighborhood</th><th>Duration</th></tr></thead>").prependTo("#event_table");
+            $("#event_table_head").remove();
+            $("<thead id='event_table_head'><tr><th>Date</th><th>Event</th><th>Neighborhood</th></tr></thead>").prependTo("#event_table");
             //iterate over each event
             $.each(data.events,
                 function(ii, item) {
@@ -188,12 +189,13 @@ function search_events() {
                     var arr_date = date_string.split(" ");
                     var date_display = arr_date[2]+" "+arr_date[1]+" "+date.getFullYear()+", "+date.toLocaleTimeString();
 
+                    item.description = item.description.replace(/<br>/g, " - ");//todo: use better line break
+
                     //each line is: make td element, add attribute title, add as child to tr element
                     $("<td>" + date_display + "</td>").attr("title", item.description).attr("timeval", date.getTime()).appendTo(el_tr);
                     //timeval is for sorting
                     $("<td><a href='" + base_url + "/events/" + item.id + "'>" + item.name + "</td>").attr("title", item.description).appendTo(el_tr);
                     $("<td>" + item.neighborhood + "</td>").attr("title", item.description).appendTo(el_tr);
-                    $("<td>" + item.duration + "</td>").attr("title", item.description).appendTo(el_tr);
 
                     $(el_tr).appendTo("#event_table_body");
 
