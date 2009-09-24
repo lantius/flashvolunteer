@@ -3,6 +3,7 @@ from google.appengine.ext.webapp import template
 import os, random
 
 from controllers._auth import Authorize
+from controllers._params import Parameters
 from models.interestcategory import InterestCategory
 
 ################################################################################
@@ -10,10 +11,30 @@ from models.interestcategory import InterestCategory
 ################################################################################
 class CategoryPage(webapp.RequestHandler):
   def get(self, url_data):
+    
     if url_data:
       self.show(url_data)
     else:
-      self.list() 
+      params = Parameters.parameterize(self.request)
+      categories = InterestCategory.all().order('name').fetch(limit=500)
+      template_values = {
+          'categories': categories
+      }
+      is_json = self.is_json(params)
+      if is_json:
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'categories', 'category.json')
+        render_out = template.render(path, template_values)
+        if (('jsoncallback' in params)):
+          render_out = params['jsoncallback'] + '(' + render_out + ');'
+          
+        self.response.out.write(render_out)
+
+  def is_json(self, params):
+    if ((self.request.headers["Accept"] == "application/json") or 
+         ('format' in params and params['format'] == 'json')):
+       return True
+    else:
+       return False
 
   ################################################################################
   # POST

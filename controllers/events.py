@@ -374,6 +374,7 @@ class EventsPage(webapp.RequestHandler):
     event.put()
     return event.key().id()
   
+     
   ################################################################################
   # SEARCH
   def search(self, params):
@@ -384,13 +385,27 @@ class EventsPage(webapp.RequestHandler):
       'interestcategory': interestcategory
     }
     
-    if self.request.headers["Accept"] == "application/json":
+    is_json = self.is_json(params)
+    if is_json:
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.json')
+      render_out = template.render(path, template_values, debug=is_debugging())
+      if (('jsoncallback' in params)):
+        render_out = params['jsoncallback'] + '(' + render_out + ');'
     else:
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
+      render_out = template.render(path, template_values, debug=is_debugging())
     
-    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+    
+    
+    self.response.out.write(render_out)
   
+  def is_json(self, params):
+    if ((self.request.headers["Accept"] == "application/json") or 
+         ('format' in params and params['format'] == 'json')):
+       return True
+    else:
+       return False
+     
   def do_search(self, params):
     events_query = Event.all()
     neighborhood = None

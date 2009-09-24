@@ -1,0 +1,8 @@
+{"interestcategories":[
+{% for cat in categories %}
+	{"id":"{{cat.key.id}}",
+	 "name":"{{cat.name|escape}}",
+	}	
+	{% if forloop.last %}{%else%},{%endif%}
+{% endfor %}
+]}

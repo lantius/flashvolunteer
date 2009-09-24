@@ -104,6 +104,7 @@ def main():
          ('/volunteers/(\d+)/team/(\d+)', PaginatedVolunteerTeam),
          ('/category/(\d+)', CategoryPage),
          ('/category/(\d+)/volunteers/(\d+)', PaginatedVolunteerCategoryPage),
+         ('/category(|)', CategoryPage),
          ('/static/(\w+)', StaticPage),
          ('/timeout', TimeoutPage),
         ],

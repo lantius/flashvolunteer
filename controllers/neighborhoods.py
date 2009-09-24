@@ -3,6 +3,7 @@ from google.appengine.ext.webapp import template
 import os, random
 
 from controllers._auth import Authorize
+from controllers._params import Parameters
 from models.neighborhood import Neighborhood
 
 ################################################################################
@@ -15,6 +16,8 @@ class NeighborhoodsPage(webapp.RequestHandler):
     except:
       return
     
+    params = Parameters.parameterize(self.request)
+    
     neighborhoods = Neighborhood.all().order('name').fetch(limit=500)
     cnt = len(neighborhoods)
     col1 = neighborhoods[:cnt/3]
@@ -23,14 +26,30 @@ class NeighborhoodsPage(webapp.RequestHandler):
     
     template_values = {
         'volunteer': volunteer,
+        'neighborhoods': neighborhoods, 
         'neighborhoods1': col1,
         'neighborhoods2': col2,
         'neighborhoods3': col3 
-      }
-
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')
-    self.response.out.write(template.render(path, template_values))
+    }
+    is_json = self.is_json(params)
+    if is_json:
+      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.json')
+      render_out = template.render(path, template_values)
+      if (('jsoncallback' in params)):
+        render_out = params['jsoncallback'] + '(' + render_out + ');'
+    else:
+      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')
+      render_out = template.render(path, template_values)
+      
+    self.response.out.write(render_out)
     return
+
+  def is_json(self, params):
+    if ((self.request.headers["Accept"] == "application/json") or 
+         ('format' in params and params['format'] == 'json')):
+       return True
+    else:
+       return False
     
 class NeighborhoodDetailPage(webapp.RequestHandler):
   ################################################################################

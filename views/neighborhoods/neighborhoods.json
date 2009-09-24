@@ -1,0 +1,8 @@
+{"neighborhoods":[
+{% for neigh in neighborhoods %}
+	{"id":"{{neigh.key.id}}",
+	 "name":"{{neigh.name|escape}}",
+	}	
+	{% if forloop.last %}{%else%},{%endif%}
+{% endfor %}
+]}
