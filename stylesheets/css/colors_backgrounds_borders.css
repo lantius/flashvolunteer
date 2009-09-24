@@ -142,3 +142,7 @@ div.shortevent {
 div#badges {
 	border-top: 3px solid #eee;
 }
+
+#footer #static_nav a:hover {
+    background-color: #E6F4F4;
+}

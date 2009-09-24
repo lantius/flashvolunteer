@@ -105,7 +105,7 @@ Contains navigation list items for header and footer
 }
 
 #footer li{
-    padding-right: 20px;
+    padding: 15px 15px 14px 15px;
     font-size: 10pt;
     display: inline;
 	font-variant: small-caps;
@@ -249,6 +249,7 @@ ul.rightformlist {
 	padding-top:10px;
 }
 
+
 /*
 ======================================================
 >>Link Styles
@@ -275,6 +276,10 @@ a.operation, a {
 
 a.event_name {
     font-weight:bold;
+}
+
+#footer #static_nav li a{
+    padding: 15px 15px 14px 15px;
 }
 
 /*

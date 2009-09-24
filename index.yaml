@@ -19,6 +19,11 @@ indexes:
   - name: geostring
   - name: date
 
+- kind: Event
+  properties:
+  - name: hidden
+  - name: date
+
 - kind: Eventvolunteer
   properties:
   - name: isowner
