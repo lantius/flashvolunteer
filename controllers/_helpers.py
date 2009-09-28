@@ -86,11 +86,7 @@ class InitializeStore():
       c.put()  
 
   def is_initialized(self):
-    n = Neighborhood.gql("WHERE name = :name", name = "Capitol Hill").get()
-    if n:
-      return True
-
-    return False
+    return InterestCategory().all().count() > 0
 
   def migrate_store(self):
 
