@@ -1,18 +1,16 @@
 <!DOCTYPE html	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>Flashvolunteer JSONP Widget</title>
+	<title>Flashvolunteer IFrame Widget</title>
 	<meta name="description" content="FlashVolunteer Widget" />
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 
     <!-- Flashvolunteer widget - html/javascript blob to search for events on www.flashvolunteer.org and display results in page
-    This code uses jquery, which provides jsonp functionality to get around same-origin constraints regarding domains.
-    Upon clicking the search function, it will issue a http get request to flashvolunteer, that returns json which triggers a callback that
-    then displays the returned json.
+    This code uses jquery, which provides json functionality - it is meant to live on flashvolunteer.org, and displayed in external site's iframe.
+    Upon clicking the search function, it will issue a http get request to flashvolunteer, that returns json which is parsed, and a table is built.
     It uses tablesorter to make the displayed table sortable (click on headers).
 
-    To use, copy script and style sections from head into your html head.
-    Copy body section into your html body.
+    To use, embed as iframe.
 
     We load the dropdowns for neighborhoods and interest categories on page load from an array.
     Since neighborhoods and categories might change in the future, it is as easy as a few copy and pastes to update these.
@@ -21,6 +19,8 @@
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script type="text/javascript" src="http://tablesorter.com/jquery.tablesorter.min.js"></script>
+
+    <script type="text/javascript" src="/stylesheets/json/json2.min.js"></script>
 
 	<style type="text/css">
         body {
@@ -99,31 +99,28 @@ $(document).ready(
         init_tablesorter();
         init_search_local();
 
-        //enable this to update searching options upon page load
-        //it will take a bit while it gets out and gets the latest neighborhoods and interestcategories from www.flashvolunteer.org
-        //init_search_from_flashvolunteer();
-   });
+    });
 
 
 function init_tablesorter() {
-        // add parser through the tablesorter addParser method
-        $.tablesorter.addParser({
-            id: 'date_time_parse', // set a unique id
-            is: function(s) {
-                return false;// return false so this parser is not auto detected
-            },
-            format: function(s, table, cell) {
-                return $(cell).attr("timeval");// sort by timeval attribute, not displayed text
-            },
-            // set type, either numeric or text
-            type: 'numeric'
-        });
-        $("#event_table").tablesorter({ headers: {0: {sorter:'date_time_parse'}}} );//debug: true,
+    // add parser through the tablesorter addParser method
+    $.tablesorter.addParser({
+        id: 'date_time_parse', // set a unique id
+        is: function(s) {
+            return false;// return false so this parser is not auto detected
+        },
+        format: function(s, table, cell) {
+            return $(cell).attr("timeval");// sort by timeval attribute, not displayed text
+        },
+        // set type, either numeric or text
+        type: 'numeric'
+    });
+    $("#event_table").tablesorter({ headers: {0: {sorter:'date_time_parse'}}} );//debug: true,
 
 
 }
 
-var base_url = "http://www.flashvolunteer.org";
+var base_url = "";
 function init_search_local() {
     var data;
     //init the neighborhood dropdown with the latest neighborhoods
@@ -143,16 +140,6 @@ function init_search_local() {
     //end replace
     ;
     add_interestcategory_option(data);
-}
-
-
-//this issues http get request to www.flashvolunteer.org to get the latest neighborhoods and interestcategories and populates the dropdowns
-function init_search_from_flashvolunteer() {
-    var neigh_url = base_url + "/neighborhoods?format=json&amp;ver=w1;&amp;jsoncallback=?";
-    $.getJSON(neigh_url, add_neighborhood_option);
-
-    var cat_url = base_url + "/category?format=json&amp;ver=w1;&amp;jsoncallback=?";
-    $.getJSON(cat_url, add_interestcategory_option);
 }
 
 function add_neighborhood_option(data) {
@@ -178,12 +165,17 @@ function add_interestcategory_option(data) {
 function search_events() {
     var intcat = $('#interestcategory')[0].value;
     var neigh = $('#neighborhood')[0].value;
-    var search_url = base_url + "/events/search?neighborhood=" + neigh + "&amp;interestcategory=" + intcat + "&amp;ver=w1;&amp;format=json&amp;jsoncallback=?";
+    var search_url = base_url + "/events/search?neighborhood=" + neigh + "&amp;interestcategory=" + intcat + "&amp;ver=w1;&amp;format=json";
 
-    $.getJSON(search_url,
-        function(data) {
+    $.get(search_url,
+        function(json_data) {
             $("#event_table_body tr").remove();
             //iterate over each event
+            try {
+            var data = JSON.parse(json_data);
+            } catch(err) {
+            }
+
             $.each(data.events,
                 function(ii, item) {
                     try {
@@ -222,7 +214,7 @@ function search_events() {
             $("#event_table").trigger("sorton",[sorting]);
             } catch(err) {
             }
-        });
+        }, "json");
 }
 
 
