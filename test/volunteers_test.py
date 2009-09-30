@@ -5,6 +5,8 @@ from google.appengine.api import urlfetch
 
 from controllers.volunteers import *
 
+from models.neighborhood import Neighborhood
+
 class VolunteersTest(unittest.TestCase):
   
   def setUp(self):
@@ -41,7 +43,7 @@ class VolunteersTest(unittest.TestCase):
     self.assertFalse(volunteer.validate(params))
     self.assertTrue((not 'tosagree' in params) or params['tosagree'] != '1')
     
-  def test_vaidate_working(self):
+  def test_validate_working(self):
     params = { 'name' : 'A. Nameous',
                'tosagree' : '1'}
     volunteer = Volunteer()

@@ -7,10 +7,10 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users, images
 from google.appengine.ext import webapp, db
 
-from models.volunteer import *
-from models.neighborhood import *
-from models.interestcategory import *
-from models.volunteerinterestcategory import *
+from models.volunteer import Volunteer
+from models.neighborhood import Neighborhood
+from models.interestcategory import InterestCategory
+from models.volunteerinterestcategory import VolunteerInterestCategory
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from components.sessions import Session

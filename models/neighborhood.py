@@ -1,9 +1,15 @@
 from google.appengine.ext import db
+from models.application import Application
+
 
 ################################################################################
 # Neighborhood
 class Neighborhood(db.Model):
   name = db.StringProperty()
+  application = db.ReferenceProperty(Application,
+                                     collection_name = 'neighborhoods',
+                                     default = None)
+  
   # implicitly has .events and .volunteers properties
 
   def url(self):
@@ -20,4 +26,3 @@ class Neighborhood(db.Model):
 
   def events_future(self):
     return [e for e in self.events.order('date').fetch(limit=250) if not e.inpast() and not e.hidden]
-  

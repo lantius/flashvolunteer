@@ -5,10 +5,12 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
+from controllers._utils import get_application
+
 from controllers._params import Parameters
 
-from models.volunteer import *
-from models.volunteerfollower import *
+from models.volunteer import Volunteer
+from models.volunteerfollower import VolunteerFollower
 
 ################################################################################
 # Volunteers page
@@ -39,8 +41,9 @@ class VolunteersPage(webapp.RequestHandler):
       self.redirect("/settings");
       return
 
+    #TODO: if application instances are closed, do not allow people to view
     if not volunteer or not volunteer.session_id:
-      self.redirect("/setting")
+      self.redirect("/settings")
       return
 
     page_volunteer = Volunteer.get_by_id(int(volunteer_id))
@@ -95,7 +98,10 @@ class VolunteersPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
 
   def do_search(self, params):
-    volunteers_query = Volunteer.all()
+      
+    #todo: get volunteers from this application only
+    application = get_application()
+    volunteers_query = Volunteer.all().filter('applications =', application.key().id())
     neighborhood = None
     name = None
     email = None

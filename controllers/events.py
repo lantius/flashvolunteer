@@ -1,32 +1,35 @@
-import os, string, random
+import os, string, random, datetime
 import exceptions
 import logging
 
-from controllers._utils import *
+from controllers._utils import is_debugging, get_application, get_google_maps_api_key
 
 from components.geostring import *
+from components.time_zones import Pacific
+
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 
-from models.volunteer import *
-from models.event import *
-from models.eventvolunteer import *
-from models.neighborhood import *
-from models.interestcategory import *
-from models.eventinterestcategory import *
-from models.eventphoto import *
+from models.volunteer import Volunteer
+from models.event import Event
+from models.eventvolunteer import EventVolunteer
+from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
+from models.eventinterestcategory import EventInterestCategory
+from models.eventphoto import EventPhoto
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
-def _get_upcoming_events():
 
-    events = Event.all().filter(
+def _get_upcoming_events():
+    region = get_application()
+    
+    events = region.events.filter(
         'date >= ', datetime.datetime.now(tz=Pacific).replace(tzinfo=None)).filter(
         'hidden = ', False).order(
         'date')
@@ -185,12 +188,14 @@ class EventsPage(webapp.RequestHandler):
         neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
         interest_categories = InterestCategoryHelper().selected(volunteer)
     else: 
+        application = get_application()
         recommended_events = None
         my_future_events = None
         my_past_events = None
         event_volunteers = None
         session_id = None
-        neighborhoods = Neighborhood.all()
+        neighborhoods = application.neighborhoods
+        #TODO: convert to application-specific data model
         interest_categories = InterestCategory.all()
         
     template_values = {
@@ -203,7 +208,6 @@ class EventsPage(webapp.RequestHandler):
         'upcoming_events': upcoming_events,
         'my_future_events': my_future_events,
         'my_past_events': my_past_events,
-        'interest_categories' : InterestCategory.all()
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values, debug=is_debugging()))
@@ -218,9 +222,10 @@ class EventsPage(webapp.RequestHandler):
     offset = 0
     
     volunteer = Authorize.login(self)
+    application = get_application()
     
     event = Event.get_by_id(int(event_id))
-    if not event:
+    if not event or event.application.key().id() != application.key().id():
       self.error(404)
       return
   
@@ -254,14 +259,12 @@ class EventsPage(webapp.RequestHandler):
         event_contact = None
     
     eventvolunteer = ""
-    session_id = ''
     
     attendees_anonymous = []
     attendees = []
     
     if volunteer:
 
-      session_id = volunteer.session_id
       eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
                          volunteer=volunteer, event=event).get() 
                          
@@ -291,7 +294,7 @@ class EventsPage(webapp.RequestHandler):
                         'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,
                         'num_anon': len(attendees_anonymous),
-                        'GOOGLE_MAPS_API_KEY' : GOOGLE_MAPS_API_KEY,
+                        'GOOGLE_MAPS_API_KEY' : get_google_maps_api_key(),
                         }
     
     path = None
@@ -361,6 +364,7 @@ class EventsPage(webapp.RequestHandler):
       self.new(event)
       return
     
+    #TODO: convert interest category helper to application-specific data model
     for interestcategory in InterestCategory.all():
       pic = 'interestcategory[' + str(interestcategory.key().id()) + ']'
       if params[pic] == ['1','1']: 
@@ -415,6 +419,7 @@ class EventsPage(webapp.RequestHandler):
       self.edit(event)
       return False
     
+    #TODO: convert interest category helper to application-specific data model
     for interestcategory in InterestCategory.all():
       param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
       eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
@@ -470,7 +475,8 @@ class EventsPage(webapp.RequestHandler):
        return False
      
   def do_search(self, params):
-    events_query = Event.all()
+    application = get_application()
+    events_query = application.events
     neighborhood = None
     interestcategory = None
     ur = None
@@ -603,7 +609,7 @@ class EventAddCoordinatorPage(webapp.RequestHandler):
     template_values = {
         'event' : event,
         'volunteer': volunteer,
-        'volunteers': sorted(Volunteer.all(), lambda a,b: cmp(a.name,b.name))
+        #'volunteers': sorted(Volunteer.all(), lambda a,b: cmp(a.name,b.name))
       }
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_page', '_add_event_coordinator.html')
     self.response.out.write(template.render(path, template_values, debug=is_debugging()))

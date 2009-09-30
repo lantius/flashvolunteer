@@ -5,9 +5,11 @@ from components.sessions import Session
 
 import sys
 
+from controllers._utils import get_application
+
 class Authorize():
   
-  def login(req, requireVolunteer=False, redirectTo='/login'):
+  def login(req, requireVolunteer=False, redirectTo='/login', requireAdmin = False):
     session = Session()
     user = session.get('user', None)
     
@@ -29,7 +31,13 @@ class Authorize():
         req.redirect('/timeout')
         raise TimeoutError("Session has timed out.")
         #return (None)       # shouldn't get here except in tests    
+      elif requireAdmin and not users.is_current_user_admin():
+          req.redirect(redirectTo)
+          raise AuthError('You do not have permission to view this page.')
     
+    application = get_application()
+    if abstract_user and not abstract_user.applications == application.key().id():
+        abstract_user.add_application(application)
     return abstract_user
     
   login = staticmethod(login)

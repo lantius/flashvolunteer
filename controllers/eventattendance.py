@@ -113,7 +113,3 @@ class VerifyEventAttendance(webapp.RequestHandler):
         eventvolunteer.hours = None
       
     eventvolunteer.put()
-
-
-
-

@@ -24,6 +24,13 @@ indexes:
   - name: hidden
   - name: date
 
+- kind: Event
+  properties:
+  - name: application
+  - name: hidden
+  - name: date
+
+
 - kind: Eventvolunteer
   properties:
   - name: isowner
@@ -50,3 +57,8 @@ indexes:
   - name: event
   - name: display_weight
     direction: desc
+
+- kind: Neighborhood
+  properties:
+  - name: application
+  - name: name

@@ -7,25 +7,24 @@ from components.time_zones import Pacific
 from google.appengine.api import urlfetch
 
 from google.appengine.ext import db
-from models.neighborhood import *
-from models.interestcategory import *
+from models.neighborhood import Neighborhood
+from models.interestcategory import InterestCategory
+from models.application import Application
 
-# flashvolunteer-dev.appspot.com
-#GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
-# flashvolunteer.appspot.com
-#GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ'
-# flashvolunteer.org
-GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBT8o8BW0NprhG7ZQBw6sHycsndbhRS7hhGpRgOy2Kssletcr3BQkAy7jg'
-#http://v01-1.latest.flashvolunteer.appspot.com
-#GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBRKcpMVieIGuRjmcVoCEVomVUOSzxQXzU7Vr92SCk5CZf8Fq_G1wz5bIA'
+from controllers._utils import get_google_maps_api_key, get_application
 
 
 ################################################################################
 # Event
 class Event(db.Model):
   name = db.StringProperty()
+  
   neighborhood = db.ReferenceProperty(Neighborhood,
                                       collection_name = 'events')
+  
+  application = db.ReferenceProperty(Application,
+                                     collection_name = 'events',
+                                     default = None)
 
   description = db.TextProperty()
   
@@ -154,7 +153,7 @@ class Event(db.Model):
     return (eic.interestcategory for eic in self.eventinterestcategories)
   
   def geocode(self):
-    response = urlfetch.fetch('http://maps.google.com/maps/geo?q=' + urllib.quote_plus(self.address) + '&output=csv&oe=utf8&sensor=false&key=' + GOOGLE_MAPS_API_KEY)
+    response = urlfetch.fetch('http://maps.google.com/maps/geo?q=' + urllib.quote_plus(self.address) + '&output=csv&oe=utf8&sensor=false&key=' + get_google_maps_api_key())
     (httpcode) = response.content.split(',')[0]
     if '200' == httpcode:
       (httpcode,accuracy,lat,lon) = response.content.split(',')

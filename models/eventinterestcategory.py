@@ -1,7 +1,7 @@
 from google.appengine.ext import db
 
-from models.event import *
-from models.interestcategory import *
+from models.event import Event
+from models.interestcategory import InterestCategory
 
 class EventInterestCategory(db.Model):
   event = db.ReferenceProperty(Event,

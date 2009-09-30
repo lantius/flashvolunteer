@@ -1,8 +1,10 @@
 from google.appengine.ext import db
 from models.neighborhood import Neighborhood
+from models.application import Application
 
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
+
 
 
 ################################################################################
@@ -22,6 +24,8 @@ class AbstractUser(db.Model):
   
   verified = db.BooleanProperty(default=False)
   
+  applications = db.ListProperty(int)
+
   error = {}
 
 
@@ -103,7 +107,7 @@ class AbstractUser(db.Model):
   def events_coordinating(self):
     events = [ev.event for ev in self.eventvolunteers if ev.isowner and not ev.event.inpast() and not ev.event.hidden]
     events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
-    return events      
+    return events
 
   def interestcategories(self):
     return (vic.interestcategory for vic in self.volunteerinterestcategories)
@@ -123,3 +127,6 @@ class AbstractUser(db.Model):
   def check_session_id(self, form_session_id):
     return form_session_id == self.session_id
 
+  def add_application(self, application):
+      self.applications.append(application.key().id())
+      self.put()

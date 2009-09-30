@@ -6,9 +6,10 @@ from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
+from controllers._utils import get_application
 
-from models.organization import *
-from models.organizationfollower import *
+from models.organization import Organization
+from models.organizationfollower import OrganizationFollower
 
 ################################################################################
 # Organizations page
@@ -92,7 +93,8 @@ class OrganizationsPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
 
   def do_search(self, params):
-    volunteers_query = Volunteer.all()
+    application = get_application()
+    volunteers_query = Organization.all().filter('applications =', application)
     neighborhood = None
     name = None
     email = None

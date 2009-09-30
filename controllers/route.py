@@ -33,7 +33,6 @@ from controllers.paginated_volunteer_pages import \
 from controllers.static import StaticPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
-from controllers.admin import AdminPage
 
 webapp.template.register_template_library('templatetags.filters')
 
@@ -70,7 +69,6 @@ def main():
          ('/dev_login', AccountPage),
          ('/logout', AccountPage),
           ('/delete', SettingsPage),
-         ('/admin', AdminPage),
          ('/profile', ProfilePage),
          ('/settings', SettingsPage), #handles posts as well
          ('/settings/avatar', VolunteerAvatar),

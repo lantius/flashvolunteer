@@ -5,13 +5,18 @@ from google.appengine.api import users
 
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
+from controllers._utils import is_debugging
 
-from models.volunteer import *
-from models.neighborhood import *
-from models.event import *
-from models.interestcategory import *
+from models.volunteer import Volunteer
+from models.neighborhood import Neighborhood
+from models.event import Event
+from models.interestcategory import InterestCategory
 
 from components.sessions import Session
+
+import urllib
+
+
 
 ################################################################################
 # MainPage
@@ -43,12 +48,7 @@ class AccountPage(webapp.RequestHandler):
   # splashpage
   def login(self):
 
-    try:
-      from google3.apphosting.runtime import _apphosting_runtime___python__apiproxy
-    except ImportError:
-      _apphosting_runtime___python__apiproxy = None
-
-    dev_server = not _apphosting_runtime___python__apiproxy
+    dev_server = is_debugging() 
     
     template_values = { 
       'new_account': self.request.path == '/create',

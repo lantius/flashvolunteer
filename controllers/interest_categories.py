@@ -16,6 +16,7 @@ class CategoryPage(webapp.RequestHandler):
       self.show(url_data)
     else:
       params = Parameters.parameterize(self.request)
+      #TODO: convert to application-specific data model
       categories = InterestCategory.all().order('name').fetch(limit=500)
       template_values = {
           'categories': categories

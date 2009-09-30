@@ -42,6 +42,7 @@ class ProfilePage(webapp.RequestHandler):
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'recommended_events': recommended_events,
         'my_future_events': my_future_events,
+        #TODO: convert to application-specific data model
         'interest_categories': InterestCategory.all()
       }
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'volunteers', 'profile.html')

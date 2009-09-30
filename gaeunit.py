@@ -236,7 +236,7 @@ def _create_suite(request):
 def _load_default_test_modules():
     if not _LOCAL_TEST_DIR in sys.path:
         sys.path.append(_LOCAL_TEST_DIR)
-        module_names = [mf[0:-3] for mf in os.listdir(_LOCAL_TEST_DIR) if mf.endswith(".py")]
+    module_names = [mf[0:-3] for mf in os.listdir(_LOCAL_TEST_DIR) if mf.endswith(".py")]
     return [reload(__import__(name)) for name in module_names]
 
 

@@ -6,6 +6,8 @@ from controllers._auth import Authorize
 from controllers._params import Parameters
 from models.neighborhood import Neighborhood
 
+from controllers._utils import get_application
+
 ################################################################################
 # Neighborhoods page
 ################################################################################
@@ -18,7 +20,9 @@ class NeighborhoodsPage(webapp.RequestHandler):
     
     params = Parameters.parameterize(self.request)
     
-    neighborhoods = Neighborhood.all().order('name').fetch(limit=500)
+    application = get_application()
+    
+    neighborhoods = application.neighborhoods.order('name').fetch(limit=500)
     cnt = len(neighborhoods)
     col1 = neighborhoods[:cnt/3]
     col2 = neighborhoods[cnt/3:2*cnt/3]
@@ -94,4 +98,3 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
     self.response.out.write(template.render(path, template_values))
-    return
