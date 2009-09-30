@@ -1,0 +1,23 @@
+
+{% if not event.inpast %}
+
+<script>function fbs_click() {u=location.href;t=document.title;window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent(u)+'&t='+encodeURIComponent(t),'sharer','toolbar=0,status=0,width=626,height=436');return false;}</script>
+<div id="event_promotion" class="softmodule">
+    <div class="moduletitle"><h3>Help promote this event</h3></div>
+
+    <div class="event_operation_block">
+        <ul>
+            {% if eventvolunteer %}
+                <li><a class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://www.flashvolunteer.org/events/{{event.key.id}}. If you would like to join me, please click on the above link and sign-up!">&raquo; Invite your friends via email</a></li>             
+                <li><a class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm volunteering at http://www.flashvolunteer.org/events/{{event.key.id}} via @flashvolunteer. Anyone want to join?">&raquo; Tweet this</a></li>
+            {% else %}
+                <li><a class="operation" href="mailto:?subject=I'm considering attending '{{event.name}}'!&body=I am thinking about signing up for the following event: http://www.flashvolunteer.org/events/{{event.key.id}}. Would anyone like to join me?">&raquo; Invite your friends via email</a></li>             
+                <li><a class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=Thinking about volunteering at http://www.flashvolunteer.org/events/{{event.key.id}} via @flashvolunteer. Anyone want to join?">&raquo; Tweet this</a></li>
+			{% endif %}
+            
+            <li><a href="http://www.facebook.com/share.php?u=<url>" onclick="return fbs_click()" target="_blank" class="operation fb_share_link">&raquo; Share on Facebook</a></li>
+		
+		</ul>
+    </div><!--end event_operation-->
+</div><!--end event_promotion-->
+{% endif %}

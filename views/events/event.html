@@ -30,6 +30,8 @@ class="current"
 	{% endcomment %}
 	{% if event.inpast %}
        {% include "../events/event_page/_event_photos.html" %}
+	{% else %}
+	   {% include "../events/event_page/_event_promote.html" %}
     {% endif %}
 	{% if event.inpast and eventvolunteer.isowner %}
        {% include "../events/event_page/_attendees_past_owner.html" %}

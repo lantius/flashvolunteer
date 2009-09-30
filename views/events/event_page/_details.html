@@ -24,18 +24,18 @@
 
         <div class="event_operation_block">
         	<ul>
-        		{% if volunteer %}
-    				<li><a class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://www.flashvolunteer.org/events/{{event.key.id}}. If you would like to join me, please click on the above link and sign-up!">&raquo; Invite your friends</a></li>				
-                {% endif %}
 			{% if eventvolunteer %}
 				{% if eventvolunteer.isowner %}
 						<li><form action="/events/{{event.key.id}}/edit">
 							<input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
 						</form></li>
 		  			{% if not event.inpast %}
+                            <li><a href="/events/{{event.key.id}}/contact_volunteers" class="operation">&raquo; Send email to volunteers</a></li>
+
 							<li><form action="/events/{{event.key.id}}/add_coordinator">
 								<input type="submit" title="Add another event coordinator" class="operation" value="&raquo; Add another event coordinator" id="s_add_coordinator"/>
 							</form></li>
+							
 							<li><form action="/events/{{event.key.id}}" method="post">
 								<input type="submit" title="Cancel this event" class="operation" value="&raquo; Cancel this event" id="s_cancel_event"/>
 								<input type=hidden name="session_id" value="{{ volunteer.session_id }}" />
