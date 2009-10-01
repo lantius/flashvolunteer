@@ -31,8 +31,15 @@ class SettingsPage(AbstractHandler):
       volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
-              
+    
+    
     if volunteer:
+      session = Session()
+      if 'redirect' in session:
+        self.redirect(session['redirect'])
+        del session['redirect']
+        return
+                
       self.edit(volunteer)
     else:
       volunteer = Volunteer()
@@ -49,11 +56,13 @@ class SettingsPage(AbstractHandler):
       return
       
     params = Parameters.parameterize(self.request)
-
+    session = Session()
+    
     if not volunteer:
       if self.create(params):
-        session = Session()
         redirect = session.get('redirect', '/')
+        if redirect in session:
+            del session['redirect']
         self.redirect(redirect)
         
     else:
@@ -66,7 +75,7 @@ class SettingsPage(AbstractHandler):
           
       else:  
         if self.update(params, volunteer):
-          self.redirect('/settings')
+            self.redirect('/settings')
         
 
   ################################################################################
