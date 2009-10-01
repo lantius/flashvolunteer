@@ -512,7 +512,7 @@ class EventsPage(AbstractHandler):
       except:
         pass
     
-    events = _get_upcoming_events().fetch(limit = 100)
+    events = events_query.fetch(limit = 100)
     
     if ur and ll:
       filtered_events = []
