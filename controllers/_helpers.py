@@ -46,6 +46,12 @@ class InterestCategoryHelper():
     return interestcategories
 
 
+APPLICATIONS = {
+   'seattle': ('','seattle'),
+   'los-angeles': ('la', 'los-angeles'),
+   'tacoma': ('tacoma')
+}
+    
 class InitializeStore():
       
   def init(self):
@@ -53,58 +59,35 @@ class InitializeStore():
       self.initialize_store()
 
   def initialize_store(self):
-
-    
-#    neighborhoods = (
-#      'Ballard','Beacon Hill','Belltown','Capitol Hill','Central District',
-#      'Downtown','Fremont','Georgetown','Green Lake',
-#      'Greenwood','International District', 'Bitter Lake','Lake City',
-#      'Leschi','Madison Park','Madrona','Magnolia','Maple Leaf',
-#      'Northgate','Phinney Ridge','Queen Anne','Rainier Valley',
-#      'Ravenna','Sand Point',
-#      'Lake Union','South Park','University District','Wallingford',
-#      'Wedgwood','West Seattle','Delridge','Rainier Beach', 
-#                       'Shoreline',
-#                        'Edmonds',
-#                        'Lynnwood',
-#                        'Bothell',
-#                        'Kirkland',
-#                        'Redmond',
-#                        'Bellevue',
-#                        'Mercer Island',
-#                        'Tukwila',
-#                        'Burien',
-#                        'White Center',
-#                        'Bainbridge Island',)
-#    
-#          
-#          
-#    for neighborhood_name in neighborhoods:
-#      n = Neighborhood(name=neighborhood_name)
-#      n.put()    
-    
     
     server = get_server()
     if server == 0:
         from gui_integration_tests.test_settings import host
-        domain = host
+        domains = [host]
         
     elif server == 1:
-        domain = 'flashvolunteer-dev.appspot.com'
+        domains = ['flashvolunteer-dev.appspot.com', 'development.flashvolunteer.org']
     else:
-        domain = 'flashvolunteer.org'
+        domains = ['flashvolunteer.org']
+
+    applications = {}
+    
+    for application, subdomains in APPLICATIONS.items():
+        if Application().all().filter('name =', application).count() > 0: continue
         
-    applications = {
-       'seattle': (domain, 'seattle.%s'%domain), 
-       'los-angeles': ('la.%s'%domain, 'los-angeles.%s'%domain),
-       'tacoma': ('tacoma.%s'%domain,),
-    }
+        applications[application] = []
+        for d in domains:
+            for sd in subdomains:
+                if sd == '':
+                    applications[application].append(d)
+                else: 
+                    applications[application].append('%s.%s'%(sd,d))
     
     if Application.all().count() == 0:
-        for app, domains in applications.items():
+        for app, qualified_domains in applications.items():
             a = Application(name = app)
             a.put()
-            for domain in domains:
+            for domain in qualified_domains:
                 d = ApplicationDomain(domain = domain, application = a)
                 d.put()
 
@@ -117,6 +100,6 @@ class InitializeStore():
           c.put()  
 
   def is_initialized(self):
-    return Application().all().count() > 0
+    return Application().all().count() != len(APPLICATIONS.keys())
 
 

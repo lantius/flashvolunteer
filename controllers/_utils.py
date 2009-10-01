@@ -15,7 +15,7 @@ def get_server():
     """Determines which host requests are being served from. 
     
     0 == development server
-    1 == flashvolunteer-dev.appspot.com
+    1 == flashvolunteer-dev.appspot.com or development.flashvolunteer.org
     2 == flashvolunteer.org etc.    
     """
     
@@ -23,7 +23,7 @@ def get_server():
         return 0
     else:
         domain = get_domain()
-        if domain.find('flashvolunteer-dev') > -1:
+        if domain.endswith('flashvolunteer-dev.appspot.com') or domain.endswith('development.flashvolunteer.org'):
             return 1
         else:
             return 2
