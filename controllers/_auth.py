@@ -36,7 +36,7 @@ class Authorize():
           raise AuthError('You do not have permission to view this page.')
     
     application = get_application()
-    if abstract_user and not abstract_user.applications == application.key().id():
+    if abstract_user and not application.key().id() in abstract_user.applications:
         abstract_user.add_application(application)
     return abstract_user
     
