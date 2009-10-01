@@ -52,7 +52,9 @@ class SettingsPage(AbstractHandler):
 
     if not volunteer:
       if self.create(params):
-        self.redirect('/')
+        session = Session()
+        redirect = session.get('redirect', '/')
+        self.redirect(redirect)
         
     else:
       if 'is_delete' in params and params['is_delete'] == 'true':     

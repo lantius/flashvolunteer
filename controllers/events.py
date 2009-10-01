@@ -353,7 +353,8 @@ class EventsPage(AbstractHandler):
   ################################################################################
   # CREATE
   def create(self, params, volunteer):
-    event = Event()
+    application = get_application()
+    event = Event(application = application)
     
 #    if not volunteer.can_create_events():
 #      self.redirect("/events") #TODO REDIRECT to error page

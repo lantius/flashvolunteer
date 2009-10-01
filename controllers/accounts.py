@@ -23,7 +23,6 @@ from controllers.abstract_handler import AbstractHandler
 class AccountPage(AbstractHandler):
   LIMIT = 12 
   def get(self):
-    redirect = self.request.GET.get('redirect', None)
       
     volunteer = Authorize.login(self, requireVolunteer=False)
 
@@ -33,7 +32,7 @@ class AccountPage(AbstractHandler):
     if self.request.path.find('dev_login') > -1:    
       self.dev_login()    
     elif not volunteer:
-      self.login(redirect = redirect)
+      self.login()
     elif self.request.path.find('logout') > -1:    
       self.logout(volunteer)
     else:
@@ -42,18 +41,15 @@ class AccountPage(AbstractHandler):
   def dev_login(self):
     from google.appengine.api import users
     session = Session()
-    redirect = session.get('redirect', '/settings')
-
+    
     user = users.get_current_user()    
     session['user'] = user
-    self.redirect(redirect)
-      
+    self.redirect('/settings')
+    
   ################################################################################
   # splashpage
-  def login(self, redirect):
-    if redirect is None or redirect == '/' or redirect == '/login':
-        redirect = '/settings'
-        
+  def login(self):
+                
     dev_server = is_debugging() 
     
     template_values = { 
@@ -68,7 +64,7 @@ class AccountPage(AbstractHandler):
         template_values['token_url'] = self.request.host_url + '/rpx_response'
         
     session = Session()
-    session['redirect'] = redirect
+    session['redirect'] = self.request.GET.get('redirect', '/')
         
     self._add_base_template_values(vals = template_values)
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
