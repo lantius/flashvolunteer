@@ -19,7 +19,7 @@ def get_server():
     2 == flashvolunteer.org etc.    
     """
     
-    if os.environ['SERVER_SOFTWARE'].startswith('Development'): 
+    if 'SERVER_SOFTWARE' not in os.environ or os.environ['SERVER_SOFTWARE'].startswith('Development'): 
         return 0
     else:
         domain = get_domain()

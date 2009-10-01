@@ -22,6 +22,9 @@ from models.volunteerfollower import VolunteerFollower
 from models.volunteerinterestcategory import VolunteerInterestCategory
 from models.interestcategory import InterestCategory
 
+from controllers._utils import get_application
+from controllers._helpers import InitializeStore
+
 import datetime, copy
 
 
@@ -35,6 +38,10 @@ remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
 def create_environment(name, session_id):
     print 'Populating FV...'
     exec('from gui_integration_tests.test_environments.%s import my_env'%name)
+    
+    os.environ['HTTP_HOST'] = host
+    InitializeStore().init()
+    application = get_application()
 
     (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
     
@@ -42,6 +49,7 @@ def create_environment(name, session_id):
         n = Neighborhood(
              name = v['name'],
              session_id = session_id,
+             application = application
         )
         neighborhoods[k] = n
 
@@ -66,7 +74,8 @@ def create_environment(name, session_id):
           work_neighborhood = neighborhoods[v['work_neighborhood']],
           session_id = session_id,
           create_rights = v['create_rights'],
-          privacy__event_attendance = privacy__event_attendance)    
+          privacy__event_attendance = privacy__event_attendance,
+          applications = [application.key().id()])    
     
         volunteers[k] = v
 
@@ -84,7 +93,8 @@ def create_environment(name, session_id):
           home_neighborhood = neighborhoods[v['home_neighborhood']],
           work_neighborhood = neighborhoods[v['work_neighborhood']],
           session_id = session_id,
-          create_rights = v['create_rights'])    
+          create_rights = v['create_rights'],
+          applications = [application.key().id()])    
     
         organizations[k] = v
         
@@ -107,7 +117,8 @@ def create_environment(name, session_id):
           duration_minutes = duration,
           description = v['description'],
           special_instructions = v['special_instructions'],
-          address = v['address']
+          address = v['address'],
+          application = application
                   
         )
         e.put()
