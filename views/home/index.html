@@ -5,38 +5,64 @@ Flash Volunteer
 
 {% block homeactive %}class="current"{% endblock homeactive %}
 
+{% block head %} 
+        <script type="text/javascript" src="/stylesheets/javascript/mtaTwitterStatuses.js"></script>
+{% endblock head %}
+
 
 {% block content %}
-			<div id="splash-left">
-				<div id="slogan">
-					Welcome!
-				</div>
-				
-                <p>Flash Volunteer is a tool for igniting Seattle-area volunteerism.</p>
 
-                <p>Find events in your area that fit your schedule. Invite your friends. Create events. Improve your neighborhood!</p>
 
-                <p>If you coordinate service opportunities for an organization, use this site to post events and recruit volunteers.</p>
+<div id="home-top">
+	
+	<div id="home-about" class="fl">
+		 
+	    <div id="slogan">
+	        Welcome!
+	    </div>
+	    <div id="about">
+	        <p>Flash Volunteer is a tool for igniting Seattle-area volunteerism.</p>
+	
+	        <p>Find events in your area that fit your schedule. Invite your friends. Create events. Improve your neighborhood!</p>
+	
+	        <p>If you coordinate service opportunities for an organization, use this site to post events and recruit volunteers.</p>
+	    </div>
+	</div>				
+	
+	<div id="splash-right" class="softmodule">
+	    <div class="moduletitle">
+	        <h3>Tips for Getting Started</h3>
+	    </div>              
+	        <ol>
+	            {%if not volunteer%}<li><a href="/login">Login or signup.</a></li>{%endif%}
+	            <li>Identify the <a href="/neighborhoods">neighborhoods</a> where you live and work{%if volunteer%}<a href="/settings"> by editing your volunteer profile</a>{%endif%}.</li>
+	            <li>Sign up to volunteer for an <a href="/events">event</a>.</li>
+	            <li>Attend the event.</li>
+	            <li>Become {% if volunteer %} <a href="/team">Flash Friends</a>{%else%}Flash Friends{%endif%} with other volunteers.</li>
+	            <li>{%if volunteer %}<a href="/events/create">{%endif%}Create and organize events{%if volunteer%}</a>{%endif%} in your neighborhood.</li>
+	            <li>Repeat.</li>
+	        </ol>                   
+	
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<div id="home-bottom">
+	<div id="mtaTwitter" class="fl">
+	    <div class="moduletitle">
+	    	<h3>News Feed</h3>
+		</div>
+		<div id="mtaTwitterbody"></div>
+	</div>
+	
+	<script type="text/javascript">
+	    mtaTwitterStatusesFilterReplies = false;
+	</script>
+	<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=5"></script>
+	
+	<div id="splash-leftmost">
+	    {% include "../events/events_page/_upcoming_events.html" %}
+	</div>
+	<div style="clear: both;"></div>
+</div>
 
-			</div>
-
-			<div id="splash-leftmost">
-				{% include "../events/events_page/_upcoming_events.html" %}
-            </div>
-			
-            <div id="splash-right" class="softmodule">
-                <div class="moduletitle">
-                    <h3>Tips for Getting Started</h3>
-                </div>              
-                    <ol>
-                        {%if not volunteer%}<li><a href="/login">Login or signup.</a></li>{%endif%}
-                        <li>Identify the <a href="/neighborhoods">neighborhoods</a> where you live and work{%if volunteer%}<a href="/settings"> by editing your volunteer profile</a>{%endif%}.</li>
-                        <li>Sign up to volunteer for an <a href="/events">event</a>.</li>
-                        <li>Attend the event.</li>
-                        <li>Become {% if volunteer %} <a href="/team">Flash Friends</a>{%else%}Flash Friends{%endif%} with other volunteers.</li>
-                        <li>{%if volunteer %}<a href="/events/create">{%endif%}Create and organize events{%if volunteer%}</a>{%endif%} in your neighborhood.</li>
-                        <li>Repeat.</li>
-                    </ol>                   
-            
-            </div>
 {% endblock content %}
