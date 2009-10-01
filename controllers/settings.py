@@ -15,10 +15,13 @@ from models.volunteerinterestcategory import VolunteerInterestCategory
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from components.sessions import Session
 
+from controllers.abstract_handler import AbstractHandler
+
+
 ################################################################################
 # Settings page
 ################################################################################
-class SettingsPage(webapp.RequestHandler):
+class SettingsPage(AbstractHandler):
 
   ################################################################################
   # GET
@@ -74,6 +77,8 @@ class SettingsPage(webapp.RequestHandler):
         'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
     self.response.out.write(template.render(path, template_values))
   
@@ -92,6 +97,8 @@ class SettingsPage(webapp.RequestHandler):
         'default_email': user.email(),
         'volunteer' :  volunteer
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'create.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -174,5 +181,6 @@ class SettingsPage(webapp.RequestHandler):
     template_values = {
         'volunteer' : volunteer, 
       }
+    self._add_base_template_values(vals = template_values)
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'confirm_delete.html')
     self.response.out.write(template.render(path, template_values))

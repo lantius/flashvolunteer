@@ -3,10 +3,10 @@ import os, string
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from models.volunteer import *
-from models.event import *
-from models.message import *
-from models.eventvolunteer import *
+from models.volunteer import Volunteer
+from models.event import Event
+from models.message import Message
+from models.eventvolunteer import EventVolunteer
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
@@ -67,6 +67,8 @@ class EventMessagesPage(MessagesPage):
         'eventvolunteer' : eventvolunteer,
         'message' : message,
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
     self.response.out.write(template.render(path, template_values))
   
@@ -100,6 +102,8 @@ class EventMessagesPage(MessagesPage):
         'volunteer': volunteer,
         'event' : event,
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_messages.html')
     self.response.out.write(template.render(path, template_values))  
     

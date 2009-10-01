@@ -8,10 +8,12 @@ from models.neighborhood import Neighborhood
 
 from controllers._utils import get_application
 
+from controllers.abstract_handler import AbstractHandler
+
 ################################################################################
 # Neighborhoods page
 ################################################################################
-class NeighborhoodsPage(webapp.RequestHandler):
+class NeighborhoodsPage(AbstractHandler):
   def get(self, url_data):    
     try:
       volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
@@ -35,6 +37,8 @@ class NeighborhoodsPage(webapp.RequestHandler):
         'neighborhoods2': col2,
         'neighborhoods3': col3 
     }
+    self._add_base_template_values(vals = template_values)
+    
     is_json = self.is_json(params)
     if is_json:
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.json')
@@ -55,7 +59,7 @@ class NeighborhoodsPage(webapp.RequestHandler):
     else:
        return False
     
-class NeighborhoodDetailPage(webapp.RequestHandler):
+class NeighborhoodDetailPage(AbstractHandler):
   ################################################################################
   # GET
   def get(self, url_data):
@@ -95,6 +99,7 @@ class NeighborhoodDetailPage(webapp.RequestHandler):
         'past_events': past_events[-LIMIT:],
         'upcoming_events':upcoming_events[:LIMIT],
       }
-
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhood.html')
     self.response.out.write(template.render(path, template_values))

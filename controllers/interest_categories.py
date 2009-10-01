@@ -6,10 +6,12 @@ from controllers._auth import Authorize
 from controllers._params import Parameters
 from models.interestcategory import InterestCategory
 
+from controllers.abstract_handler import AbstractHandler
+
 ################################################################################
 # Neighborhoods page
 ################################################################################
-class CategoryPage(webapp.RequestHandler):
+class CategoryPage(AbstractHandler):
   def get(self, url_data):
     
     if url_data:
@@ -21,6 +23,8 @@ class CategoryPage(webapp.RequestHandler):
       template_values = {
           'categories': categories
       }
+      self._add_base_template_values(vals = template_values)
+      
       is_json = self.is_json(params)
       if is_json:
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'categories', 'category.json')
@@ -66,6 +70,7 @@ class CategoryPage(webapp.RequestHandler):
         'past_events': random.sample(past_events, min(len(past_events),LIMIT)),
         'upcoming_events':random.sample(upcoming_events, min(len(upcoming_events),LIMIT)),
       }
+    self._add_base_template_values(vals = template_values)
 
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'categories', 'category.html')
     self.response.out.write(template.render(path, template_values))

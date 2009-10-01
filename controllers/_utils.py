@@ -22,14 +22,17 @@ def get_server():
     if os.environ['SERVER_SOFTWARE'].startswith('Development'): 
         return 0
     else:
-        domain = os.environ['HTTP_HOST']
+        domain = get_domain()
         if domain.find('flashvolunteer-dev') > -1:
             return 1
         else:
             return 2
+        
+def get_domain():
+    return os.environ['HTTP_HOST']
 
 def get_application(just_id = False):
-    domain = os.environ['HTTP_HOST']
+    domain = get_domain()
     key = "app-%s"%domain
     app_domain = memcache.get(key)
     if app_domain is None:

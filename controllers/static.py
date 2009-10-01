@@ -4,10 +4,12 @@ import os
 
 from controllers._auth import Authorize
 
+from controllers.abstract_handler import AbstractHandler
+
 ################################################################################
 # Help page
 ################################################################################
-class StaticPage(webapp.RequestHandler):
+class StaticPage(AbstractHandler):
   def get(self, urldata):    
     
     try:
@@ -18,6 +20,8 @@ class StaticPage(webapp.RequestHandler):
     template_values = {
         'volunteer': volunteer,
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'static', urldata + '.html')
     self.response.out.write(template.render(path, template_values))
     return

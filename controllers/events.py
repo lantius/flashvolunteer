@@ -25,6 +25,7 @@ from controllers._params import Parameters
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
+from controllers.abstract_handler import AbstractHandler
 
 def _get_upcoming_events():
     region = get_application()
@@ -116,7 +117,7 @@ def escapejs(value):
 ################################################################################
 # Events page
 ################################################################################
-class EventsPage(webapp.RequestHandler):
+class EventsPage(AbstractHandler):
   LIMIT = 3
   ################################################################################
   # GET
@@ -209,6 +210,8 @@ class EventsPage(webapp.RequestHandler):
         'my_future_events': my_future_events,
         'my_past_events': my_past_events,
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
     self.response.out.write(template.render(path, template_values, debug=is_debugging()))
 
@@ -296,6 +299,7 @@ class EventsPage(webapp.RequestHandler):
                         'num_anon': len(attendees_anonymous),
                         'GOOGLE_MAPS_API_KEY' : get_google_maps_api_key(),
                         }
+    self._add_base_template_values(vals = template_values)
     
     path = None
     if self.request.headers["Accept"] == "application/json":
@@ -341,6 +345,8 @@ class EventsPage(webapp.RequestHandler):
         'neighborhoods': neighborhoods,
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
     self.response.out.write(template.render(path, template_values, debug=is_debugging()))
   
@@ -402,6 +408,8 @@ class EventsPage(webapp.RequestHandler):
       'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
       'interestcategories' : InterestCategoryHelper().selected(event),
     }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
     self.response.out.write(template.render(path, template_values, debug=is_debugging()))
   
@@ -444,6 +452,7 @@ class EventsPage(webapp.RequestHandler):
       'events' : events,
       'interestcategory': interestcategory
     }
+    self._add_base_template_values(vals = template_values)
     
     is_json = self.is_json(params)
     if is_json:
@@ -586,7 +595,7 @@ class EventsPage(webapp.RequestHandler):
 ################################################################################
 # EventAddCoordinatorPage page
 ################################################################################
-class EventAddCoordinatorPage(webapp.RequestHandler):
+class EventAddCoordinatorPage(AbstractHandler):
   LIMIT = 12
   ################################################################################
   # GET
@@ -611,6 +620,8 @@ class EventAddCoordinatorPage(webapp.RequestHandler):
         'volunteer': volunteer,
         #'volunteers': sorted(Volunteer.all(), lambda a,b: cmp(a.name,b.name))
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_page', '_add_event_coordinator.html')
     self.response.out.write(template.render(path, template_values, debug=is_debugging()))
     

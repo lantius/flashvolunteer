@@ -11,9 +11,11 @@ from controllers._utils import get_application
 from models.organization import Organization
 from models.organizationfollower import OrganizationFollower
 
+from controllers.abstract_handler import AbstractHandler
+
 ################################################################################
 # Organizations page
-class OrganizationsPage(webapp.RequestHandler):
+class OrganizationsPage(AbstractHandler):
   LIMIT = 12
   ################################################################################
   # GET
@@ -64,6 +66,8 @@ class OrganizationsPage(webapp.RequestHandler):
                         'event_access': event_access,
                         'future_events': future_events
                         }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -89,6 +93,8 @@ class OrganizationsPage(webapp.RequestHandler):
       'volunteers' : volunteers,
       'volunteer' : volunteer,
     }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteers_search.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -127,7 +133,7 @@ class OrganizationsPage(webapp.RequestHandler):
 
 ################################################################################
 # FollowVolunteer
-class FollowOrganization(webapp.RequestHandler):
+class FollowOrganization(AbstractHandler):
 
   ################################################################################
   # POST
@@ -158,7 +164,7 @@ class FollowOrganization(webapp.RequestHandler):
 
 ################################################################################
 # VolunteerAvatar
-class OrganizationLogo(webapp.RequestHandler):
+class OrganizationLogo(AbstractHandler):
   ################################################################################
   # GET
   def get(self, url_data):

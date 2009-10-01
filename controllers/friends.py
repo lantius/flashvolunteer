@@ -6,10 +6,12 @@ import random
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 
+from controllers.abstract_handler import AbstractHandler
+
 ################################################################################
 # Friends page
 ################################################################################
-class FriendsPage(webapp.RequestHandler):
+class FriendsPage(AbstractHandler):
   def get(self): 
     LIMIT = 12
     
@@ -25,6 +27,8 @@ class FriendsPage(webapp.RequestHandler):
         'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'friends': friends,
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'team.html')
     self.response.out.write(template.render(path, template_values))
     return

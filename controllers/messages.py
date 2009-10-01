@@ -5,13 +5,15 @@ from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
 
-from models.event import *
-from models.message import *
+from models.event import Event
+from models.message import Message
+
+from controllers.abstract_handler import AbstractHandler
 
 ################################################################################
 # Messages page
 ################################################################################
-class MessagesPage(webapp.RequestHandler):
+class MessagesPage(AbstractHandler):
 
   ################################################################################
   # GET

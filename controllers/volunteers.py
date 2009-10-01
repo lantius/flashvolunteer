@@ -12,9 +12,12 @@ from controllers._params import Parameters
 from models.volunteer import Volunteer
 from models.volunteerfollower import VolunteerFollower
 
+from controllers.abstract_handler import AbstractHandler
+
+
 ################################################################################
 # Volunteers page
-class VolunteersPage(webapp.RequestHandler):
+class VolunteersPage(AbstractHandler):
   LIMIT = 12
   ################################################################################
   # GET
@@ -69,6 +72,8 @@ class VolunteersPage(webapp.RequestHandler):
                         'event_access': event_access,
                         'future_events': future_events
                         }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -94,6 +99,8 @@ class VolunteersPage(webapp.RequestHandler):
       'volunteers' : volunteers,
       'volunteer' : volunteer,
     }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'volunteers_search.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -134,7 +141,7 @@ class VolunteersPage(webapp.RequestHandler):
 
 ################################################################################
 # FollowVolunteer
-class FollowVolunteer(webapp.RequestHandler):
+class FollowVolunteer(AbstractHandler):
 
   ################################################################################
   # POST
@@ -165,7 +172,7 @@ class FollowVolunteer(webapp.RequestHandler):
 
 ################################################################################
 # VolunteerAvatar
-class VolunteerAvatar(webapp.RequestHandler):
+class VolunteerAvatar(AbstractHandler):
   ################################################################################
   # GET
   def get(self, url_data):

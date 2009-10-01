@@ -16,11 +16,11 @@ from components.sessions import Session
 
 import urllib
 
-
+from controllers.abstract_handler import AbstractHandler
 
 ################################################################################
 # MainPage
-class AccountPage(webapp.RequestHandler):
+class AccountPage(AbstractHandler):
   LIMIT = 12 
   def get(self):
     volunteer = Authorize.login(self, requireVolunteer=False)
@@ -60,7 +60,8 @@ class AccountPage(webapp.RequestHandler):
         template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
     else:
         template_values['token_url'] = self.request.host_url + '/rpx_response'
-        
+    
+    self._add_base_template_values(vals = template_values)
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
     self.response.out.write(template.render(path, template_values))
 
@@ -76,7 +77,7 @@ from google.appengine.api import urlfetch
 from django.utils import simplejson
 from google.appengine.api.users import User
 
-class RPXTokenHandler(webapp.RequestHandler):
+class RPXTokenHandler(AbstractHandler):
       
   def post(self):
     token = self.request.get('token')

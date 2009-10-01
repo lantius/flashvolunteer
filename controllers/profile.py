@@ -6,17 +6,18 @@ from google.appengine.api import users
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 
-from models.volunteer import *
-from models.neighborhood import *
-from models.event import *
-from models.interestcategory import *
+from models.volunteer import Volunteer
+from models.neighborhood import Neighborhood
+from models.event import Event
+from models.interestcategory import InterestCategory
 
 from controllers.events import _get_recommended_events, _get_upcoming_events 
 
+from controllers.abstract_handler import AbstractHandler
 
 ################################################################################
 # ProfilePage
-class ProfilePage(webapp.RequestHandler):
+class ProfilePage(AbstractHandler):
   LIMIT = 3 
   def get(self):
     try:
@@ -45,5 +46,7 @@ class ProfilePage(webapp.RequestHandler):
         #TODO: convert to application-specific data model
         'interest_categories': InterestCategory.all()
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'volunteers', 'profile.html')
     self.response.out.write(template.render(path, template_values))

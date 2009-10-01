@@ -9,12 +9,14 @@ from models.event import *
 from models.eventvolunteer import *
 
 from controllers._auth import Authorize
-from controllers._utils import send_mail
+from controllers._utils import send_mail, get_domain
+
+from controllers.abstract_handler import AbstractHandler
 
 ################################################################################
 # VolunteerForEvent
 ################################################################################
-class VolunteerForEvent(webapp.RequestHandler):
+class VolunteerForEvent(AbstractHandler):
 
   ################################################################################
   # POST
@@ -88,12 +90,11 @@ Please let us know if you have any questions or if you would prefer not to get e
 The Flash Volunteer Team
 """
                     
-        #TODO : event url needs to account for which FV application this is
         params = {
             'event_name': event.name.strip(),
             'owner_name': owner.get_name().strip(),
             'owner_email': owner.get_email().strip(),
-            'event_url': 'http://%s%s'%(os.environ['HTTP_HOST'], event.url()),
+            'event_url': 'http://%s%s'%(get_domain(), event.url()),
             'vol_count': EventVolunteer.gql("WHERE isowner = false AND event = :event" ,event=event).count(),
             'vol_name': volunteer.get_name()
         }

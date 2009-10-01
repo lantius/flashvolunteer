@@ -13,8 +13,9 @@ from components.sessions import Session
 
 import wsgiref.handlers
 
+from controllers.abstract_handler import AbstractHandler
 
-class MigrateDatastore(webapp.RequestHandler):
+class MigrateDatastore(AbstractHandler):
 
     def get(self):
         

@@ -10,7 +10,9 @@ from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
 
-class BaseVolunteerListPage(webapp.RequestHandler):
+from controllers.abstract_handler import AbstractHandler
+
+class BaseVolunteerListPage(AbstractHandler):
   LIST_LIMIT = 12
     
   def set_context(self):  
@@ -66,6 +68,7 @@ class BaseVolunteerListPage(webapp.RequestHandler):
                         'prev_page': prev_page,
                         'url': self._get_url()
                         }
+    self._add_base_template_values(vals = template_values)
     
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'person_lists', '_paginated_volunteer_page.html')
     self.response.out.write(template.render(path, template_values))

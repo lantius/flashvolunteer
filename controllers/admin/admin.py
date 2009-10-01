@@ -10,11 +10,12 @@ from models.volunteerfollower import *
 from controllers._params import Parameters
 from controllers._auth import Authorize
 
+from controllers.abstract_handler import AbstractHandler
 
 ################################################################################
 # Admin
 ################################################################################
-class AdminPage(webapp.RequestHandler):
+class AdminPage(AbstractHandler):
   
   ################################################################################
   # GET
@@ -48,6 +49,8 @@ class AdminPage(webapp.RequestHandler):
       'volunteers' : volunteers,
       'volunteer' : volunteer,
       }
+    self._add_base_template_values(vals = template_values)
+    
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'admin', 'list.html')
     self.response.out.write(template.render(path, template_values))
     

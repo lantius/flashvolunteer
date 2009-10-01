@@ -34,14 +34,19 @@ from controllers.static import StaticPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
 
+from controllers.abstract_handler import AbstractHandler
+
 webapp.template.register_template_library('templatetags.filters')
 
 ################################################################################
 # Timeout page
-class TimeoutPage(webapp.RequestHandler):
+class TimeoutPage(AbstractHandler):
   def get(self):
+    template_values = {}
+    self._add_base_template_values(vals = template_values)
+
     path = os.path.join(os.path.dirname(__file__), '..', 'views','session_timeout.html')
-    self.response.out.write(template.render(path, {}))
+    self.response.out.write(template.render(path, template_values))
 
 ################################################################################
 # gae mojo
@@ -74,6 +79,7 @@ def main():
          ('/settings/avatar', VolunteerAvatar),
          ('/events/(\d+)/volunteer', VolunteerForEvent),
          ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
+#         ('/events/(\d+)/contact_volunteers', Event)
          ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
          ('/events/(\d+)/verify', VerifyEventAttendance),
          ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),

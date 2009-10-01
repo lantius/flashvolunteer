@@ -16,7 +16,10 @@ from controllers._params import Parameters
 
 from controllers.events import _get_recommended_events, _get_upcoming_events 
 
-class BaseEventListPage(webapp.RequestHandler):
+from controllers.abstract_handler import AbstractHandler
+
+
+class BaseEventListPage(AbstractHandler):
   LIST_LIMIT = 12
     
   def set_context(self):  
@@ -73,6 +76,7 @@ class BaseEventListPage(webapp.RequestHandler):
                         'prev_page': prev_page,
                         'url': self._get_url()
                         }
+    self._add_base_template_values(vals = template_values)
     
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'paginated_event_page.html')
     self.response.out.write(template.render(path, template_values))

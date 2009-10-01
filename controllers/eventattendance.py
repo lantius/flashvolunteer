@@ -12,10 +12,12 @@ from controllers._auth import Authorize
 from controllers._params import Parameters
 from components.time_zones import Pacific
 
+from controllers.abstract_handler import AbstractHandler
+
 ################################################################################
 # VerifyEventAttendance
 ################################################################################
-class VerifyEventAttendance(webapp.RequestHandler):
+class VerifyEventAttendance(AbstractHandler):
   
   ################################################################################
   # GET
@@ -65,6 +67,8 @@ class VerifyEventAttendance(webapp.RequestHandler):
         'event' : ev.event,
         'now' : datetime.datetime.now(Pacific).strftime("%A, %d %B %Y"),
       }
+    
+    self._add_base_template_values(vals = template_values)
     path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'receipt.html')
     self.response.out.write(template.render(path, template_values))
     
