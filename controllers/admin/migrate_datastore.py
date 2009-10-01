@@ -37,17 +37,26 @@ class MigrateDatastore(AbstractHandler):
                 logging.info('MIGRATE: added seattle to volunteer "%s"'%v.name)
 
         for e in Event.all():
-            if not e.application:
+            try:
+                if e.application is None:
+                    e.application = seattle
+                    e.put()
+                    logging.info('MIGRATE: added seattle to event "%s"'%e.name)
+            except:
                 e.application = seattle
                 e.put()
                 logging.info('MIGRATE: added seattle to event "%s"'%e.name)
 
         for n in Neighborhood.all():
-            if not n.application:
+            try:
+                if not n.application:
+                    n.application = seattle
+                    n.put()
+                    logging.info('MIGRATE: added seattle to neighborhood "%s"'%e.name)
+            except:
                 n.application = seattle
                 n.put()
                 logging.info('MIGRATE: added seattle to neighborhood "%s"'%e.name)
-
                 
     def __migrate_neighborhoods(self):
         #neighborhoods to add

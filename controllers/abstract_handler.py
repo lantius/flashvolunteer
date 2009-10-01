@@ -22,7 +22,7 @@ class AbstractHandler(webapp.RequestHandler):
     def _add_base_template_values(self, vals):
         
         vals.update( {
-            'domain': get_domain(),
+            'domain': get_domain(keep_www = True),
             'path': self.request.path
         })
         

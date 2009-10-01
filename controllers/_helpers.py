@@ -47,9 +47,9 @@ class InterestCategoryHelper():
 
 
 APPLICATIONS = {
-   'seattle': ('','seattle'),
-   'los-angeles': ('la', 'los-angeles'),
-   'tacoma': ('tacoma')
+   'seattle': ['','seattle'],
+   'los-angeles': ['la', 'los-angeles'],
+   'tacoma': ['tacoma']
 }
     
 class InitializeStore():
@@ -100,6 +100,6 @@ class InitializeStore():
           c.put()  
 
   def is_initialized(self):
-    return Application().all().count() != len(APPLICATIONS.keys())
+    return Application().all().count() == len(APPLICATIONS.keys())
 
 

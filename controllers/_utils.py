@@ -23,12 +23,14 @@ def get_server():
         return 0
     else:
         domain = get_domain()
-        if domain.endswith('flashvolunteer-dev.appspot.com') or domain.endswith('development.flashvolunteer.org'):
+        if domain.find('flashvolunteer-dev.appspot.com') > -1 or domain.find('development.flashvolunteer.org') > -1:
             return 1
         else:
             return 2
         
-def get_domain():
+def get_domain(keep_www = False):
+    if not keep_www and os.environ['HTTP_HOST'].startswith('www.'):
+        return os.environ['HTTP_HOST'][4:]
     return os.environ['HTTP_HOST']
 
 def get_application(just_id = False):
