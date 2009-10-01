@@ -41,7 +41,7 @@ div{
 
 p { margin: 8px 0 0 0; }
 
-#splash-left p {
+#home-about p {
 	padding-bottom: 7px;
 	font-size: 110%;
 }
@@ -274,6 +274,7 @@ a.operation, a {
     right:15px;
 }
 
+
 a.event_name {
     font-weight:bold;
 }
@@ -315,10 +316,6 @@ img.smallavatar {
     padding-right: 20px;
 }
 
-#splash-left .badge img {
-	width: 100px;
-}
-
 #donate-badge-img {
 }
 
@@ -329,11 +326,6 @@ img.smallavatar {
 	width: 90px;
 }
 
-#splash-left #twitter-badge {}
-
-#splash-left #fb-badge { padding-top: 20px; }
-
-#splash-left .badge input { padding-top: 20px; }
 
 .volunteer_summary_pic {
     height: 80px;
@@ -523,10 +515,10 @@ div.faq-link-wrapper {
 a.faq-link { font-size: 7pt;}
 
 /* for slogan on splash screen */
-div#splash-left div#slogan {
+div#home-about div#slogan {
     font-size: 215%;
     font-family: serif;
-	margin: 15px 0px;
+	margin-top: 15px;
 	font-weight:bold;
 }
 
@@ -705,3 +697,37 @@ span#l_login {
 #partners .logo {
     margin-bottom: 5px;
 }
+
+
+#home-about {
+	width: 50%;
+}
+
+#home-bottom {
+	margin-top: 10px;
+}
+
+#home-top, #home-bottom {height: 100%; width: 100%;}
+
+#mtaTwitter { 
+    width: 49%; 
+}
+#mtaTwitter { padding: 0; }
+#mtaTwitter a img {
+    height: 48px;
+    width: 48px;
+    border: 1px solid #CCC;
+}
+#mtaTwitter ul {
+    position: relative;
+
+    list-style: none;
+    margin: 0;
+    padding: 0px;
+    font-family: Helvetica, sans-serif;
+}
+#mtaTwitter ul li { padding: 10px 10px;}
+#mtaTwitter ul li.first { }
+#mtaTwitter ul li.even { background-color: #EDEEFD; }
+#mtaTwitter ul li.first span { font-weight: normal; }
+#mtaTwitter ul li span { font-style: normal; }
