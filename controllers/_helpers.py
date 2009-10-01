@@ -86,8 +86,9 @@ class InitializeStore():
     
     server = get_server()
     if server == 0:
-        #TODO: generalize this
-        domain = 'localhost:9999'
+        from gui_integration_tests.test_settings import host
+        domain = host
+        
     elif server == 1:
         domain = 'flashvolunteer-dev.appspot.com'
     else:
