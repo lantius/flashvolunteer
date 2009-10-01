@@ -5,7 +5,7 @@ from google.appengine.api import users
 
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
-from controllers._utils import is_debugging, get_domain
+from controllers._utils import is_debugging, get_domain, get_application
 
 from models.volunteer import Volunteer
 from models.neighborhood import Neighborhood
@@ -23,6 +23,7 @@ class AbstractHandler(webapp.RequestHandler):
         
         vals.update( {
             'domain': get_domain(keep_www = True),
-            'path': self.request.path
+            'path': self.request.path,
+            'application_alias': get_application().get_alias()
         })
         

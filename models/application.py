@@ -12,3 +12,6 @@ from google.appengine.ext import db
 # RegionDomain
 class Application(db.Model):
   name = db.StringProperty()
+  
+  def get_alias(self):
+      return self.name.replace('-', ' ').capitalize()
