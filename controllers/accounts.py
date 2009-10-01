@@ -23,6 +23,8 @@ from controllers.abstract_handler import AbstractHandler
 class AccountPage(AbstractHandler):
   LIMIT = 12 
   def get(self):
+    redirect = self.request.GET.get('redirect', None)
+      
     volunteer = Authorize.login(self, requireVolunteer=False)
 
     # if volunteer is logged in, then they get their login page
@@ -31,7 +33,7 @@ class AccountPage(AbstractHandler):
     if self.request.path.find('dev_login') > -1:    
       self.dev_login()    
     elif not volunteer:
-      self.login()
+      self.login(redirect = redirect)
     elif self.request.path.find('logout') > -1:    
       self.logout(volunteer)
     else:
@@ -39,20 +41,24 @@ class AccountPage(AbstractHandler):
 
   def dev_login(self):
     from google.appengine.api import users
-    user = users.get_current_user()
     session = Session()
+    redirect = session.get('redirect', '/settings')
+
+    user = users.get_current_user()    
     session['user'] = user
-    self.redirect('/settings')
+    self.redirect(redirect)
       
   ################################################################################
   # splashpage
-  def login(self):
-
+  def login(self, redirect):
+    if redirect is None or redirect == '/' or redirect == '/login':
+        redirect = '/settings'
+        
     dev_server = is_debugging() 
     
     template_values = { 
       'new_account': self.request.path == '/create',
-      'dev_server': dev_server
+      'dev_server': dev_server,
     }
     
     if dev_server:
@@ -60,7 +66,10 @@ class AccountPage(AbstractHandler):
         template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
     else:
         template_values['token_url'] = self.request.host_url + '/rpx_response'
-    
+        
+    session = Session()
+    session['redirect'] = redirect
+        
     self._add_base_template_values(vals = template_values)
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
     self.response.out.write(template.render(path, template_values))
@@ -106,7 +115,7 @@ class RPXTokenHandler(AbstractHandler):
       user = User(email = login_info['email'], _auth_domain = login_info['providerName'])
       session['user'] = user
       
-      self.redirect('/settings')
+      self.redirect(session.get('redirect', '/settings'))
     else:
       self.redirect('/error')  
     

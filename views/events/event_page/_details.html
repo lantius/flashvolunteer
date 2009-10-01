@@ -68,7 +68,7 @@
 					<input type=submit title="Volunteer for this event" class="volunteer_button" value="{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}" id="s_volunteer"/>
 				</form></li>
 				{% else %}
-				    <li>You must <a href='/login'>login</a> to signup for this event</li>
+				    <li>You must <a href='/login?redirect={{path}}'>login</a> to signup for this event</li>
 			{% endif %}{% endif %}
 			</ul>
     </div>

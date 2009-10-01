@@ -3,6 +3,6 @@
         {% if volunteer %}
 		<a class="operation" href="/events/new">&raquo; Create a new event</a>
 		{% else %}
-			You need to <a href="/login">login</a> to create an event. 
+			You need to <a href="/login?redirect={{path}}">login</a> to create an event. 
 		{% endif %}
 </div>

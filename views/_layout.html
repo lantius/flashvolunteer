@@ -28,7 +28,7 @@
 				{%if volunteer %}
 					<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
 				{% else %}
-					<div id="volunteerwelcome"><a href="/login" id="l_logout">Log in or signup</a></div>			
+					<div id="volunteerwelcome"><a href="/login?redirect={{path}}" id="l_logout">Log in or signup</a></div>			
 				{% endif %}
 		    </div><!--end logo-strip-->
     </div><!--end top-->
