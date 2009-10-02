@@ -3,5 +3,17 @@
 	<div class="moduletitle"><h3>Description</h3></div>
 	<ul>
 		<li>{{ event.description }}</li>
+
+        {% ifnotequal event_categories '' %}
+            <li>            
+                <ul style="padding-top:5px">
+                    {% for ic in event.interestcategories %}
+                        <li style="display:inline"><a id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a>{% if forloop.last %}{%else%},{%endif%}</li>
+                    {% endfor %}
+                </ul>
+            </li>{% endifnotequal %}
+
 	</ul>
+
+			
 </div><!--end eventdescription-->

@@ -492,7 +492,6 @@ div.event_operation_block {
 
 /* google maps */
 div#map_canvas {
-    width: 370px;
     height: 169px;
 }
 
@@ -732,19 +731,23 @@ span#l_login {
 #mtaTwitter ul li.first span { font-weight: normal; }
 #mtaTwitter ul li span { font-style: normal; }
 
-#event_promotion_header li {
+.event_header li {
     display:inline;
+	padding-top:0px;
 }
 
-ul#event_promotion_header {
-    margin-top: 7px;
+.event_header li.title {
+	vertical-align: 7px;
 }
 
-ul#event_promotion_header img{
-    width: 25px;
+ul.event_header {
 }
 
-#event_promotion_header {
+ul.event_header img{
+    height: 25px;
+}
+
+.event_header {
 	font-size: small;
 	float:right;
 }

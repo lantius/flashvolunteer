@@ -1,0 +1,27 @@
+<div id="event_headers">
+	<ul class="event_header">
+	    <li class="title">Invite your friends: </li>
+	    {% if eventvolunteer %}
+	         {% if eventvolunteer.isowner %}
+	            <li><a title="email" class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I'm organizing the following event: http://{{domain}}{{event.url}}. If you would like to help out, please click on the above link and sign-up!"><img src="/stylesheets/media/email_icon.gif" /></a></li>             
+	            <li><a title="Twitter" class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm organizing http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to help out?"><img src="/stylesheets/media/twitter_icon.jpg" /></a></li>
+	         {% else %}
+	            <li><a title="email" class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://{{domain}}{{event.url}}. If you would like to join me, please click on the above link and sign-up!"><img src="/stylesheets/media/email_icon.gif" /></a></li>             
+	            <li><a title="Twiter" class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?"><img src="/stylesheets/media/twitter_icon.jpg" /></li>
+	         {% endif %}                 
+	    {% else %}
+	        <li><a title="email" class="operation" href="mailto:?subject=I'm considering attending '{{event.name}}'!&body=I am thinking about signing up for the following event: http://{{domain}}{{event.url}}. Would anyone like to join me?"><img src="/stylesheets/media/email_icon.gif" /></a></li>             
+	        <li><a title="Twitter" class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=Thinking about volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?"><img src="/stylesheets/media/twitter_icon.jpg" /></a></li>
+	    {% endif %}
+	    
+	    <li><a title="Facebook" href="http://www.facebook.com/share.php?u=<url>" onclick="return fbs_click()" target="_blank" class="operation fb_share_link"><img src="/stylesheets/media/facebook_icon.jpg" /></a></li>
+	
+	</ul>   
+	<div style="clear:both"></div>
+	<ul class="event_header">
+	    <li class="title">Add to your calendar: </li>
+	    <li><a title="Google" class="operation" href="http://www.google.com/calendar/event?action=TEMPLATE&text=Volunteering at '{{event.name}}'</a>&dates={{event.get_google_calendar_date}}&location={{event.address}}&details=Visit http://{{domain}}{{event.url}} to read the description, manage your participation, and interact with the hosts and other volunteers.&trp=true&sprop= website:http://{{domain}}&sprop=name:Flash Volunteer">
+	       <img src="/stylesheets/media/googlecal_icon.png" />
+	    </a></li> 
+	</ul>
+</div>

@@ -1,6 +1,27 @@
 <div id="eventattendees" class="hardmodule">
-    <div class="moduletitle"><h3>Event managers/coordinators</h3></div>
-    <ul>        
+    <div class="moduletitle"><h3>Event organizers</h3></div>
+    <ul>   
+	    {% if volunteer %}
+            {% if eventvolunteer and eventvolunteer.isowner %}
+                {% if not event.inpast %}
+
+	                <li><form action="/events/{{event.key.id}}/edit">
+	                        <input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
+	                </form></li>
+                    <li><form action="/events/{{event.key.id}}/add_coordinator">
+                        <input type="submit" title="Add another event coordinator" class="operation" value="&raquo; Add another event coordinator" id="s_add_coordinator"/>
+                    </form></li>
+                        
+                    <li><form action="/events/{{event.key.id}}" method="post">
+                        <input type="submit" title="Cancel this event" class="operation" value="&raquo; Cancel this event" id="s_cancel_event"/>
+                        <input type=hidden name="session_id" value="{{ volunteer.session_id }}" />
+                        <input type=hidden name="is_delete" value="true" />
+                    </form></li>
+                {% endif %}				
+			{% else %}
+			     <li><a href="mailto:{{ event.contact_email }}" class="operation">&raquo; Contact organizers</a></li>     
+            {% endif %}
+        {% endif %}
         <li>  
             <ul class="imagenamelinklist">
                 {% for volunteer_in_list in owners %}
