@@ -20,7 +20,7 @@ handlers:
   login: admin    
 
 - url: /admin/.*
-  script: controllers/admin/migrate_datastore.py
+  script: controllers/admin/route.py
   login: admin
     
 - url: /.*

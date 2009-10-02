@@ -1,0 +1,4 @@
+cron:
+- description: the FV message dispatcher
+  url: /admin/message_dispatch
+  schedule: every 1 minutes

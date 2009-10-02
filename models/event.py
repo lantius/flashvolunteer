@@ -1,5 +1,5 @@
 from components.geostring import *
-from components.time_zones import Pacific
+from components.time_zones import Pacific, now
 from controllers._utils import get_google_maps_api_key, get_application
 from google.appengine.api import urlfetch
 from google.appengine.ext import db
@@ -276,8 +276,7 @@ class Event(db.Model):
         return not self.error
     
     def inpast(self):
-        now = datetime.datetime.now(tz=Pacific).replace(tzinfo=None)
-        return self.date < now
+        return self.date < now()
     
     
     #########################################

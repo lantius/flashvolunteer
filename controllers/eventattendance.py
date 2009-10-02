@@ -10,7 +10,7 @@ from models.eventvolunteer import *
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
-from components.time_zones import Pacific
+from components.time_zones import Pacific, now
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -65,7 +65,7 @@ class VerifyEventAttendance(AbstractHandler):
         'eventvolunteer': ev,
         'volunteer' : ev.volunteer,
         'event' : ev.event,
-        'now' : datetime.datetime.now(Pacific).strftime("%A, %d %B %Y"),
+        'now' : now().strftime("%A, %d %B %Y"),
       }
     
     self._add_base_template_values(vals = template_values)

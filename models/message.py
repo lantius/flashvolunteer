@@ -1,17 +1,29 @@
 from google.appengine.ext import db
 from google.appengine.api import mail
 
-from models.volunteer import *
+from google.appengine.api.users import User
 
 ################################################################################
 # Message
 class Message(db.Model):
   title = db.StringProperty()
-  sent = db.DateTimeProperty(auto_now_add=True)
-  sender = db.ReferenceProperty(Volunteer,
+  text = db.TextProperty()
+  
+  date = db.DateTimeProperty(auto_now_add=True)
+  trigger = db.DateTimeProperty(required = True)
+  
+  
+  sent = db.BooleanProperty(default = False)
+  sender = db.ReferenceProperty(User,
                                 collection_name = 'sent_messages')
-  recipients = db.ListProperty(int)
-  content = db.TextProperty()
+
+  recipients = db.ListProperty(int) #list of Users
+  sender = UserProperty()
+  
+  flagged = db.BooleanProperty(default = False)
+  verified = db.BooleanProperty(default = False)
+  
+  referral_url = db.LinkProperty(default = None)
 
   def url(self):
     return self.recipient.url() + '/messages/' + str(self.key().id())

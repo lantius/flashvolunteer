@@ -14,9 +14,11 @@ from components.sessions import Session
 import wsgiref.handlers
 
 from controllers.admin.migrate_datastore import MigrateDatastore
+from controllers.admin.message_dispatcher import MessageDispatcher
 
-application = webapp.WSGIApplication([(
-    '/admin/migrate', MigrateDatastore)
+application = webapp.WSGIApplication([
+    ('/admin/migrate', MigrateDatastore),
+    ('/admin/message_dispatch', MessageDispatcher),
 
 ], debug=True)
 

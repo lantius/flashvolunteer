@@ -5,7 +5,7 @@ import logging
 from controllers._utils import is_debugging, get_application, get_google_maps_api_key
 
 from components.geostring import *
-from components.time_zones import Pacific
+from components.time_zones import Pacific, now
 
 
 from google.appengine.ext.webapp import template
@@ -31,7 +31,7 @@ def _get_upcoming_events():
     region = get_application()
     
     events = region.events.filter(
-        'date >= ', datetime.datetime.now(tz=Pacific).replace(tzinfo=None)).filter(
+        'date >= ', now()).filter(
         'hidden = ', False).order(
         'date')
     
