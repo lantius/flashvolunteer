@@ -22,6 +22,7 @@
             {% endifequal %}</li>
     	</ul>
 
+				
         <div class="event_operation_block">
         	<ul>
 			{% if eventvolunteer %}
@@ -30,7 +31,9 @@
 							<input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
 						</form></li>
 		  			{% if not event.inpast %}
-
+		                    <li><a class="operation" href="http://www.google.com/calendar/event?action=TEMPLATE&text=Volunteering at '{{event.name}}'</a>&dates={{event.get_google_calendar_date}}&location={{event.address}}&details=Visit http://{{domain}}{{event.url}} to manage your participation.<br><br>{{event.description}}&trp=true&sprop= website:http://{{domain}}&sprop=name:Flash Volunteer">
+		                        &raquo; Add to Google Calendar
+		                    </a></li> 
 							<li><form action="/events/{{event.key.id}}/add_coordinator">
 								<input type="submit" title="Add another event coordinator" class="operation" value="&raquo; Add another event coordinator" id="s_add_coordinator"/>
 							</form></li>
@@ -44,16 +47,23 @@
 				{% else %}
 		    		<li><a href="mailto:{{ contact.user.email }}" class="operation">&raquo; Contact Event Host</a></li>
 					{% if not event.inpast %}
+	                    <li><a class="operation" href="http://www.google.com/calendar/event?action=TEMPLATE&text=Volunteering at '{{event.name}}'</a>&dates={{event.get_google_calendar_date}}&location={{event.address}}&details=Visit http://{{domain}}{{event.url}} to manage your participation.<br><br>{{event.description}}&trp=true&sprop= website:http://{{domain}}&sprop=name:Flash Volunteer">
+                            &raquo; Add to Google Calendar
+                        </a></li> 
 						<li><form action="{{event.url}}/volunteer" method="post" >
 							<input type=hidden name="delete" value="true" />
 							<input type=hidden name="session_id" value="{{ volunteer.session_id }}" />
 							<input type=submit title="Unvolunteer for this event" class="operation" value="&raquo; Unvolunteer" id="s_unvolunteer" />
 						</form></li>
 					{% endif %}
+					
 					{% if not event.verified %}
 						<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 					{% endif %}
+				
+				
 				{% endif %}
+
 			{% else %}{% if volunteer %}
 		    
 					<li><a href="mailto:{{ contact.user.email }}" class="operation">&raquo; Contact Event Host</a></li>
@@ -66,6 +76,7 @@
 					<input type=hidden name="session_id" value="{{ volunteer.session_id }}" />
 					<input type=submit title="Volunteer for this event" class="volunteer_button" value="{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}" id="s_volunteer"/>
 				</form></li>
+				
 				{% else %}
 				    <li>You must <a href='/login?redirect={{path}}'>login</a> to signup for this event</li>
 			{% endif %}{% endif %}

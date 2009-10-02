@@ -8,8 +8,13 @@
     <div class="event_operation_block">
         <ul>
             {% if eventvolunteer %}
-                <li><a class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://{{domain}}{{event.url}}. If you would like to join me, please click on the above link and sign-up!">&raquo; Invite your friends via email</a></li>             
-                <li><a class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?">&raquo; Tweet this</a></li>
+			     {% if eventvolunteer.isowner %}
+	                <li><a class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I'm organizing the following event: http://{{domain}}{{event.url}}. If you would like to help out, please click on the above link and sign-up!">&raquo; Invite your friends via email</a></li>             
+	                <li><a class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm organizing http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to help out?">&raquo; Tweet this</a></li>
+                 {% else %}
+                    <li><a class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://{{domain}}{{event.url}}. If you would like to join me, please click on the above link and sign-up!">&raquo; Invite your friends via email</a></li>             
+                    <li><a class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?">&raquo; Tweet this</a></li>
+                 {% endif %}                 
             {% else %}
                 <li><a class="operation" href="mailto:?subject=I'm considering attending '{{event.name}}'!&body=I am thinking about signing up for the following event: http://{{domain}}{{event.url}}. Would anyone like to join me?">&raquo; Invite your friends via email</a></li>             
                 <li><a class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=Thinking about volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?">&raquo; Tweet this</a></li>

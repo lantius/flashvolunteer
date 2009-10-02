@@ -125,6 +125,13 @@ class Event(db.Model):
   def get_endminute(self):
     return self.get_end_repr("%M")
   
+  def get_address(self):
+    return self.address
+
+  def get_google_calendar_date(self):
+    start = self.get_start_repr('%Y%m%dT%H%M00Z')
+    str = '%s/%s'%(start, self.get_end_repr('%Y%m%dT%H%M00Z'))
+    return str
 
   def message_body(self):
       lines = ['You are invited to the event %s.'%self.name]
