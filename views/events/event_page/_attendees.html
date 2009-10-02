@@ -6,18 +6,18 @@
 		<ul>
 			<li class="tallerlistitem" >
 	    
-			  {% if eventvolunteer %}
+			  {% if eventvolunteer and not eventvolunteer.isowner %}
 			      {% if event.inpast %}
 			        You attended! <a href="{{event.url}}/verify">Get a receipt.</a>
 			      {% else %}
-			        {% ifequal event.eventvolunteers.count 1 %}
+			        {% ifequal event.volunteer_count 1 %}
 			          You are signed up for this event!
 			        {% else %}
-			          {{ event.eventvolunteers.count }} volunteers are signed up (including you!)
+			          {{ event.volunteer_count }} volunteers are signed up (including you!)
 	                {% endifequal %}
 			      {% endif %}
 	          {% else %}
-	              {{ event.eventvolunteers.count }} volunteers are signed up
+	              {{ event.volunteer_count }} volunteers are signed up
 	          {% endif %}
 	          
 	          <!--<a>&raquo Invite a friend to this event</a>-->		

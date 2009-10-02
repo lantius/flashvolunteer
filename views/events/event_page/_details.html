@@ -1,25 +1,19 @@
 
 <div id="eventdetails" class="hardmodule">
+    <ul>
+        <li>{{ event.get_startdate_long }}</li>
+        <li>{{ event.get_start_time }} - {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
+    </ul>
 	<ul>
-		<li><span class="label">Date:</span> {{ event.get_startdate_long }}</li>
-		<li><span class="label">Start Time:</span> {{ event.get_start_time }}</li>
-		<li><span class="label">End Time:</span> {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
-		<li><span class="label">Neighborhood:</span> {{ event.neighborhood.name }}</li>
-		<li><span class="label">Coordinator(s):</span> 
-			{% for owner in owners %}
-				<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a>{% if forloop.last %}{%else%}, {%endif%}
-			{% endfor %}</li>
-		<li><span class="label">Address:</span> {{ event.address }}</li>
-		<li><span class="label">Categories:</span> 
-		    {% ifequal event_categories '' %}
-		        None selected
-		    {% else %}
-		        <ul style="padding-left:20px">
+		<li>{{ event.address }} ( <a href={{event.neighborhood.url}}>{{ event.neighborhood.name }}</a> )</li>
+		{% ifnotequal event_categories '' %}
+		    <li>		    
+		        <ul style="padding-top:5px">
 	                {% for ic in event.interestcategories %}
-	                    <a id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a><br/>
+	                    <li style="display:inline"><a id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a>{% if forloop.last %}{%else%},{%endif%}</li>
 	                {% endfor %}
 	            </ul>
-            {% endifequal %}</li>
+            </li>{% endifnotequal %}
     	</ul>
 
 				
@@ -45,7 +39,7 @@
 							</form></li>
 					{% endif %}
 				{% else %}
-		    		<li><a href="mailto:{{ contact.user.email }}" class="operation">&raquo; Contact Event Host</a></li>
+		    		<li><a href="mailto:{{ event.contact_email }}" class="operation">&raquo; Contact Event Host</a></li>
 					{% if not event.inpast %}
 	                    <li><a class="operation" href="http://www.google.com/calendar/event?action=TEMPLATE&text=Volunteering at '{{event.name}}'</a>&dates={{event.get_google_calendar_date}}&location={{event.address}}&details=Visit http://{{domain}}{{event.url}} to manage your participation.<br><br>{{event.description}}&trp=true&sprop= website:http://{{domain}}&sprop=name:Flash Volunteer">
                             &raquo; Add to Google Calendar
@@ -66,7 +60,7 @@
 
 			{% else %}{% if volunteer %}
 		    
-					<li><a href="mailto:{{ contact.user.email }}" class="operation">&raquo; Contact Event Host</a></li>
+					<li><a href="mailto:{{ event.contact_email }}" class="operation">&raquo; Contact Event Host</a></li>
 
 					{% if not event.verified %}
 						<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>

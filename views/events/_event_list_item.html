@@ -6,7 +6,7 @@
 		<li><span class="label">Coordinator:</span> 
 			{% for owner in event.hosts %}
 				{% ifequal forloop.counter 1 %}
-					<a href="{{owner.volunteer.url}}">{{owner.volunteer.get_name}}</a>
+					<a href="{{owner.url}}">{{owner.get_name}}</a>
 				{% else %} 
 					{%ifequal forloop.counter 2 %}
 						(...)

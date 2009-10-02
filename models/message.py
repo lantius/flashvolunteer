@@ -10,8 +10,7 @@ class Message(db.Model):
   sent = db.DateTimeProperty(auto_now_add=True)
   sender = db.ReferenceProperty(Volunteer,
                                 collection_name = 'sent_messages')
-  recipient = db.ReferenceProperty(None,
-                                   collection_name = 'messages')
+  recipients = db.ListProperty(int)
   content = db.TextProperty()
 
   def url(self):

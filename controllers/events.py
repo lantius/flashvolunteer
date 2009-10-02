@@ -246,7 +246,7 @@ class EventsPage(AbstractHandler):
         event.put()
     ###################
         
-    owners = EventVolunteer.gql("WHERE isowner=true AND event = :event", event=event).fetch(limit=100)
+    owners = event.hosts()
     eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
     
     for ep in eventphotos:
@@ -255,25 +255,18 @@ class EventsPage(AbstractHandler):
       else:
         ep.can_edit_now = False
     
-    
-    if len(owners) > 0:
-        event_contact = owners[0].volunteer
-    else:
-        event_contact = None
-    
-    eventvolunteer = ""
+    eventvolunteer = None
     
     attendees_anonymous = []
     attendees = []
     
     if volunteer:
 
-      eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                         volunteer=volunteer, event=event).get() 
-                         
+      eventvolunteer = event.eventvolunteers.filter('volunteer = ', volunteer).get()
+                               
       if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
         # TODO: randomize this...
-        attendees = [ev.volunteer for ev in event.eventvolunteers.fetch(limit = EventsPage.LIMIT)]
+          attendees = list(event.volunteers())[offset:offset+EventsPage.LIMIT]
       else:
           public_attendees = []
           for v in event.volunteers():
@@ -292,7 +285,6 @@ class EventsPage(AbstractHandler):
                         'eventphotos': eventphotos,
                         'event_categories': ', '.join([ic.name for ic in event.interestcategories()]),
                         'owners': owners, 
-                        'contact': event_contact,
                         'volunteer': volunteer, 
                         'attendees': attendees,
                         'attendees_anonymous': attendees_anonymous,

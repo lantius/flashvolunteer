@@ -134,8 +134,8 @@ h3 {
 
 #pagespectitle h1 {
     text-align: left;
-    font-size: 21pt;
-    margin: 10px 20px 20px 0px;
+    font-size: 16pt;
+    margin: 10px 20px 10px 0px;
 }
 
 .softmodule, .hardmodule {
@@ -731,3 +731,20 @@ span#l_login {
 #mtaTwitter ul li.even { background-color: #EDEEFD; }
 #mtaTwitter ul li.first span { font-weight: normal; }
 #mtaTwitter ul li span { font-style: normal; }
+
+#event_promotion_header li {
+    display:inline;
+}
+
+ul#event_promotion_header {
+    margin-top: 7px;
+}
+
+ul#event_promotion_header img{
+    width: 25px;
+}
+
+#event_promotion_header {
+	font-size: small;
+	float:right;
+}

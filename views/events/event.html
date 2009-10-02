@@ -10,7 +10,33 @@ class="current"
 
 
 {% block pagespectitle %}
-<h1>Event: {{event.name}} {% if not event.verified %}<span class="verification_warning_wrapper"><a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a></span>{% endif %}</h1>
+<h1>{{event.name}} 
+    {% if not event.verified %}
+        <span class="verification_warning_wrapper">
+        	 <a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a>
+		 </span>
+    {% endif %}
+	{% if not event.inpast %}
+	<ul id="event_promotion_header">
+		<li>Invite your friends: </li>
+        {% if eventvolunteer %}
+             {% if eventvolunteer.isowner %}
+                <li><a title="email" class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I'm organizing the following event: http://{{domain}}{{event.url}}. If you would like to help out, please click on the above link and sign-up!"><img src="/stylesheets/media/email_icon.gif" /></a></li>             
+                <li><a title="Twitter" class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm organizing http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to help out?"><img src="/stylesheets/media/twitter_icon.jpg" /></a></li>
+             {% else %}
+                <li><a title="email" class="operation" href="mailto:?subject=Join me at {{event.name}}!&body=I just signed up to volunteer at the following event: http://{{domain}}{{event.url}}. If you would like to join me, please click on the above link and sign-up!"><img src="/stylesheets/media/email_icon.gif" /></a></li>             
+                <li><a title="Twiter" class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=I'm volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?"><img src="/stylesheets/media/twitter_icon.jpg" /></li>
+             {% endif %}                 
+        {% else %}
+            <li><a title="email" class="operation" href="mailto:?subject=I'm considering attending '{{event.name}}'!&body=I am thinking about signing up for the following event: http://{{domain}}{{event.url}}. Would anyone like to join me?"><img src="/stylesheets/media/email_icon.gif" /></a></li>             
+            <li><a title="Twitter" class="operation" href="http://twitter.com/home?source=flashvolunteer.org&status=Thinking about volunteering at http://{{domain}}{{event.url}} via @flashvolunteer. Anyone want to join?"><img src="/stylesheets/media/twitter_icon.jpg" /></a></li>
+        {% endif %}
+        
+        <li><a title="Facebook" href="http://www.facebook.com/share.php?u=<url>" onclick="return fbs_click()" target="_blank" class="operation fb_share_link"><img src="/stylesheets/media/facebook_icon.jpg" /></a></li>
+    
+    </ul>	
+	{% endif %}
+</h1>
 {% endblock pagespectitle %}
 
 
@@ -18,26 +44,31 @@ class="current"
 
 <div id="lefthalf">
 	{% include "../events/event_page/_details.html" %}
-	{% include "../events/event_page/_description.html" %}
-	{% include "../events/event_page/_special_instructions.html" %}
-	
+
+    {% include "../events/event_page/_event_hosts.html" %}
+
+    {% if event.inpast and eventvolunteer.isowner %}
+       {% include "../events/event_page/_attendees_past_owner.html" %}
+    {% else %}
+       {% include "../events/event_page/_attendees.html" %}
+    {% endif %}	
+    {% comment %}
+        show photos, and allow to add albums and photos
+    {% endcomment %}
+    {% if event.inpast %}
+       {% include "../events/event_page/_event_photos.html" %}
+    {% else %}
+    {% endif %}
+
 </div>
 
 <div id="righthalf">
+
 	{% include "../events/event_page/_event_map.html" %}
-	{% comment %}
-		show photos, and allow to add albums and photos
-	{% endcomment %}
-	{% if event.inpast %}
-       {% include "../events/event_page/_event_photos.html" %}
-	{% else %}
-	   {% include "../events/event_page/_event_promote.html" %}
-    {% endif %}
-	{% if event.inpast and eventvolunteer.isowner %}
-       {% include "../events/event_page/_attendees_past_owner.html" %}
-    {% else %}
-	   {% include "../events/event_page/_attendees.html" %}
-    {% endif %}
+
+    {% include "../events/event_page/_description.html" %}
+    {% include "../events/event_page/_special_instructions.html" %}
+	
 </div>
 
 
