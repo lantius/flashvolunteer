@@ -1,33 +1,31 @@
-import os, logging
-
+from components.sessions import Session
+from controllers._utils import get_server, get_application
+from controllers.applications.operations import add_applications
+from controllers.abstract_handler import AbstractHandler
+from google.appengine.api import memcache
 from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
-
-from models.volunteer import Volunteer
-from models.neighborhood import Neighborhood
+from models.application import Application
+from models.applicationdomain import ApplicationDomain
 from models.event import Event
 from models.interestcategory import InterestCategory
-from models.application import Application
-
-from components.sessions import Session
-
-import wsgiref.handlers
-
-from controllers.abstract_handler import AbstractHandler
+from models.neighborhood import Neighborhood
+from models.volunteer import Volunteer
+import os, logging
 
 class MigrateDatastore(AbstractHandler):
 
     def get(self):
         
         ## do migration here
-        self.__add_application_data()
+        from controllers.applications.defs import regions
+        add_applications(applications = regions)
         return
     
 ##########################################################################
 ## Various migration methods that may or may not be useful in the future.
 ##########################################################################
 
-    def __add_application_data(self):
+    def __set_default_application_data(self):
         logging.info('MIGRATE: add application data')
         seattle = Application.all().filter('name =', "seattle").get()
         for v in Volunteer.all():
@@ -110,12 +108,3 @@ class MigrateDatastore(AbstractHandler):
                 event = ec.event
             except:
                 ec.delete()
-                
-application = webapp.WSGIApplication([('/admin/migrate', MigrateDatastore)],
-                                      debug=True)
-
-def main():
-    run_wsgi_app(application)                                    
-
-if __name__ == '__main__':
-    main()

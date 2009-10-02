@@ -21,7 +21,6 @@ from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
 from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
-from controllers._helpers import InitializeStore
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage 
 
@@ -36,17 +35,19 @@ from controllers.interest_categories import CategoryPage
 
 from controllers.abstract_handler import AbstractHandler
 
+from controllers._utils import get_server
+
 webapp.template.register_template_library('templatetags.filters')
 
 ################################################################################
 # Timeout page
 class TimeoutPage(AbstractHandler):
-  def get(self):
-    template_values = {}
-    self._add_base_template_values(vals = template_values)
-
-    path = os.path.join(os.path.dirname(__file__), '..', 'views','session_timeout.html')
-    self.response.out.write(template.render(path, template_values))
+    def get(self):
+        template_values = {}
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__), '..', 'views','session_timeout.html')
+        self.response.out.write(template.render(path, template_values))
 
 ################################################################################
 # gae mojo
@@ -63,60 +64,65 @@ class TimeoutPage(AbstractHandler):
 # /events/1?delete=true POST: delete up for an event
 
 def main():
-  init = InitializeStore()
-  init.init()
-  logging.getLogger().setLevel(logging.DEBUG)
-  application = webapp.WSGIApplication(
-        [('/', MainPage),
-         ('/rpx_response', RPXTokenHandler),
-         ('/create', AccountPage),
-         ('/login', AccountPage),
-         ('/dev_login', AccountPage),
-         ('/logout', AccountPage),
-          ('/delete', SettingsPage),
-         ('/profile', ProfilePage),
-         ('/settings', SettingsPage), #handles posts as well
-         ('/settings/avatar', VolunteerAvatar),
-         ('/events/(\d+)/volunteer', VolunteerForEvent),
-         ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
-#         ('/events/(\d+)/contact_volunteers', Event)
-         ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
-         ('/events/(\d+)/verify', VerifyEventAttendance),
-         ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
-         ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),
-
-         ('/events/past/volunteer/(\d+)/(\d+)', PaginatedVolunteerCompletedPage),    
-         ('/events/past/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodCompletedPage),
-         ('/events/past/category/(\d+)/(\d+)', PaginatedCategoryCompletedPage),
-              
-         ('/events/hosted/volunteer/(\d+)/(\d+)', PaginatedVolunteerHostedPage),
-         ('/events/upcoming/volunteer/(\d+)/(\d+)', PaginatedVolunteerUpcomingPage),
-         ('/events/upcoming/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodUpcomingPage),
-         ('/events/upcoming/category/(\d+)/(\d+)', PaginatedCategoryUpcomingPage),         
-         ('/events/upcoming/(\d+)', PaginatedUpcomingPage),
-         ('/events/recommended/(\d+)', PaginatedRecommendedPage),
-         
-         ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
-         ('/neighborhoods/(\d+)/volunteers_work/(\d+)', PaginatedNeighborhoodVolunteerWorkPage),
-         ('/neighborhoods/(\d+)/volunteers_live/(\d+)', PaginatedNeighborhoodVolunteerHomePage),
-         ('/neighborhoods(|)', NeighborhoodsPage),     
-         ('/team', FriendsPage),
-         ('/team/(\d+)', PaginatedTeamPage),
-         ('/volunteers/(\d+)/follow', FollowVolunteer),
-         ('/volunteers/(\d+)/avatar', VolunteerAvatar),
-         ('/volunteers(|/\d+|/search)', VolunteersPage),
-         ('/volunteers/(\d+)/team/(\d+)', PaginatedVolunteerTeam),
-         ('/category/(\d+)', CategoryPage),
-         ('/category/(\d+)/volunteers/(\d+)', PaginatedVolunteerCategoryPage),
-         ('/category(|)', CategoryPage),
-         ('/static/(\w+)', StaticPage),
-         ('/timeout', TimeoutPage),
-        ],
-        debug=True)
-  wsgiref.handlers.CGIHandler().run(application)
+    if get_server() == 0:
+        from models.application import Application
+        if Application.all().count() == 0:
+            from controllers.applications.operations import add_applications, add_categories
+            add_applications()
+            add_categories()
+      
+    logging.getLogger().setLevel(logging.DEBUG)
+    application = webapp.WSGIApplication(
+          [('/', MainPage),
+           ('/rpx_response', RPXTokenHandler),
+           ('/create', AccountPage),
+           ('/login', AccountPage),
+           ('/dev_login', AccountPage),
+           ('/logout', AccountPage),
+            ('/delete', SettingsPage),
+           ('/profile', ProfilePage),
+           ('/settings', SettingsPage), #handles posts as well
+           ('/settings/avatar', VolunteerAvatar),
+           ('/events/(\d+)/volunteer', VolunteerForEvent),
+           ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
+    #         ('/events/(\d+)/contact_volunteers', Event)
+           ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
+           ('/events/(\d+)/verify', VerifyEventAttendance),
+           ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
+           ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),
+    
+           ('/events/past/volunteer/(\d+)/(\d+)', PaginatedVolunteerCompletedPage),    
+           ('/events/past/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodCompletedPage),
+           ('/events/past/category/(\d+)/(\d+)', PaginatedCategoryCompletedPage),
+                
+           ('/events/hosted/volunteer/(\d+)/(\d+)', PaginatedVolunteerHostedPage),
+           ('/events/upcoming/volunteer/(\d+)/(\d+)', PaginatedVolunteerUpcomingPage),
+           ('/events/upcoming/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodUpcomingPage),
+           ('/events/upcoming/category/(\d+)/(\d+)', PaginatedCategoryUpcomingPage),         
+           ('/events/upcoming/(\d+)', PaginatedUpcomingPage),
+           ('/events/recommended/(\d+)', PaginatedRecommendedPage),
+           
+           ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
+           ('/neighborhoods/(\d+)/volunteers_work/(\d+)', PaginatedNeighborhoodVolunteerWorkPage),
+           ('/neighborhoods/(\d+)/volunteers_live/(\d+)', PaginatedNeighborhoodVolunteerHomePage),
+           ('/neighborhoods(|)', NeighborhoodsPage),     
+           ('/team', FriendsPage),
+           ('/team/(\d+)', PaginatedTeamPage),
+           ('/volunteers/(\d+)/follow', FollowVolunteer),
+           ('/volunteers/(\d+)/avatar', VolunteerAvatar),
+           ('/volunteers(|/\d+|/search)', VolunteersPage),
+           ('/volunteers/(\d+)/team/(\d+)', PaginatedVolunteerTeam),
+           ('/category/(\d+)', CategoryPage),
+           ('/category/(\d+)/volunteers/(\d+)', PaginatedVolunteerCategoryPage),
+           ('/category(|)', CategoryPage),
+           ('/static/(\w+)', StaticPage),
+           ('/timeout', TimeoutPage),
+          ],
+          debug=True)
+    wsgiref.handlers.CGIHandler().run(application)
 
 if __name__ == "__main__":
-  main()
+    main()
   
   
 

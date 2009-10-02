@@ -6,12 +6,8 @@ from models.eventvolunteer import EventVolunteer
 from models.eventinterestcategory import EventInterestCategory
 from models.volunteer import Volunteer
 from models.event import Event
-from models.application import Application
-from models.applicationdomain import ApplicationDomain
 
-from google.appengine.api import memcache
-
-from controllers._utils import get_server, get_application
+from controllers._utils import get_application
 
 class SessionID():
   #TODO: Optimize random string generation
@@ -44,62 +40,3 @@ class InterestCategoryHelper():
           interestcategory.selected = True
       interestcategories.append(interestcategory)
     return interestcategories
-
-
-APPLICATIONS = {
-   'seattle': ['','seattle'],
-   'los-angeles': ['la', 'los-angeles'],
-   'tacoma': ['tacoma']
-}
-    
-class InitializeStore():
-      
-  def init(self):
-    if not self.is_initialized():
-      self.initialize_store()
-
-  def initialize_store(self):
-    
-    server = get_server()
-    if server == 0:
-        from gui_integration_tests.test_settings import host
-        domains = [host]
-        
-    elif server == 1:
-        domains = ['flashvolunteer-dev.appspot.com', 'development.flashvolunteer.org']
-    else:
-        domains = ['flashvolunteer.org']
-
-    applications = {}
-    
-    for application, subdomains in APPLICATIONS.items():
-        if Application().all().filter('name =', application).count() > 0: continue
-        
-        applications[application] = []
-        for d in domains:
-            for sd in subdomains:
-                if sd == '':
-                    applications[application].append(d)
-                else: 
-                    applications[application].append('%s.%s'%(sd,d))
-    
-    if Application.all().count() == 0:
-        for app, qualified_domains in applications.items():
-            a = Application(name = app)
-            a.put()
-            for domain in qualified_domains:
-                d = ApplicationDomain(domain = domain, application = a)
-                d.put()
-
-    if InterestCategory.all().count() == 0:
-        categories = ("Animals","Arts & Culture","Children & Youth", "Education & Literacy", 
-                      "Environment", "Gay, Lesbian, Bi, & Transgender", "Homeless & Housing",
-                      "Hunger", "Justice & Legal", "Senior Citizens")
-        for category_name in categories:
-          c = InterestCategory(name = category_name)
-          c.put()  
-
-  def is_initialized(self):
-    return Application().all().count() == len(APPLICATIONS.keys())
-
-
