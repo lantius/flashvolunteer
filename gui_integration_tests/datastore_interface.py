@@ -23,7 +23,6 @@ from models.volunteerinterestcategory import VolunteerInterestCategory
 from models.interestcategory import InterestCategory
 
 from controllers._utils import get_application
-from controllers._helpers import InitializeStore
 
 import datetime, copy
 
@@ -40,7 +39,6 @@ def create_environment(name, session_id):
     exec('from gui_integration_tests.test_environments.%s import my_env'%name)
     
     os.environ['HTTP_HOST'] = host
-    InitializeStore().init()
     application = get_application()
 
     (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
