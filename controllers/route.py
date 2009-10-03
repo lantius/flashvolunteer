@@ -68,7 +68,8 @@ def main():
         from models.application import Application
         if Application.all().count() == 0:
             from controllers.applications.operations import add_applications, add_categories
-            add_applications()
+            from controllers.applications.defs import regions
+            add_applications(applications=regions)
             add_categories()
       
     logging.getLogger().setLevel(logging.DEBUG)

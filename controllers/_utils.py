@@ -3,7 +3,6 @@ from google.appengine.api import memcache
 
 from models.applicationdomain import ApplicationDomain
 
-
 def is_debugging():
     """Detects if app is running in production or not.
 
@@ -62,11 +61,23 @@ def get_google_maps_api_key():
     elif server == 2: 
         return 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBT8o8BW0NprhG7ZQBw6sHycsndbhRS7hhGpRgOy2Kssletcr3BQkAy7jg'
     
-    
-def send_mail(sender, to, subject, body):
-    from google.appengine.api import mail
 
-    mail.send_mail(sender=sender,
-                   to=to,
-                   subject=subject,
-                   body=body)
+from models.message import Message
+from components.time_zones import now
+
+def send_message(sender, to, subject, body, type, trigger = None, referral_url = None):
+    
+    if trigger is None:
+        trigger = now()
+    
+    message = Message(
+      subject = subject,
+      body = body,
+      recipients = [u.key().id() for u in to],
+      sender = sender.key().id(),
+      #referral_url = referral_url,
+      trigger = trigger,
+      type = type
+    )
+
+    message.put()

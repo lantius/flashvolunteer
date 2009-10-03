@@ -2,10 +2,6 @@ import random
 
 from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
-from models.eventvolunteer import EventVolunteer
-from models.eventinterestcategory import EventInterestCategory
-from models.volunteer import Volunteer
-from models.event import Event
 
 from controllers._utils import get_application
 

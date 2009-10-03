@@ -4,12 +4,7 @@ from controllers.applications.operations import add_applications
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache, mail
 from google.appengine.ext import webapp
-from models.application import Application
-from models.applicationdomain import ApplicationDomain
-from models.event import Event
-from models.interestcategory import InterestCategory
-from models.neighborhood import Neighborhood
-from models.volunteer import Volunteer
+
 import os, logging
 
 from models.message import Message
