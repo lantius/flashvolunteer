@@ -36,9 +36,13 @@ div#container{
             }
             div#volunteerwelcome {
                 position: relative;
-                text-align: right;
+                float:right;
+				text-align: right;
                 top: 20px;
             }
+			div#volavatar {
+				float:right;
+			}
     div#navtabs { 
         width: 100%;
         height: 30px;

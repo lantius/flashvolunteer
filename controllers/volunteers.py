@@ -141,34 +141,52 @@ class VolunteersPage(AbstractHandler):
 
 ################################################################################
 # FollowVolunteer
+
+from components.message_text import type2
+from controllers._utils import send_message
 class FollowVolunteer(AbstractHandler):
 
-  ################################################################################
-  # POST
-  def post(self, url_data):
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
-    except:
-      return
-
-    to_follow = Volunteer.get_by_id(int(url_data))
-
-    if to_follow:
-      volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
-      volunteer=to_follow, follower=volunteer).get()
-      if self.request.get('delete') and self.request.get('delete') == "true":
-        if volunteerfollower:
-          volunteerfollower.delete()
-      else:
-        if not volunteerfollower:
-          volunteerfollower = VolunteerFollower(volunteer=to_follow, follower=volunteer)
-          volunteerfollower.put()
-
-    #self.redirect('/volunteers/' + url_data)
-    self.redirect(self.request.referrer)
-
-    return
-
+    ################################################################################
+    # POST
+    def post(self, url_data):
+        try:
+            volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+        except:
+            return
+        
+        to_follow = Volunteer.get_by_id(int(url_data))
+        
+        if to_follow:
+            volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
+            volunteer=to_follow, follower=volunteer).get()
+            if self.request.get('delete') and self.request.get('delete') == "true":
+                if volunteerfollower:
+                    volunteerfollower.delete()
+            else:
+                if not volunteerfollower:
+                    volunteerfollower = VolunteerFollower(volunteer=to_follow, follower=volunteer)
+                    volunteerfollower.put()
+                    params = self.get_message_params(adder = volunteer, volunteer = to_follow)
+                    subject = type2.subject%params
+                    body = type2.body%params
+                    send_message(sender = volunteer, 
+                        to = [to_follow], 
+                        subject = subject, 
+                        body = body, 
+                        type = 2)   
+        
+        #self.redirect('/volunteers/' + url_data)
+        self.redirect(self.request.referrer)
+        
+        return
+    
+    def get_message_params(self,adder, volunteer):
+        return {
+            'adder_name': adder.name,
+            'vol_name': volunteer.name,
+            'adder_url': '%s%s'%(self._get_base_url(), adder.url()),
+            'vol_team_url': '%s%s'%(self._get_base_url(), volunteer.url()) 
+        }
 
 ################################################################################
 # VolunteerAvatar

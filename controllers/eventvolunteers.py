@@ -63,12 +63,9 @@ class VolunteerForEvent(AbstractHandler):
         return
 
     def get_message_text(self, event, volunteer, sign_up = True):
-        #TODO email multiple owners
-        owners = [ev.volunteer for ev in EventVolunteer.gql("WHERE isowner = true AND event = :event" ,
+        to = [ev.volunteer for ev in EventVolunteer.gql("WHERE isowner = true AND event = :event" ,
                           event=event).fetch(limit=10)]
                           
-        to = owners
-        
         if sign_up:
             msg = type1_vol
         else:
@@ -76,8 +73,8 @@ class VolunteerForEvent(AbstractHandler):
 
         params = {
             'event_name': event.name.strip(),
-            'owner_name': ', '.join([owner.get_name().strip() for owner in owners]),
-            'event_url': 'http://%s%s'%(get_domain(), event.url()),
+            'owner_name': ', '.join([owner.get_name().strip() for owner in to]),
+            'event_url': '%s%s'%(self._get_base_url(), event.url()),
             'vol_count': EventVolunteer.gql("WHERE isowner = false AND event = :event" ,event=event).count(),
             'vol_name': volunteer.get_name()
         }

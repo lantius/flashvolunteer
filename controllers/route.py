@@ -19,7 +19,8 @@ from controllers.accounts import AccountPage, RPXTokenHandler
 
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
-from controllers.eventmessages import EventMessagesPage
+from controllers.messages import Mailbox
+#from controllers.eventmessages import EventMessagesPage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage 
@@ -82,12 +83,13 @@ def main():
            ('/logout', AccountPage),
             ('/delete', SettingsPage),
            ('/profile', ProfilePage),
+           ('/messages(|/\d+)', Mailbox),
            ('/settings', SettingsPage), #handles posts as well
            ('/settings/avatar', VolunteerAvatar),
            ('/events/(\d+)/volunteer', VolunteerForEvent),
            ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
     #         ('/events/(\d+)/contact_volunteers', Event)
-           ('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
+           #('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
            ('/events/(\d+)/verify', VerifyEventAttendance),
            ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
            ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),

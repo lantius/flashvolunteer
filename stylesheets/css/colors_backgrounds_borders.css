@@ -146,3 +146,11 @@ div#badges {
 #footer #static_nav a:hover {
     background-color: #E6F4F4;
 }
+
+tr.message {
+    border-bottom: 3px solid #E6E6E6;
+}
+
+tr.message.unread {
+	background-color: #F7F7F7;
+}

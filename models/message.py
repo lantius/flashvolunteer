@@ -4,7 +4,7 @@ from google.appengine.api import mail
 from models.volunteer import Volunteer
 from models.organization import Organization
 
-def get_recipient(id):
+def get_user(id):
     recipient = Volunteer.get_by_id(id) 
     if not recipient:
         recipient = Organization.get_by_id(id)
@@ -38,7 +38,10 @@ class Message(db.Model):
     referral_url = db.LinkProperty(default = None)
     
     type = db.IntegerProperty(default = None)
-
+    
+    read = db.BooleanProperty(default = False)
+    autogen = db.BooleanProperty(default = True)
+    
     def send(self):
         if self.flagged and not self.verified: return
         
@@ -55,9 +58,15 @@ class Message(db.Model):
         self.put()
     
     def url(self):
-        return self.recipient.url() + '/messages/' + str(self.key().id())
+        return '/messages/' + str(self.key().id())
             
     def time_sent(self):
-        return self.trigger.strftime("%m/%d/%Y %I:%M %p")
-
+        return self.trigger.strftime("%m/%d/%Y %H:%M")
+    
+    def get_sender(self):
+        #TODO: maybe memcache this
+        sender = get_user(self.sender) 
+        return sender
+    
+        
 

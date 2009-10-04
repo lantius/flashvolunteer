@@ -7,7 +7,7 @@ from models.organization import *
 class EventOrganization(db.Model):
   event = db.ReferenceProperty(Event,
                                required = True,
-                               collection_name = 'eventorgaizations')
+                               collection_name = 'eventorganizations')
   organization = db.ReferenceProperty(Organization,
                                     required = True,
                                     collection_name = 'eventorganizations')

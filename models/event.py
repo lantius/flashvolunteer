@@ -128,12 +128,6 @@ class Event(db.Model):
         str = '%s/%s' % (start, self.get_end_repr('%Y%m%dT%H%M00Z'))
         return str
     
-    def message_body(self):
-        lines = ['You are invited to the event %s.' % self.name]
-        lines.append('To sign up for the event, please visit http://www.flashvolunteer.org/events/%i.' % self.key().id())
-        lines.append('Thanks!')
-        return "%0A%0A".join(lines)
-    
     def url(self):
         if self.is_saved():
             return '/events/' + str(self.key().id())

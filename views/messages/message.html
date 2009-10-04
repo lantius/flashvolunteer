@@ -1,0 +1,46 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Flash Volunteer
+{% endblock title %}
+
+{% block mailboxactive %}class="current"{% endblock mailboxactive %}
+
+{% block pagespectitle %}
+{% endblock %}
+
+{% block content %}
+
+<div id="middle100">
+    <div id="mailbox" class="softmodule">
+        <div class="messages">
+            <table>
+                
+                    <tr class="message {% if message.read %}read{%else%}unread{%endif%}">
+                        <td><div class="volunteer_summary_pic">
+                            <a href="{{ message.get_sender.url }}" >
+                            <img class="smallavatar" src="
+                            {% if message.get_sender.avatar %}
+                                {{ message.get_sender.url }}/avatar
+                            {% else %}
+                                /stylesheets/media/default-profile-pic-small.png
+                            {% endif %}
+                            " alt="{{ message.get_sender.get_name }}" /></a>
+                        </div></td>
+                        <td class="minfo">
+                            {% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
+                            <div><a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a></div>
+                            <div class="subtext">{{ message.time_sent }}</div>
+                        </td>
+                        <td class="msubject">
+                            <div><a href="{{message.url}}">{{ message.subject }}</a></div>
+                            <div class="subtext">{{ message.body}}</div>
+                        </td>
+                    </tr>
+                    
+            </table>
+        </div>
+    </div><!--end eventmessages-->
+</div><!--end middle100-->
+
+
+{% endblock content %}

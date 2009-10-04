@@ -18,7 +18,7 @@ from controllers.abstract_handler import AbstractHandler
 ################################################################################
 # ProfilePage
 class ProfilePage(AbstractHandler):
-  LIMIT = 3 
+  LIMIT = 2
   def get(self):
     try:
       volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/login')

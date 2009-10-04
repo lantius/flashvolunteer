@@ -40,7 +40,7 @@ To manage your event, visit %(event_url)s.
     
 Please let us know if you have any questions or if you would prefer not to get emails like this.
     
-Thanks,
+Thanks!
 The Flash Volunteer Team
 """
 
@@ -51,17 +51,17 @@ The Flash Volunteer Team
 
 type2 = msg(
 
-    subject = '%(adder_name) has added you to their Flash Team',
+    subject = '%(adder_name)s has added you to their Flash Team',
     body = """
 Hi %(vol_name)s,
 
 %(adder_name)s has added you to their Flash Team. 
 
-You can do the same (if you haven't already) by visiting %(adder_url)s or by clicking the (+) button under their name in your %(vol_team_url)s.
+You can do the same (if you haven't already) by visiting %(adder_url)s or by clicking the (+) button under their name in your People page (%(vol_team_url)s).
     
 Please let us know if you have any questions or if you would prefer not to get emails like this.
 
-Thanks,
+Thanks!
 The Flash Volunteer Team
 """
 )

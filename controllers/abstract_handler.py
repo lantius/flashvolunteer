@@ -19,10 +19,13 @@ import urllib
 ################################################################################
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
+    def _get_base_url(self):
+        return 'http://' + get_domain(keep_www = True)
+    
     def _add_base_template_values(self, vals):
         
         vals.update( {
-            'domain': get_domain(keep_www = True),
+            'domain': self._get_base_url(),
             'path': self.request.path,
             'application_alias': get_application().get_alias()
         })

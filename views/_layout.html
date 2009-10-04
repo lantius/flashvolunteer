@@ -26,6 +26,18 @@
 				<div id="logo" class="fl"><a href="/"><img src="/stylesheets/media/logo.png" alt="Flash Volunteer Logo"/></a></div>
 				<div id="beta" class="fl"><a href="/static/help#beta"><img src="/stylesheets/media/beta.png" alt="Flash Volunteer is in Beta"/></a></div>		
 				{%if volunteer %}
+				    <div id="volavatar">
+		    	        <div class="volunteer_summary_pic">
+				            <a href="{{ volunteer.url }}" >
+				            <img class="smallavatar" src="
+				            {% if volunteer.avatar %}
+				                {{ volunteer.url }}/avatar
+				            {% else %}
+				                /stylesheets/media/default-profile-pic-small.png
+				            {% endif %}
+				            " alt="{{ volunteer.get_name }}" /></a>
+				        </div>
+				    </div>
 					<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
 				{% else %}
 					<div id="volunteerwelcome"><a href="/login?redirect={{path}}" id="l_logout">Log in or signup</a></div>			
@@ -38,7 +50,8 @@
 		<ul>
 			<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
             {% if volunteer %}
-                <li id="profilelink"><a href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>           
+                <li id="profilelink"><a href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
+				<li id="mailboxlink"><a href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX</a></li>            
             {% endif %}                
 			<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
 			<li id="neighborhoodslink"><a href="/n
