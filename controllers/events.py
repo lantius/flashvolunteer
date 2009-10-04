@@ -478,7 +478,11 @@ class EventsPage(AbstractHandler):
      
   def do_search(self, params):
     application = get_application()
-    events_query = application.events
+    events_query = application.events.filter(
+        'date >= ', now()).filter(
+        'hidden = ', False).order(
+        'date')
+        
     neighborhood = None
     interestcategory = None
     ur = None
@@ -507,23 +511,19 @@ class EventsPage(AbstractHandler):
     events = events_query.fetch(limit = 100)
     
     if ur and ll:
-      filtered_events = []
-      for event in events:
-        if event.location.lon > ll.lon and event.location.lat > ll.lat and event.location.lon < ur.lon and event.location.lat < ur.lat:
-           filtered_events.append(event)
-      events = filtered_events
+      events = [event for event in events if 
+                         event.location.lon > ll.lon 
+                     and event.location.lat > ll.lat 
+                     and event.location.lon < ur.lon 
+                     and event.location.lat < ur.lat]
     
     
     if 'interestcategory' in params and params['interestcategory'] and params['interestcategory'] != 'default':
       try:
         catid = int(params['interestcategory'])
         interestcategory = InterestCategory.get_by_id(catid)
-        filtered_events = []
-        for event in events:
-          cats = [ic.interestcategory.key().id() for ic in event.eventinterestcategories]
-          if catid in cats:
-            filtered_events.append(event)
-        events = filtered_events
+        events = [event for event in events if 
+                    catid in [ic.interestcategory.key().id() for ic in event.eventinterestcategories]]
       except:
         pass
                 

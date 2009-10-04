@@ -2,12 +2,12 @@
 {% for event in events %}
     {"id":"{{event.key.id}}",
      "name":"{{event.name|escape}}",
-     "neighborhood":"{{event.neighborhood.name}}",
+     "neighborhood":"{{event.key.id}}",
      "date":"{{event.get_startdatetime}}",
      "enddate":"{{event.get_enddatetime}}",
      "address":"{{event.address|escape}}"{% if event.location.lat %}, 
-     "lat":{{event.location.lat}} {% endif %}{% if event.location.lon %}, 
-     "long":{{event.location.lon}}{% endif %}
+     "lat":"{{event.location.lat}}" {% endif %}{% if event.location.lon %}, 
+     "long":"{{event.location.lon}}"{% endif %}
     }{% if forloop.last %}{%else%},{%endif%}
 {% endfor %}
 ]}
