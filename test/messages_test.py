@@ -1,6 +1,6 @@
 import unittest
 
-from models.message import *
+from models.messages.message import *
 from models.event import *
 from models.volunteer import *
 

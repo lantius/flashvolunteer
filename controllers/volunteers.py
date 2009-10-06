@@ -144,6 +144,8 @@ class VolunteersPage(AbstractHandler):
 
 from components.message_text import type2
 from controllers._utils import send_message
+from models.messages import MessageType
+
 class FollowVolunteer(AbstractHandler):
 
     ################################################################################
@@ -173,7 +175,7 @@ class FollowVolunteer(AbstractHandler):
                         to = [to_follow], 
                         subject = subject, 
                         body = body, 
-                        type = 2)   
+                        type = MessageType.all().filter('name =', 'added_to_team').get())   
         
         #self.redirect('/volunteers/' + url_data)
         self.redirect(self.request.referrer)

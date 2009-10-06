@@ -62,22 +62,30 @@ def get_google_maps_api_key():
         return 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBT8o8BW0NprhG7ZQBw6sHycsndbhRS7hhGpRgOy2Kssletcr3BQkAy7jg'
     
 
-from models.message import Message
+from models.messages.message import Message
 from components.time_zones import now
+from controllers.admin.message_dispatcher import check_messages
 
-def send_message(sender, to, subject, body, type, trigger = None, referral_url = None):
+def send_message(to, subject, body, type, sender = None, trigger = None, referral_url = None, immediate=False):
     
     if trigger is None:
         trigger = now()
     
+    if sender:
+        sender_id = sender.key().id()
+    else:
+        sender_id = -1
+        
     message = Message(
       subject = subject,
       body = body,
       recipients = [u.key().id() for u in to],
-      sender = sender.key().id(),
+      sender = sender_id,
       #referral_url = referral_url,
       trigger = trigger,
       type = type
     )
 
     message.put()
+    if immediate:
+        check_messages()

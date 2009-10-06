@@ -436,6 +436,10 @@ th {
 	width: 100%;
 }
 
+tr.message {
+	margin-bottom:10px;
+	
+}
 /*
 ======================================================
 >>Miscellaneous Styles
@@ -779,6 +783,10 @@ ul.event_header img{
 	font-size: 65%;
 }
 
-.message .minfo {
-	min-width: 100px;
+.message td.minfo {
+	min-width: 105px;
 }
+
+.messages td.msubject{
+    padding: 5px 20px 0px 0px;	
+}	

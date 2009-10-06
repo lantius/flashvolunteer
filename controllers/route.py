@@ -1,6 +1,7 @@
 import os
 import wsgiref.handlers
 import cgi, logging
+
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
@@ -72,6 +73,10 @@ def main():
             from controllers.applications.defs import regions
             add_applications(applications=regions)
             add_categories()
+        from models.messages import MessageType
+        if MessageType.all().count() == 0:
+            from controllers.applications.operations import add_messaging
+            add_messaging()
       
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(

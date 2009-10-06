@@ -1,4 +1,5 @@
 import os, string
+from datetime import datetime
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
@@ -6,14 +7,16 @@ from google.appengine.ext import webapp
 from controllers._auth import Authorize
 
 from models.event import Event
-from models.message import Message
+from models.messages.message import Message
 
 from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging
+from google.appengine.ext.db import Key
 
 ################################################################################
 # Messages page
 ################################################################################
+PAGELIMIT = 10
 class Mailbox(AbstractHandler):
 
     ################################################################################
@@ -59,6 +62,9 @@ class Mailbox(AbstractHandler):
           }
         self._add_base_template_values(vals = template_values)
         
+        message.read = True
+        message.put()
+        
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'message.html')
         self.response.out.write(template.render(path, template_values, debug=is_debugging()))        
         
@@ -89,8 +95,34 @@ class Mailbox(AbstractHandler):
         except:
             return
         
+        messages = volunteer.get_messages().filter('show_in_mailbox =', volunteer.key().id())
+        
+        bookmark = self.request.get("bookmark", None)
+        if bookmark:
+            bookmark = datetime.strptime(bookmark, '%Y-%m-%d %H:%M:%S')            
+            messages = messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
+        else:
+            messages = messages.fetch(PAGELIMIT+1)
+            
+        if len(messages) == PAGELIMIT+1:
+            next = messages[-1].trigger
+            if next.second != 59:
+                #this is because the comparison operator is working against a 
+                #reverse sorted list & datetime.isotime returns a microsecond
+                #in its str rep which cannot be recreated through strftime
+                next.replace(second=next.second+1)
+            else:
+                next.replace(minute=next.minute+1, second = 0)
+                
+            next = next.strftime('%Y-%m-%d %H:%M:%S')
+            messages = messages[:PAGELIMIT]
+        else:
+            next = None
+                    
         template_values = {
             'volunteer': volunteer,
+            'messages': messages,
+            'next': next,
           }
         self._add_base_template_values(vals = template_values)
         

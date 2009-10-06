@@ -1,6 +1,6 @@
 from components.sessions import Session
 from controllers._utils import get_server, get_application
-from controllers.applications.operations import add_applications
+from controllers.applications.operations import add_applications, add_messaging
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -17,8 +17,9 @@ class MigrateDatastore(AbstractHandler):
     def get(self):
         
         ## do migration here
-        from controllers.applications.defs import regions
-        add_applications(applications = regions)
+#        from controllers.applications.defs import regions
+#        add_applications(applications = regions)
+        add_messaging()
         return
     
 ##########################################################################

@@ -30,7 +30,7 @@ type1_unvol = msg(
     body="""
 Hi %(owner_name)s,
 
-Someone decided they could not help out at \"%(event_name)s\". You now have %(vol_count)s volunteer(s) signed up. 
+%(vol_name)s is unable to help out at \"%(event_name)s\". You now have %(vol_count)s volunteer(s) signed up. 
 """
 )
 
@@ -38,10 +38,7 @@ for type1 in (type1_vol, type1_unvol):
     type1.body += """
 To manage your event, visit %(event_url)s. 
     
-Please let us know if you have any questions or if you would prefer not to get emails like this.
-    
-Thanks!
-The Flash Volunteer Team
+Please let us know if you have any questions.
 """
 
 
@@ -58,10 +55,5 @@ Hi %(vol_name)s,
 %(adder_name)s has added you to their Flash Team. 
 
 You can do the same (if you haven't already) by visiting %(adder_url)s or by clicking the (+) button under their name in your People page (%(vol_team_url)s).
-    
-Please let us know if you have any questions or if you would prefer not to get emails like this.
-
-Thanks!
-The Flash Volunteer Team
 """
 )

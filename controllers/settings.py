@@ -11,12 +11,14 @@ from models.volunteer import Volunteer
 from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
 from models.volunteerinterestcategory import VolunteerInterestCategory
+from models.messages import MessageType, MessagePropagationType
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from components.sessions import Session
 
 from controllers.abstract_handler import AbstractHandler
 
+from controllers._utils import send_message
 
 ################################################################################
 # Settings page
@@ -87,6 +89,8 @@ class SettingsPage(AbstractHandler):
         'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
         'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
+        'message_propagation_types' : MessagePropagationType.all(),
+        'message_types': MessageType.all().filter('in_settings =', 'True')
       }
     self._add_base_template_values(vals = template_values)
     
@@ -131,6 +135,21 @@ class SettingsPage(AbstractHandler):
       return False
       
     volunteer.put()
+    send_message(to = [volunteer], 
+                 subject = 'Welcome to Flash Volunteer!', 
+                 body = """Hello %(name)s. 
+
+We hope that you will be able to use this site to easily find and/or coordinate volunteer opportunities in the most timely and convenient fashion as possible.
+
+Get started by filling out your profile and checking out the listed events!
+
+If you have any questions, send an email to info@flashvolunteer.org.
+
+Thanks!
+The Flash Volunteer team    
+"""%{'name': volunteer.name}, type=MessageType.all().filter('name =', 'welcome').get(), immediate = True)
+    
+    
     return True
     
   ################################################################################

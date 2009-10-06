@@ -15,21 +15,26 @@ Flash Volunteer
 	<div id="mailbox" class="softmodule">
 	    <div class="messages">
 	        <table>
-                {% for m in volunteer.get_messages %}
+                {% for m in messages %}
                     <tr class="message {% if m.read %}read{%else%}unread{%endif%}">
             	        <td><div class="volunteer_summary_pic">
-				            <a href="{{ m.get_sender.url }}" >
+				            {%if m.get_sender %}<a href="{{ m.get_sender.url }}" >
 				            <img class="smallavatar" src="
 				            {% if m.get_sender.avatar %}
 				                {{ m.get_sender.url }}/avatar
 				            {% else %}
 				                /stylesheets/media/default-profile-pic-small.png
 				            {% endif %}
-				            " alt="{{ m.get_sender.get_name }}" /></a>
+				            " alt="{{ m.get_sender.get_name }}" /></a>{%endif%}
 				        </div></td>
                         <td class="minfo">
                         	{% if m.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
-                        	<div><a href="{{ m.get_sender.url }}">{{ m.get_sender.name }}</a></div>
+                        	<div>{% if m.get_sender %}
+							         <a href="{{ m.get_sender.url }}">{{ m.get_sender.name }}</a>
+								 {% else %}
+								    The Flash Volunteer team
+								 {%endif%}
+						      </div>
 							<div class="subtext">{{ m.time_sent }}</div>
 						</td>
                         <td class="msubject">
@@ -42,6 +47,15 @@ Flash Volunteer
             </table>
 	    </div>
 	</div><!--end eventmessages-->
+	
+	<div class="pagination">
+	    {% if next %} 
+	        <a href="{{domain}}/messages?bookmark={{next}}">  &raquo; next page</a>
+	    {% endif %}
+	</div>
+
+	
+	
 </div><!--end middle100-->
 
 

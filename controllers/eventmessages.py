@@ -5,7 +5,7 @@ from google.appengine.ext import webapp
 
 from models.volunteer import Volunteer
 from models.event import Event
-from models.message import Message
+from models.messages.message import Message
 from models.eventvolunteer import EventVolunteer
 
 from controllers._auth import Authorize

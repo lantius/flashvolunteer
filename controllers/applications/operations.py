@@ -1,10 +1,11 @@
 from models.application import Application
 from models.applicationdomain import ApplicationDomain
-from models.event import Event
+
 from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
-from models.volunteer import Volunteer
-    
+from models.messages.message_type import MessageType
+from models.messages.message_propagation_type import MessagePropagationType
+
 from controllers._utils import get_server, get_application
 
 import os
@@ -17,8 +18,49 @@ def add_categories():
                   "Environment", "Gay, Lesbian, Bi, & Transgender", "Homeless & Housing",
                   "Hunger", "Justice & Legal", "Senior Citizens")
     for category_name in categories:
-      c = InterestCategory(name = category_name)
-      c.put()  
+        if InterestCategory.all().filter('name =', category_name).count() > 0: 
+            continue
+        c = InterestCategory(name = category_name)
+        c.put() 
+      
+def add_messaging(): 
+    message_props = (
+        ('mailbox', 'Flash Mailbox'),
+        ('email', 'Email')
+    )
+
+    mps = {}
+    for mp, prompt in message_props: 
+        if MessagePropagationType.all().filter('name =', mp).count() > 0: 
+            mpt = MessagePropagationType.all().filter('name =', mp).get()       
+        else:
+            mpt = MessagePropagationType(name = mp, prompt = prompt)
+            mpt.put()
+        mps[mp] = mpt
+        
+    message_types = (
+        (1, 'event_coord', 'When someone signs up for an event you coordinate', ['mailbox','email']),
+        (2, 'added_to_team', 'When someone adds you to their team', ['mailbox','email']),
+        (3, 'welcome', 'When you create an account', ['mailbox'])
+    )
+
+    for order, name, prompt, mpts in message_types:
+        defaults = [mps[mp].key().id() for mp in mpts]
+        if MessageType.all().filter('name =', name).count() > 0:         
+            mt = MessageType.all().filter('name =', name).get()
+            if mt.prompt != prompt or defaults != mt.default_propagation or order != mt.order:
+                mt.prompt = prompt
+                mt.order = order
+                mt.default_propagation = defaults
+                mt.put()
+        else: 
+            mt = MessageType(
+                name = name,
+                order = order,
+                prompt = prompt,
+                default_propagation = defaults,
+            )
+            mt.put()
 
 def add_applications(applications):
         

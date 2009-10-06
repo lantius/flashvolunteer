@@ -27,6 +27,16 @@ class AbstractHandler(webapp.RequestHandler):
         vals.update( {
             'domain': self._get_base_url(),
             'path': self.request.path,
-            'application_alias': get_application().get_alias()
+            'application_alias': get_application().get_alias(), 
         })
         
+        volunteer = self.auth()
+        if volunteer:
+            vals['unread_message_count'] = volunteer.get_messages().filter('read =', False).filter('show_in_mailbox =', volunteer.key().id()).count()
+    
+    def auth(self):
+        try:
+            volunteer = Authorize.login(self, requireVolunteer=False)
+        except:
+            return None
+        return volunteer

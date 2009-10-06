@@ -132,5 +132,5 @@ class AbstractUser(db.Model):
         self.put()
       
     def get_messages(self):
-        from models.message import Message
+        from models.messages.message import Message
         return Message.all().filter('recipients =', self.key().id()).filter('sent =', True).order('-trigger')

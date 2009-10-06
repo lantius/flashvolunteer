@@ -7,9 +7,10 @@ from google.appengine.ext import db
 from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
+from models.messages import MessageType
 
 from controllers._auth import Authorize
-from controllers._utils import send_message, get_domain
+from controllers._utils import send_message
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -42,7 +43,7 @@ class VolunteerForEvent(AbstractHandler):
                             to = to, 
                             subject = subject, 
                             body = body, 
-                            type = 1,
+                            type = MessageType.all().filter('name =', 'event_coord').get(),
                             referral_url = event.url())
           else:
             if not eventvolunteer:
@@ -56,7 +57,7 @@ class VolunteerForEvent(AbstractHandler):
                             to = to, 
                             subject = subject, 
                             body = body, 
-                            type = 1, 
+                            type = MessageType.all().filter('name =', 'event_coord').get(),
                             referral_url = event.url())
               
         self.redirect('/events/' + url_data)
