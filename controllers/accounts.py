@@ -1,4 +1,4 @@
-import os
+import os, logging
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
@@ -110,8 +110,9 @@ class RPXTokenHandler(AbstractHandler):
       session = Session()
       user = User(email = login_info['email'], _auth_domain = login_info['providerName'])
       session['user'] = user
-      
-      self.redirect(session.get('redirect', '/settings'))
+      logging.info('RPX post')
+
+      self.redirect('/settings')
     else:
       self.redirect('/error')  
     
