@@ -10,8 +10,20 @@ class="current"
 {% block content %}
 
 <div id="middlewhole">
-
-	{% include "../events/_message_creator.html" %}
-
+	<div id="eventmessagescreate" class="hardmodule">
+	    <div class="moduletitle"><h3>Send a message for {{purpose}}</h3></div>
+        <div id="emto"><span class="label">To:</span>{{recipients}}<div>
+	    
+	    <form action="{{volunteer.url}}/send_message" method="post">
+	        
+	        <div id="emcreatesubject"><span class="label">Subject:</span> <input type="text" name="title"/><div>
+	        
+	        <div id="emcreatebody"><span class="label">Body:</span> <textarea name="body">{{message.content}}</textarea></div>
+	        
+	        <div id="emcreatesubmit"><input type="submit" value="Send message">
+	        <input type=hidden name="session_id" value="{{ volunteer.session_id }}"></div>
+	        
+	    </form>
+	</div>
 </div><!--end middlewhole-->
 {% endblock %}

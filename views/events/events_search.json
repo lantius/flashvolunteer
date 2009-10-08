@@ -2,7 +2,7 @@
 {% for event in events %}
     {"id":"{{event.key.id}}",
      "name":"{{event.name|escape}}",
-     "neighborhood":"{{event.key.id}}",
+     "neighborhood":"{{event.neighborhood.key.id}}",
      "date":"{{event.get_startdatetime}}",
      "enddate":"{{event.get_enddatetime}}",
      "address":"{{event.address|escape}}"{% if event.location.lat %}, 
