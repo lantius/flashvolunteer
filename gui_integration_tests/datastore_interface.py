@@ -13,15 +13,6 @@ from google.appengine.ext import db
 from google.appengine.api.users import User
 from google.appengine.ext.db import put, delete
 
-from models.neighborhood import Neighborhood
-from models.volunteer import Volunteer
-from models.event import Event
-from models.eventvolunteer import EventVolunteer
-from models.eventphoto import EventPhoto
-from models.volunteerfollower import VolunteerFollower
-from models.volunteerinterestcategory import VolunteerInterestCategory
-from models.interestcategory import InterestCategory
-
 from controllers._utils import get_application
 
 import datetime, copy
@@ -37,6 +28,15 @@ remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
 def create_environment(name, session_id):
     print 'Populating FV...'
     exec('from gui_integration_tests.test_environments.%s import my_env'%name)
+    from models.neighborhood import Neighborhood
+    from models.volunteer import Volunteer
+    from models.event import Event
+    from models.eventvolunteer import EventVolunteer
+    from models.eventphoto import EventPhoto
+    from models.volunteerfollower import VolunteerFollower
+    from models.volunteerinterestcategory import VolunteerInterestCategory
+    from models.interestcategory import InterestCategory
+    
     from components.applications.operations import synchronize_apps
     synchronize_apps()
     
