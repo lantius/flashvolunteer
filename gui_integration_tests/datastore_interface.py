@@ -37,6 +37,8 @@ remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
 def create_environment(name, session_id):
     print 'Populating FV...'
     exec('from gui_integration_tests.test_environments.%s import my_env'%name)
+    from components.applications.operations import synchronize_apps
+    synchronize_apps()
     
     os.environ['HTTP_HOST'] = host
     application = get_application()
