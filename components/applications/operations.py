@@ -8,6 +8,7 @@ from models.messages.message_propagation_type import MessagePropagationType
 
 from controllers._utils import get_server, get_application
 from components.applications.defs import regions
+from google.appengine.ext import db
 
 import os
 
@@ -84,8 +85,19 @@ def add_applications(applications):
 
     for application_def in applications: 
         if Application().all().filter('name =', application_def.get_name()).count() == 0: 
-            a = Application(name = application_def.get_name())
+            a = Application(name = application_def.get_name(), 
+                            ne_coord = application_def.ne_coord, 
+                            sw_coord = application_def.sw_coord)
             a.put()
+        else:
+            a = Application().all().filter('name =', application_def.get_name()).get()
+            if a.ne_coord != application_def.ne_coord:
+                a.ne_coord = application_def.ne_coord                
+                a.put()
+            if a.sw_coord != application_def.sw_coord:
+                a.sw_coord = application_def.sw_coord                
+                a.put()
+                
         add_application_subdomains(application_def = application_def,
                                    domains = domains)
         add_application_neighborhoods(application_def = application_def)
@@ -117,14 +129,16 @@ def add_application_neighborhoods(application_def):
     if not application: raise
     
     for hood, centroid_lat, centroid_lon in application_def.get_neighborhoods():
+        if centroid_lat != None:
+            centroid = db.GeoPt(lat = centroid_lat, lon = centroid_lon)
+        else:
+            centroid = None
         if Neighborhood.all().filter('name =', hood).count() > 0: 
             n = Neighborhood.all().filter('name =', hood).get()
-            if n.centroid_lat != centroid_lat: 
-                n.centroid_lat = centroid_lat
-                n.put()
-            if n.centroid_lon != centroid_lon:
-                n.centroid_lon = centroid_lon
-                n.put()
+            
+            if n.centroid != centroid:
+                n.centroid = centroid
+                n.put()            
         else:
-            n = Neighborhood(name = hood, application = application, centroid_lat = centroid_lat, centroid_lon = centroid_lon)
+            n = Neighborhood(name = hood, application = application, centroid = centroid)
             n.put()

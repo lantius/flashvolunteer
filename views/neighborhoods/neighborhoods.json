@@ -2,6 +2,8 @@
 {% for neigh in neighborhoods %}
 	{"id":"{{neigh.key.id}}",
 	 "name":"{{neigh.name|escape}}",
+	 "lat": "{{neigh.centroid.lat}}",
+	 "lon": "{{neigh.centroid.lon}}"
 	}	
 	{% if forloop.last %}{%else%},{%endif%}
 {% endfor %}

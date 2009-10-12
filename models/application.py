@@ -12,6 +12,8 @@ from google.appengine.ext import db
 # RegionDomain
 class Application(db.Model):
   name = db.StringProperty()
+  ne_coord = db.GeoPtProperty() # No default
+  sw_coord = db.GeoPtProperty()
   
   def get_alias(self):
       return self.name.replace('-', ' ').capitalize()

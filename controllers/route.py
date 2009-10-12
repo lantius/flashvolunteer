@@ -26,6 +26,7 @@ from controllers.messages import SendMessage
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage 
+from controllers.applications import AllApplications, ThisApplication
 
 from controllers.paginated_volunteer_pages import \
     PaginatedTeamPage, PaginatedVolunteerCategoryPage, \
@@ -119,6 +120,8 @@ def main():
            ('/category(|)', CategoryPage),
            ('/static/(\w+)', StaticPage),
            ('/timeout', TimeoutPage),
+           ('/api/applications/all', AllApplications), 
+           ('/api/applications/this', ThisApplication)
           ],
           debug=True)
     wsgiref.handlers.CGIHandler().run(application)

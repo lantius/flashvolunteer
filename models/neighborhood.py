@@ -10,8 +10,7 @@ class Neighborhood(db.Model):
                                      collection_name = 'neighborhoods',
                                      default = None)
   
-  centroid_lat = db.FloatProperty()
-  centroid_lon = db.FloatProperty()
+  centroid = db.GeoPtProperty()
   
   # implicitly has .events and .volunteers properties
 

@@ -1,0 +1,12 @@
+{"applications":[
+{% for app in applications %}
+	{"id":"{{app.key.id}}",
+	 "name":"{{app.name|escape}}",
+	 "sw_lat": "{{app.sw_coord.lat}}",
+	 "sw_lon": "{{app.sw_coord.lon}}",
+     "ne_lat": "{{app.ne_coord.lat}}",
+     "ne_lon": "{{app.ne_coord.lon}}"
+	}	
+	{% if forloop.last %}{%else%},{%endif%}
+{% endfor %}
+]}

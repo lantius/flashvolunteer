@@ -1,7 +1,10 @@
 from components.applications.defs._application_def import ApplicationDef
+from google.appengine.ext import db
 
 ############################
 class Seattle(ApplicationDef):
+    ne_coord = db.GeoPt(lat = 47.834116 , lon = -122.066345 )
+    sw_coord = db.GeoPt(lat = 47.434343 , lon = -122.567596 )
     
     def get_name(self):
         return'seattle'
@@ -34,26 +37,28 @@ class Seattle(ApplicationDef):
                 ('Rainier Valley', 47.567261, -122.27972),
                 ('Ravenna', 47.683823, -122.296371),
                 ('Sand Point', 47.678692, -122.257048),
-                ('Lake Union', None, None),
+                ('Lake Union', 47.632020 , -122.334137),
                 ('South Park', 47.534472, -122.310705),
                 ('University District', 47.657698, -122.306368),
                 ('Wallingford', 47.655526, -122.326796),
                 ('Wedgwood', 47.686669, -122.294891),
                 ('West Seattle', 47.576526, -122.391901),
-                ('Delridge', None, None),
-                ('Rainier Beach', None, None),
-                ('Shoreline', None, None),
-                ('Edmonds', None, None),
-                ('Lynnwood', None, None),
-                ('Bothell', None, None),
-                ('Kirkland', None, None),
-                ('Redmond', None, None),
-                ('Bellevue', None, None),
-                ('Mercer Island', None, None),
-                ('Tukwila', None, None),
-                ('Burien', None, None),
-                ('White Center', None, None),
-                ('Bainbridge Island', None, None)
+                ('Delridge', 47.552634,-122.382545),
+                ('Rainier Beach', 47.517518,-122.256374),
+                ('Shoreline', 47.755221, -122.340832),
+                ('Edmonds', 47.810011,-122.373104),
+                ('Lynnwood', 47.821423,-122.313709),
+                ('Bothell', 47.761107,-122.205563),
+                ('Kirkland', 47.681770,-122.209682),
+                ('Redmond', 47.674805,-122.117844),
+                ('Bellevue', 47.609805,-122.201271),
+                ('Mercer Island',47.570210,-122.221184),
+                ('Tukwila', 47.475618,-122.262383),
+                ('Burien', 47.469816,-122.343750),
+                ('White Center', 47.516675,-122.354736),
+                ('Bainbridge Island', 47.629244,-122.507858),
+                ('Sammamish', 47.642662,-122.066689),
+                ('Renton', 47.483971,-122.216034)
                 )
 
 ############################ 
