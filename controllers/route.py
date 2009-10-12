@@ -68,17 +68,9 @@ class TimeoutPage(AbstractHandler):
 
 def main():
     if get_server() == 0:
-        from models.application import Application
-        if Application.all().count() == 0:
-            from controllers.applications.operations import add_applications, add_categories
-            from controllers.applications.defs import regions
-            add_applications(applications=regions)
-            add_categories()
-        from models.messages import MessageType
-        if MessageType.all().count() == 0:
-            from controllers.applications.operations import add_messaging
-            add_messaging()
-      
+        from components.applications.operations import synchronize_apps
+        synchronize_apps()
+        
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(
           [('/', MainPage),

@@ -1,4 +1,4 @@
-import os
+import os, logging
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
@@ -34,8 +34,9 @@ class SettingsPage(AbstractHandler):
     except:
       return
     
-    
+    logging.info('beginning settings')
     if volunteer:
+      logging.info('1st if')
       session = Session()
       if 'redirect' in session:
         self.redirect(session['redirect'])
@@ -44,6 +45,7 @@ class SettingsPage(AbstractHandler):
                 
       self.edit(volunteer)
     else:
+      logging.info('create new vol')
       volunteer = Volunteer()
       volunteer.error.clear()
       self.new(volunteer)
@@ -90,7 +92,7 @@ class SettingsPage(AbstractHandler):
         'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
         'interestcategories' : InterestCategoryHelper().selected(volunteer),
         'message_propagation_types' : MessagePropagationType.all(),
-        'message_types': MessageType.all().filter('in_settings =', 'True')
+        'message_types': MessageType.all().filter('in_settings =', True)
       }
     self._add_base_template_values(vals = template_values)
     

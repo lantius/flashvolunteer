@@ -1,6 +1,6 @@
 from components.sessions import Session
 from controllers._utils import get_server, get_application
-from controllers.applications.operations import add_applications
+from components.applications.operations import add_applications
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache, mail
 from google.appengine.ext import webapp

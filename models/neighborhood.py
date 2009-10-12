@@ -10,6 +10,9 @@ class Neighborhood(db.Model):
                                      collection_name = 'neighborhoods',
                                      default = None)
   
+  centroid_lat = db.FloatProperty()
+  centroid_lon = db.FloatProperty()
+  
   # implicitly has .events and .volunteers properties
 
   def url(self):

@@ -13,6 +13,10 @@ from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging
 from google.appengine.ext.db import Key
 
+class SendMessage(AbstractHandler):
+    pass
+
+
 ################################################################################
 # Messages page
 ################################################################################
