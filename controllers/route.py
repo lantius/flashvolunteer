@@ -68,9 +68,6 @@ class TimeoutPage(AbstractHandler):
 # /events/1?delete=true POST: delete up for an event
 
 def main():
-    if get_server() == 0:
-        from components.applications.operations import synchronize_apps
-        synchronize_apps()
         
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(
