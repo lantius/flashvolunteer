@@ -5,7 +5,7 @@ import os, random
 from controllers._auth import Authorize
 from controllers._params import Parameters
 from models.neighborhood import Neighborhood
-
+from models.eventvolunteer import EventVolunteer
 from controllers._utils import get_application
 
 from controllers.abstract_handler import AbstractHandler
@@ -26,17 +26,46 @@ class NeighborhoodsPage(AbstractHandler):
     
     neighborhoods = application.neighborhoods.order('name').fetch(limit=500)
     cnt = len(neighborhoods)
+    ev = EventVolunteer.all().fetch(limit=500)               
+    d = []
+    LIMIT = 10
+    for n in neighborhoods:                                                     
+        candidates = len(list(n.volunteers_living_here())) + len(list(n.volunteers_working_here()))                   
+        past_events = len(list(n.events_past()))                       
+        upcoming_events = len(list(n.events_future()))                    
+        d.append([str(n.key().id()), str(n.name), candidates, past_events, upcoming_events])             
+        vhours = 0 
+        for e in ev:
+            if  e.event.neighborhood.name == n.name:                    
+                if e.hours:                                           
+                    vhours += e.hours
+        if sum([candidates, past_events, upcoming_events]):    
+            d[-1].append(vhours)
+                                    
+    e = [m for m in d if sum(m[2:6])]              
+    for l in e: l.append(sum(l[2:6]))                                                                     
+    e.sort(key=lambda x: x[6],reverse=True)                            
+    for m in e:  
+        y = tuple(m[2:6]) 
+        m.append(y)        
+    f = []
+    for m in e:
+        del m[2:7]               
+        m = tuple(m)
+        f.append(m)        
+    g = tuple(f)                                       
     col1 = neighborhoods[:cnt/3]
     col2 = neighborhoods[cnt/3:2*cnt/3]
     col3 = neighborhoods[2*cnt/3:]
-    
-    template_values = {
-        'volunteer': volunteer,
-        'neighborhoods': neighborhoods, 
+         
+    template_values = {                              
         'neighborhoods1': col1,
         'neighborhoods2': col2,
-        'neighborhoods3': col3 
-    }
+        'neighborhoods3': col3,
+        'neighborhoods': neighborhoods,                                
+        'most_active_neighborhoods': g[:LIMIT],
+        'LIMIT': LIMIT,                                                                       
+      }
     self._add_base_template_values(vals = template_values)
     
     is_json = self.is_json(params)
