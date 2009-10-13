@@ -1,36 +1,81 @@
+<script>
+    $(function() {
+$('table.zebra tr:even').addClass('even');
+$('table.zebra tr:odd').addClass('odd');
+});
+</script>
 
-    <div class="hardmodule">
-		<div class="moduletitle">
-		    <h3>Supported Neighborhoods</h3>
-		</div>
-		<div id="leftthirdequi">
-			<div id="supported_neighborhoods">
-		
-				<ul>	
-					{% for neighborhood in neighborhoods1 %}
-						<li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
-					{% endfor %}
-				</ul>
-			</div>
-		</div>
-		<div id="middlethirdequi">
-		    <div id="supported_neighborhoods">
-		
-		        <ul>    
-		            {% for neighborhood in neighborhoods2 %}
-		                <li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
-		            {% endfor %}
-		        </ul>
-		    </div>
-		</div>		
-		<div id="rightthirdequi">
-		    <div id="supported_neighborhoods">
-		
-		        <ul>    
-		            {% for neighborhood in neighborhoods3 %}
-		                <li><a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a></li>
-		            {% endfor %}
-		        </ul>
-		    </div>
-		</div>    
-	</div>  
+<!-- <div id="lefthalf"> -->
+     <div class="hardmodule">          
+        <div class="moduletitle">
+             <h3>Supported Neighborhoods ({{ neighborhoods|length }})</h3>
+        </div>                        
+        <div id="leftthirdequi">                    
+            <ul>
+                {% for neighborhood in neighborhoods1 %}
+                    <li>
+                        <a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>               
+        </div><!--end splash-left--> 
+         <div id="middlethirdequi">                   
+            <ul>
+                {% for neighborhood in neighborhoods2 %}
+                    <li>
+                        <a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>               
+        </div>    
+        <div id="rightthirdequi">         
+            <ul>               
+                {% for neighborhood in neighborhoods3 %}
+                    <li>     
+                        <a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
+                    </li>
+                {% endfor %}    
+            </ul>
+        </div><!--end splash-right-->       
+    </div><!--end current_neighborhoods--> 
+<!-- </div> -->
+  
+<div id="lowerhalf">
+    
+    <div id="active_neighborhoods" class="hardmodule">            
+        <div class="moduletitle">
+            <h3>Most Active Neighborhoods</h3>
+        </div> 
+        <div id="mostactiveintro">
+              <span class="label">Most active neighborhoods by number of volunteers, events, and volunteer hours.</span>
+        </div> 
+              <table class="zebra">                 
+                <thead><tr>
+                    <th class="corner">Top {{ LIMIT }} Neighborhoods</th>
+                        <th>Volunteers</th>                    
+                        <th>Past Events</th>
+                        <th>Upcoming Events</th>
+                        <th>Volunteer Hours</th>                                            
+                    </tr>                   
+                </thead>
+                <tfoot></tfoot> 
+                <tbody>                             
+                    {% for n in most_active_neighborhoods %}                                                    
+                        <tr>
+                            <th>
+                                <a href="/neighborhoods/{{ n.0 }}">{{ n.1 }}</a>                            
+                            </th>                               
+                            {% for o in n.2 %}                              
+                                <td>
+                                    {% if o %}                                    
+                                      {{ o }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}                                                                    
+                        </tr>
+                    {% endfor %} 
+                </tbody>                  
+            </table>                                                                   
+    </div>   
+</div>
+ 
