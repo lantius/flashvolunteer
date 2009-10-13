@@ -440,6 +440,49 @@ tr.message {
 	margin-bottom:10px;
 	
 }
+
+#active_neighborhoods table {
+    margin-top:10px;
+    font-size: 9pt;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    text-align: center;
+}
+
+#active_neighborhoods td {   
+    border-top: 0px;
+    border-bottom: 0px;
+    border-left: 1px solid #FFFFFF;
+    border-right: 0px;
+    text-align: right;
+    padding:3px 10px;
+    font-weight: normal;
+}
+
+#active_neighborhoods thead th {
+    text-align: left;
+    border-left: 1px solid #FFFFFF;
+    border-right: 0px;  
+    border-top: 0px;
+    padding-left:4px;
+    padding-right:4px;
+}
+
+#active_neighborhoods tbody th {
+    text-align: left;
+    border-top: 0px;
+}
+
+#active_neighborhoods .corner {
+    background-color:#008C98;
+    color:white;
+    font-size:8pt;
+}
+
+#active_neighborhoods th a:link, #active_neighborhoods th a:visited {
+    font-weight: bold;
+}
+
 /*
 ======================================================
 >>Miscellaneous Styles
