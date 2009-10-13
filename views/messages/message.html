@@ -14,8 +14,8 @@ Flash Volunteer
 <div id="left75">
     <div id="mailbox" class="softmodule">
         <div class="messages">
-            <ul>
-                <li class="message fl">
+            <ul class="message">
+                <li class="fl">
                 	<div class="volunteer_summary_pic">
                         <a href="{{ message.get_sender.url }}" >
                             <img class="smallavatar" src="
@@ -32,10 +32,12 @@ Flash Volunteer
 						</a>
                     </div>
 				</li>
-                <li class="fl">{% if message.autogen %}
-				         <div class="additionalinfo">Auto-sent on behalf of</div>
-				    {%endif%}
-                    <div>{% if message.get_sender %}
+                <li class="fl">
+                    <div>
+                    	{% if message.autogen %}
+                             <span class="additionalinfo">Auto-sent on behalf of</span>
+                        {%endif%}
+						{% if message.get_sender %}
                                  <a href="{{ m.get_sender.url }}">{{ message.get_sender.name }}</a>
                          {% else %}
                                  Flash Volunteer

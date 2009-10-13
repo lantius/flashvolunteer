@@ -10,11 +10,19 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 56 times in query history.
+# Used 14 times in query history.
 - kind: Event
   properties:
   - name: application
   - name: hidden
+  - name: date
+
+# Unused in query history -- copied from input.
+- kind: Event
+  properties:
+  - name: application
+  - name: hidden
+  - name: neighborhood
   - name: date
 
 # Unused in query history -- copied from input.
@@ -29,7 +37,7 @@ indexes:
   - name: hidden
   - name: date
 
-# Unused in query history -- copied from input.
+# Used 3894 times in query history.
 - kind: Event
   properties:
   - name: neighborhood
@@ -67,7 +75,7 @@ indexes:
   - name: event
   - name: isowner
 
-# Used 19 times in query history.
+# Used 28 times in query history.
 - kind: Message
   properties:
   - name: read
@@ -77,21 +85,12 @@ indexes:
   - name: trigger
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Message
   properties:
   - name: read
   - name: recipients
   - name: sent
-  - name: trigger
-    direction: desc
-
-# Used 10 times in query history.
-- kind: Message
-  properties:
-  - name: recipients
-  - name: sent
-  - name: show_in_mailbox
   - name: trigger
     direction: desc
 
@@ -100,25 +99,26 @@ indexes:
   properties:
   - name: recipients
   - name: sent
+  - name: show_in_mailbox
   - name: trigger
     direction: desc
 
-# Used 8 times in query history.
+# Unused in query history -- copied from input.
+- kind: Message
+  properties:
+  - name: recipients
+  - name: sent
+  - name: trigger
+    direction: desc
+
+# Used once in query history.
 - kind: Message
   properties:
   - name: sent
   - name: trigger
 
-# Used 53 times in query history.
+# Used 9 times in query history.
 - kind: Neighborhood
   properties:
   - name: application
   - name: name
-  
-- kind: Event
-  properties:
-  - name: application
-  - name: hidden
-  - name: neighborhood
-  - name: date
-

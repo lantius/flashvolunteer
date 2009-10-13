@@ -835,11 +835,12 @@ ul.event_header img{
 	font-size: x-small;
 }
 
-.message .minfo .additionalinfo {
+.message div.additionalinfo {
 	font-size: 65%;
 }
 
-.message td.minfo {
+.message td.minfo,
+.message li.minfo {
 	min-width: 105px;
 	padding: 20px;
 }
