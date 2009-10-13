@@ -100,12 +100,12 @@ class AbstractUser(db.Model):
       return '/logout'
     
     def events(self):
-      events = [ev.event for ev in self.eventvolunteers.filter('isowner=',False) if not ev.event.hidden]
+      events = [ev.event for ev in self.eventvolunteers.filter('isowner =',False) if not ev.event.hidden]
       events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
       return events
     
     def events_coordinating(self):
-      events = [ev.event for ev in self.eventvolunteers.filter('isowner=',True) if not ev.event.inpast() and not ev.event.hidden]
+      events = [ev.event for ev in self.eventvolunteers.filter('isowner =',True) if not ev.event.inpast() and not ev.event.hidden]
       events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
       return events
     

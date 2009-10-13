@@ -1,6 +1,6 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Send a message to {{event.name}}
+Send a message
 {% endblock title %}
 
 {% block eventactive %}
@@ -9,21 +9,39 @@ class="current"
 
 {% block content %}
 
-<div id="middlewhole">
-	<div id="eventmessagescreate" class="hardmodule">
-	    <div class="moduletitle"><h3>Send a message for {{purpose}}</h3></div>
-        <div id="emto"><span class="label">To:</span>{{recipients}}<div>
+<div id="left75">
+	<div id="eventmessagescreate" class="softmodule">
+	    <div class="moduletitle"><h3>Send a message</h3></div>
+        <div id="emto">
+        	<span class="label">To: </span>{{recipients}}
+		</div>
 	    
-	    <form action="{{volunteer.url}}/send_message" method="post">
+	    <form action="{{url}}/send_message" method="post">
 	        
-	        <div id="emcreatesubject"><span class="label">Subject:</span> <input type="text" name="title"/><div>
+	        <div id="emcreatesubject">
+	        	<span class="label">Subject:</span> <input type="text" name="subject"/>
+		    </div>
 	        
-	        <div id="emcreatebody"><span class="label">Body:</span> <textarea name="body">{{message.content}}</textarea></div>
+	        <div id="emcreatebody">
+	        	<span class="label">Body:</span> <textarea name="body"></textarea>
+		    </div>
 	        
-	        <div id="emcreatesubmit"><input type="submit" value="Send message">
-	        <input type=hidden name="session_id" value="{{ volunteer.session_id }}"></div>
+	        <div id="emcreatesubmit">
+	        	<input type="submit" value="Send">
+	            <input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+			</div>
 	        
 	    </form>
+		
 	</div>
 </div><!--end middlewhole-->
+<div id="right25">
+	<div id="creationtips" class="hardmodule">
+	    <div class="moduletitle"><h3>Tips</h3></div>
+	    <ul>
+	        <li>Your message will be sent to the recipients according to each of their notification settings.</li>
+			<li>Do not send messages that reasonable people would consider to be spam.</li>
+	    </ul>
+	</div>	
+</div><!--end right25-->
 {% endblock %}

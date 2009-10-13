@@ -44,16 +44,11 @@ div#footer #copyright{
 #navtabs {
     background: #fff url("../media/body-top-rpt-horiz.png") repeat-x top center;
 }
-#navtabs li a.current{
+#navtabs li a.current,
+#navtabs li a:hover {
     background-color: #3b3b3b;
 }
 
-#navtabs li a:hover {
-/*
-	background: #fff url("../media/body-top-rpt-horiz_hover.png") repeat-x top center;
-*/
-    color: #eee;
-}
 
 #navtabs li a{
     color: #FFF;

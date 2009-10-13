@@ -36,7 +36,6 @@ class SettingsPage(AbstractHandler):
     
     logging.info('beginning settings')
     if volunteer:
-      logging.info('1st if')
       session = Session()
       if 'redirect' in session:
         self.redirect(session['redirect'])

@@ -51,7 +51,7 @@
 			<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
             {% if volunteer %}
                 <li id="profilelink"><a href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
-				<!--<li id="mailboxlink"><a href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>-->            
+				<li id="mailboxlink"><a href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>        
             {% endif %}                
 			<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
 			<li id="neighborhoodslink"><a href="/n

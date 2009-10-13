@@ -12,6 +12,8 @@ from controllers._auth import Authorize
 from controllers._params import Parameters
 from controllers.messages import MessagesPage
 
+from components.sessions import Session
+
 ################################################################################
 ################################################################################
 class EventMessagesPage(MessagesPage):
@@ -46,7 +48,8 @@ class EventMessagesPage(MessagesPage):
       return
 
     self.create(params, event, volunteer)
-    self.redirect(event.url() + '/messages')
+    session = Session()
+    self.redirect(session.get('redirect','/'))
     return
   
   ################################################################################

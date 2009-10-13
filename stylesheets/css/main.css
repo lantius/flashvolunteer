@@ -790,3 +790,17 @@ ul.event_header img{
 .messages td.msubject{
     padding: 5px 20px 0px 0px;	
 }	
+
+#emcreatesubject input,
+#emcreatebody textarea {
+    width: 85%;	
+	float:right;
+}
+
+#eventmessagescreate form {
+	margin-top: 20px;
+}
+#eventmessagescreate form div {
+    margin-bottom: 20px;	
+	
+}

@@ -21,8 +21,7 @@ from controllers.accounts import AccountPage, RPXTokenHandler
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
 from controllers.messages import Mailbox
-from controllers.messages import SendMessage
-#from controllers.eventmessages import EventMessagesPage
+from controllers.message_writer import SendMessage_Personal
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage 
@@ -79,10 +78,11 @@ def main():
            ('/logout', AccountPage),
             ('/delete', SettingsPage),
            ('/profile', ProfilePage),
-#           ('/messages(|/\d+)', Mailbox),
-#           ('/volunteers/(\d+)/send_message', SendMessage),
+           ('/messages(|/\d+)', Mailbox),
+           
            ('/settings', SettingsPage), #handles posts as well
            ('/settings/avatar', VolunteerAvatar),
+           
            ('/events/(\d+)/volunteer', VolunteerForEvent),
            ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
     #         ('/events/(\d+)/contact_volunteers', Event)
@@ -90,11 +90,9 @@ def main():
            ('/events/(\d+)/verify', VerifyEventAttendance),
            ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
            ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),
-    
            ('/events/past/volunteer/(\d+)/(\d+)', PaginatedVolunteerCompletedPage),    
            ('/events/past/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodCompletedPage),
            ('/events/past/category/(\d+)/(\d+)', PaginatedCategoryCompletedPage),
-                
            ('/events/hosted/volunteer/(\d+)/(\d+)', PaginatedVolunteerHostedPage),
            ('/events/upcoming/volunteer/(\d+)/(\d+)', PaginatedVolunteerUpcomingPage),
            ('/events/upcoming/neighborhood/(\d+)/(\d+)', PaginatedNeighborhoodUpcomingPage),
@@ -106,17 +104,23 @@ def main():
            ('/neighborhoods/(\d+)/volunteers_work/(\d+)', PaginatedNeighborhoodVolunteerWorkPage),
            ('/neighborhoods/(\d+)/volunteers_live/(\d+)', PaginatedNeighborhoodVolunteerHomePage),
            ('/neighborhoods(|)', NeighborhoodsPage),     
+           
            ('/team', FriendsPage),
            ('/team/(\d+)', PaginatedTeamPage),
+           
            ('/volunteers/(\d+)/follow', FollowVolunteer),
            ('/volunteers/(\d+)/avatar', VolunteerAvatar),
            ('/volunteers(|/\d+|/search)', VolunteersPage),
            ('/volunteers/(\d+)/team/(\d+)', PaginatedVolunteerTeam),
+           ('/volunteers/(\d+)/send_message', SendMessage_Personal),
+           
            ('/category/(\d+)', CategoryPage),
            ('/category/(\d+)/volunteers/(\d+)', PaginatedVolunteerCategoryPage),
            ('/category(|)', CategoryPage),
+           
            ('/static/(\w+)', StaticPage),
            ('/timeout', TimeoutPage),
+           
            ('/api/applications/all', AllApplications), 
            ('/api/applications/this', ThisApplication)
           ],

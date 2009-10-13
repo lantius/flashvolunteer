@@ -1,4 +1,4 @@
-import os, string
+import os, string, logging
 from datetime import datetime
 
 from google.appengine.ext.webapp import template
@@ -6,15 +6,12 @@ from google.appengine.ext import webapp
 
 from controllers._auth import Authorize
 
-from models.event import Event
-from models.messages.message import Message
-
+from models.messages import MessageType, Message
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging
-from google.appengine.ext.db import Key
+from controllers._utils import is_debugging, send_message
 
-class SendMessage(AbstractHandler):
-    pass
+from components.sessions import Session
+
 
 
 ################################################################################

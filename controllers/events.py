@@ -359,7 +359,6 @@ class EventsPage(AbstractHandler):
     try:
       event.put()
     except:
-      raise
       self.new(event)
       return
     

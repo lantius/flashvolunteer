@@ -11,7 +11,7 @@ Flash Volunteer
 
 {% block content %}
 
-<div id="middle100">
+<div id="left75">
     <div id="mailbox" class="softmodule">
         <div class="messages">
             <table>
@@ -30,6 +30,7 @@ Flash Volunteer
                         <td>{% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
                         <div><a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a></div>
                         <div class="subtext">{{ message.time_sent }}</div></td>
+                        <td>{% if message.autogen %}{% else %}<a href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{%endif%}</td>
 					</tr>
 			</table>
 			<table>
@@ -42,7 +43,15 @@ Flash Volunteer
             </table>
         </div>
     </div><!--end eventmessages-->
-</div><!--end middle100-->
-
+</div><!--end left75-->
+<div id="right25">
+    <div id="creationtips" class="hardmodule">
+        <div class="moduletitle"><h3>Message notes</h3></div>
+        <ul>
+            <li>If you don't want to receive these kinds of messages, you can <a href='/settings'>change your message settings</a>.</li>
+            <li><a href="mailto:info@flashvolunteer.org">Send us mail</a> to report inappropriate messages.</li>
+        </ul>
+    </div>  
+</div><!--end right25-->
 
 {% endblock content %}

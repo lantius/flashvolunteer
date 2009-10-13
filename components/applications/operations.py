@@ -50,7 +50,8 @@ def add_messaging():
     message_types = (
         (1, 'event_coord', 'When someone signs up for an event you coordinate', ['mailbox','email'], True),
         (2, 'added_to_team', 'When someone adds you to their team', ['mailbox','email'], True),
-        (3, 'welcome', 'When you create an account', ['mailbox'], False)
+        (3, 'welcome', 'When you create an account', ['mailbox'], False),
+        (4, 'person_to_person', 'When someone sends you a message', ['mailbox', 'email'], True)
     )
 
     for order, name, prompt, mpts, in_settings in message_types:

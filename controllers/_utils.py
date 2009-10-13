@@ -66,26 +66,26 @@ from models.messages.message import Message
 from components.time_zones import now
 from controllers.admin.message_dispatcher import check_messages
 
-def send_message(to, subject, body, type, sender = None, trigger = None, referral_url = None, immediate=False):
-    return
-#    if trigger is None:
-#        trigger = now()
-#    
-#    if sender:
-#        sender_id = sender.key().id()
-#    else:
-#        sender_id = -1
-#        
-#    message = Message(
-#      subject = subject,
-#      body = body,
-#      recipients = [u.key().id() for u in to],
-#      sender = sender_id,
-#      #referral_url = referral_url,
-#      trigger = trigger,
-#      type = type
-#    )
-#
-#    message.put()
-#    if immediate:
-#        check_messages()
+def send_message(to, subject, body, type, sender = None, trigger = None, referral_url = None, immediate=False, autogen = True):
+    if trigger is None:
+        trigger = now()
+    
+    if sender:
+        sender_id = sender.key().id()
+    else:
+        sender_id = -1
+        
+    message = Message(
+      subject = subject,
+      body = body,
+      recipients = [u.key().id() for u in to],
+      sender = sender_id,
+      #referral_url = referral_url,
+      trigger = trigger,
+      type = type,
+      autogen = autogen
+    )
+
+    message.put()
+    if immediate:
+        check_messages()
