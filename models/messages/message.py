@@ -1,3 +1,5 @@
+import re
+
 from google.appengine.ext import db
 from google.appengine.api import mail
 
@@ -23,6 +25,11 @@ def get_user(id):
 # 2: Message to volunteer when they are added to team#
 #
 #
+
+
+def remove_html_tags(data):
+    p = re.compile(r'<.*?>')
+    return p.sub('', data)
 
 class Message(db.Model):
     subject = db.StringProperty()
@@ -56,7 +63,11 @@ class Message(db.Model):
     
         self.sent = True
         self.put()
-    
+        
+    def get_mailbox_friendly_body(self):
+        reg = r"(http://(www\.)?([-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]))"
+        return re.sub(reg,r'<a rel="nofollow" target="_blank" href="\1">\1</a>', remove_html_tags(self.body))
+
     def url(self):
         return '/messages/' + str(self.key().id())
             
@@ -65,7 +76,10 @@ class Message(db.Model):
     
     def get_sender(self):
         #TODO: maybe memcache this
-        sender = get_user(self.sender) 
+        if self.sender:
+            sender = get_user(self.sender) 
+        else:
+            sender = None
         return sender
 
     def _get_message_pref(self, recipient, prop):
@@ -84,6 +98,8 @@ Thanks!,
 The Flash Volunteer team
 
 ---
+To view this message on Flash Volunteer, visit %(domain)s%(message_url)s. There you may reply to the message or flag it as inappropriate.  
+
 If you would prefer not to receive these types of messages, visit %(domain)s%(recipient_url)s/settings and adjust your Message preferences.
 """   
         domain = 'http://' + get_domain(keep_www = True)
@@ -100,10 +116,10 @@ If you would prefer not to receive these types of messages, visit %(domain)s%(re
             
     def mailbox(self):
         footer = """
-        
+<br><br>
 Thanks!,
 The Flash Volunteer team
-
+<br>
 ---
 If you would prefer not to receive these types of messages, visit %(domain)s%(recipient_url)s/settings and adjust your Message preferences.
 """   

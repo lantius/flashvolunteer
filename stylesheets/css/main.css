@@ -81,6 +81,7 @@ Contains navigation list items for header and footer
 #navtabs li{
     display: inline;
     padding: 0;
+	margin-right:5px;
 }
 
 #navtabs li a{
@@ -828,6 +829,7 @@ ul.event_header img{
 
 .message td.minfo {
 	min-width: 105px;
+	padding: 20px;
 }
 
 .messages td.msubject{

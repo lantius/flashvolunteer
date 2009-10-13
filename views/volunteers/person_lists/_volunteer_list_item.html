@@ -33,7 +33,7 @@
 		                    <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=submit value="(team)"/>
 		                </form>
                       {% endif %}
-                      <a class="operation" href="{{volunteer_in_list.url}}/send_message" title="send message">(msg)</a>
+                      <a class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">(msg)</a>
 	                {% endifnotequal %}
                 {% endif %}
             </div>

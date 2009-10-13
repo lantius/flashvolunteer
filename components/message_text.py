@@ -48,12 +48,33 @@ Please let us know if you have any questions.
 
 type2 = msg(
 
-    subject = '%(adder_name)s has added you to their Flash Team',
+    subject = '%(adder_name)s has%(reciprocation)s added you to their Flash Team',
     body = """
 Hi %(vol_name)s,
 
-%(adder_name)s has added you to their Flash Team. 
+%(adder_name)s has%(reciprocation)s added you to their Flash Team. 
 
-You can do the same (if you haven't already) by visiting %(adder_url)s or by clicking the (+) button under their name in your People page (%(vol_team_url)s).
+You can do the same by visiting %(adder_url)s.
+"""
+)
+
+
+###############################################################
+# Type 3: When someone signs up for Flash Volunteer
+###############################################################
+
+type3 = msg(
+
+    subject = 'Welcome to Flash Volunteer!',
+    body = """Hello %(name)s. 
+
+We hope that you will be able to use this site to easily find and coordinate volunteer opportunities in the most timely and convenient fashion as possible.
+
+Get started by filling out your profile and checking out the listed events!
+
+If you have any questions, send an email to info@flashvolunteer.org.
+
+Thanks!
+The Flash Volunteer team    
 """
 )

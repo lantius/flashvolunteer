@@ -19,6 +19,7 @@ from components.sessions import Session
 from controllers.abstract_handler import AbstractHandler
 
 from controllers._utils import send_message
+from components.message_text import type3
 
 ################################################################################
 # Settings page
@@ -136,19 +137,15 @@ class SettingsPage(AbstractHandler):
       return False
       
     volunteer.put()
+    
+    params = {'name': volunteer.name} 
+            
+        
     send_message(to = [volunteer], 
-                 subject = 'Welcome to Flash Volunteer!', 
-                 body = """Hello %(name)s. 
-
-We hope that you will be able to use this site to easily find and/or coordinate volunteer opportunities in the most timely and convenient fashion as possible.
-
-Get started by filling out your profile and checking out the listed events!
-
-If you have any questions, send an email to info@flashvolunteer.org.
-
-Thanks!
-The Flash Volunteer team    
-"""%{'name': volunteer.name}, type=MessageType.all().filter('name =', 'welcome').get(), immediate = True)
+                 subject = type3.subject%params,
+                 body = type3.body%params,
+                 type= MessageType.all().filter('name =', 'welcome').get(), 
+                 immediate = True)
     
     
     return True

@@ -3,6 +3,7 @@ from datetime import datetime
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
+
 from controllers._params import Parameters
 
 from controllers._auth import Authorize
@@ -14,7 +15,6 @@ from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging, send_message
 
 from components.sessions import Session
-
 
 class AbstractSendMessage(AbstractHandler):
     ################################################################################
@@ -29,8 +29,6 @@ class AbstractSendMessage(AbstractHandler):
                      sender = sender,
                      autogen = False)
         
-        session = Session()
-        self.redirect(session.get('redirect','/'))
         return
 
     def _get_helper(self, recipients, url):
@@ -38,9 +36,7 @@ class AbstractSendMessage(AbstractHandler):
             volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
         except:
             return
-    
-        params = Parameters.parameterize(self.request)
-        
+            
         template_values = {
           'volunteer': volunteer,
           'recipients': ', '.join([r.name for r in recipients]),
@@ -62,13 +58,18 @@ class SendMessage_Personal(AbstractSendMessage):
         recipients = [Volunteer.get_by_id(int(id))]
         params = Parameters.parameterize(self.request)
         self._send_message(sender = volunteer, recipients = recipients, type_id = 4, params = params)
+        session = Session()
+        self.redirect(session.get('redirect','/'))
         
     def get(self, url_data):
         try:
             volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
         except:
             return
-        
+        params = Parameters.parameterize(self.request)
+        session = Session()
+        if 'redirect' in params:
+            session['redirect'] = params['redirect']
         id = url_data
         recipient = Volunteer.get_by_id(int(id))
         recipients = [recipient]

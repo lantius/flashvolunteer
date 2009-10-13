@@ -17,26 +17,41 @@ Flash Volunteer
             <table>
                 
                     <tr class="message">
-                        <td><div class="volunteer_summary_pic">
-                            <a href="{{ message.get_sender.url }}" >
-                            <img class="smallavatar" src="
-                            {% if message.get_sender.avatar %}
-                                {{ message.get_sender.url }}/avatar
-                            {% else %}
-                                /stylesheets/media/default-profile-pic-small.png
-                            {% endif %}
-                            " alt="{{ message.get_sender.get_name }}" /></a>
-                        </div></td>
-                        <td>{% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
-                        <div><a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a></div>
-                        <div class="subtext">{{ message.time_sent }}</div></td>
+                        <td>
+                        	<div class="volunteer_summary_pic">
+	                            <a href="{{ message.get_sender.url }}" >
+		                            <img class="smallavatar" src="
+									{% if message.get_sender %}
+			                            {% if message.get_sender.avatar %}
+			                                {{ message.get_sender.url }}/avatar
+			                            {% else %}
+			                                /stylesheets/media/default-profile-pic-small.png
+			                            {% endif %}
+                                    {% else %}
+									   /stylesheets/media/fv_avatar.png
+									{% endif %}
+	                                " alt="{{ message.get_sender.get_name }}" />
+								</a>
+                            </div>
+						</td>
+                        <td>{% if message.autogen %}
+						         <div class="additionalinfo">Auto-sent on behalf of</div>
+						    {%endif%}
+	                        <div>{% if m.get_sender %}
+	                                     <a href="{{ m.get_sender.url }}">{{ m.get_sender.name }}</a>
+	                             {% else %}
+	                                     The Flash Volunteer team
+	                             {%endif%}
+						    </div>
+                        <div class="subtext">{{ message.time_sent }}</div>
+						</td>
                         <td>{% if message.autogen %}{% else %}<a href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{%endif%}</td>
 					</tr>
 			</table>
 			<table>
 					<tr>
                         <td class="msubject">
-                            <div>{{ message.body|striptags}}</div>
+                            <div>{{ message.get_mailbox_friendly_body}}</div>
                         </td>
                     </tr>
                     

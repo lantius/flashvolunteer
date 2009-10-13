@@ -5,7 +5,7 @@
        {% else %}     
             {% include "../volunteers/view_other_volunteer/_add_to_team.html" %}
 	   {% endif %}
-	   <a class="operation" href="{{page_volunteer.url}}/send_message" title="send this volunteer a message">&raquo; Send message</a>
+	   <a class="operation" href="{{page_volunteer.url}}/send_message?redirect={{path}}" title="send this volunteer a message">&raquo; Send message</a>
 	{% endif %}
 	
 </div>

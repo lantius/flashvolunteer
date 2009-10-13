@@ -17,16 +17,23 @@ Flash Volunteer
 	        <table>
                 {% for m in messages %}
                     <tr class="message {% if m.read %}read{%else%}unread{%endif%}">
-            	        <td><div class="volunteer_summary_pic">
-				            {%if m.get_sender %}<a href="{{ m.get_sender.url }}" >
-				            <img class="smallavatar" src="
-				            {% if m.get_sender.avatar %}
-				                {{ m.get_sender.url }}/avatar
-				            {% else %}
-				                /stylesheets/media/default-profile-pic-small.png
-				            {% endif %}
-				            " alt="{{ m.get_sender.get_name }}" /></a>{%endif%}
-				        </div></td>
+            	        <td>
+                            <div class="volunteer_summary_pic">
+                                <a href="{{ message.get_sender.url }}" >
+                                    <img class="smallavatar" src="
+                                    {% if m.get_sender %}
+                                        {% if m.get_sender.avatar %}
+                                            {{ m.get_sender.url }}/avatar
+                                        {% else %}
+                                            /stylesheets/media/default-profile-pic-small.png
+                                        {% endif %}
+                                    {% else %}
+                                       /stylesheets/media/fv_avatar.png
+                                    {% endif %}
+                                    " alt="{{ m.get_sender.get_name }}" />
+                                </a>
+                            </div>
+						</td>
                         <td class="minfo">
                         	{% if m.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
                         	<div>{% if m.get_sender %}

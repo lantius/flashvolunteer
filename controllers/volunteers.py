@@ -183,12 +183,19 @@ class FollowVolunteer(AbstractHandler):
         return
     
     def get_message_params(self,adder, volunteer):
-        return {
+        params = {
             'adder_name': adder.name,
             'vol_name': volunteer.name,
             'adder_url': '%s%s'%(self._get_base_url(), adder.url()),
-            'vol_team_url': '%s%s'%(self._get_base_url(), volunteer.url()) 
+            'vol_team_url': '%s%s'%(self._get_base_url(), volunteer.url()), 
+            'reciprocation':''
         }
+        
+        reciprocal = adder.key().id() in volunteer.teammates_ids()
+        if reciprocal:
+            params['reciprocation'] = ' also'
+        
+        return params
 
 ################################################################################
 # VolunteerAvatar

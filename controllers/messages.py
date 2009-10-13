@@ -55,7 +55,7 @@ class Mailbox(AbstractHandler):
         
         message = Message.get_by_id(int(id))
         if not message or not volunteer.key().id() in message.recipients:
-            self.redirect(self.request.referral)
+            self.redirect(self.request.referrer)
         
         template_values = {
             'volunteer': volunteer,

@@ -40,6 +40,10 @@ class Event(db.Model):
     hidden = db.BooleanProperty(default=False)
     coordinator = db.BooleanProperty(default=False)
     
+    ###message state
+    reminder_message_sent = db.BooleanProperty(default=False)
+    post_event_message_sent = db.BooleanProperty(default=False)
+    
     def __init__(self,
                parent=None,
                key_name=None,

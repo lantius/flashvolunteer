@@ -31,8 +31,9 @@
 	            <span class="label">{{message_type.prompt}}:</span>
 				<ol>
 				{% for propagation_type in message_propagation_types %}
+    			  {% message_type_pref volunteer message_type propagation_type %} 
 				  <li>
-				    <input class="checkbox" type="checkbox" id="{{message_type.key.id}}[{{propagation_type.key.id}}]" name="{{message_type.key.id}}[{{propagation_type.key.id}}]" value="1" {% if 1 %} checked {% endif %} />
+				    <input class="checkbox" type="checkbox" id="{{message_type.key.id}}[{{propagation_type.key.id}}]" name="{{message_type.key.id}}[{{propagation_type.key.id}}]" value="1" {% if mt_checked %} checked {% endif %} />
 				    <label class="checkboxlabel" for="{{message_type.key.id}}[{{propagation_type.key.id}}]" >{{ propagation_type.prompt }}</label>
 				  </li>
 				{% endfor %}
