@@ -149,3 +149,12 @@ tr.message {
 tr.message.unread {
 	background-color: #F5F5F5;
 }
+
+
+div#active_neighborhoods .odd {
+    background-color: #FFFFFF;
+}
+
+div#active_neighborhoods .even {
+    background-color: #EDEEFD;
+}
