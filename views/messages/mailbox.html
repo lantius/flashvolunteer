@@ -15,38 +15,38 @@ Flash Volunteer
 	<div id="mailbox" class="softmodule">
 	    <div class="messages">
 	        <table>
-                {% for m in messages %}
-                    <tr class="message {% if m.read %}read{%else%}unread{%endif%}">
+                {% for message in messages %}
+                    <tr class="message {% if message.read %}read{%else%}unread{%endif%}">
             	        <td>
                             <div class="volunteer_summary_pic">
                                 <a href="{{ message.get_sender.url }}" >
                                     <img class="smallavatar" src="
-                                    {% if m.get_sender %}
-                                        {% if m.get_sender.avatar %}
-                                            {{ m.get_sender.url }}/avatar
+                                    {% if message.get_sender %}
+                                        {% if message.get_sender.avatar %}
+                                            {{ message.get_sender.url }}/avatar
                                         {% else %}
                                             /stylesheets/media/default-profile-pic-small.png
                                         {% endif %}
                                     {% else %}
                                        /stylesheets/media/fv_avatar.png
                                     {% endif %}
-                                    " alt="{{ m.get_sender.get_name }}" />
+                                    " alt="{{ message.get_sender.get_name }}" />
                                 </a>
                             </div>
 						</td>
                         <td class="minfo">
-                        	{% if m.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
-                        	<div>{% if m.get_sender %}
-							         <a href="{{ m.get_sender.url }}">{{ m.get_sender.name }}</a>
+                        	{% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
+                        	<div>{% if message.get_sender %}
+							         <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
 								 {% else %}
-								    The Flash Volunteer team
+								    Flash Volunteer
 								 {%endif%}
 						      </div>
-							<div class="subtext">{{ m.time_sent }}</div>
+							<div class="subtext">{{ message.time_sent }}</div>
 						</td>
                         <td class="msubject">
-                        	<div><a href="{{m.url}}">{{ m.subject }}</a></div>
-						    <div class="subtext">{{ m.body|slice:":200"}}...</div>
+                        	<div><a href="{{message.url}}">{{ message.subject }}</a></div>
+						    <div class="subtext">{{ message.body|slice:":200"}}...</div>
 						</td>
                     </tr>
                 {% endfor %}

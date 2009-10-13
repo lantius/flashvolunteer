@@ -471,7 +471,7 @@ tr.message {
     text-align: center	
 }
 
-#active_neighborhoods thead th .small {
+#active_neighborhoods .small {
 	font-size:smaller;
 	color:#CCC;
 }

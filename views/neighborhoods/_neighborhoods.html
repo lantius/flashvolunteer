@@ -67,12 +67,12 @@ $('table.zebra tr:odd').addClass('odd');
                             </th>                               
                             <td>
                                 {% if n.1.0 or n.1.1 %}                                    
-                                  {{ n.1.0 }} / {{n.1.1 }}
+                                  {{ n.1.0 }} <span class="small">/</span> {{n.1.1 }}
                                 {% endif %}
                             </td>
                             <td>
                                 {% if n.1.2 or n.1.3 %}                                    
-                                  {{ n.1.2 }} / {{n.1.3 }}
+                                  {{ n.1.2 }} <span class="small">/</span> {{n.1.3 }}
                                 {% endif %}
                             </td>
                             <!--<td>

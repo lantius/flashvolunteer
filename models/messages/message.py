@@ -66,7 +66,7 @@ class Message(db.Model):
         
     def get_mailbox_friendly_body(self):
         reg = r"(http://(www\.)?([-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]))"
-        return re.sub(reg,r'<a rel="nofollow" target="_blank" href="\1">\1</a>', remove_html_tags(self.body))
+        return re.sub(reg,r'<a rel="nofollow" target="_blank" href="\1">\1</a>', remove_html_tags(self.body).replace('\n','<br>'))
 
     def url(self):
         return '/messages/' + str(self.key().id())
