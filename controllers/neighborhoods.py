@@ -23,60 +23,62 @@ class NeighborhoodsPage(AbstractHandler):
     params = Parameters.parameterize(self.request)
     
     application = get_application()
+    neighborhoods = application.neighborhoods.fetch(limit=500) 
+    is_json = self.is_json(params)
     
-    neighborhoods = application.neighborhoods.order('name').fetch(limit=500)
-    cnt = len(neighborhoods)
-    ev = EventVolunteer.all().fetch(limit=500)               
-    d = []
-    LIMIT = 10
-    for n in neighborhoods:                                                     
-        candidates = len(list(n.volunteers_living_here())) + len(list(n.volunteers_working_here()))                   
-        past_events = len(list(n.events_past()))                       
-        upcoming_events = len(list(n.events_future()))                    
-        d.append([str(n.key().id()), str(n.name), candidates, past_events, upcoming_events])             
-        vhours = 0 
-        for e in ev:
-            if  e.event.neighborhood.name == n.name:                    
-                if e.hours:                                           
-                    vhours += e.hours
-        if sum([candidates, past_events, upcoming_events]):    
-            d[-1].append(vhours)
-                                    
-    e = [m for m in d if sum(m[2:6])]              
-    for l in e: l.append(sum(l[2:6]))                                                                     
-    e.sort(key=lambda x: x[6],reverse=True)                            
-    for m in e:  
-        y = tuple(m[2:6]) 
-        m.append(y)        
-    f = []
-    for m in e:
-        del m[2:7]               
-        m = tuple(m)
-        f.append(m)        
-    g = tuple(f)                                       
-    col1 = neighborhoods[:cnt/3]
-    col2 = neighborhoods[cnt/3:2*cnt/3]
-    col3 = neighborhoods[2*cnt/3:]
-         
+    col1 = None
+    col2 = None
+    col3 = None
+
     template_values = {                              
-        'neighborhoods1': col1,
-        'neighborhoods2': col2,
-        'neighborhoods3': col3,
         'neighborhoods': neighborhoods,                                
-        'most_active_neighborhoods': g[:LIMIT],
-        'LIMIT': LIMIT,                                                                       
       }
     self._add_base_template_values(vals = template_values)
+
+    if not is_json:
+        stats = {}
+        LIMIT = 15
+        for n in neighborhoods:                                                     
+            volunteers_living = len(list(n.volunteers_living_here()))
+            volunteers_working = len(list(n.volunteers_working_here()))                   
+            past_events = len(list(n.events_past()))                       
+            upcoming_events = len(list(n.events_future()))                    
+            vhours = 0 
+            for e in n.events:
+                vhours += sum([ev.hours for ev in e.eventvolunteers if ev.hours])
     
-    is_json = self.is_json(params)
-    if is_json:
-      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.json')
-      render_out = template.render(path, template_values)
-      if (('jsoncallback' in params)):
-        render_out = params['jsoncallback'] + '(' + render_out + ');'
+            stats[n] = [volunteers_living, volunteers_working, past_events, upcoming_events, vhours]           
+        
+        all_scores = []                                             
+        for n,scores in stats.items():
+            all_scores.append((n, sum(scores), scores)) 
+                                                 
+        all_scores.sort(lambda (n, total, scores), (n2, total2, scores2): total-total2, reverse=True)                            
+        
+        output = []
+        for n, total, scores in all_scores:
+            #scores.append(total)  #dont show total score at this time...
+            output.append((n, scores))
+        
+        cnt = application.neighborhoods.count()                           
+        col1 = neighborhoods[:cnt/3]
+        col2 = neighborhoods[cnt/3:2*cnt/3]
+        col3 = neighborhoods[2*cnt/3:]
+
+        template_values.update({                              
+            'neighborhoods1': col1,
+            'neighborhoods2': col2,
+            'neighborhoods3': col3,
+            'most_active_neighborhoods': output[:LIMIT],
+            'LIMIT': LIMIT,                                                                       
+        })         
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')
+        render_out = template.render(path, template_values)
     else:
-      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')
-      render_out = template.render(path, template_values)
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.json')
+        render_out = template.render(path, template_values)
+        if (('jsoncallback' in params)):
+          render_out = params['jsoncallback'] + '(' + render_out + ');'
       
     self.response.out.write(render_out)
     return

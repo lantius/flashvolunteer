@@ -96,7 +96,7 @@ div#container{
                 /*the following is specific to the three column layout, 33% - 33% - 33% */
                 #leftthirdequi,#middlethirdequi,#rightthirdequi {
                     padding: 0 10px 10px 0;
-                    width: 250px;
+                    width: 30%;
                 }
                 
                 /*the following is specific to the two equal column layout, 50% - 50% */

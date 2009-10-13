@@ -6,9 +6,11 @@ $('table.zebra tr:odd').addClass('odd');
 </script>
 
 <!-- <div id="lefthalf"> -->
+
+<div id="lefthalf">
      <div class="hardmodule">          
         <div class="moduletitle">
-             <h3>Supported Neighborhoods ({{ neighborhoods|length }})</h3>
+             <h3>{{application_alias}} areas ({{ neighborhoods|length }})</h3>
         </div>                        
         <div id="leftthirdequi">                    
             <ul>
@@ -38,24 +40,22 @@ $('table.zebra tr:odd').addClass('odd');
             </ul>
         </div><!--end splash-right-->       
     </div><!--end current_neighborhoods--> 
-<!-- </div> -->
-  
-<div id="lowerhalf">
-    
+</div>
+<div id="righthalf">
+
     <div id="active_neighborhoods" class="hardmodule">            
         <div class="moduletitle">
-            <h3>Most Active Neighborhoods</h3>
+            <h3>Most Active</h3>
         </div> 
         <div id="mostactiveintro">
-              <span class="label">Most active neighborhoods by number of volunteers, events, and volunteer hours.</span>
+              <span class="label">Most active neighborhoods by number of volunteers and events.</span>
         </div> 
               <table class="zebra">                 
                 <thead><tr>
-                    <th class="corner">Top {{ LIMIT }} Neighborhoods</th>
-                        <th>Volunteers</th>                    
-                        <th>Past Events</th>
-                        <th>Upcoming Events</th>
-                        <th>Volunteer Hours</th>                                            
+                    <th></th>
+                        <th>Volunteers <div class="small">(live/work)</div></th>                    
+                        <th>Events <div class="small">(past/upcoming)</div></th>
+                        <!--<th>Vol. Hours</th>-->                                            
                     </tr>                   
                 </thead>
                 <tfoot></tfoot> 
@@ -63,19 +63,27 @@ $('table.zebra tr:odd').addClass('odd');
                     {% for n in most_active_neighborhoods %}                                                    
                         <tr>
                             <th>
-                                <a href="/neighborhoods/{{ n.0 }}">{{ n.1 }}</a>                            
+                                <a href="{{ n.0.url }}">{{ n.0.name }}</a>                            
                             </th>                               
-                            {% for o in n.2 %}                              
-                                <td>
-                                    {% if o %}                                    
-                                      {{ o }}
-                                    {% endif %}
-                                </td>
-                            {% endfor %}                                                                    
+                            <td>
+                                {% if n.1.0 or n.1.1 %}                                    
+                                  {{ n.1.0 }} / {{n.1.1 }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if n.1.2 or n.1.3 %}                                    
+                                  {{ n.1.2 }} / {{n.1.3 }}
+                                {% endif %}
+                            </td>
+                            <!--<td>
+                                {% if n.1.3 %}                                    
+                                  {{ n.1.3 }}
+                                {% endif %}
+                            </td>-->
                         </tr>
                     {% endfor %} 
                 </tbody>                  
             </table>                                                                   
-    </div>   
+    </div>
 </div>
  
