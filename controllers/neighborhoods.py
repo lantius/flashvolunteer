@@ -31,7 +31,8 @@ class NeighborhoodsPage(AbstractHandler):
     col3 = None
 
     template_values = {                              
-        'neighborhoods': neighborhoods,                                
+        'neighborhoods': neighborhoods,
+        'volunteer': volunteer                                
       }
     self._add_base_template_values(vals = template_values)
 
@@ -53,7 +54,7 @@ class NeighborhoodsPage(AbstractHandler):
         for n,scores in stats.items():
             all_scores.append((n, sum(scores), scores)) 
                                                  
-        all_scores.sort(lambda (n, total, scores), (n2, total2, scores2): total-total2, reverse=True)                            
+        all_scores.sort(lambda (n, total, scores), (n2, total2, scores2): int(total-total2), reverse=True)                            
         
         output = []
         for n, total, scores in all_scores:

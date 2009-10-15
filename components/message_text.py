@@ -66,7 +66,7 @@ You can do the same by visiting %(adder_url)s.
 type3 = msg(
 
     subject = 'Welcome to Flash Volunteer!',
-    body = """Hello %(name)s. 
+    body = """Hello %(name)s, 
 
 We hope that you will be able to use this site to easily find and coordinate volunteer opportunities in the most timely and convenient fashion as possible.
 
@@ -75,6 +75,80 @@ Get started by filling out your profile and checking out the listed events!
 If you have any questions, send an email to info@flashvolunteer.org.
 
 Thanks!
+The Flash Volunteer team    
+"""
+)
+
+###############################################################
+# Type 5: Event rsvp for volunteer
+###############################################################
+
+type5 = msg(
+
+    subject = 'You are signed up to volunteer for "%(event_name)s"',
+    body = """Hello, 
+
+"%(event_name)s" is happening at %(event_start)s! You have signed up to volunteer there. 
+
+Please visit the event page at %(event_url)s and send one of the event organizers a message in order to RSVP. 
+
+Thanks!
+The Flash Volunteer team    
+"""
+)
+
+###############################################################
+# Type 6: Event rsvp for organizer
+###############################################################
+
+type6 = msg(
+
+    subject = 'You are organizing "%(event_name)s"',
+    body = """Hello, 
+
+You are organizing "%(event_name)s", scheduled to occur at %(event_start)s! %(participation_statement)s
+
+Please visit the event page at %(event_url)s to edit the event or contact volunteers. 
+
+Thanks!
+The Flash Volunteer team    
+"""
+)
+
+###############################################################
+# Type 7: Post event for volunteer
+###############################################################
+
+type7 = msg(
+
+    subject = 'You participated in "%(event_name)s"',
+    body = """Hello, 
+
+You participated in "%(event_name)s"! We hope that you enjoyed it. 
+
+Visit the event page at %(event_url)s to upload photos, send the event organizers feedback, and connect with other volunteers you may have met. 
+
+If you did not participate, please visit the event site and remove yourself from the participants list.
+
+Thanks!
+The Flash Volunteer team    
+"""
+)
+
+###############################################################
+# Type 8: Post event for organizer
+###############################################################
+
+type8 = msg(
+
+    subject = 'You organized "%(event_name)s"',
+    body = """Hello, 
+
+You organized "%(event_name)s". We hope that it went well! %(participation_statement)s 
+
+We hope that you will continue organizing events on Flash Volunteer!
+
+Thanks,
 The Flash Volunteer team    
 """
 )

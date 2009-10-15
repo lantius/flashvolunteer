@@ -855,10 +855,18 @@ ul.event_header img{
 	float:right;
 }
 
+#emcreatebody textarea {
+    height: 250px;
+}
+
 #eventmessagescreate form {
 	margin-top: 20px;
 }
 #eventmessagescreate form div {
     margin-bottom: 20px;	
 	
+}
+
+#emcreatesubmit input {
+	float:right;
 }

@@ -43,8 +43,7 @@ class VolunteerForEvent(AbstractHandler):
                             to = to, 
                             subject = subject, 
                             body = body, 
-                            type = MessageType.all().filter('name =', 'event_coord').get(),
-                            referral_url = event.url())
+                            type = MessageType.all().filter('name =', 'event_coord').get())
           else:
             if not eventvolunteer:
               eventvolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=False)
@@ -57,8 +56,7 @@ class VolunteerForEvent(AbstractHandler):
                             to = to, 
                             subject = subject, 
                             body = body, 
-                            type = MessageType.all().filter('name =', 'event_coord').get(),
-                            referral_url = event.url())
+                            type = MessageType.all().filter('name =', 'event_coord').get())
               
         self.redirect('/events/' + url_data)
         return

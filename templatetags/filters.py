@@ -26,6 +26,8 @@ class RelationshipStatusNode(template.Node):
 
 register.tag(team_status)
 
+#############################################################
+
 def message_type_pref(parser, token):
     try:
         tag_name, volunteer, message_type, propagation_type = token.split_contents()
@@ -57,3 +59,27 @@ class MessageTypePrefNode(template.Node):
         return ''
 
 register.tag(message_type_pref)
+
+#####################################################################
+def message_read_by_volunteer(parser, token):
+    try:
+        tag_name, volunteer, message = token.split_contents()
+    except ValueError:
+        return None
+    return MessageReadNode(volunteer = volunteer, 
+                           message = message)
+
+class MessageReadNode(template.Node):
+    def __init__(self, volunteer, message):
+        self.volunteer = volunteer
+        self.message = message
+        
+    def render(self, context):
+        volunteer = template.resolve_variable(self.volunteer,context)
+        message = template.resolve_variable(self.message,context)
+        
+        if volunteer:            
+            context['message_read'] = volunteer.key().id() not in message.unread
+        return ''
+
+register.tag(message_read_by_volunteer)

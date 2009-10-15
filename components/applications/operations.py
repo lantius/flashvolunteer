@@ -51,7 +51,11 @@ def add_messaging():
         (1, 'event_coord', 'When someone signs up for an event you coordinate', ['mailbox','email'], True),
         (2, 'added_to_team', 'When someone adds you to their team', ['mailbox','email'], True),
         (3, 'welcome', 'When you create an account', ['mailbox'], False),
-        (4, 'person_to_person', 'When someone sends you a message', ['mailbox', 'email'], True)
+        (4, 'person_to_person', 'When someone sends you a message', ['mailbox', 'email'], True),
+        (5, 'rsvp_vol', 'Reminder message for event you have volunteered for, 24 hours ahead', ['mailbox','email'], True),
+        (6, 'rsvp_host', 'Reminder message for event you are coordinating, 24 hours ahead', ['mailbox','email'], True),
+        (7, 'post_vol', 'Post event message requesting feedback about your volunteer experience', ['mailbox','email'], True),
+        (8, 'post_host', 'Post event message requesting feedback about your experience coordinating an event', ['mailbox','email'], True),
     )
 
     for order, name, prompt, mpts, in_settings in message_types:
@@ -62,6 +66,7 @@ def add_messaging():
                 mt.prompt = prompt
                 mt.order = order
                 mt.default_propagation = defaults
+                mt.in_settings = in_settings
                 mt.put()
         else: 
             mt = MessageType(

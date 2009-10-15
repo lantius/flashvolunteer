@@ -10,6 +10,8 @@ from controllers._utils import get_domain
 
 from models.messages.message_type import MessageType, MessagePropagationType
 
+from controllers._utils import is_debugging
+
 def get_user(id):
     recipient = Volunteer.get_by_id(id) 
     if not recipient:
@@ -45,12 +47,10 @@ class Message(db.Model):
     
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)
-    
-    referral_url = db.LinkProperty(default = None)
-    
+        
     type = db.ReferenceProperty(MessageType)
     
-    read = db.BooleanProperty(default = False)
+    unread = db.ListProperty(int) #list of recipient ids that have yet to read the message
     autogen = db.BooleanProperty(default = True)
     
     show_in_mailbox = db.ListProperty(int)
@@ -58,9 +58,11 @@ class Message(db.Model):
     def send(self):
         if self.flagged and not self.verified: return
         
-        self.email()
+        if not is_debugging(): 
+            self.email()
         self.mailbox()
     
+        self.unread = self.recipients
         self.sent = True
         self.put()
         
@@ -100,6 +102,8 @@ The Flash Volunteer team
 ---
 To view this message on Flash Volunteer, visit %(domain)s%(message_url)s. There you may reply to the message or flag it as inappropriate.  
 
+If you have feedback for the Flash Volunteer service, please visit http://flashvolunteer.uservoice.com/. 
+
 If you would prefer not to receive these types of messages, visit %(domain)s%(recipient_url)s/settings and adjust your Message preferences.
 """   
         domain = 'http://' + get_domain(keep_www = True)
@@ -112,7 +116,7 @@ If you would prefer not to receive these types of messages, visit %(domain)s%(re
             mail.send_mail(sender="noreply@flashvolunteer.org",
                             to= recipient.name + "<" + recipient.get_email() + ">",
                             subject=self.subject,
-                            body=self.body + footer%{'domain': domain, 'recipient_url': recipient.url})   
+                            body=self.body + footer%{'domain': domain, 'recipient_url': recipient.url(), 'message_url': self.url()})   
             
     def mailbox(self):
         footer = """

@@ -8,6 +8,7 @@ from google.appengine.ext import webapp
 import os, logging
 
 from models.messages.message import Message
+from models.event import Event
 from components.time_zones import now
 
 
@@ -17,11 +18,13 @@ def check_messages():
     for message in messages_to_send:
         message.send()        
 
+    
 class MessageDispatcher(AbstractHandler):
 
     def get(self):
         check_messages()
-        
+        self.redirect('/')
+        return
             
             
         

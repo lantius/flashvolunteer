@@ -78,7 +78,10 @@ class Event(db.Model):
     
     def get_start_time(self):
         return self.get_start_repr("%I:%M %p")
-    
+
+    def get_start_time_full(self):
+        return self.get_start_repr("%m/%d %I:%M %p")
+        
     def get_startdate_long(self):
         return self.get_start_repr("%A, %d %B %Y")
     
