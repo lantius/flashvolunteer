@@ -121,14 +121,15 @@ function init_tablesorter() {
 }
 
 var base_url = "";
+var neighborhoods = [];
+var interestcateogries = [];
 function init_search_local() {
-    var data;
+	var data;
     //init the neighborhood dropdown with the latest neighborhoods
     //paste 'http://www.flashvolunteer.org/neighborhoods?format=json&ver=w1' into your browser, copy and paste the result into here
     data =
     //replace following line:
-        {"neighborhoods":[ {"id":"1", "name":"Ballard", } , {"id":"2", "name":"Beacon Hill", } , {"id":"3", "name":"Belltown", } , {"id":"4", "name":"Capitol Hill", } , {"id":"5", "name":"Central District/ Madison Valley", } , {"id":"6", "name":"Columbia City", } , {"id":"7", "name":"Downtown", } , {"id":"8", "name":"Eastlake", } , {"id":"9", "name":"First Hill", } , {"id":"1001", "name":"Fremont", } , {"id":"10", "name":"Georgetown", } , {"id":"1002", "name":"Green Lake", } , {"id":"11", "name":"Greenwood", } , {"id":"13", "name":"Haller Lake/ Bitter Lake", } , {"id":"1003", "name":"Interbay", } , {"id":"12", "name":"International District", } , {"id":"14", "name":"Lake City", } , {"id":"1004", "name":"Laurelhurst", } , {"id":"15", "name":"Leschi", } , {"id":"16", "name":"Madison Park", } , {"id":"17", "name":"Madrona", } , {"id":"1005", "name":"Magnolia", } , {"id":"18", "name":"Maple Leaf", } , {"id":"19", "name":"Montlake", } , {"id":"20", "name":"Mount Baker", } , {"id":"21", "name":"Northgate", } , {"id":"22", "name":"Phinney Ridge", } , {"id":"23", "name":"Pioneer Square", } , {"id":"1006", "name":"Queen Anne", } , {"id":"1007", "name":"Rainier Valley", } , {"id":"1008", "name":"Ravenna", } , {"id":"1009", "name":"Roosevelt", } , {"id":"24", "name":"Sand Point", } , {"id":"1010", "name":"Seattle Center / Lower Queen Anne", } , {"id":"25", "name":"SoDo", } , {"id":"1011", "name":"South Lake Union", } , {"id":"26", "name":"South Park", } , {"id":"1012", "name":"University District", } , {"id":"27", "name":"View Ridge", } , {"id":"1013", "name":"Wallingford", } , {"id":"1014", "name":"Wedgwood", } , {"id":"28", "name":"West Seattle", } ]}
-    //end replace
+ 		{"neighborhoods":[ {"id":"38376", "name":"Bainbridge Island", } , {"id":"22805", "name":"Ballard", } , {"id":"23805", "name":"Beacon Hill", } , {"id":"39924", "name":"Bellevue", } , {"id":"23806", "name":"Belltown", } , {"id":"64928", "name":"Bitter Lake", } , {"id":"38371", "name":"Bothell", } , {"id":"38375", "name":"Burien", } , {"id":"23807", "name":"Capitol Hill", } , {"id":"22806", "name":"Central District", } , {"id":"38369", "name":"Delridge", } , {"id":"23809", "name":"Downtown", } , {"id":"38370", "name":"Edmonds", } , {"id":"50801", "name":"First Hill", } , {"id":"22808", "name":"Fremont", } , {"id":"23812", "name":"Georgetown", } , {"id":"22809", "name":"Green Lake", } , {"id":"23813", "name":"Greenwood", } , {"id":"23815", "name":"International District", } , {"id":"55801", "name":"Issaquah", } , {"id":"39923", "name":"Kirkland", } , {"id":"22811", "name":"Lake City", } , {"id":"39919", "name":"Lake Union", } , {"id":"22812", "name":"Leschi", } , {"id":"39922", "name":"Lynnwood", } , {"id":"22813", "name":"Madison Park", } , {"id":"23818", "name":"Madrona", } , {"id":"22814", "name":"Magnolia", } , {"id":"23819", "name":"Maple Leaf", } , {"id":"38373", "name":"Mercer Island", } , {"id":"22816", "name":"Northgate", } , {"id":"22817", "name":"Phinney Ridge", } , {"id":"22819", "name":"Queen Anne", } , {"id":"39920", "name":"Rainier Beach", } , {"id":"22820", "name":"Rainier Valley", } , {"id":"23821", "name":"Ravenna", } , {"id":"38372", "name":"Redmond", } , {"id":"67801", "name":"Renton", } , {"id":"49801", "name":"Sammamish", } , {"id":"23823", "name":"Sand Point", } , {"id":"39921", "name":"Shoreline", } , {"id":"22824", "name":"South Park", } , {"id":"38374", "name":"Tukwila", } , {"id":"23825", "name":"University District", } , {"id":"23826", "name":"Wallingford", } , {"id":"23827", "name":"Wedgwood", } , {"id":"22826", "name":"West Seattle", } , {"id":"39925", "name":"White Center", } ]}    //end replace
     ;
     add_neighborhood_option(data);
 
@@ -136,17 +137,18 @@ function init_search_local() {
     //paste 'http://www.flashvolunteer.org/category?format=json&ver=w1' into your browser, copy and paste the result into here
     data =
     //replace following line:
-        {"interestcategories":[ {"id":"1015", "name":"Animals", } , {"id":"1016", "name":"Arts & Culture", } , {"id":"1017", "name":"Children & Youth", } , {"id":"1018", "name":"Education & Literacy", } , {"id":"1019", "name":"Environment", } , {"id":"29", "name":"Gay, Lesbian, Bi, & Transgender", } , {"id":"1020", "name":"Homeless & Housing", } , {"id":"30", "name":"Hunger", } , {"id":"31", "name":"Justice & Legal", } , {"id":"32", "name":"Senior Citizens", } ]}
-    //end replace
+        {"interestcategories":[ {"id":"23828", "name":"Animals", } , {"id":"22827", "name":"Arts & Culture", } , {"id":"23829", "name":"Children & Youth", } , {"id":"22828", "name":"Education & Literacy", } , {"id":"23830", "name":"Environment", } , {"id":"22829", "name":"Gay, Lesbian, Bi, & Transgender", } , {"id":"23831", "name":"Homeless & Housing", } , {"id":"23832", "name":"Hunger", } , {"id":"23833", "name":"Justice & Legal", } , {"id":"23834", "name":"Senior Citizens", } ]}    //end replace
     ;
     add_interestcategory_option(data);
 }
+
 
 function add_neighborhood_option(data) {
     $("#neighborhood option").remove();
     $("<option value='none'>Any neighborhood</option>").appendTo("#neighborhood");
     $.each(data.neighborhoods,
         function(ii, item) {
+			neighborhoods[item.id] = item.name;
             $("<option value='"+ item.id +"'>"+ item.name +"</option>").appendTo("#neighborhood");
         });
 }
@@ -156,6 +158,7 @@ function add_interestcategory_option(data) {
     $("<option value='none'>Any  event type</option>").appendTo("#interestcategory");
     $.each(data.interestcategories,
         function(ii, item) {
+			interestcateogries[item.id] = item.name;
             $("<option value='"+ item.id +"'>"+ item.name +"</option>").appendTo("#interestcategory");
         });
 }
@@ -198,7 +201,7 @@ function search_events() {
                     $("<td>" + date_display + "</td>").attr("title", description).attr("timeval", date.getTime()).appendTo(el_tr);
                     //timeval is for sorting
                     $("<td><a href='" + base_url + "/events/" + item.id + "'>" + item.name + "</td>").attr("title", description).appendTo(el_tr);
-                    $("<td>" + item.neighborhood + "</td>").attr("title", description).appendTo(el_tr);
+                    $("<td>" + neighborhoods[item.neighborhood] + "</td>").attr("title", description).appendTo(el_tr);
 
                     $(el_tr).appendTo("#event_table_body");
                     } catch(err) {
