@@ -16,7 +16,7 @@ class FriendsPage(AbstractHandler):
     LIMIT = 12
     
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
     candidates = list(volunteer.friends()) + list(volunteer.following_only())

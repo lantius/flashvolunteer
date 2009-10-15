@@ -17,7 +17,7 @@ class BaseVolunteerListPage(AbstractHandler):
     
   def set_context(self):  
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
       self.volunteer = volunteer
     except:
       return

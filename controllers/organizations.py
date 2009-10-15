@@ -34,7 +34,7 @@ class OrganizationsPage(AbstractHandler):
   # SHOW
   def show(self, volunteer_id):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
 
@@ -81,7 +81,7 @@ class OrganizationsPage(AbstractHandler):
   # SEARCH
   def search(self, params):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
     
@@ -139,7 +139,7 @@ class FollowOrganization(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
 

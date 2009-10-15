@@ -4,8 +4,8 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 
-from models.volunteer import *
-from models.volunteerfollower import *
+from models.volunteer import Volunteer
+from models.volunteerfollower import VolunteerFollower
 
 from controllers._params import Parameters
 from controllers._auth import Authorize
@@ -21,7 +21,7 @@ class AdminPage(AbstractHandler):
   # GET
   def get(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
 
@@ -31,7 +31,7 @@ class AdminPage(AbstractHandler):
   # POST
   def post(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
     

@@ -135,7 +135,7 @@ The Flash Volunteer team
 <br>
 ---
 If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
-"""   
+"""%{'domain': 'http://' + get_domain(keep_www = True)}   
         self.body += footer
         prop = MessagePropagationType.all().filter('name =', 'mailbox').get()
         for id in self.recipients:

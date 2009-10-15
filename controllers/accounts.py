@@ -1,7 +1,6 @@
 import os, logging
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
-from google.appengine.api import users
 
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
@@ -30,11 +29,11 @@ class AccountPage(AbstractHandler):
     # otherwise, they get the splash page
 
     if self.request.path.find('dev_login') > -1:    
-      self.dev_login()    
+        self.dev_login()    
     elif not volunteer:
-      self.login()
+        self.login()
     elif self.request.path.find('logout') > -1:    
-      self.logout(volunteer)
+        self.logout(volunteer)
     else:
         self.redirect('/')
 
@@ -64,7 +63,6 @@ class AccountPage(AbstractHandler):
         template_values['token_url'] = self.request.host_url + '/rpx_response'
         
     session = Session()
-    session['redirect'] = self.request.GET.get('redirect', '/')
         
     self._add_base_template_values(vals = template_values)
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
@@ -84,35 +82,38 @@ from google.appengine.api.users import User
 
 class RPXTokenHandler(AbstractHandler):
       
-  def post(self):
-    token = self.request.get('token')
-    url = 'https://rpxnow.com/api/v2/auth_info'
-    args = {
-      'format': 'json',
-      'apiKey': 'b269b6356c17af69406026edb6b87d65df667b5e',
-      'token': token
-      }
-    r = urlfetch.fetch(url=url,
-                       payload=urllib.urlencode(args),
-                       method=urlfetch.POST,
-                       headers={'Content-Type':'application/x-www-form-urlencoded'}
-                       )
-    json = simplejson.loads(r.content)
-
-    if json['stat'] == 'ok':  
-      login_info = json['profile']  
-      if not 'email' in login_info:
-          if 'preferredUsername' in login_info:
-              login_info['email'] = login_info['preferredUsername'] + '@' + login_info['providerName']
-          elif 'identifier' in login_info:
-              login_info['email'] = login_info['identifier']
-          
-      session = Session()
-      user = User(email = login_info['email'], _auth_domain = login_info['providerName'])
-      session['user'] = user
-      logging.info('RPX post')
-
-      self.redirect('/settings')
-    else:
-      self.redirect('/error')  
+    def post(self):
+        token = self.request.get('token')
+        url = 'https://rpxnow.com/api/v2/auth_info'
+        args = {
+          'format': 'json',
+          'apiKey': 'b269b6356c17af69406026edb6b87d65df667b5e',
+          'token': token
+          }
+        r = urlfetch.fetch(url=url,
+                           payload=urllib.urlencode(args),
+                           method=urlfetch.POST,
+                           headers={'Content-Type':'application/x-www-form-urlencoded'}
+                           )
+        json = simplejson.loads(r.content)
+        
+        if json['stat'] == 'ok':  
+            login_info = json['profile']  
+            if not 'email' in login_info:
+                if 'preferredUsername' in login_info:
+                    login_info['email'] = login_info['preferredUsername'] + '@' + login_info['providerName']
+                elif 'identifier' in login_info:
+                    login_info['email'] = login_info['identifier']
+                
+            session = Session()
+            user = User(email = login_info['email'], _auth_domain = login_info['providerName'])
+            session['user'] = user
+            
+            if 'login_redirect' in session:
+                self.redirect(session['login_redirect'])
+                del session['login_redirect']
+            else:  
+                self.redirect('/settings')
+        else:
+            self.redirect('/error')  
     

@@ -13,7 +13,7 @@ class StaticPage(AbstractHandler):
   def get(self, urldata):    
     
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
     

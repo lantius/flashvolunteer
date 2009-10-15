@@ -33,7 +33,7 @@ class AbstractSendMessage(AbstractHandler):
 
     def _get_helper(self, recipients, url):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+            volunteer = Authorize.login(self, requireVolunteer=True)
         except:
             return
             
@@ -50,7 +50,7 @@ class AbstractSendMessage(AbstractHandler):
 class SendMessage_Personal(AbstractSendMessage):
     def post(self, url_data):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+            volunteer = Authorize.login(self, requireVolunteer=True)
         except:
             return
         
@@ -59,17 +59,22 @@ class SendMessage_Personal(AbstractSendMessage):
         params = Parameters.parameterize(self.request)
         self._send_message(sender = volunteer, recipients = recipients, type_id = 4, params = params)
         session = Session()
-        self.redirect(session.get('redirect','/'))
+        self.redirect(session.get('message_redirect','/'))
+        if 'message_redirect' in session:
+            self.redirect(session['message_redirect'])
+            del session['message_redirect']
+        else:
+            self.redirect('/messages')
         
     def get(self, url_data):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+            volunteer = Authorize.login(self, requireVolunteer=True)
         except:
             return
         params = Parameters.parameterize(self.request)
         session = Session()
         if 'redirect' in params:
-            session['redirect'] = params['redirect']
+            session['message_redirect'] = params['redirect']
         id = url_data
         recipient = Volunteer.get_by_id(int(id))
         recipients = [recipient]

@@ -49,7 +49,7 @@ class CategoryPage(AbstractHandler):
   def show(self, category_id):
     LIMIT = 12
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
 

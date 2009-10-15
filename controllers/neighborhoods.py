@@ -16,7 +16,7 @@ from controllers.abstract_handler import AbstractHandler
 class NeighborhoodsPage(AbstractHandler):
   def get(self, url_data):    
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
     
@@ -108,7 +108,7 @@ class NeighborhoodDetailPage(AbstractHandler):
   def show(self, neighborhood_id):
     LIMIT = 12
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
 

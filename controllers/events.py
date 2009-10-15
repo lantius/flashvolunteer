@@ -140,7 +140,7 @@ class EventsPage(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
     
@@ -319,7 +319,7 @@ class EventsPage(AbstractHandler):
   # NEW
   def new(self, event):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
     
@@ -378,7 +378,7 @@ class EventsPage(AbstractHandler):
   # EDIT
   def edit(self, event): 
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return   
     
@@ -593,7 +593,7 @@ class EventAddCoordinatorPage(AbstractHandler):
   # GET
   def get(self, event_id):   
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
     
@@ -619,7 +619,7 @@ class EventAddCoordinatorPage(AbstractHandler):
     
   def post(self, event_id):   
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return
 

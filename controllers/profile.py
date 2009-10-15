@@ -21,7 +21,7 @@ class ProfilePage(AbstractHandler):
   LIMIT = 2
   def get(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/login')
+      volunteer = Authorize.login(self, requireVolunteer=True)
     except:
       return    
 

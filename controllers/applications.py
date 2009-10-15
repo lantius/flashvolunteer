@@ -14,7 +14,7 @@ from models.application import Application
 class AllApplications(AbstractHandler):
   def get(self):    
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = Authorize.login(self, requireVolunteer=False)
     except:
       return
     
