@@ -20,7 +20,7 @@ class="current"
 	    <input type="hidden" name="session_id" value="{{ volunteer.session_id }}">
 	    <ul>	
 	        <li><span class="label">Volunteer:</span> {% include "_select_volunteer_event_coordinator.html"%}</li>
-			<li><input type="submit" id="s_add_coordinator" value="Add as coordinator"></li>
+			<li><input type="submit" id="s_add_coordinator" value="Add as organizer"></li>
 		</ul>				
 	</form>
 	<p>You can only add people who have already signed up for an event. If your co-coordinator is not yet signed up, <a class="operation" href="mailto:?subject=Help me coordinate {{event.name}}!&body=I'd like you to help coordinate this event: http:/{{domain}}{{event.url}}. Please click on the above link and volunteer so I can add you as co-coordinator!">invite them</a>!</p>

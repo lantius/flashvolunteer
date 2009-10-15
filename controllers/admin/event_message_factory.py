@@ -25,7 +25,6 @@ class EventMessageFactory(AbstractHandler):
         rsvp_events_to_check = [e for e in Event.all().filter('reminder_message_sent =', False).filter('date >', right_now)]
     
         for e in rsvp_events_to_check:
-            print (e.date - right_now).days
             if (e.date - right_now).days > 0:
                 continue
             #it appears that model instances accessed in a cron job do not have referenceproperties resolved; 
@@ -91,6 +90,5 @@ class EventMessageFactory(AbstractHandler):
                 e.post_event_message_sent = True
             e.put()
             
-        self.redirect('/')
         return
             

@@ -18,6 +18,15 @@ class MigrateDatastore(AbstractHandler):
         
         ## do migration here
         synchronize_apps()
+        
+        for e in Event.all():
+            if e.inpast():
+                e.post_event_message_sent = True
+                e.reminder_message_sent = True
+            else:
+                e.post_event_message_sent = False
+                e.reminder_message_sent = False     
+            e.put()
         return
     
 ##########################################################################

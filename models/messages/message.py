@@ -95,17 +95,20 @@ class Message(db.Model):
         
     def email(self):
         footer = """
-        
-Thanks!,
-The Flash Volunteer team
-
 ---
 To view this message on Flash Volunteer, visit %(domain)s%(message_url)s. There you may reply to the message or flag it as inappropriate.  
 
-If you have feedback for the Flash Volunteer service, please visit http://flashvolunteer.uservoice.com/. 
+If you have feedback for us at Flash Volunteer, please visit http://flashvolunteer.uservoice.com/. 
 
-If you would prefer not to receive these types of messages, visit %(domain)s%(recipient_url)s/settings and adjust your Message preferences.
-"""   
+If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
+"""  
+        if self.autogen:
+            footer = """
+        
+Thanks!,
+The Flash Volunteer team
+""" + footer
+ 
         domain = 'http://' + get_domain(keep_www = True)
 
         prop = MessagePropagationType.all().filter('name =', 'email').get()
@@ -120,14 +123,20 @@ If you would prefer not to receive these types of messages, visit %(domain)s%(re
             
     def mailbox(self):
         footer = """
-<br><br>
+---
+If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
+"""  
+        if self.autogen:
+            footer = """<br><br>
 Thanks!,
 The Flash Volunteer team
+""" + footer
+        footer = """
 <br>
 ---
-If you would prefer not to receive these types of messages, visit %(domain)s%(recipient_url)s/settings and adjust your Message preferences.
+If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
 """   
-
+        self.body += footer
         prop = MessagePropagationType.all().filter('name =', 'mailbox').get()
         for id in self.recipients:
             recipient = get_user(id = id)

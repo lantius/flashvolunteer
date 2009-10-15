@@ -90,10 +90,7 @@ type5 = msg(
 
 "%(event_name)s" is happening at %(event_start)s! You have signed up to volunteer there. 
 
-Please visit the event page at %(event_url)s and send one of the event organizers a message in order to RSVP. 
-
-Thanks!
-The Flash Volunteer team    
+Please visit the event page at %(event_url)s and send one of the event organizers a message in order to RSVP.   
 """
 )
 
@@ -108,10 +105,7 @@ type6 = msg(
 
 You are organizing "%(event_name)s", scheduled to occur at %(event_start)s! %(participation_statement)s
 
-Please visit the event page at %(event_url)s to edit the event or contact volunteers. 
-
-Thanks!
-The Flash Volunteer team    
+Please visit the event page at %(event_url)s to edit the event or contact volunteers.     
 """
 )
 
@@ -129,9 +123,6 @@ You participated in "%(event_name)s"! We hope that you enjoyed it.
 Visit the event page at %(event_url)s to upload photos, send the event organizers feedback, and connect with other volunteers you may have met. 
 
 If you did not participate, please visit the event site and remove yourself from the participants list.
-
-Thanks!
-The Flash Volunteer team    
 """
 )
 
@@ -146,9 +137,6 @@ type8 = msg(
 
 You organized "%(event_name)s". We hope that it went well! %(participation_statement)s 
 
-We hope that you will continue organizing events on Flash Volunteer!
-
-Thanks,
-The Flash Volunteer team    
+We hope that you will continue organizing events on Flash Volunteer!  
 """
 )

@@ -23,7 +23,6 @@ class MessageDispatcher(AbstractHandler):
 
     def get(self):
         check_messages()
-        self.redirect('/')
         return
             
             
