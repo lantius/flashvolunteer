@@ -10,7 +10,7 @@ from models.eventvolunteer import EventVolunteer
 from components.time_zones import now
 
 from controllers._utils import send_message
-from components.message_text import type5, type6, type7, type8
+from components.message_text import type5, type6, type7, type8, type9
     
 class EventMessageFactory(AbstractHandler):
 
@@ -33,7 +33,8 @@ class EventMessageFactory(AbstractHandler):
             params = {
                 'event_name': e.name,
                 'event_url': '%s%s'%(self._get_base_url(), e.url()),
-                'event_start': e.get_start_time_full()
+                'event_start_date': e.get_startdate_short(),
+                'event_start_time': e.get_start_time()
             }
             if len(recipients) > 0:
                 send_message(to = recipients, 
@@ -43,7 +44,7 @@ class EventMessageFactory(AbstractHandler):
                              autogen = True)
             
             if len(recipients) > 0: 
-                params['participation_statement'] = "You have %i Flash Volunteers signed up."%len(recipients)
+                params['participation_statement'] = "You currently have %i Flash Volunteers signed up."%len(recipients)
             else:
                 params['participation_statement'] = "At this time, there are no Flash Volunteers signed up."
             hosts = [ev.volunteer for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, True).fetch(limit=500)]
@@ -91,4 +92,52 @@ class EventMessageFactory(AbstractHandler):
             e.put()
             
         return
+
+
+class RecommendedEventMessageFactory(AbstractHandler):
+
+    def get(self):
+        from models.volunteer import Volunteer
+        from controllers.events import _get_recommended_events
+        
+        print 'here'
+        type9_msg = MessageType.all().filter('name =', 'rec_event').get()
+        right_now = now()
+        cached_descs = {}
+        
+        for v in Volunteer.all():
+            rec_events = [e for e in _get_recommended_events(volunteer = v) 
+                            if e.enddate and (e.enddate - right_now).days < 7][:10]
             
+            desc = []
+            for i,e in enumerate(rec_events):
+                id = e.key().id()
+                if id in cached_descs:
+                    d = cached_descs[id]
+                else:
+                    if e.get_startdate() == e.get_enddate():
+                        dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time())
+                    else:
+                        dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time_full())
+                        
+                    url = '%s%s'%(self._get_base_url(), e.url())
+                    
+                    d = '%i. "%s" - %s \nWhen: %s\nWhere: %s\n"%s..."'%(i+1, e.name, url, dt, e.neighborhood.name, e.description[:100])
+                    cached_descs[id] = d
+                    
+                desc.append(d)
+            
+            if len(rec_events) > 0:
+                print 'sending message'
+                params = {
+                    'vol_name': v.name,
+                    'recommendation_text': '\n\n'.join(desc)
+                }
+
+                send_message(to = [v], 
+                             subject = type9.subject%params, 
+                             body = type9.body%params, 
+                             type = type9_msg, 
+                             autogen = True)
+            
+        return

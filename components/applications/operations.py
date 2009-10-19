@@ -48,14 +48,15 @@ def add_messaging():
         mps[mp] = mpt
         
     message_types = (
-        (1, 'event_coord', 'When someone signs up for an event you coordinate', ['mailbox','email'], True),
-        (2, 'added_to_team', 'When someone adds you to their team', ['mailbox','email'], True),
+        (1, 'event_coord', 'Someone signs up for an event I\'m coordinating', ['mailbox','email'], True),
+        (2, 'added_to_team', 'Someone adds me to their Flash team', ['mailbox','email'], True),
         (3, 'welcome', 'When you create an account', ['mailbox'], False),
-        (4, 'person_to_person', 'When someone sends you a message', ['mailbox', 'email'], True),
-        (5, 'rsvp_vol', 'Reminder message for event you have volunteered for, 24 hours ahead', ['mailbox','email'], True),
-        (6, 'rsvp_host', 'Reminder message for event you are coordinating, 24 hours ahead', ['mailbox','email'], True),
-        (7, 'post_vol', 'Post event message requesting feedback about your volunteer experience', ['mailbox','email'], True),
-        (8, 'post_host', 'Post event message requesting feedback about your experience coordinating an event', ['mailbox','email'], True),
+        (4, 'person_to_person', 'When someone sends me a personal message', ['mailbox', 'email'], True),
+        (5, 'rsvp_vol', 'An event I am volunteering at is coming up (24 hours notice)', ['mailbox','email'], True),
+        (6, 'rsvp_host', 'An event I am coordinating is coming up (24 hours notice)', ['mailbox','email'], True),
+        (7, 'post_vol', 'Feedback requested about my experience at an event', ['mailbox','email'], True),
+        (8, 'post_host', 'Request for post-processing after an event I coordinated', ['mailbox','email'], True),
+        (9, 'rec_event', 'Recommended events (weekly digest)', ['mailbox', 'email'], True),
     )
 
     for order, name, prompt, mpts, in_settings in message_types:

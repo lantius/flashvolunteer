@@ -4,7 +4,6 @@ from google.appengine.ext import db
 from google.appengine.api import mail
 
 from models.volunteer import Volunteer
-from models.organization import Organization
 
 from controllers._utils import get_domain
 
@@ -13,21 +12,12 @@ from models.messages.message_type import MessageType, MessagePropagationType
 from controllers._utils import is_debugging
 
 def get_user(id):
+    from models.organization import Organization
+
     recipient = Volunteer.get_by_id(id) 
     if not recipient:
         recipient = Organization.get_by_id(id)
     return recipient
-
-################################################################################
-# Message
-########################
-#TYPE is a way to index what kind of message it is, for accounting purposes
-#
-# 1: message to event host when volunteer signs up
-# 2: Message to volunteer when they are added to team#
-#
-#
-
 
 def remove_html_tags(data):
     p = re.compile(r'<.*?>')
@@ -94,7 +84,7 @@ class Message(db.Model):
         return prop.key().id() in prefs        
         
     def email(self):
-        footer = """
+        footer = """\n
 ---
 To view this message on Flash Volunteer, visit %(domain)s%(message_url)s. There you may reply to the message or flag it as inappropriate.  
 
@@ -105,7 +95,7 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
         if self.autogen:
             footer = """
         
-Thanks!,
+Thanks!
 The Flash Volunteer team
 """ + footer
  
@@ -122,20 +112,11 @@ The Flash Volunteer team
                             body=self.body + footer%{'domain': domain, 'recipient_url': recipient.url(), 'message_url': self.url()})   
             
     def mailbox(self):
-        footer = """
----
-If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
-"""  
         if self.autogen:
-            footer = """<br><br>
-Thanks!,
-The Flash Volunteer team
-""" + footer
-        footer = """
-<br>
----
-If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
-"""%{'domain': 'http://' + get_domain(keep_www = True)}   
+            footer = "\n\nThanks!\nThe Flash Volunteer team"
+        else:
+            footer = ''
+        footer += "\n\n---\nIf you would prefer not to receive these types of messages, visit your <a href=\"/settings\">settings page</a> and adjust your Message preferences."
         self.body += footer
         prop = MessagePropagationType.all().filter('name =', 'mailbox').get()
         for id in self.recipients:

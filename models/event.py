@@ -88,6 +88,9 @@ class Event(db.Model):
     def get_startdatetime(self):
         return self.get_start_repr("%Y-%m-%d %H:%M")
         
+    def get_startdate_short(self):
+      return self.get_start_repr("%m/%d")
+    
     def get_startdate(self):
       return self.get_start_repr("%m/%d/%Y")
     
@@ -117,6 +120,9 @@ class Event(db.Model):
     
     def get_enddate(self):
         return self.get_end_repr("%m/%d/%Y")
+
+    def get_end_time_full(self):
+        return self.get_end_repr("%m/%d %I:%M %p")
     
     def get_end_time(self):
         return self.get_end_repr("%I:%M %p")
@@ -278,7 +284,6 @@ class Event(db.Model):
     
     def inpast(self):
         return self.date < now()
-    
     
     #########################################
     ## DEPRECATED

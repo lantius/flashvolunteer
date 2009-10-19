@@ -30,7 +30,7 @@ type1_unvol = msg(
     body="""
 Hi %(owner_name)s,
 
-%(vol_name)s is unable to help out at \"%(event_name)s\". You now have %(vol_count)s volunteer(s) signed up. 
+%(vol_name)s is no longer able to attend your event \"%(event_name)s\". You now have %(vol_count)s volunteer(s) signed up. 
 """
 )
 
@@ -73,9 +73,6 @@ We hope that you will be able to use this site to easily find and coordinate vol
 Get started by filling out your profile and checking out the listed events!
 
 If you have any questions, send an email to info@flashvolunteer.org.
-
-Thanks!
-The Flash Volunteer team    
 """
 )
 
@@ -85,10 +82,10 @@ The Flash Volunteer team
 
 type5 = msg(
 
-    subject = 'You are signed up to volunteer for "%(event_name)s"',
+    subject = 'RSVP for "%(event_name)s"',
     body = """Hello, 
 
-"%(event_name)s" is happening at %(event_start)s! You have signed up to volunteer there. 
+"%(event_name)s" is happening at %(event_start_time)s on %(event_start_date)s! You have signed up to volunteer there. 
 
 Please visit the event page at %(event_url)s and send one of the event organizers a message in order to RSVP.   
 """
@@ -103,7 +100,9 @@ type6 = msg(
     subject = 'You are organizing "%(event_name)s"',
     body = """Hello, 
 
-You are organizing "%(event_name)s", scheduled to occur at %(event_start)s! %(participation_statement)s
+You are organizing "%(event_name)s", scheduled to occur on %(event_start_date)s at %(event_start_time)s! 
+
+%(participation_statement)s
 
 Please visit the event page at %(event_url)s to edit the event or contact volunteers.     
 """
@@ -135,8 +134,25 @@ type8 = msg(
     subject = 'You organized "%(event_name)s"',
     body = """Hello, 
 
-You organized "%(event_name)s". We hope that it went well! %(participation_statement)s 
+You organized "%(event_name)s". We hope that it went well! 
+
+%(participation_statement)s 
 
 We hope that you will continue organizing events on Flash Volunteer!  
+"""
+)
+
+###############################################################
+# Type 9: recommended events
+###############################################################
+
+type9 = msg(
+
+    subject = 'Your weekly volunteer recommendations',
+    body = """Hello %(vol_name)s, 
+
+Here are the events we think you might be interested in, based on the neighborhoods you work and live in and your selected interest categories. We hope that you find them useful!
+
+%(recommendation_text)s 
 """
 )

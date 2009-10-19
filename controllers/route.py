@@ -1,6 +1,7 @@
 import os
 import wsgiref.handlers
 import cgi, logging
+from components.sessions import Session
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -38,7 +39,7 @@ from controllers.interest_categories import CategoryPage
 
 from controllers.abstract_handler import AbstractHandler
 
-from controllers._utils import get_server
+from controllers._utils import get_server, is_debugging
 
 webapp.template.register_template_library('templatetags.filters')
 
@@ -67,6 +68,13 @@ class TimeoutPage(AbstractHandler):
 # /events/1?delete=true POST: delete up for an event
 
 def main():
+    session = Session()
+    debug = is_debugging()
+    if debug:
+        from components.applications.operations import synchronize_apps
+        from models.application import Application
+        if Application.all().count() == 0:
+            synchronize_apps()
         
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(
@@ -124,7 +132,7 @@ def main():
            ('/api/applications/all', AllApplications), 
            ('/api/applications/this', ThisApplication)
           ],
-          debug=True)
+          debug=debug)
     wsgiref.handlers.CGIHandler().run(application)
 
 if __name__ == "__main__":

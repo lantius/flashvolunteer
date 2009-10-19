@@ -64,7 +64,6 @@ def get_google_maps_api_key():
 
 from models.messages.message import Message
 from components.time_zones import now
-from controllers.admin.message_dispatcher import check_messages
 
 def send_message(to, subject, body, type, sender = None, trigger = None, immediate=False, autogen = True):
     if trigger is None:
@@ -88,3 +87,9 @@ def send_message(to, subject, body, type, sender = None, trigger = None, immedia
     message.put()
     if immediate:
         check_messages()
+
+def check_messages():
+    messages_to_send = Message.all().filter('sent =', False).filter('trigger <', now())
+
+    for message in messages_to_send:
+        message.send()    

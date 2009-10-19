@@ -72,7 +72,8 @@ div#container{
                 #left75, #right25,
                 #left25, #right75,
                 #middle100,
-                #splash-right, #splash-left, #splash-leftmost {
+                #splash-right, #splash-left, #splash-leftmost,
+				#left66, #right33 {
                     float: left; 
                     top:0
                 }
@@ -92,7 +93,17 @@ div#container{
                     padding: 0 0 10px 10px;
                     width: 185px;
                 }
-                
+				
+                #right33 {
+                    padding: 0 0 10px 10px;
+                    width: 260px;
+                }
+				
+                #left66 {
+                    padding: 0 10px 10px 0px;
+                    width: 500px;
+                }				
+				
                 /*the following is specific to the three column layout, 33% - 33% - 33% */
                 #leftthirdequi,#middlethirdequi,#rightthirdequi {
                     padding: 0 10px 10px 0;

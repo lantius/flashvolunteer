@@ -101,7 +101,7 @@ class PierceCounty(ApplicationDef):
         return 'pierce-county'
     
     def get_subdomains(self):
-        return ['pierce-county', 'tacoma']
+        return ['pierce']
     
     def get_neighborhoods(self):
         return (

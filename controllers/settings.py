@@ -8,7 +8,6 @@ from google.appengine.api import users, images
 from google.appengine.ext import webapp, db
 
 from models.volunteer import Volunteer
-from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
 from models.volunteerinterestcategory import VolunteerInterestCategory
 from models.messages import MessageType, MessagePropagationType

@@ -1,7 +1,5 @@
 from google.appengine.api import users
 from google.appengine.ext import db
-from models.interestcategory import *
-from controllers._helpers import SessionID
 from models.abstractuser import AbstractUser
 
 #For verifying volunteer creation
