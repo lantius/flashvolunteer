@@ -37,11 +37,11 @@ class="current"
     {% endif %}	
     {% comment %}
         show photos, and allow to add albums and photos
-    {% endcomment %}
     {% if event.inpast %}
-       {% include "../events/event_page/_event_photos.html" %}
     {% else %}
     {% endif %}
+    {% endcomment %}
+       {% include "../events/event_page/_event_photos.html" %}
 
 </div>
 
