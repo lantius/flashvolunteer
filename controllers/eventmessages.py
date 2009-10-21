@@ -49,7 +49,7 @@ class EventMessagesPage(MessagesPage):
 
     self.create(params, event, volunteer)
     session = Session()
-    self.redirect(session.get('redirect','/'))
+    self.redirect('/')
     return
   
   ################################################################################

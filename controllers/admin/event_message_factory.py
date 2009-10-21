@@ -11,11 +11,19 @@ from components.time_zones import now
 
 from controllers._utils import send_message
 from components.message_text import type5, type6, type7, type8, type9
-    
+
+from components.sessions import Session
+from controllers._auth import Authorize
+
+from models.volunteer import Volunteer
+
+
+
 class EventMessageFactory(AbstractHandler):
 
     def get(self):
-
+        s = Session()
+        
         type5_msg = MessageType.all().filter('name =', 'rsvp_vol').get()
         type6_msg = MessageType.all().filter('name =', 'rsvp_host').get()
         type7_msg = MessageType.all().filter('name =', 'post_vol').get()
@@ -97,16 +105,15 @@ class EventMessageFactory(AbstractHandler):
 class RecommendedEventMessageFactory(AbstractHandler):
 
     def get(self):
-        from models.volunteer import Volunteer
-        from controllers.events import _get_recommended_events
-        
-        print 'here'
+        s = Session()
+
         type9_msg = MessageType.all().filter('name =', 'rec_event').get()
         right_now = now()
         cached_descs = {}
         
         for v in Volunteer.all():
-            rec_events = [e for e in _get_recommended_events(volunteer = v) 
+            v.volunteerinterestcategories
+            rec_events = [e for e in v.recommended_events() 
                             if e.enddate and (e.enddate - right_now).days < 7][:10]
             
             desc = []

@@ -150,11 +150,10 @@ tr.message.unread {
 	background-color: #F5F5F5;
 }
 
-
-div#active_neighborhoods .odd {
-    background-color: #FFFFFF;
+table.zebra tr.odd {
+    background-color: #EDEEFD;
 }
 
-div#active_neighborhoods .even {
-    background-color: #EDEEFD;
+table.zebra tr.even {
+    background-color: #FFFFFF;
 }

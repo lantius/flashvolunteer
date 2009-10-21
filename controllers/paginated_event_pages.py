@@ -14,7 +14,7 @@ from models.interestcategory import InterestCategory
 from controllers._auth import Authorize
 from controllers._params import Parameters
 
-from controllers.events import _get_recommended_events, _get_upcoming_events 
+from controllers.events import _get_upcoming_events 
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -103,7 +103,7 @@ class PaginatedRecommendedPage(BaseEventListPage):
       self.set_context()
         
   def _get_event_generator(self):
-     return (list(_get_recommended_events(volunteer = self.volunteer)), 'direct')
+     return (list(self.volunteer.recommended_events()), 'direct')
  
   def _get_title(self):
      return 'Recommended Events'

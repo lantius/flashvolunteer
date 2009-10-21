@@ -6,12 +6,12 @@ from google.appengine.api import users
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 
-from models.volunteer import *
-from models.neighborhood import *
-from models.event import *
-from models.interestcategory import *
+from models.volunteer import Volunteer
+from models.neighborhood import Neighborhood
+from models.event import Event
+from models.interestcategory import InterestCategory
 
-from controllers.events import _get_recommended_events, _get_upcoming_events 
+from controllers.events import _get_upcoming_events 
 
 from controllers.abstract_handler import AbstractHandler
 

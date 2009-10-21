@@ -870,3 +870,13 @@ ul.event_header img{
 #emcreatesubmit input {
 	float:right;
 }
+
+#message_settings li{
+	padding-left: 15px;
+	padding-bottom: 5px;    
+}
+
+.message_settings table {
+	margin-left: 10px;
+	
+}

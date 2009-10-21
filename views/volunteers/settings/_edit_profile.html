@@ -12,36 +12,46 @@
 		{% if volunteer.error.name %}
 			<br/><strong class="error" id="error_name" >{{volunteer.error.name.0}}</strong>
 		{% endif %}
-        <li><span class="label">Preferred email:</span> <input type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
+        <li><span class="label">Email:</span> <input type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
         <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
         <li><span class="label">I live in:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
         <li><span class="label">I work in:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
     </ul>
 </div>
-    
+
+<script>
+    $(function() {
+$('table.zebra tr:even').addClass('even');
+$('table.zebra tr:odd').addClass('odd');
+});
+</script>
+
 <div id="editprofile" class="softmodule">
     <div class="moduletitle">
         <h3>Message settings</h3>
     </div>
-   
-    <ul>
+	
+	
+    Let us know how you want to receive notifications<br><br>
+    <div id="message_settings">
+    	<table class="zebra">
         {% for message_type in message_types %}
-		
-	        <li>
-	            <span class="label">{{message_type.prompt}}:</span>
-				<ol>
-				{% for propagation_type in message_propagation_types %}
-    			  {% message_type_pref volunteer message_type propagation_type %} 
-				  <li>
-				    <input class="checkbox" type="checkbox" id="{{message_type.key.id}}[{{propagation_type.key.id}}]" name="{{message_type.key.id}}[{{propagation_type.key.id}}]" value="1" {% if mt_checked %} checked {% endif %} />
-				    <label class="checkboxlabel" for="{{message_type.key.id}}[{{propagation_type.key.id}}]" >{{ propagation_type.prompt }}</label>
-				  </li>
-				{% endfor %}
-				</ol>               
-	        <li>
+		    <tr><td class="message_setting">
+			        <span class="label">{{message_type.prompt}}:</span>
+					<ul>
+        				{% for propagation_type in message_propagation_types %}
+    	           		  {% message_type_pref volunteer message_type propagation_type %} 
+							  <li class="fl">
+							    <input class="checkbox" type="checkbox" id="{{message_type.key.id}}[{{propagation_type.key.id}}]" name="{{message_type.key.id}}[{{propagation_type.key.id}}]" value="1" {% if mt_checked %} checked {% endif %} />
+							    <label class="checkboxlabel" for="{{message_type.key.id}}[{{propagation_type.key.id}}]" >{{ propagation_type.prompt }}</label>
+							  </li>
+        				{% endfor %}
+					</ul>
+				</td>
+			</tr>
         {% endfor %}
-        
-    </ul>
+		</table>
+	</div>
 </div>
 
 

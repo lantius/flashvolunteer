@@ -49,7 +49,7 @@ class MessageTypePrefNode(template.Node):
         message_type = template.resolve_variable(self.message_type,context)
         
         if volunteer:
-            mp = MessagePreference.all().filter('type =', message_type).get()
+            mp = volunteer.message_preferences.filter('type =', message_type).get()
             if not mp: 
                 prop = message_type.default_propagation
             else:

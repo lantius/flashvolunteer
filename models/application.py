@@ -16,4 +16,4 @@ class Application(db.Model):
   sw_coord = db.GeoPtProperty()
   
   def get_alias(self):
-      return self.name.replace('-', ' ').capitalize()
+      return self.name.replace('-', ' ').title()

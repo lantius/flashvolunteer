@@ -10,6 +10,7 @@ import wsgiref.handlers
 from controllers.admin.migrate_datastore import MigrateDatastore
 from controllers.admin.message_dispatcher import MessageDispatcher
 from controllers.admin.event_message_factory import EventMessageFactory, RecommendedEventMessageFactory
+from controllers.settings import SettingsPage
 
 webapp.template.register_template_library('templatetags.filters')
 

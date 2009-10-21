@@ -34,29 +34,37 @@ def add_categories():
       
 def add_messaging(): 
     message_props = (
-        ('mailbox', 'Flash Mailbox'),
+        ('mailbox', 'Mailbox'),
         ('email', 'Email')
     )
 
     mps = {}
     for mp, prompt in message_props: 
         if MessagePropagationType.all().filter('name =', mp).count() > 0: 
-            mpt = MessagePropagationType.all().filter('name =', mp).get()       
+            mpt = MessagePropagationType.all().filter('name =', mp).get()   
+            if mpt.prompt != prompt:
+                mpt.prompt = prompt
+                mpt.put()    
         else:
             mpt = MessagePropagationType(name = mp, prompt = prompt)
             mpt.put()
         mps[mp] = mpt
         
     message_types = (
-        (1, 'event_coord', 'Someone signs up for an event I\'m coordinating', ['mailbox','email'], True),
-        (2, 'added_to_team', 'Someone adds me to their Flash team', ['mailbox','email'], True),
-        (3, 'welcome', 'When you create an account', ['mailbox'], False),
-        (4, 'person_to_person', 'When someone sends me a personal message', ['mailbox', 'email'], True),
-        (5, 'rsvp_vol', 'An event I am volunteering at is coming up (24 hours notice)', ['mailbox','email'], True),
-        (6, 'rsvp_host', 'An event I am coordinating is coming up (24 hours notice)', ['mailbox','email'], True),
-        (7, 'post_vol', 'Feedback requested about my experience at an event', ['mailbox','email'], True),
-        (8, 'post_host', 'Request for post-processing after an event I coordinated', ['mailbox','email'], True),
-        (9, 'rec_event', 'Recommended events (weekly digest)', ['mailbox', 'email'], True),
+        (0, 'rec_event', 'Digest of upcoming, recommended events (weekly digest)', ['mailbox'], True),
+        (1, 'person_to_person', 'If someone sends me a personal message', ['mailbox', 'email'], True),
+
+        (2, 'rsvp_vol', 'Reminder about an event I am volunteering at (24 hours notice)', ['mailbox','email'], True),
+        (3, 'rsvp_host', 'Reminder about an event I am coordinating (24 hours notice)', ['mailbox','email'], True),
+        
+        (4, 'event_coord', 'If someone signs up for an event I\'m coordinating', ['mailbox','email'], True),
+
+        (5, 'post_vol', 'Reminder to give feedback on an event I attended', ['mailbox','email'], True),
+        (6, 'post_host', 'Reminder to fill out volunteer attendance for an event I coordinated', ['mailbox','email'], True),
+
+        (7, 'added_to_team', 'If someone adds me to their Flash team', ['mailbox','email'], True),
+        (8, 'welcome', 'When you create an account', ['mailbox'], False),
+
     )
 
     for order, name, prompt, mpts, in_settings in message_types:

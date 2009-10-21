@@ -27,6 +27,11 @@ class MigrateDatastore(AbstractHandler):
                 e.post_event_message_sent = False
                 e.reminder_message_sent = False     
             e.put()
+            
+        for v in Volunteer.all():
+            if v.preferred_email and v.preferred_email.endswith('@facebook'):
+                v.preferred_email = None
+                v.put()
         return
     
 ##########################################################################

@@ -27,6 +27,8 @@ from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 
 from controllers.abstract_handler import AbstractHandler
 
+from google.appengine.api import memcache
+
 def _get_upcoming_events():
     region = get_application()
     
@@ -37,56 +39,6 @@ def _get_upcoming_events():
     
     return events
                   
-
-def _get_recommended_events(volunteer):
-    #TODO make more efficient
-    
-    vol_events = set([e.key().id() for e in volunteer.events_future()])
-
-    neighborhoods = {}
-    if(volunteer.work_neighborhood):
-      neighborhoods[volunteer.work_neighborhood.key().id()] = 1
-    if(volunteer.home_neighborhood):
-      neighborhoods[volunteer.home_neighborhood.key().id()] = 1
-      
-          
-    #Don't know which of these two implementations are faster
-    #############################
-    ### 1    : this one only gets ids right now
-    ##########################
-#
-#    events_in_interested_neighborhoods = []
-#    for n in neighborhoods:
-#        events_in_interested_neighborhoods += [e.key().id() for e in n.events_future()]
-#    events_in_interested_neighborhoods = set(events_in_interested_neighborhoods)
-#
-#    events_in_interest_categories = set([])
-#    for ic in volunteer.interestcategories():
-#        events_in_interest_categories.update([e.key().id() for e in ic.upcoming_events()])
-#    
-#    recommended_events = events_in_interested_neighborhoods | events_in_interest_categories - vol_events
-#
-#    return recommended_events
-
-    #########################
-    ###2
-    ####################
-
-    vol_interests = set([ic.key().id() for ic in volunteer.interestcategories()])
-    recommended_events = (e for e in _get_upcoming_events() if
-            # recommend non rsvp'd events
-            not e.key().id() in vol_events and  
-            #recommend events in home or work neighborhood  
-            (e.neighborhood.key().id() in neighborhoods or  
-             #recommend events in interest categories
-            len(vol_interests.intersection(
-                   set([ic.key().id() for ic in e.interestcategories()]))
-                ) > 0)
-            )
-    #########
-    
-    return recommended_events
-
 #this is a hack: google django does not have escapejs yet - this is from there
 _base_js_escapes = (
   ('\\', r'\x5C'),
@@ -180,7 +132,7 @@ class EventsPage(AbstractHandler):
     upcoming_events = _get_upcoming_events().fetch(EventsPage.LIMIT)
     
     if volunteer:
-        recommended_events = list(_get_recommended_events(volunteer = volunteer))[:EventsPage.LIMIT]
+        recommended_events = list(volunteer.recommended_events())[:EventsPage.LIMIT]
         my_future_events = volunteer.events_future()[:EventsPage.LIMIT]
         my_past_events = volunteer.events_past()[-EventsPage.LIMIT:]
         my_past_events.reverse()

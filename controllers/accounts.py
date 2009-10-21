@@ -20,60 +20,60 @@ from controllers.abstract_handler import AbstractHandler
 ################################################################################
 # MainPage
 class AccountPage(AbstractHandler):
-  LIMIT = 12 
-  def get(self):
-      
-    volunteer = Authorize.login(self, requireVolunteer=False)
-
-    # if volunteer is logged in, then they get their login page
-    # otherwise, they get the splash page
-
-    if self.request.path.find('dev_login') > -1:    
-        self.dev_login()    
-    elif not volunteer:
-        self.login()
-    elif self.request.path.find('logout') > -1:    
-        self.logout(volunteer)
-    else:
-        self.redirect('/')
-
-  def dev_login(self):
-    from google.appengine.api import users
-    session = Session()
+    LIMIT = 12 
+    def get(self):
+        
+        volunteer = Authorize.login(self, requireVolunteer=False)
     
-    user = users.get_current_user()    
-    session['user'] = user
-    self.redirect('/settings')
+        # if volunteer is logged in, then they get their login page
+        # otherwise, they get the splash page
     
-  ################################################################################
-  # splashpage
-  def login(self):
-                
-    dev_server = is_debugging() 
+        if self.request.path.find('dev_login') > -1:    
+            self.dev_login()    
+        elif not volunteer:
+            self.login()
+        elif self.request.path.find('logout') > -1:    
+            self.logout(volunteer)
+        else:
+            self.redirect('/')
     
-    template_values = { 
-      'new_account': self.request.path == '/create',
-      'dev_server': dev_server,
-    }
-    
-    if dev_server:
+    def dev_login(self):
         from google.appengine.api import users
-        template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
-    else:
-        template_values['token_url'] = self.request.host_url + '/rpx_response'
+        session = Session()
         
-    session = Session()
+        user = users.get_current_user()    
+        session['user'] = user
+        self.redirect('/settings')
+      
+    ################################################################################
+    # splashpage
+    def login(self):
+                  
+        dev_server = is_debugging() 
         
-    self._add_base_template_values(vals = template_values)
-    path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
-    self.response.out.write(template.render(path, template_values))
-
-  ################################################################################
-  # homepage
-  def logout(self, volunteer):
-    session = Session()
-    session.delete()
-    self.redirect('/')
+        template_values = { 
+          'new_account': self.request.path == '/create',
+          'dev_server': dev_server,
+        }
+        
+        if dev_server:
+            from google.appengine.api import users
+            template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
+        else:
+            template_values['token_url'] = self.request.host_url + '/rpx_response'
+            
+        session = Session()
+            
+        self._add_base_template_values(vals = template_values)
+        path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
+        self.response.out.write(template.render(path, template_values))
+    
+    ################################################################################
+    # homepage
+    def logout(self, volunteer):
+        session = Session()
+        session.delete()
+        self.redirect('/')
 
     
 from google.appengine.api import urlfetch
@@ -106,9 +106,19 @@ class RPXTokenHandler(AbstractHandler):
                     login_info['email'] = login_info['identifier']
                 
             session = Session()
+#            for k,v in login_info.items():
+#                if isinstance(v, dict):
+#                    logging.info(k + '...')
+#                    for kk,vv in v.items():
+#                        logging.info('\t'+kk + ': ' + str(vv))
+#                    logging.info('done')
+#                else:
+#                    logging.info(k + ': ' + str(v))
             user = User(email = login_info['email'], _auth_domain = login_info['providerName'])
             session['user'] = user
-            
+            session['auth_domain'] = login_info['providerName']
+            session['login_info'] = login_info
+                
             if 'login_redirect' in session:
                 self.redirect(session['login_redirect'])
                 del session['login_redirect']

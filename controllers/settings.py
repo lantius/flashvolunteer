@@ -4,8 +4,10 @@ from controllers._auth import Authorize
 from controllers._params import Parameters
 
 from google.appengine.ext.webapp import template
-from google.appengine.api import users, images
+from google.appengine.api import users, images, memcache
 from google.appengine.ext import webapp, db
+
+from google.appengine.api.urlfetch import fetch
 
 from models.volunteer import Volunteer
 from models.interestcategory import InterestCategory
@@ -29,20 +31,39 @@ class SettingsPage(AbstractHandler):
     # GET
     ################################################################################
     def get(self):      
-      try:
-          volunteer = Authorize.login(self, requireVolunteer=False)
-      except:
-          return
-      
-      logging.info('beginning settings')
-      if volunteer:
-          self.edit(volunteer)
-      else:
-          logging.info('create new vol')
-          volunteer = Volunteer()
-          volunteer.error.clear()
-          self.new(volunteer)
+        try:
+            volunteer = Authorize.login(self, requireVolunteer=False)
+        except:
+            return
+        
+        logging.info('beginning settings')
+        if volunteer:
+            self.edit(volunteer)
+        else:
+            logging.info('create new vol')
+            volunteer = Volunteer()
+            volunteer.error.clear()
+            self.new(volunteer)
+        
+        session = Session()
+        if volunteer and \
+          volunteer.avatar is None and \
+          session['auth_domain'] == 'Facebook':
+
+            try:
+                import imghdr
             
+                img = fetch(url = session['login_info']['photo']).content   
+                content_type = imghdr.what(None, img)
+                if not content_type:
+                  return
+            
+                volunteer.avatar_type = 'image/' + content_type
+                volunteer.avatar = img
+                volunteer.put()          
+            except:
+                pass
+              
     ################################################################################
     # POST
     ################################################################################
@@ -57,10 +78,7 @@ class SettingsPage(AbstractHandler):
       
       if not volunteer:
         if self.create(params):
-          redirect = session.get('redirect', '/')
-          if redirect in session:
-              del session['redirect']
-          self.redirect(redirect)
+          self.redirect('/')
           
       else:
         if 'is_delete' in params and params['is_delete'] == 'true':     
@@ -85,7 +103,7 @@ class SettingsPage(AbstractHandler):
           'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
           'interestcategories' : InterestCategoryHelper().selected(volunteer),
           'message_propagation_types' : MessagePropagationType.all(),
-          'message_types': MessageType.all().filter('in_settings =', True)
+          'message_types': MessageType.all().filter('in_settings =', True).order('order')
         }
       self._add_base_template_values(vals = template_values)
       
@@ -147,25 +165,26 @@ class SettingsPage(AbstractHandler):
     # UPDATE
     def update(self, params, volunteer):
       
-      if not volunteer.validate(params):
-        self.edit(volunteer)
-        return False
+        if not volunteer.validate(params):
+            self.edit(volunteer)
+            return False
       
-      for interestcategory in InterestCategory.all():
-        param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-        if not param_name in params:
-          continue
-        vic = VolunteerInterestCategory.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
+        for interestcategory in InterestCategory.all():
+            param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+            if not param_name in params:
+                continue
+            vic = VolunteerInterestCategory.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
                             volunteer = volunteer, interestcategory = interestcategory).get()
-        if params[param_name] == ['1','1'] and not vic:          
-          vic = VolunteerInterestCategory(volunteer = volunteer, interestcategory = interestcategory)
-          vic.put()
-        elif params[param_name] == '1' and vic:
-          vic.delete()
+            if params[param_name] == ['1','1'] and not vic:          
+                vic = VolunteerInterestCategory(volunteer = volunteer, interestcategory = interestcategory)
+                vic.put()
+            elif params[param_name] == '1' and vic:
+                vic.delete()
     
-      
-      volunteer.put()
-      return True
+        volunteer.put()
+        if memcache.get('%s_rec_events'%volunteer.key().id()):
+            memcache.delete('%s_rec_events'%volunteer.key().id())
+        return True
         
     ################################################################################
     # DELETE
@@ -184,7 +203,12 @@ class SettingsPage(AbstractHandler):
       interests = volunteer.volunteerinterestcategories;
       for interest in interests:
         interest.delete()
-    
+
+      # Remove your message preferences
+      prefs = volunteer.message_preferences;
+      for pref in prefs:
+        pref.delete()
+            
       # Remove events you've volunteered for
       evs = volunteer.eventvolunteers
       for ev in evs:

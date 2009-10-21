@@ -19,8 +19,8 @@ from components.sessions import Session
 class AbstractSendMessage(AbstractHandler):
     ################################################################################
     # POST
-    def _send_message(self, sender, recipients, type_id, params):            
-        mt = MessageType.all().filter('order = ', type_id).get()
+    def _send_message(self, sender, recipients, type, params):            
+        
         
         send_message(to = recipients, 
                      subject = params['subject'], 
@@ -57,7 +57,9 @@ class SendMessage_Personal(AbstractSendMessage):
         id = url_data
         recipients = [Volunteer.get_by_id(int(id))]
         params = Parameters.parameterize(self.request)
-        self._send_message(sender = volunteer, recipients = recipients, type_id = 4, params = params)
+        mt = MessageType.all().filter('name = ', 'person_to_person').get()
+        
+        self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
         if 'message_redirect' in session:
