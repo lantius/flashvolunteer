@@ -20,7 +20,7 @@ import urllib
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
     def _get_base_url(self):
-        return 'http://' + get_domain(keep_www = True)
+        return 'http://www.' + get_domain(keep_www = False)
     
     def _add_base_template_values(self, vals):
         

@@ -157,3 +157,20 @@ table.zebra tr.odd {
 table.zebra tr.even {
     background-color: #FFFFFF;
 }
+
+#mailbox-tab-sections.ui-widget-content {
+	border:none;
+}
+#nav.ui-widget-header {
+	background: #ffffff;
+	border: none;
+	border-bottom: 3px solid #E6E6E6;
+}
+#nav .ui-state-active {
+	border-color: #E6E6E6;
+    border-width: 3px;
+}
+
+#nav.ui-tabs-nav li {
+	margin-bottom: -3px;
+}

@@ -1,4 +1,4 @@
-import os
+import os, logging
 from google.appengine.api import memcache
 
 from models.applicationdomain import ApplicationDomain
@@ -29,8 +29,8 @@ def get_server():
         
 def get_domain(keep_www = False):
     if not keep_www and os.environ['HTTP_HOST'].startswith('www.'):
-        return os.environ['HTTP_HOST'][4:].replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
-    return os.environ['HTTP_HOST'].replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
+        return os.environ['HTTP_HOST'][4:].replace('appspot.com', 'org')
+    return os.environ['HTTP_HOST'].replace('appspot.com', 'org')
 
 def get_application(just_id = False):
     domain = get_domain()
@@ -44,15 +44,6 @@ def get_application(just_id = False):
     else: return app_domain.application
     
 def get_google_maps_api_key():
-    # flashvolunteer-dev.appspot.com
-    #GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxRzNuM6YWShM3q9_tmx1xqncfIVVBR0Vl7Dzc-1cpY5wjaMPmq_fwpBYA'
-    # flashvolunteer.appspot.com
-    #GOOGLE_MAPS_API_KEY = 'ABQIAAAA5caWoMd1eNfUNui_l1ovGxQ_mWzt9DEjH1LJGfRCLKaKtSAdHRQXsI-fBQAVUzaYlblLSlzQ1ctnSQ'
-    # flashvolunteer.org
-    #GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBT8o8BW0NprhG7ZQBw6sHycsndbhRS7hhGpRgOy2Kssletcr3BQkAy7jg'
-    #http://v01-1.latest.flashvolunteer.appspot.com
-    #GOOGLE_MAPS_API_KEY = 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBRKcpMVieIGuRjmcVoCEVomVUOSzxQXzU7Vr92SCk5CZf8Fq_G1wz5bIA'
-    
     server = get_server()
     if server == 0:
         return 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBT8o8BW0NprhG7ZQBw6sHycsndbhRS7hhGpRgOy2Kssletcr3BQkAy7jg'
@@ -60,7 +51,7 @@ def get_google_maps_api_key():
         return 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBRzNuM6YWShM3q9_tmx1xqncfIVVBTbiYMhS-lVDJ8Xb4gcYINCK_rBMA'
     else: 
         return 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBSQPgw8JI6IbILJlYJvqzvWY-lLQBTXCrJQnsm-dzTVGDCeBq80bPNwUQ'
-    
+
 
 from models.messages.message import Message
 from components.time_zones import now
@@ -73,7 +64,9 @@ def send_message(to, subject, body, type, sender = None, trigger = None, immedia
         sender_id = sender.key().id()
     else:
         sender_id = -1
-        
+    
+    if subject == '' or subject is None:
+        subject = '(No subject)'
     message = Message(
       subject = subject,
       body = body,

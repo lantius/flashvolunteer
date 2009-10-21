@@ -132,3 +132,10 @@ indexes:
   properties:
   - name: application
   - name: name
+
+- kind: Message
+  properties:
+  - name: sender
+  - name: sent
+  - name: trigger
+    direction: desc

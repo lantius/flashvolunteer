@@ -20,7 +20,6 @@ from components.sessions import Session
 from controllers.abstract_handler import AbstractHandler
 
 from controllers._utils import send_message
-from components.message_text import type3
 
 ################################################################################
 # Settings page
@@ -134,33 +133,35 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     # CREATE
     def create(self, params):
-      session = Session()
-      user = session.get('user', None)
-    
-      if not user:
-        self.redirect('/create')
-        return
-    
-      volunteer = Volunteer()
-      volunteer.user = user
-      
-      if not volunteer.validate(params):
-        self.new(volunteer)
-        return False
+        from components.message_text import type3
         
-      volunteer.put()
-      
-      params = {'name': volunteer.name} 
-              
+        session = Session()
+        user = session.get('user', None)
+        
+        if not user:
+            self.redirect('/create')
+            return
+        
+        volunteer = Volunteer()
+        volunteer.user = user
+        
+        if not volunteer.validate(params):
+            self.new(volunteer)
+            return False
           
-      send_message(to = [volunteer], 
-                   subject = type3.subject%params,
-                   body = type3.body%params,
-                   type= MessageType.all().filter('name =', 'welcome').get(), 
-                   immediate = True)
-      
-      
-      return True
+        volunteer.put()
+        
+        params = {'name': volunteer.name} 
+                
+            
+        send_message(to = [volunteer], 
+                     subject = type3.subject%params,
+                     body = type3.body%params,
+                     type= MessageType.all().filter('name =', 'welcome').get(), 
+                     immediate = True)
+        
+        
+        return True
       
     ################################################################################
     # UPDATE

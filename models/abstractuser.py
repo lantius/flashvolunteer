@@ -139,3 +139,7 @@ class AbstractUser(db.Model):
         from models.messages.message import Message
         return Message.all().filter('unread =', self.key().id()).filter('recipients =', self.key().id()).filter('sent =', True).order('-trigger')
 
+    def get_sent_messages(self):
+        from models.messages.message import Message
+        return Message.all().filter('sender =', self.key().id()).filter('sent =', True).order('-trigger')
+    

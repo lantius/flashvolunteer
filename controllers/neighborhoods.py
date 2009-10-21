@@ -9,6 +9,7 @@ from models.eventvolunteer import EventVolunteer
 from controllers._utils import get_application
 
 from controllers.abstract_handler import AbstractHandler
+from google.appengine.api import memcache
 
 ################################################################################
 # Neighborhoods page
@@ -36,30 +37,35 @@ class NeighborhoodsPage(AbstractHandler):
       }
     self._add_base_template_values(vals = template_values)
 
+    LIMIT = 15
     if not is_json:
-        stats = {}
-        LIMIT = 15
-        for n in neighborhoods:                                                     
-            volunteers_living = len(list(n.volunteers_living_here()))
-            volunteers_working = len(list(n.volunteers_working_here()))                   
-            past_events = len(list(n.events_past()))                       
-            upcoming_events = len(list(n.events_future()))                    
-            vhours = 0 
-            for e in n.events:
-                vhours += sum([ev.hours for ev in e.eventvolunteers if ev.hours])
-    
-            stats[n] = [volunteers_living, volunteers_working, past_events, upcoming_events, vhours]           
         
-        all_scores = []                                             
-        for n,scores in stats.items():
-            all_scores.append((n, sum(scores), scores)) 
-                                                 
-        all_scores.sort(lambda (n, total, scores), (n2, total2, scores2): int(total-total2), reverse=True)                            
+        neighborhood_stats = memcache.get('neighborhood_stats')
+        if not neighborhood_stats: 
+            stats = {}
+            
+            for n in neighborhoods:                                                     
+                volunteers_living = len(list(n.volunteers_living_here()))
+                volunteers_working = len(list(n.volunteers_working_here()))                   
+                past_events = len(list(n.events_past()))                       
+                upcoming_events = len(list(n.events_future()))                    
+                vhours = 0 
+                for e in n.events:
+                    vhours += sum([ev.hours for ev in e.eventvolunteers if ev.hours])
         
-        output = []
-        for n, total, scores in all_scores:
-            #scores.append(total)  #dont show total score at this time...
-            output.append((n, scores))
+                stats[n] = [volunteers_living, volunteers_working, past_events, upcoming_events, vhours]           
+            
+            all_scores = []                                             
+            for n,scores in stats.items():
+                all_scores.append((n, sum(scores), scores)) 
+                                                     
+            all_scores.sort(lambda (n, total, scores), (n2, total2, scores2): int(total-total2), reverse=True)                            
+            
+            neighborhood_stats = []
+            for n, total, scores in all_scores:
+                #scores.append(total)  #dont show total score at this time...
+                neighborhood_stats.append((n, scores))
+            memcache.add('neighborhood_stats', neighborhood_stats, 10000)
         
         cnt = application.neighborhoods.count()                           
         col1 = neighborhoods[:cnt/3]
@@ -70,7 +76,7 @@ class NeighborhoodsPage(AbstractHandler):
             'neighborhoods1': col1,
             'neighborhoods2': col2,
             'neighborhoods3': col3,
-            'most_active_neighborhoods': output[:LIMIT],
+            'most_active_neighborhoods': neighborhood_stats[:LIMIT],
             'LIMIT': LIMIT,                                                                       
         })         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.html')

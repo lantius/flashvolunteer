@@ -73,6 +73,12 @@ class Message(db.Model):
         else:
             sender = None
         return sender
+    
+    def get_recipient(self):
+        if len(self.recipients) == 1: 
+            return get_user(self.recipients[0])
+        else:
+            return None
 
     def _get_message_pref(self, recipient, prop):
         prefs = recipient._get_message_pref(type = self.type)
@@ -99,7 +105,7 @@ Thanks!
 The Flash Volunteer team
 """ + footer
  
-        domain = 'http://' + get_domain(keep_www = True)
+        domain = 'http://www.' + get_domain(keep_www = False)
 
         prop = MessagePropagationType.all().filter('name =', 'email').get()
         for id in self.recipients:

@@ -17,34 +17,60 @@ Flash Volunteer
             <ul class="message">
                 <li class="fl">
                 	<div class="volunteer_summary_pic">
-                        <a href="{{ message.get_sender.url }}" >
-                            <img class="smallavatar" src="
-							{% if message.get_sender %}
-	                            {% if message.get_sender.avatar %}
-	                                {{ message.get_sender.url }}/avatar
+                      {%if sender_viewing %}
+	                        <a href="{{ message.get_recipient.url }}" >
+	                            <img class="smallavatar" src="
+								{% if message.get_recipient %}
+		                            {% if message.get_recipient.avatar %}
+		                                {{ message.get_recipient.url }}/avatar
+		                            {% else %}
+		                                /stylesheets/media/default-profile-pic-small.png
+		                            {% endif %}
 	                            {% else %}
-	                                /stylesheets/media/default-profile-pic-small.png
+								   /stylesheets/media/fv_avatar.png
+								{% endif %}
+	                            " alt="{{ message.get_recipient.get_name }}" />
+							</a>
+						{% else %}
+	                        <a href="{{ message.get_sender.url }}" >
+	                            <img class="smallavatar" src="
+	                            {% if message.get_sender %}
+	                                {% if message.get_sender.avatar %}
+	                                    {{ message.get_sender.url }}/avatar
+	                                {% else %}
+	                                    /stylesheets/media/default-profile-pic-small.png
+	                                {% endif %}
+	                            {% else %}
+	                               /stylesheets/media/fv_avatar.png
 	                            {% endif %}
-                            {% else %}
-							   /stylesheets/media/fv_avatar.png
-							{% endif %}
-                            " alt="{{ message.get_sender.get_name }}" />
-						</a>
+	                            " alt="{{ message.get_sender.get_name }}" />
+	                        </a>
+						
+						{% endif %}
                     </div>
 				</li>
                 <li class="fl">
                     <div>
-                    	{% if message.autogen %}
-                             <span class="additionalinfo">Auto-sent on behalf of</span>
-                        {%endif%}
-						{% if message.get_sender %}
-                                 <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
-                         {% else %}
-                                 Flash Volunteer
-                         {%endif%}
+                    	{% if sender_viewing %}
+	                    	<a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+						{% else %}
+                            {% if message.autogen %}
+                                 <span class="additionalinfo">Auto-sent on behalf of</span>
+                            {%endif%}
+                            {% if message.get_sender %}
+                                     <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
+                             {% else %}
+                                     Flash Volunteer
+                             {%endif%}						
+						{% endif %}
 				    </div>
                     <div class="subtext">{{ message.time_sent }}</div>
-					{% if message.autogen %}{% else %}<div class="operations"><a href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a></div>{%endif%}
+					{% if message.autogen %}
+					{% else %}
+					   <div class="operations">
+					   	   {% if sender_viewing %}{% else %}<a href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
+					   </div>
+					{%endif%}
 				</li>
 			</ul>
 			<div class="cl"><!--empty--></div>

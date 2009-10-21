@@ -36,12 +36,16 @@ class Mailbox(AbstractHandler):
         
         message = Message.get_by_id(int(id))
         
-        if not message or not volunteer.key().id() in message.recipients:
-            self.redirect(self.request.referrer)
-        
+        if not message or not (volunteer.key().id() in message.recipients or volunteer.key().id() == message.sender):
+            if self.request.referrer:
+                self.redirect(self.request.referrer)
+            else:
+                self.redirect('/')
+                
         template_values = {
             'volunteer': volunteer,
-            'message': message
+            'message': message,
+            'sender_viewing': message.get_sender() is not None and message.get_sender().key().id() == volunteer.key().id()
           }
         self._add_base_template_values(vals = template_values)
         
@@ -71,6 +75,20 @@ class Mailbox(AbstractHandler):
         message = Message.get_by_id(int(message_id))
         message.delete()
           
+          
+    def _get_next(self, lst):
+        next = lst[-1].trigger
+        if next.second != 59:
+            #this is because the comparison operator is working against a 
+            #reverse sorted list & datetime.isotime returns a microsecond
+            #in its str rep which cannot be recreated through strftime
+            next.replace(second=next.second+1)
+        else:
+            next.replace(minute=next.minute+1, second = 0)
+            
+        next = next.strftime('%Y-%m-%d %H:%M:%S')   
+        return next
+             
     ################################################################################
     # LIST
     def list(self):
@@ -81,32 +99,35 @@ class Mailbox(AbstractHandler):
         
         messages = volunteer.get_messages().filter('show_in_mailbox =', volunteer.key().id())
         
+        sent_messages = volunteer.get_sent_messages()
+        
         bookmark = self.request.get("bookmark", None)
         if bookmark:
             bookmark = datetime.strptime(bookmark, '%Y-%m-%d %H:%M:%S')            
             messages = messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
+            sent_messages = sent_messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
         else:
             messages = messages.fetch(PAGELIMIT+1)
+            sent_messages = sent_messages.fetch(PAGELIMIT+1)
             
         if len(messages) == PAGELIMIT+1:
-            next = messages[-1].trigger
-            if next.second != 59:
-                #this is because the comparison operator is working against a 
-                #reverse sorted list & datetime.isotime returns a microsecond
-                #in its str rep which cannot be recreated through strftime
-                next.replace(second=next.second+1)
-            else:
-                next.replace(minute=next.minute+1, second = 0)
-                
-            next = next.strftime('%Y-%m-%d %H:%M:%S')
+            next = self._get_next(lst = messages)                
             messages = messages[:PAGELIMIT]
         else:
             next = None
-                    
+
+        if len(sent_messages) == PAGELIMIT+1:
+            sent_next = self._get_next(lst = sent_messages)                
+            sent_messages = sent_messages[:PAGELIMIT]
+        else:
+            sent_next = None
+
         template_values = {
             'volunteer': volunteer,
             'messages': messages,
             'next': next,
+            'sent_messages': sent_messages,
+            'sent_next': sent_next,
           }
         self._add_base_template_values(vals = template_values)
         
