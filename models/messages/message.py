@@ -86,7 +86,7 @@ class Message(db.Model):
     def email(self):
         footer = """\n
 ---
-To view this message on Flash Volunteer, visit %(domain)s%(message_url)s. There you may reply to the message or flag it as inappropriate.  
+To view and reply to this message on Flash Volunteer, visit %(domain)s%(message_url)s.
 
 If you have feedback for us at Flash Volunteer, please visit http://flashvolunteer.uservoice.com/. 
 

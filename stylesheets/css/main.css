@@ -352,6 +352,13 @@ img.smallavatar {
     height: 80px;
 }
 
+.volunteer_summary_name img,
+.volunteer_summary_name input,
+.volunteer_summary_name form {
+	width: 20px;
+}
+
+
 /*
 ======================================================
 >>Form Styles
@@ -880,3 +887,8 @@ ul.event_header img{
 	margin-left: 10px;
 	
 }
+
+.person_list_ops {
+	padding-left: 20px;
+}
+

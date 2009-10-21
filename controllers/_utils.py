@@ -29,8 +29,8 @@ def get_server():
         
 def get_domain(keep_www = False):
     if not keep_www and os.environ['HTTP_HOST'].startswith('www.'):
-        return os.environ['HTTP_HOST'][4:]
-    return os.environ['HTTP_HOST']
+        return os.environ['HTTP_HOST'][4:].replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
+    return os.environ['HTTP_HOST'].replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
 
 def get_application(just_id = False):
     domain = get_domain()

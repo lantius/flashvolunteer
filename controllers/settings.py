@@ -48,6 +48,7 @@ class SettingsPage(AbstractHandler):
         session = Session()
         if volunteer and \
           volunteer.avatar is None and \
+          'auth_domain' in session and \
           session['auth_domain'] == 'Facebook':
 
             try:

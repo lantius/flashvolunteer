@@ -25,7 +25,7 @@ class AbstractSendMessage(AbstractHandler):
         send_message(to = recipients, 
                      subject = params['subject'], 
                      body = params['body'], 
-                     type = mt, 
+                     type = type, 
                      sender = sender,
                      autogen = False)
         
@@ -59,6 +59,8 @@ class SendMessage_Personal(AbstractSendMessage):
         params = Parameters.parameterize(self.request)
         mt = MessageType.all().filter('name = ', 'person_to_person').get()
         
+        from_header = 'From: %s\n\n'%volunteer.name
+        params['body'] = from_header + params['body']
         self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))

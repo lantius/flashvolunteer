@@ -5,9 +5,10 @@ cron:
   
 - description: generates RSVP and post event messages
   url: /admin/event_message_factory
-  schedule: every 5 minutes
+  schedule: every 2 hours
 
 - description: generates messages for recommended events
   url: /admin/recommended_events_message_factory
-  schedule: every monday 06:00
+  schedule: every monday 03:00
+  timezone: America/New_York
   

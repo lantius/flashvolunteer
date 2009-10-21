@@ -123,6 +123,11 @@ indexes:
   - name: sent
   - name: trigger
 
+- kind: MessageType
+  properties:
+  - name: in_settings
+  - name: order
+
 - kind: Neighborhood
   properties:
   - name: application

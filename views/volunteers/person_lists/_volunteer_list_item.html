@@ -18,25 +18,34 @@
             " alt="{{ volunteer_in_list.get_name }}" /></a>
         </div>
         <div class="volunteer_summary_name">
-            <div>
+                <div>
                  <a id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
                     {{ volunteer_in_list.get_first_name }}
                     <br/>
                     {{ volunteer_in_list.get_last_name }}
                  </a>
+                </div>
+
                 {% if volunteer %}
+				    <div class="person_list_ops">
 	                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
 	                  {% if is_teammate %}
 					  {% else %} 
-		                <form title="Add to your Team" action="{{volunteer_in_list.url}}/follow" method="post">
-		                    <input type=hidden name="session_id" value="{{ volunteer.session_id }}">
-		                    <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=submit value="(team)"/>
-		                </form>
+					    <div class="fl">
+			                <form title="Add to your Team" action="{{volunteer_in_list.url}}/follow" method="post">
+			                    <input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+			                    <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=image src="/stylesheets/media/add.png" value=""/>
+			                </form>
+						</div>
                       {% endif %}
-                      <a class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">(msg)</a>
-	                {% endifnotequal %}
+                        <div class="fl">
+                        	<a class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">
+                        		<img src="/stylesheets/media/email_icon.gif" />
+							</a>
+	                    </div>
+					{% endifnotequal %}
+					</div>
                 {% endif %}
-            </div>
         </div>
                 
     </div>
