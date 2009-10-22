@@ -620,10 +620,16 @@ span.verification_warning_wrapper {
 }
 
 #createvolunteer #createnameinput {
-    width: 285px;
+    width: 100%;
 }
 
+#createvolunteer select {
+	width: 100%;
+}
 
+#createvolunteer li {
+	padding-top: 10px;
+}
 /******************************************************
  * >> UNORGANIZED
  * 

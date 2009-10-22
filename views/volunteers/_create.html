@@ -16,11 +16,13 @@
 					value="{{ default_name|striptags }}"
 				{% endif %}
 			{% endif %}
-			/></li>
-			{% if volunteer.error.name %}
-				<br/><strong class="error">{{volunteer.error.name.0}}</strong>
-			{% endif %}
-		<li>
+			/>
+		    {% if volunteer.error.name %}
+                <br/><strong class="error">{{volunteer.error.name.0}}</strong>
+            {% endif %}
+		</li>
+
+
 		<li><span class="label">Email (required):</span><input id="createnameinput" type="text" name="email"
 			{% if volunteer.error.email %}
 				value="{{ volunteer.error.email.1 }}"
@@ -31,17 +33,20 @@
 					value="{{ default_email|striptags }}"
 				{% endif %}
 			{% endif %}
-			/></li>
-			{% if volunteer.error.email %}
-				<br/><strong class="error">{{volunteer.error.email.0}}</strong>
-			{% endif %}
-		<li>			
-			
-		<input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
+			/>
+	        {% if volunteer.error.email %}
+                <br/><strong class="error">{{volunteer.error.email.0}}</strong>
+            {% endif %}
+		</li>
+
+        <li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
+        <li><span class="label">I work nearest to:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
+					
+		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
 		{% if volunteer.error.tosagree %}
 			<br/><strong class="error">{{volunteer.error.tosagree.0}}</strong>
 		{% endif %}
-		
+		</li>
 		<li><input type="submit" value="Create my account" id="s_create_account"/></li>
 	</ul>
 	</form>

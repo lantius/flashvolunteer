@@ -119,9 +119,16 @@ class RPXTokenHandler(AbstractHandler):
             session['auth_domain'] = login_info['providerName']
             session['login_info'] = login_info
                 
+            try:
+                volunteer = Authorize.login(self, requireVolunteer=False)
+            except:
+                return
+            
             if 'login_redirect' in session:
                 self.redirect(session['login_redirect'])
                 del session['login_redirect']
+            elif volunteer:
+                self.redirect('/profile')
             else:  
                 self.redirect('/settings')
         else:

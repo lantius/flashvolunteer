@@ -35,11 +35,9 @@ class SettingsPage(AbstractHandler):
         except:
             return
         
-        logging.info('beginning settings')
         if volunteer:
             self.edit(volunteer)
         else:
-            logging.info('create new vol')
             volunteer = Volunteer()
             volunteer.error.clear()
             self.new(volunteer)
@@ -69,30 +67,28 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     def post(self):
       try:
-        volunteer = Authorize.login(self, requireVolunteer=False)
+          volunteer = Authorize.login(self, requireVolunteer=False)
       except:
-        return
+          return
         
       params = Parameters.parameterize(self.request)
       session = Session()
       
       if not volunteer:
-        if self.create(params):
-          self.redirect('/')
+          if self.create(params):
+              self.redirect('/profile')
           
       else:
-        if 'is_delete' in params and params['is_delete'] == 'true':     
-          if 'confirm_delete' in params and params['confirm_delete'] == 'true':
-            self.delete(volunteer)
-            self.redirect('/')
-          else:
-            self.confirm_delete(volunteer)
-            
-        else:  
-          if self.update(params, volunteer):
-              self.redirect('/settings')
-          
-    
+          if 'is_delete' in params and params['is_delete'] == 'true':     
+              if 'confirm_delete' in params and params['confirm_delete'] == 'true':
+                  self.delete(volunteer)
+                  self.redirect('/')
+              else:
+                  self.confirm_delete(volunteer)
+          else:  
+              if self.update(params, volunteer):
+                  self.redirect('/profile')
+
     ################################################################################
     # EDIT
     def edit(self, volunteer):
@@ -119,11 +115,17 @@ class SettingsPage(AbstractHandler):
       if not user:
         self.redirect('/login')
         return
-    
+      if 'auth_domain' in session and session['auth_domain'] == 'Facebook':
+          default_email = ''
+      else:
+          default_email = user.email()
+          
       template_values = {
           'default_name' : user.nickname(),
-          'default_email': user.email(),
-          'volunteer' :  volunteer
+          'default_email': default_email,
+          'volunteer' :  volunteer,
+          'home_neighborhoods': NeighborhoodHelper().selected(None),
+          'work_neighborhoods': NeighborhoodHelper().selected(None),
         }
       self._add_base_template_values(vals = template_values)
       
