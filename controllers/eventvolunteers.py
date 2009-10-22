@@ -39,8 +39,7 @@ class VolunteerForEvent(AbstractHandler):
               (to, subject, body) = self.get_message_text(event = event, 
                                                                   volunteer = volunteer, 
                                                                   sign_up = False)
-              send_message(sender = volunteer, 
-                            to = to, 
+              send_message( to = to, 
                             subject = subject, 
                             body = body, 
                             type = MessageType.all().filter('name =', 'event_coord').get())

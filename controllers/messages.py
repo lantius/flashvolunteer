@@ -36,7 +36,7 @@ class Mailbox(AbstractHandler):
         
         message = Message.get_by_id(int(id))
         
-        if not message or not (volunteer.key().id() in message.recipients or volunteer.key().id() == message.sender):
+        if not message or not (volunteer.key().id() == message.recipient.key().id() or volunteer.key().id() == message.sender):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
             else:
@@ -49,31 +49,12 @@ class Mailbox(AbstractHandler):
           }
         self._add_base_template_values(vals = template_values)
         
-        if volunteer.key().id() in message.unread:
-            message.unread.remove(volunteer.key().id())
+        if not message.read: 
+            message.read = True
             message.put()
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'message.html')
         self.response.out.write(template.render(path, template_values, debug=is_debugging()))        
-        
-    ################################################################################
-    # CREATE
-    def create(self, params, volunteer):
-        message = Message()
-        message.title = params['title']
-        message.sender = volunteer
-        message.content = params['content']
-        message.recipient = params['recipient']
-        
-        message.put()
-            
-        return message.key().id()
-      
-    ################################################################################
-    # DELETE
-    def delete(self, message_id, volunteer):
-        message = Message.get_by_id(int(message_id))
-        message.delete()
           
           
     def _get_next(self, lst):
@@ -97,7 +78,7 @@ class Mailbox(AbstractHandler):
         except:
             return
         
-        messages = volunteer.get_messages().filter('show_in_mailbox =', volunteer.key().id())
+        messages = volunteer.incoming_messages.filter('mailbox =', True)
         
         sent_messages = volunteer.get_sent_messages()
         

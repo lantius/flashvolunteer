@@ -79,7 +79,7 @@ class MessageReadNode(template.Node):
         message = template.resolve_variable(self.message,context)
         
         if volunteer:            
-            context['message_read'] = volunteer.key().id() not in message.unread
+            context['message_read'] = message.read
         return ''
 
 register.tag(message_read_by_volunteer)

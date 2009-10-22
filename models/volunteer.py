@@ -171,3 +171,16 @@ class Volunteer(AbstractUser):
         #########
         memcache.add('%s_rec_events'%self.key().id(), recommended_events, 120)
         return recommended_events
+
+    def get_messages(self):
+        from models.messages.message import Message
+        return self.incoming_messages.filter('sent =', True).order('-trigger')
+    
+    def get_unread_messages(self):
+        from models.messages.message import Message
+        return self.incoming_messages.filter('read =', False).filter('sent =', True).order('-trigger')
+
+    def get_sent_messages(self):
+        from models.messages.message import Message
+        return Message.all().filter('sender =', self.key().id()).order('-trigger')
+    

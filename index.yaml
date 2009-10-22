@@ -1,4 +1,5 @@
 indexes:
+
 # This index.yaml is automatically updated whenever the dev_appserver
 # detects that a new type of query is run.  If you want to manage the
 # index.yaml file manually, remove the above marker line (the line
@@ -80,41 +81,29 @@ indexes:
 - kind: Message
   properties:
   - name: read
-  - name: recipients
+  - name: recipient
   - name: sent
-  - name: show_in_mailbox
+  - name: mailbox
   - name: trigger
     direction: desc
 
 - kind: Message
   properties:
-  - name: read
-  - name: recipients
+  - name: sender
   - name: sent
   - name: trigger
     direction: desc
 
 - kind: Message
   properties:
-  - name: recipients
-  - name: sent
-  - name: show_in_mailbox
+  - name: sender
   - name: trigger
     direction: desc
 
 - kind: Message
   properties:
-  - name: recipients
   - name: sent
-  - name: show_in_mailbox
-  - name: unread
-  - name: trigger
-    direction: desc
-
-- kind: Message
-  properties:
-  - name: recipients
-  - name: sent
+  - name: mailbox
   - name: trigger
     direction: desc
 
@@ -132,10 +121,3 @@ indexes:
   properties:
   - name: application
   - name: name
-
-- kind: Message
-  properties:
-  - name: sender
-  - name: sent
-  - name: trigger
-    direction: desc

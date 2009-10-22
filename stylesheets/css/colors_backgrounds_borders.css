@@ -174,3 +174,10 @@ table.zebra tr.even {
 #nav.ui-tabs-nav li {
 	margin-bottom: -3px;
 }
+
+
+.event_note {
+	background-color: #E6F4F4;
+	font-size: 120%;
+	color: #333;
+}

@@ -1,10 +1,9 @@
 
 <div id="eventdetails" class="hardmodule">
+	
     <ul>
         <li>{{ event.get_startdate_long }}</li>
         <li>{{ event.get_start_time }} - {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
-    </ul>
-	<ul>
 		<li>{{ event.address }} ( <a href={{event.neighborhood.url}}>{{ event.neighborhood.name }}</a> )</li>
 	</ul>
 

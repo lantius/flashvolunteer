@@ -10,6 +10,8 @@ import wsgiref.handlers
 from controllers.admin.migrate_datastore import MigrateDatastore
 from controllers.admin.message_dispatcher import MessageDispatcher
 from controllers.admin.event_message_factory import EventMessageFactory, RecommendedEventMessageFactory
+from controllers.admin.site_wide_message import SiteWideMessage
+
 from controllers.settings import SettingsPage
 
 webapp.template.register_template_library('templatetags.filters')
@@ -21,7 +23,8 @@ def main():
         ('/admin/migrate', MigrateDatastore),
         ('/admin/message_dispatch', MessageDispatcher),
         ('/admin/event_message_factory', EventMessageFactory),
-        ('/admin/recommended_events_message_factory', RecommendedEventMessageFactory)
+        ('/admin/recommended_events_message_factory', RecommendedEventMessageFactory),
+        ('/admin/send_message', SiteWideMessage)
     
     ], debug=True)
 

@@ -35,15 +35,20 @@ class Message(db.Model):
     
     recipients = db.ListProperty(int) #list of Users
     
+    recipient = db.ReferenceProperty(Volunteer, collection_name = 'incoming_messages')
+    
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)
         
     type = db.ReferenceProperty(MessageType)
     
     unread = db.ListProperty(int) #list of recipient ids that have yet to read the message
+    
+    read = db.BooleanProperty(default = False)
     autogen = db.BooleanProperty(default = True)
     
     show_in_mailbox = db.ListProperty(int)
+    mailbox = db.BooleanProperty(default = False)
     
     def send(self):
         if self.flagged and not self.verified: return
@@ -52,7 +57,6 @@ class Message(db.Model):
             self.email()
         self.mailbox()
     
-        self.unread = self.recipients
         self.sent = True
         self.put()
         
@@ -75,10 +79,7 @@ class Message(db.Model):
         return sender
     
     def get_recipient(self):
-        if len(self.recipients) == 1: 
-            return get_user(self.recipients[0])
-        else:
-            return None
+        return self.recipient
 
     def _get_message_pref(self, recipient, prop):
         prefs = recipient._get_message_pref(type = self.type)
@@ -108,14 +109,16 @@ The Flash Volunteer team
         domain = 'http://www.' + get_domain(keep_www = False)
 
         prop = MessagePropagationType.all().filter('name =', 'email').get()
-        for id in self.recipients:
-            recipient = get_user(id = id)
-            if recipient is None or not self._get_message_pref(recipient = recipient, prop = prop): continue
-                                    
-            mail.send_mail(sender="noreply@flashvolunteer.org",
-                            to= recipient.name + "<" + recipient.get_email() + ">",
-                            subject=self.subject,
-                            body=self.body + footer%{'domain': domain, 'recipient_url': recipient.url(), 'message_url': self.url()})   
+        recipient = self.recipient
+
+        if recipient is None or \
+            not self._get_message_pref(recipient = recipient, prop = prop): 
+            return
+
+        mail.send_mail(sender="noreply@flashvolunteer.org",
+                        to= recipient.name + "<" + recipient.get_email() + ">",
+                        subject=self.subject,
+                        body=self.body + footer%{'domain': domain, 'recipient_url': recipient.url(), 'message_url': self.url()})   
             
     def mailbox(self):
         if self.autogen:
@@ -125,11 +128,10 @@ The Flash Volunteer team
         footer += "\n\n---\nIf you would prefer not to receive these types of messages, visit your <a href=\"/settings\">settings page</a> and adjust your Message preferences."
         self.body += footer
         prop = MessagePropagationType.all().filter('name =', 'mailbox').get()
-        for id in self.recipients:
-            recipient = get_user(id = id)
-            if recipient is None or not self._get_message_pref(recipient = recipient, prop = prop): continue
-                                    
-            self.show_in_mailbox.append(recipient.key().id())
+        recipient = self.recipient
+        if recipient is None or not self._get_message_pref(recipient = recipient, prop = prop): return
+                                
+        self.mailbox = True
         self.put()
                
 

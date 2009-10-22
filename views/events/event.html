@@ -24,7 +24,13 @@ class="current"
 {% block content %}
 
 
-	
+{% if event.inpast %}
+    <div class="event_note">
+        This event has already happened. 
+	</div>
+
+{% endif %}
+
 <div id="lefthalf">
 	{% include "../events/event_page/_details.html" %}
 

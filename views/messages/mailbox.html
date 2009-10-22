@@ -42,8 +42,7 @@ Flash Volunteer
 			    <div class="messages">
 			        <table>
 		                {% for message in messages %}
-						    {% message_read_by_volunteer volunteer message %}
-		                    <tr class="message {% if message_read %}read{%else%}unread{%endif%}">
+		                    <tr class="message {% if message.read %}read{%else%}unread{%endif%}">
 		            	        <td>
 		                            <div class="volunteer_summary_pic">
 		                                <a href="{{ message.get_sender.url }}" >

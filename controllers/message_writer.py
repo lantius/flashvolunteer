@@ -20,7 +20,7 @@ class AbstractSendMessage(AbstractHandler):
     ################################################################################
     # POST
     def _send_message(self, sender, recipients, type, params):            
-        
+        if len(recipients) == 0: return
         
         send_message(to = recipients, 
                      subject = params['subject'], 
@@ -37,9 +37,14 @@ class AbstractSendMessage(AbstractHandler):
         except:
             return
             
+        if len(recipients) > 10: 
+            recipients = ', '.join([r.name for r in recipients[:10]]) + '...'
+        else:
+            recipients = ', '.join([r.name for r in recipients])
+            
         template_values = {
           'volunteer': volunteer,
-          'recipients': ', '.join([r.name for r in recipients]),
+          'recipients': recipients,
           'url': url
           }
         self._add_base_template_values(vals = template_values)

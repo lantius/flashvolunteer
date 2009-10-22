@@ -63,6 +63,10 @@ class AccountPage(AbstractHandler):
             template_values['token_url'] = self.request.host_url + '/rpx_response'
             
         session = Session()
+        logging.info('login referrer:'+self.request.referrer)
+        #TODO: make this more secure?
+        if self.request.referrer and not self.request.referrer.endswith('org/') and self.request.referrer.find('flashvolunteer') > -1:
+            session['login_redirect'] = self.request.referrer
             
         self._add_base_template_values(vals = template_values)
         path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')

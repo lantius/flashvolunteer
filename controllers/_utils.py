@@ -67,17 +67,19 @@ def send_message(to, subject, body, type, sender = None, trigger = None, immedia
     
     if subject == '' or subject is None:
         subject = '(No subject)'
-    message = Message(
-      subject = subject,
-      body = body,
-      recipients = [u.key().id() for u in to],
-      sender = sender_id,
-      trigger = trigger,
-      type = type,
-      autogen = autogen
-    )
-
-    message.put()
+        
+    for recipient in to:
+        message = Message(
+          subject = subject,
+          body = body,
+          recipient = recipient,
+          sender = sender_id,
+          trigger = trigger,
+          type = type,
+          autogen = autogen
+        )
+        message.put()
+        
     if immediate:
         check_messages()
 

@@ -171,7 +171,7 @@ class FollowVolunteer(AbstractHandler):
                     params = self.get_message_params(adder = volunteer, volunteer = to_follow)
                     subject = type2.subject%params
                     body = type2.body%params
-                    send_message(sender = volunteer, 
+                    send_message( 
                         to = [to_follow], 
                         subject = subject, 
                         body = body, 

@@ -51,7 +51,9 @@ def add_messaging():
         mps[mp] = mpt
         
     message_types = (
-        (0, 'rec_event', 'Digest of upcoming, recommended events (weekly digest)', ['mailbox'], True),
+        (-1, 'site_wide', 'Flash Volunteer news updates (no more than once per week)', ['mailbox','email'], True),
+
+        (0, 'rec_event', 'Digest of upcoming, recommended events (weekly)', ['mailbox'], True),
         (1, 'person_to_person', 'If someone sends me a personal message', ['mailbox', 'email'], True),
 
         (2, 'rsvp_vol', 'Reminder about an event I am volunteering at (24 hours notice)', ['mailbox','email'], True),
@@ -64,6 +66,7 @@ def add_messaging():
 
         (7, 'added_to_team', 'If someone adds me to their Flash team', ['mailbox','email'], True),
         (8, 'welcome', 'When you create an account', ['mailbox'], False),
+
 
     )
 

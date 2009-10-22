@@ -32,7 +32,7 @@ class AbstractHandler(webapp.RequestHandler):
         
         volunteer = self.auth()
         if volunteer:
-            vals['unread_message_count'] = volunteer.get_unread_messages().filter('show_in_mailbox =', volunteer.key().id()).count()
+            vals['unread_message_count'] = volunteer.get_unread_messages().filter('mailbox =', True).count()
     
     def auth(self):
         s = Session()

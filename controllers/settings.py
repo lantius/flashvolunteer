@@ -42,6 +42,9 @@ class SettingsPage(AbstractHandler):
             volunteer.error.clear()
             self.new(volunteer)
         
+        self.check_avatar(volunteer)
+              
+    def check_avatar(self, volunteer):
         session = Session()
         if volunteer and \
           volunteer.avatar is None and \
@@ -61,7 +64,7 @@ class SettingsPage(AbstractHandler):
                 volunteer.put()          
             except:
                 pass
-              
+
     ################################################################################
     # POST
     ################################################################################
@@ -152,6 +155,7 @@ class SettingsPage(AbstractHandler):
             return False
           
         volunteer.put()
+        self.check_avatar(volunteer = volunteer)
         
         params = {'name': volunteer.name} 
                 
