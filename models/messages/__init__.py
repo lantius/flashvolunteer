@@ -2,3 +2,4 @@ from message_preference import MessagePreference
 from message_propagation_type import MessagePropagationType
 from message_type import MessageType
 from message import Message
+from message_receipt import MessageReceipt

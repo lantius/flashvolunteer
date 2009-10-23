@@ -19,42 +19,12 @@ class MigrateDatastore(AbstractHandler):
         
         ## do migration here
         synchronize_apps()
-            
-        for v in Volunteer.all():
-            if v.preferred_email and v.preferred_email.endswith('@Facebook'):
-                v.preferred_email = None
-                v.put()
-                
-        self.update_messages()
+
         return
     
 ##########################################################################
 ## Various migration methods that may or may not be useful in the future.
 ##########################################################################
-
-    def update_messages(self):
-        from models.messages import Message
-        for m in Message.all():
-            for rid in m.recipients:
-                recipient = Volunteer.get_by_id(rid)
-                nm = Message(
-                    subject = m.subject,
-                    body = m.body,
-                    date = m.date,
-                    trigger = m.trigger,
-                    sent = m.sent,
-                    sender = m.sender,
-                    recipient = recipient,
-                    flagged = m.flagged,
-                    verified = m.verified,
-                    type = m.type,
-                    read = recipient.key().id() not in m.unread,
-                    autogen = m.autogen,
-                    mailbox = recipient.key().id() in m.show_in_mailbox
-                )
-                nm.put()
-            m.delete()
-        
         
     def __set_default_application_data(self):
         logging.info('MIGRATE: add application data')

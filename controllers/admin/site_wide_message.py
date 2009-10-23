@@ -25,22 +25,32 @@ class SiteWideMessage(AbstractSendMessage):
         except:
             return
         
-        #todo: make this work for greater than 1000
-        recipients = Volunteer.all().fetch(limit = 1000)
         params = Parameters.parameterize(self.request)
         mt = MessageType.all().filter('name = ', 'site_wide').get()
         
         from_header = 'A message from your friends at Flash Volunteer.\n\n'
         params['body'] = from_header + params['body']
         
-        chunk_size = 250
-        ranges = [(start * chunk_size, start * chunk_size +chunk_size) 
-                  for start in range(0, len(recipients) / chunk_size + 1)]
+        recipients = []
+        CHUNK_SIZE = 250
         
-        # send this in chunks because of app engine limitations on indexed properties 
-        # (see http://groups.google.com/group/google-appengine/browse_thread/thread/d5f4dcb7d00ed4c6)
-        for start, end in ranges:
-            self._send_message(sender = volunteer, recipients = recipients[start:end], type = mt, params = params)
+        last_key = None
+        while True:
+            if last_key:
+                query = Volunteer.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
+            else:
+                query = Volunteer.gql('ORDER BY __key__')
+            
+            recips = query.fetch(limit = CHUNK_SIZE + 1)
+            
+            if len(recips) == CHUNK_SIZE + 1:
+                recipients += recips[:-1]
+                last_key = recips[-1].key()
+            else:
+                recipients += recips
+                break
+
+        self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
         if 'message_redirect' in session:

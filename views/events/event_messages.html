@@ -17,7 +17,7 @@ class="current"
 <h1>Messages for {{event.name}}</h1>
 {% for message in event.messages %}
 	<p><strong>{{ message.title }}</strong><br/>
-	Sent by {{message.sender.name}} on {{message.sent}}:<br/>
+	Sent by {{message.sent_by.name}} on {{message.sent}}:<br/>
 	{{message.content}}</p>
 	
   {% if eventvolunteer %}

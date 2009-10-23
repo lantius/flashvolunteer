@@ -173,14 +173,16 @@ class Volunteer(AbstractUser):
         return recommended_events
 
     def get_messages(self):
-        from models.messages.message import Message
-        return self.incoming_messages.filter('sent =', True).order('-trigger')
+        return self.incoming_messages.order('-timestamp')
     
-    def get_unread_messages(self):
-        from models.messages.message import Message
-        return self.incoming_messages.filter('read =', False).filter('sent =', True).order('-trigger')
+    def get_unread_message_count(self):
+        return self.incoming_messages.filter('read =', False).filter('show_in_mail =', True).count()
 
     def get_sent_messages(self):
-        from models.messages.message import Message
-        return Message.all().filter('sender =', self.key().id()).order('-trigger')
+        return self.sent_messages.order('-trigger')
     
+    def is_recipient(self, message):
+        from models.messages import MessageReceipt
+        mr = MessageReceipt.gql('WHERE recipient = :name',
+                name = self)
+        return mr.get() is not None

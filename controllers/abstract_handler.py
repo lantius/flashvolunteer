@@ -20,7 +20,7 @@ import urllib
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
     def _get_base_url(self):
-        return 'http://www.' + get_domain(keep_www = False)
+        return 'http://www.' + get_domain()
     
     def _add_base_template_values(self, vals):
         
@@ -32,7 +32,7 @@ class AbstractHandler(webapp.RequestHandler):
         
         volunteer = self.auth()
         if volunteer:
-            vals['unread_message_count'] = volunteer.get_unread_messages().filter('mailbox =', True).count()
+            vals['unread_message_count'] = volunteer.get_unread_message_count()
     
     def auth(self):
         s = Session()

@@ -1,5 +1,6 @@
 import os, logging
 from google.appengine.api import memcache
+from components.sessions import Session
 
 from models.applicationdomain import ApplicationDomain
 
@@ -27,10 +28,15 @@ def get_server():
         else:
             return 2
         
-def get_domain(keep_www = False):
-    if not keep_www and os.environ['HTTP_HOST'].startswith('www.'):
-        return os.environ['HTTP_HOST'][4:].replace('appspot.com', 'org')
-    return os.environ['HTTP_HOST'].replace('appspot.com', 'org')
+def get_domain():
+    session = Session()
+    if 'this_domain' not in session:
+        if os.environ['HTTP_HOST'].startswith('www.'):
+            domain = os.environ['HTTP_HOST'][4:].replace('appspot.com', 'org')
+        else:
+            domain = os.environ['HTTP_HOST'].replace('appspot.com', 'org')
+        session['this_domain'] = domain
+    return session['this_domain']
 
 def get_application(just_id = False):
     domain = get_domain()
@@ -38,7 +44,7 @@ def get_application(just_id = False):
     app_domain = memcache.get(key)
     if app_domain is None:
         app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
-        memcache.add(key, app_domain, 3600)
+        memcache.add(key, app_domain, 100000)
 
     if just_id: return app_domain.application.key().id()
     else: return app_domain.application
@@ -53,37 +59,45 @@ def get_google_maps_api_key():
         return 'ABQIAAAApwXNBqL2vnoPPZzBT8fEFBSQPgw8JI6IbILJlYJvqzvWY-lLQBTXCrJQnsm-dzTVGDCeBq80bPNwUQ'
 
 
-from models.messages.message import Message
-from components.time_zones import now
 
 def send_message(to, subject, body, type, sender = None, trigger = None, immediate=False, autogen = True):
+    from models.messages.message import Message
+    from models.messages import MessageReceipt
+    from components.time_zones import now
+    from google.appengine.ext.db import put, delete
+    
     if trigger is None:
         trigger = now()
     
-    if sender:
-        sender_id = sender.key().id()
-    else:
-        sender_id = -1
-    
     if subject == '' or subject is None:
         subject = '(No subject)'
-        
+
+    message = Message(
+      subject = subject,
+      body = body,
+      sent_by = sender,
+      trigger = trigger,
+      type = type,
+      autogen = autogen
+    )
+    message.put()
+    mrs = []        
     for recipient in to:
-        message = Message(
-          subject = subject,
-          body = body,
+        mr = MessageReceipt(
           recipient = recipient,
-          sender = sender_id,
-          trigger = trigger,
-          type = type,
-          autogen = autogen
-        )
-        message.put()
+          message = message,
+          timestamp = trigger)
+        mrs.append(mr)
+    #todo: error handle here
+    put(mrs)
         
     if immediate:
         check_messages()
 
 def check_messages():
+    from models.messages.message import Message
+    from components.time_zones import now
+
     messages_to_send = Message.all().filter('sent =', False).filter('trigger <', now())
 
     for message in messages_to_send:

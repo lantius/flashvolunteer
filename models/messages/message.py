@@ -33,9 +33,10 @@ class Message(db.Model):
     sent = db.BooleanProperty(default = False)
     sender = db.IntegerProperty()
     
+    sent_by = db.ReferenceProperty(Volunteer, collection_name = 'sent_messages')
     recipients = db.ListProperty(int) #list of Users
     
-    recipient = db.ReferenceProperty(Volunteer, collection_name = 'incoming_messages')
+    recipient = db.ReferenceProperty(Volunteer)
     
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)
@@ -48,17 +49,22 @@ class Message(db.Model):
     autogen = db.BooleanProperty(default = True)
     
     show_in_mailbox = db.ListProperty(int)
-    mailbox = db.BooleanProperty(default = False)
+    show_in_mail = db.BooleanProperty(default = False)
     
     def send(self):
         if self.flagged and not self.verified: return
-        
-        if not is_debugging(): 
-            self.email()
-        self.mailbox()
-    
+
         self.sent = True
         self.put()
+                
+        try:
+            if not is_debugging(): 
+                self.email()
+            self.mailbox()
+        except:
+            self.sent = False
+            self.put()
+
         
     def get_mailbox_friendly_body(self):
         reg = r"(http://(www\.)?([-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]))"
@@ -71,15 +77,10 @@ class Message(db.Model):
         return self.trigger.strftime("%m/%d/%Y %H:%M")
     
     def get_sender(self):
-        #TODO: maybe memcache this
-        if self.sender:
-            sender = get_user(self.sender) 
-        else:
-            sender = None
-        return sender
+        return self.sent_by
     
     def get_recipient(self):
-        return self.recipient
+        return self.sent_to.get().recipient
 
     def _get_message_pref(self, recipient, prop):
         prefs = recipient._get_message_pref(type = self.type)
@@ -106,20 +107,22 @@ Thanks!
 The Flash Volunteer team
 """ + footer
  
-        domain = 'http://www.' + get_domain(keep_www = False)
+        domain = 'http://www.' + get_domain()
 
         prop = MessagePropagationType.all().filter('name =', 'email').get()
-        recipient = self.recipient
 
-        if recipient is None or \
-            not self._get_message_pref(recipient = recipient, prop = prop): 
-            return
+        message = mail.EmailMessage(
+            sender="noreply@flashvolunteer.org",
+            subject=self.subject)   
+        
+        for mr in self.sent_to:    
+            if mr.recipient is None or \
+                not self._get_message_pref(recipient = mr.recipient, prop = prop): 
+                continue
+            message.to = mr.recipient.name + "<" + mr.recipient.get_email() + ">"
+            message.body = self.body + footer%{'domain': domain, 'recipient_url': mr.recipient.url(), 'message_url': self.url()}  
+            message.send()
 
-        mail.send_mail(sender="noreply@flashvolunteer.org",
-                        to= recipient.name + "<" + recipient.get_email() + ">",
-                        subject=self.subject,
-                        body=self.body + footer%{'domain': domain, 'recipient_url': recipient.url(), 'message_url': self.url()})   
-            
     def mailbox(self):
         if self.autogen:
             footer = "\n\nThanks!\nThe Flash Volunteer team"
@@ -127,13 +130,11 @@ The Flash Volunteer team
             footer = ''
         footer += "\n\n---\nIf you would prefer not to receive these types of messages, visit your <a href=\"/settings\">settings page</a> and adjust your Message preferences."
         self.body += footer
-        prop = MessagePropagationType.all().filter('name =', 'mailbox').get()
-        recipient = self.recipient
-        if recipient is None or not self._get_message_pref(recipient = recipient, prop = prop): return
-                                
-        self.mailbox = True
         self.put()
-               
-
-        
-
+        prop = MessagePropagationType.all().filter('name =', 'mailbox').get()
+        for mr in self.sent_to:
+            if mr.recipient is None or \
+               not self._get_message_pref(recipient = mr.recipient, prop = prop): 
+                continue                  
+            mr.show_in_mail = True
+            mr.put()

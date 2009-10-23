@@ -36,7 +36,7 @@ class Mailbox(AbstractHandler):
         
         message = Message.get_by_id(int(id))
         
-        if not message or not (volunteer.key().id() == message.recipient.key().id() or volunteer.key().id() == message.sender):
+        if not message or not (volunteer.is_recipient(message) or volunteer.key().id() == message.sent_by.key().id()):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
             else:
@@ -45,7 +45,8 @@ class Mailbox(AbstractHandler):
         template_values = {
             'volunteer': volunteer,
             'message': message,
-            'sender_viewing': message.get_sender() is not None and message.get_sender().key().id() == volunteer.key().id()
+            'sender_viewing': message.sent_by is not None and message.sent_by.key().id() == volunteer.key().id()
+            
           }
         self._add_base_template_values(vals = template_values)
         
@@ -58,7 +59,11 @@ class Mailbox(AbstractHandler):
           
           
     def _get_next(self, lst):
-        next = lst[-1].trigger
+        try:
+            next = lst[-1].trigger
+        except:
+            next = lst[-1].timestamp
+            
         if next.second != 59:
             #this is because the comparison operator is working against a 
             #reverse sorted list & datetime.isotime returns a microsecond
@@ -78,7 +83,7 @@ class Mailbox(AbstractHandler):
         except:
             return
         
-        messages = volunteer.incoming_messages.filter('mailbox =', True)
+        messages = volunteer.get_messages().filter('show_in_mail =', True)
         
         sent_messages = volunteer.get_sent_messages()
         
