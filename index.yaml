@@ -79,17 +79,7 @@ indexes:
 
 - kind: Message
   properties:
-  - name: read
-  - name: recipient
   - name: sent
-  - name: show_in_mail
-  - name: trigger
-    direction: desc
-
-- kind: Message
-  properties:
-  - name: sent
-  - name: show_in_mail
   - name: trigger
     direction: desc
 
@@ -124,7 +114,7 @@ indexes:
 - kind: MessageReceipt
   properties:
   - name: recipient
-  - name: show_in_mail
   - name: timestamp
     direction: desc
+    
   

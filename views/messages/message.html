@@ -52,10 +52,12 @@ Flash Volunteer
                 <li class="fl">
                     <div>
                     	{% if sender_viewing %}
-	                    	<a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+	                    	To: <a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
 						{% else %}
                             {% if message.autogen %}
                                  <span class="additionalinfo">Auto-sent on behalf of</span>
+						    {% else %}
+							     From:
                             {%endif%}
                             {% if message.sent_by %}
                                      <a href="{{ message.sent_by.url }}">{{ message.sent_by.name }}</a>

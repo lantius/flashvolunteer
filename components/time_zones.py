@@ -5,6 +5,24 @@ HOUR = timedelta(hours=1)
 
 # A UTC class.
 
+class UTC(tzinfo):
+    """UTC"""
+
+    def utcoffset(self, dt):
+        return ZERO
+
+    def tzname(self, dt):
+        return "UTC"
+
+    def dst(self, dt):
+        return ZERO
+
+
+
+
+
+# A UTC class.
+
 def first_sunday_on_or_after(dt):
     days_to_go = 6 - dt.weekday()
     if days_to_go:
@@ -61,6 +79,8 @@ Eastern  = USTimeZone(-5, "Eastern",  "EST", "EDT")
 Central  = USTimeZone(-6, "Central",  "CST", "CDT")
 Mountain = USTimeZone(-7, "Mountain", "MST", "MDT")
 Pacific  = USTimeZone(-8, "Pacific",  "PST", "PDT")
+
+utc = UTC()
 
 
 def now():

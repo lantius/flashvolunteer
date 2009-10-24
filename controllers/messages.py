@@ -35,12 +35,14 @@ class Mailbox(AbstractHandler):
             return
         
         message = Message.get_by_id(int(id))
-        
-        if not message or not (volunteer.is_recipient(message) or volunteer.key().id() == message.sent_by.key().id()):
+        if message:
+            mr = message.sent_to.filter('recipient =', volunteer).get()
+        if not message or not (mr or volunteer.key().id() == message.sent_by.key().id()):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
             else:
                 self.redirect('/')
+            return
                 
         template_values = {
             'volunteer': volunteer,
@@ -50,9 +52,9 @@ class Mailbox(AbstractHandler):
           }
         self._add_base_template_values(vals = template_values)
         
-        if not message.read: 
-            message.read = True
-            message.put()
+        if not mr.read: 
+            mr.read = True
+            mr.put()
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'message.html')
         self.response.out.write(template.render(path, template_values, debug=is_debugging()))        
@@ -83,7 +85,7 @@ class Mailbox(AbstractHandler):
         except:
             return
         
-        messages = volunteer.get_messages().filter('show_in_mail =', True)
+        messages = volunteer.get_messages()
         
         sent_messages = volunteer.get_sent_messages()
         

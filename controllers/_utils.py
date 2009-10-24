@@ -60,14 +60,11 @@ def get_google_maps_api_key():
 
 
 
-def send_message(to, subject, body, type, sender = None, trigger = None, immediate=False, autogen = True):
+def send_message(to, subject, body, type, sender = None, immediate=False, autogen = True):
     from models.messages.message import Message
     from models.messages import MessageReceipt
     from components.time_zones import now
     from google.appengine.ext.db import put, delete
-    
-    if trigger is None:
-        trigger = now()
     
     if subject == '' or subject is None:
         subject = '(No subject)'
@@ -76,7 +73,6 @@ def send_message(to, subject, body, type, sender = None, trigger = None, immedia
       subject = subject,
       body = body,
       sent_by = sender,
-      trigger = trigger,
       type = type,
       autogen = autogen
     )
@@ -85,20 +81,28 @@ def send_message(to, subject, body, type, sender = None, trigger = None, immedia
     for recipient in to:
         mr = MessageReceipt(
           recipient = recipient,
-          message = message,
-          timestamp = trigger)
+          message = message)
         mrs.append(mr)
-    #todo: error handle here
-    put(mrs)
-        
+
+    try:
+        put(mrs)
+    except:
+        for mr in mrs:
+            if not mr.is_saved():
+                try:
+                    mr.put()
+                except:
+                    logging.error('Could not add message receipt of message %i for recipient %i'%(message.key().id(), mr.recipient.key().id()))
+
     if immediate:
         check_messages()
 
+from datetime import datetime
 def check_messages():
     from models.messages.message import Message
     from components.time_zones import now
 
-    messages_to_send = Message.all().filter('sent =', False).filter('trigger <', now())
+    messages_to_send = Message.all().filter('sent =', False).filter('trigger <', datetime.now())
 
     for message in messages_to_send:
         message.send()    

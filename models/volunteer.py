@@ -176,7 +176,7 @@ class Volunteer(AbstractUser):
         return self.incoming_messages.order('-timestamp')
     
     def get_unread_message_count(self):
-        return self.incoming_messages.filter('read =', False).filter('show_in_mail =', True).count()
+        return self.incoming_messages.filter('read =', False).count()
 
     def get_sent_messages(self):
         return self.sent_messages.order('-trigger')

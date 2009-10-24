@@ -61,7 +61,7 @@ Flash Volunteer
 		                            </div>
 								</td>
 		                        <td class="minfo">
-		                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
+		                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %} From: {%endif%}
 		                        	<div>{% if mr.message.sent_by %}
 									         <a href="{{ mr.message.sent_by.url }}">{{ mr.message.sent_by.name }}</a>
 										 {% else %}
@@ -113,7 +113,7 @@ Flash Volunteer
                                 </td>
                                 <td class="minfo">
                                     <div>{% if message.get_recipient %}
-                                             <a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+                                             To: <a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
                                          {% else %}
                                             Flash Volunteer
                                          {%endif%}

@@ -19,7 +19,21 @@ class MigrateDatastore(AbstractHandler):
         
         ## do migration here
         synchronize_apps()
-
+        from models.messages import MessageReceipt
+        from components.time_zones import utc, Pacific
+        
+        for mr in MessageReceipt.all():
+            mr.emailed = True
+            logging.info('converting time from: \n%s to\n'%mr.timestamp)
+            mr.timestamp = mr.timestamp.replace(tzinfo=Pacific).astimezone(utc)
+            logging.info(mr.timestamp)
+            mr.put()
+        
+        from models.messages import Message
+        for m in Message.all():
+            m.trigger = m.trigger.replace(tzinfo=Pacific).astimezone(utc)
+            m.put()
+            
         return
     
 ##########################################################################
