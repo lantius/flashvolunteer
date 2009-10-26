@@ -375,7 +375,7 @@ class Session(object):
     CHECK_IP = True # validate sessions by IP
     CHECK_USER_AGENT = True # validate sessions by user agent
     SET_COOKIE_EXPIRES = True # Set to True to add expiration field to cookie
-    SESSION_TOKEN_TTL = 5 # Number of seconds a session token is valid for.
+    SESSION_TOKEN_TTL = 7200 # Number of seconds a session token is valid for.
     UPDATE_LAST_ACTIVITY = 60 # Number of seconds that may pass before
                             # last_activity is updated
     WRITER = "datastore" # Use the datastore writer by default. cookie is the

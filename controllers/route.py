@@ -17,7 +17,7 @@ from controllers.paginated_event_pages import \
 from controllers.home import MainPage
 from controllers.profile import ProfilePage
 
-from controllers.accounts import Login, RPXTokenHandler, NewAccount
+from controllers.accounts import Login, CreateAccount
 
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
@@ -84,7 +84,6 @@ def profile_main():
  
  
 def real_main():
-    session = Session()
     debug = is_debugging()
     if debug:
         from components.applications.operations import synchronize_apps
@@ -95,13 +94,13 @@ def real_main():
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(
           [('/', MainPage),
-           ('/rpx_auth', RPXTokenHandler),
+           ('/rpx_auth', Login),
            ('/create', Login),
            ('/login', Login),
            ('/dev_login', Login),
            ('/logout', Login),
            
-           ('/new', NewAccount),
+           ('/new', CreateAccount),
            
             ('/delete', SettingsPage),
            ('/profile', ProfilePage),

@@ -64,7 +64,7 @@ class Login(AbstractHandler):
             from google.appengine.api import users
             template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
         else:
-            template_values['token_url'] = self.request.host_url + '/rpx_auth'
+            template_values['token_url'] = self.request.host_url + '/login'
             
         session = Session()
         logging.info('login referrer:'+self.request.referrer)
@@ -73,11 +73,11 @@ class Login(AbstractHandler):
             session['login_redirect'] = self.request.referrer
             
         self._add_base_template_values(vals = template_values)
-        path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
+        path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'accounts', 'login.html')
         self.response.out.write(template.render(path, template_values))
     
     def post(self):
-        if 'token' in self.request:
+        if self.request.get('token', None):
             self.rpx_auth()
         else:
             self.fv_auth()
@@ -108,7 +108,8 @@ class Login(AbstractHandler):
             logging.info('could not log user in, wrong password')
             self.redirect('/login')
             return
-                                        
+        
+        session['auth'] = auth                               
         if 'login_redirect' in session:
             self.redirect(session['login_redirect'])
             del session['login_redirect']
@@ -138,16 +139,18 @@ class Login(AbstractHandler):
             elif 'preferredUsername' in login_info:
                 login_info['identifier'] = login_info['preferredUsername'] + '@' + login_info['providerName']
 
+            session = Session()
             session['login_info'] = login_info
 
-
+            from models.auth import Auth
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
 
             if auth:
+                session['auth'] = auth
                 try:
                     volunteer = Authorize.login(self, requireVolunteer=False)
                 except:
-                    return
+                    raise
                 check_avatar(volunteer = volunteer)
                 if 'login_redirect' in session:
                     self.redirect(session['login_redirect'])

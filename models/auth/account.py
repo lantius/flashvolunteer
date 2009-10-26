@@ -14,6 +14,10 @@ class Account(db.Model):
 
     error = {}
 
+    def add_application(self, application):
+        self.active_applications.append(application.key().id())
+        self.put()
+        
     def validate(self, params):
         self.error.clear()
         
@@ -35,5 +39,4 @@ class Account(db.Model):
         except:
             self.error['email'] = ('A valid email is required', params['email'])
         
-        if self.error:
-            return False
+        return len(self.error) == 0

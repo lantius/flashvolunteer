@@ -6,8 +6,10 @@ from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 from controllers._utils import is_debugging
 
-from models.auth import Account
+from models.auth import Account, Auth
+from models.volunteer import Volunteer
 
+from controllers._utils import send_message 
 from components.sessions import Session
 from controllers._params import Parameters
 
@@ -39,7 +41,7 @@ class CreateAccount(AbstractHandler):
             )
             
         if volunteer is None:
-            volunteer = Volunteer(account = account)
+            volunteer = Volunteer()
             
         session['account'] = account
         session['volunteer'] = volunteer
@@ -53,7 +55,7 @@ class CreateAccount(AbstractHandler):
           }
         self._add_base_template_values(vals = template_values)
         
-        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'accounts', 'new_account.html')
+        path = os.path.join(os.path.dirname(__file__),'..', '..', 'views', 'accounts', 'new_account.html')
         self.response.out.write(template.render(path, template_values))    
         
     def post(self):
@@ -63,6 +65,7 @@ class CreateAccount(AbstractHandler):
         account = session.get('account', None)
         volunteer = session.get('volunteer', None)
         
+        #TODO: make sure that an account with this email does not already exist
         
         if params['session_id'] != session.sid:
             self.redirect('/error')
@@ -84,12 +87,11 @@ class CreateAccount(AbstractHandler):
             
         auth = Auth(
             strategy = login_info['providerName'],
-            identifier = login_info['identifier'],
-            account = account
+            identifier = login_info['identifier']
         )
         if login_info['providerName'] == 'fv':
-            auth.digest = login_info['digest'],
-            auth.salt = login_info['salt'],
+            auth.digest = login_info['digest']
+            auth.salt = login_info['salt']
 
 
         if not account:
@@ -100,10 +102,8 @@ class CreateAccount(AbstractHandler):
             self.get(account = account, volunteer = volunteer)
             return False
         
-        user = User(email = account.email)
+        user = User(email = account.preferred_email)
         account.user = user
-        volunteer.account = account
-        auth.account = account
         
         try:
             try:
@@ -112,11 +112,14 @@ class CreateAccount(AbstractHandler):
                 account.put()
             
             try:
+                volunteer.account = account
+                volunteer.user = user
                 volunteer.put()
             except:
                 volunteer.put()
                 
             try:
+                auth.account = account
                 auth.put()
             except:
                 auth.put()
@@ -124,6 +127,9 @@ class CreateAccount(AbstractHandler):
         except:
             self.get(account = account, volunteer = volunteer)
             return False
+        
+        session['auth'] = auth
+        session['login_info'] = login_info
         
         check_avatar(volunteer = volunteer)
                 

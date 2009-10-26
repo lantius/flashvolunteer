@@ -6,7 +6,7 @@ from models.auth import Account
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
 
-
+from components.sessions import Session
 
 ################################################################################
 # AbstractUser
@@ -128,7 +128,8 @@ class AbstractUser(db.Model):
       return [e for e in self.events() if not e.inpast() and not e.hidden]
     
     def check_session_id(self, form_session_id):
-      return form_session_id == self.session_id
+      session = Session()
+      return form_session_id == session.sid
     
     def add_application(self, application):
         self.applications.append(application.key().id())

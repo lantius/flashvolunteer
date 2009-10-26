@@ -18,15 +18,15 @@ Flash Volunteer
         <ol >
 	        <li class="fv-login-block fl" style="height:100%;padding:20px;border:1px solid #4EA0A7;width:39%;height:100%">
 		        <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Use your Flash Volunteer account</h1>
-		          <form action="/new" id="new_account" method="post">
+		          <form action="/login" id="new_account" method="post">
 		            <div style="margin:0;padding:0">
 		              <input name="session_id" type="hidden" value="{{session_id}}" />
 		            </div>
 		            <fieldset>
 		              <ol>
 		                <li>
-		                  <label for="username">Email</label>
-		                  <input class="text" id="username" name="username" tabindex="1" type="text" />
+		                  <label for="email">Email</label>
+		                  <input class="text" id="email" name="email" tabindex="1" type="text" />
 		                </li>
 		                <li>
 		                  <label for="password">Password</label>
@@ -38,7 +38,7 @@ Flash Volunteer
 		            <input class="submit" name="commit" tabindex="4" type="submit" value="Enter" />
 		          
 		          </form>
-				  <div class="cl" style="margin-top:10px">Need a new account? <a href="/new">Signup</a>.</div>
+				  <div class="cl" style="margin-top:10px">Need to register an account? <a href="/new">Signup</a>.</div>
 	        </li>  
 			<li class="fl" style="padding: 95px 12px 0 16px;width: 5%;"><span style="width:100%;text-align:center;font-size:125%">OR</span></li>
 	        <li class="fv-login-block fr" style="height:100%;padding:20px;border:1px solid #4EA0A7;width:41%;height:100%">

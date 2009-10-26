@@ -29,12 +29,25 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     # GET
     ################################################################################
-    def get(self):      
-        try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
-        except:
-            return
+    def get(self, volunteer = None):      
+        if not volunteer:
+            try:
+                volunteer = Authorize.login(self, requireVolunteer=True)
+            except:
+                return
+
+        template_values = {
+            'volunteer' : volunteer, 
+            'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+            'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
+            'interestcategories' : InterestCategoryHelper().selected(volunteer),
+            'message_propagation_types' : MessagePropagationType.all(),
+            'message_types': MessageType.all().filter('in_settings =', True).order('order')
+          }
+        self._add_base_template_values(vals = template_values)
         
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
+        self.response.out.write(template.render(path, template_values))
 
     ################################################################################
     # POST
@@ -59,29 +72,11 @@ class SettingsPage(AbstractHandler):
               self.redirect('/profile')
 
     ################################################################################
-    # EDIT
-    def edit(self, volunteer):
-      #requires a POST from the settings page, so volunteer can be assumed.
-      template_values = {
-          'volunteer' : volunteer, 
-          'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-          'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
-          'interestcategories' : InterestCategoryHelper().selected(volunteer),
-          'message_propagation_types' : MessagePropagationType.all(),
-          'message_types': MessageType.all().filter('in_settings =', True).order('order')
-        }
-      self._add_base_template_values(vals = template_values)
-      
-      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
-      self.response.out.write(template.render(path, template_values))
-    
-     
-    ################################################################################
     # UPDATE
     def update(self, params, volunteer):
       
         if not volunteer.validate(params):
-            self.edit(volunteer)
+            self.get(volunteer)
             return False
       
         for interestcategory in InterestCategory.all():

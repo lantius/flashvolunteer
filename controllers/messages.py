@@ -83,7 +83,7 @@ class Mailbox(AbstractHandler):
         try:
             volunteer = Authorize.login(self, requireVolunteer=True)
         except:
-            return
+            raise
         
         messages = volunteer.get_messages()
         
