@@ -1,0 +1,182 @@
+import os, logging, hashlib
+from google.appengine.ext import webapp, db
+from google.appengine.ext.webapp import template
+
+from controllers._auth import Authorize
+from controllers._helpers import NeighborhoodHelper
+from controllers._utils import is_debugging
+
+from models.volunteer import Volunteer
+from models.neighborhood import Neighborhood
+from models.event import Event
+from models.interestcategory import InterestCategory
+
+from components.sessions import Session
+from controllers._params import Parameters
+
+import urllib
+
+from controllers.abstract_handler import AbstractHandler
+from google.appengine.api import urlfetch
+from django.utils import simplejson
+from google.appengine.api.users import User
+
+
+################################################################################
+# MainPage
+class Login(AbstractHandler):
+    LIMIT = 12 
+    def get(self):
+        
+        volunteer = Authorize.login(self, requireVolunteer=False)
+    
+        if self.request.path.find('dev_login') > -1:    
+            self.dev_login()    
+        elif not volunteer:
+            self.login()
+        elif self.request.path.find('logout') > -1:    
+            self.logout(volunteer)
+        else:
+            self.redirect('/')
+
+    def logout(self, volunteer):
+        session = Session()
+        session.delete()
+        self.redirect('/')
+        
+    def dev_login(self):
+        from google.appengine.api import users
+        session = Session()
+        
+        user = users.get_current_user()    
+        session['user'] = user
+        self.redirect('/settings')
+      
+    def login(self):
+                  
+        dev_server = is_debugging() 
+        
+        template_values = { 
+          'dev_server': dev_server,
+        }
+        
+        if dev_server:
+            from google.appengine.api import users
+            template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
+        else:
+            template_values['token_url'] = self.request.host_url + '/rpx_auth'
+            
+        session = Session()
+        logging.info('login referrer:'+self.request.referrer)
+        #TODO: make this more secure?
+        if self.request.referrer and not self.request.referrer.endswith('org/') and self.request.referrer.find('flashvolunteer') > -1:
+            session['login_redirect'] = self.request.referrer
+            
+        self._add_base_template_values(vals = template_values)
+        path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'login.html')
+        self.response.out.write(template.render(path, template_values))
+    
+    def post(self):
+        if 'token' in self.request:
+            self.rpx_auth()
+        else:
+            self.fv_auth()
+            
+    def fv_auth(self):
+        from models.auth import Account, Auth
+        
+        #TODO: error check on email / password        
+        params = Parameters.parameterize(self.request)
+        
+        session = Session()
+        
+        if params['session_id'] != session.sid:
+            self.redirect('/error')
+            return
+
+        email = params['email']
+        password = params['password']
+        
+        auth = Auth.all().filter('identifier =', email).filter('strategy =', 'fv').get()
+        if not auth:
+            logging.info('could not log user in, no user by that name')
+            self.redirect('/login')
+            return
+        
+        hash = hashlib.sha224(password + auth.salt).hexdigest()
+        if hash != auth.digest:
+            logging.info('could not log user in, wrong password')
+            self.redirect('/login')
+            return
+                                        
+        if 'login_redirect' in session:
+            self.redirect(session['login_redirect'])
+            del session['login_redirect']
+        else:
+            self.redirect('/profile')
+                
+    def rpx_auth(self):
+        token = self.request.get('token')
+        url = 'https://rpxnow.com/api/v2/auth_info'
+        args = {
+          'format': 'json',
+          'apiKey': 'b269b6356c17af69406026edb6b87d65df667b5e',
+          'token': token
+          }
+        r = urlfetch.fetch(url=url,
+                           payload=urllib.urlencode(args),
+                           method=urlfetch.POST,
+                           headers={'Content-Type':'application/x-www-form-urlencoded'}
+                           )
+        json = simplejson.loads(r.content)
+        
+        if json['stat'] == 'ok':  
+            login_info = json['profile']  
+
+            if 'email' in login_info:
+                login_info['identifier'] = login_info['email']
+            elif 'preferredUsername' in login_info:
+                login_info['identifier'] = login_info['preferredUsername'] + '@' + login_info['providerName']
+
+            session['login_info'] = login_info
+
+
+            auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
+
+            if auth:
+                try:
+                    volunteer = Authorize.login(self, requireVolunteer=False)
+                except:
+                    return
+                check_avatar(volunteer = volunteer)
+                if 'login_redirect' in session:
+                    self.redirect(session['login_redirect'])
+                    del session['login_redirect']
+                else:
+                    self.redirect('/profile')
+            else:
+                self.redirect('/new')
+                
+        else:
+            self.redirect('/login')      
+
+def check_avatar(volunteer):
+    if not volunteer: return
+    session = Session()
+    if volunteer and \
+      volunteer.avatar is None and \
+      'photo' in session['login_info']:
+
+        try:
+            import imghdr
+        
+            img = fetch(url = session['login_info']['photo']).content   
+            content_type = imghdr.what(None, img)
+            if not content_type:
+              return
+        
+            volunteer.avatar_type = 'image/' + content_type
+            volunteer.avatar = img
+            volunteer.put()          
+        except:
+            pass

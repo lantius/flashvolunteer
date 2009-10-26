@@ -4,16 +4,16 @@
     <div class="moduletitle">
         <h3>Basic</h3>
     </div>
-    <input type="hidden" name="session_id" value="{{ volunteer.session_id }}">
+    <input type="hidden" name="session_id" value="{{ session_id }}">
     <ul>
 	
         <li><span class="label">Name:</span> 
-<input type="text" name="name" value="{% if volunteer.error.name %}{{ volunteer.error.name.1|striptags }}{% else %}{{ volunteer.name|striptags }}{% endif %}" /></li>
+<input class="text" type="text" name="name" value="{% if volunteer.error.name %}{{ volunteer.error.name.1|striptags }}{% else %}{{ volunteer.name|striptags }}{% endif %}" /></li>
 		{% if volunteer.error.name %}
 			<br/><strong class="error" id="error_name" >{{volunteer.error.name.0}}</strong>
 		{% endif %}
-        <li><span class="label">Email:</span> <input type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
-        <li><span class="label">Quote:</span> <input type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
+        <li><span class="label">Email:</span> <input class="text" type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
+        <li><span class="label">Quote:</span> <input class="text" type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
         <li><span class="label">I live in:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
         <li><span class="label">I work in:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
     </ul>
@@ -84,7 +84,7 @@ $('table.zebra tr:odd').addClass('odd');
 
 
 <div id="editprofile" class="softmodule">    
-    <li><input type="submit" id="s_update_profile" value="Save Settings"></li>
+    <li><input class="submit" type="submit" id="s_update_profile" value="Save Settings"></li>
 </div>
 
 

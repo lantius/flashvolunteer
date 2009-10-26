@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 from models.neighborhood import Neighborhood
 from models.application import Application
+from models.auth import Account
 
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
@@ -27,6 +28,8 @@ class AbstractUser(db.Model):
     applications = db.ListProperty(int)
     
     error = {}
+    
+    account = db.ReferenceProperty(Account)
     
     
     def validate(self, params):

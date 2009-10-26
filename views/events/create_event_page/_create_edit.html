@@ -58,7 +58,7 @@
 
 	</div>
 			
-	<input type=hidden name="session_id" value="{{ volunteer.session_id }}">
-	<input id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
+	<input type=hidden name="session_id" value="{{ session_id }}">
+	<input class="submit" id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
 	</form>
 </div>

@@ -45,7 +45,7 @@ class VolunteersPage(AbstractHandler):
       return
 
     #TODO: if application instances are closed, do not allow people to view
-    if not volunteer or not volunteer.session_id:
+    if not volunteer:
       self.redirect("/settings")
       return
 

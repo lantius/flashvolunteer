@@ -31,39 +31,10 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     def get(self):      
         try:
-            volunteer = Authorize.login(self, requireVolunteer=False)
+            volunteer = Authorize.login(self, requireVolunteer=True)
         except:
             return
         
-        if volunteer:
-            self.edit(volunteer)
-        else:
-            volunteer = Volunteer()
-            volunteer.error.clear()
-            self.new(volunteer)
-        
-        self.check_avatar(volunteer)
-              
-    def check_avatar(self, volunteer):
-        session = Session()
-        if volunteer and \
-          volunteer.avatar is None and \
-          'auth_domain' in session and \
-          session['auth_domain'] == 'Facebook':
-
-            try:
-                import imghdr
-            
-                img = fetch(url = session['login_info']['photo']).content   
-                content_type = imghdr.what(None, img)
-                if not content_type:
-                  return
-            
-                volunteer.avatar_type = 'image/' + content_type
-                volunteer.avatar = img
-                volunteer.put()          
-            except:
-                pass
 
     ################################################################################
     # POST
@@ -75,22 +46,17 @@ class SettingsPage(AbstractHandler):
           return
         
       params = Parameters.parameterize(self.request)
-      session = Session()
-      
-      if not volunteer:
-          if self.create(params):
+      session = Session()      
+
+      if 'is_delete' in params and params['is_delete'] == 'true':     
+          if 'confirm_delete' in params and params['confirm_delete'] == 'true':
+              self.delete(volunteer)
+              self.redirect('/')
+          else:
+              self.confirm_delete(volunteer)
+      else:  
+          if self.update(params, volunteer):
               self.redirect('/profile')
-          
-      else:
-          if 'is_delete' in params and params['is_delete'] == 'true':     
-              if 'confirm_delete' in params and params['confirm_delete'] == 'true':
-                  self.delete(volunteer)
-                  self.redirect('/')
-              else:
-                  self.confirm_delete(volunteer)
-          else:  
-              if self.update(params, volunteer):
-                  self.redirect('/profile')
 
     ################################################################################
     # EDIT
@@ -109,66 +75,7 @@ class SettingsPage(AbstractHandler):
       path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'settings.html')
       self.response.out.write(template.render(path, template_values))
     
-    ################################################################################
-    # NEW
-    def new(self, volunteer):
-      session = Session()
-      user = session.get('user', None)
-      
-      if not user:
-        self.redirect('/login')
-        return
-      if 'auth_domain' in session and session['auth_domain'] == 'Facebook':
-          default_email = ''
-      else:
-          default_email = user.email()
-          
-      template_values = {
-          'default_name' : user.nickname(),
-          'default_email': default_email,
-          'volunteer' :  volunteer,
-          'home_neighborhoods': NeighborhoodHelper().selected(None),
-          'work_neighborhoods': NeighborhoodHelper().selected(None),
-        }
-      self._add_base_template_values(vals = template_values)
-      
-      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'create.html')
-      self.response.out.write(template.render(path, template_values))
-    
-    ################################################################################
-    # CREATE
-    def create(self, params):
-        from components.message_text import type3
-        
-        session = Session()
-        user = session.get('user', None)
-        
-        if not user:
-            self.redirect('/create')
-            return
-        
-        volunteer = Volunteer()
-        volunteer.user = user
-        
-        if not volunteer.validate(params):
-            self.new(volunteer)
-            return False
-          
-        volunteer.put()
-        self.check_avatar(volunteer = volunteer)
-        
-        params = {'name': volunteer.name} 
-                
-            
-        send_message(to = [volunteer], 
-                     subject = type3.subject%params,
-                     body = type3.body%params,
-                     type= MessageType.all().filter('name =', 'welcome').get(), 
-                     immediate = True)
-        
-        
-        return True
-      
+     
     ################################################################################
     # UPDATE
     def update(self, params, volunteer):

@@ -41,8 +41,9 @@ class OrganizationsPage(AbstractHandler):
     if volunteer and volunteer.key().id() == int(volunteer_id):
       self.redirect("/settings")
       return
-
-    if not volunteer or not volunteer.session_id:
+    
+    session = Session()
+    if not volunteer or not session.sid:
       self.redirect("/setting")
       return
 

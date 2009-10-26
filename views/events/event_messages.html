@@ -23,7 +23,7 @@ class="current"
   {% if eventvolunteer %}
 	  <form method="post" action="{{message.url}}">
 	  <input type="hidden" name="is_delete" value="true" />
-		<input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+		<input type=hidden name="session_id" value="{{ session_id }}">
     <input type="submit" value="delete">
 		</form>
 	{% endif %}

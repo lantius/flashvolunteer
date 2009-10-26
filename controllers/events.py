@@ -137,7 +137,6 @@ class EventsPage(AbstractHandler):
         my_past_events = volunteer.events_past()[-EventsPage.LIMIT:]
         my_past_events.reverse()
         event_volunteers = volunteer.eventvolunteers
-        session_id = volunteer.session_id
         neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
         interest_categories = InterestCategoryHelper().selected(volunteer)
     else: 
@@ -146,7 +145,6 @@ class EventsPage(AbstractHandler):
         my_future_events = None
         my_past_events = None
         event_volunteers = None
-        session_id = None
         neighborhoods = application.neighborhoods
         #TODO: convert to application-specific data model
         interest_categories = InterestCategory.all()
@@ -157,7 +155,6 @@ class EventsPage(AbstractHandler):
         'neighborhoods': neighborhoods,
         'recommended_events': recommended_events,
         'interestcategories' : interest_categories,
-        'session_id': session_id,
         'upcoming_events': upcoming_events,
         'my_future_events': my_future_events,
         'my_past_events': my_past_events,

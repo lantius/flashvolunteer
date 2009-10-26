@@ -23,11 +23,13 @@ class AbstractHandler(webapp.RequestHandler):
         return 'http://www.' + get_domain()
     
     def _add_base_template_values(self, vals):
+        session = Session()
         
         vals.update( {
             'domain': self._get_base_url(),
             'path': self.request.path,
-            'application_alias': get_application().get_alias(), 
+            'application_alias': get_application().get_alias(),
+            'session_id':  session.sid
         })
         
         volunteer = self.auth()

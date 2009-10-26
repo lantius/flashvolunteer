@@ -12,7 +12,7 @@ class Authorize():
     def login(req, requireVolunteer=False, redirectTo='/login', requireAdmin = False):
         session = Session()
         user = session.get('user', None)
-        
+    
         abstract_user = None
         if user:
             abstract_user = Volunteer.gql("where user = :user", user=user).get()
@@ -41,7 +41,9 @@ class Authorize():
             abstract_user.add_application(application)
         return abstract_user
       
-    login = staticmethod(login)
+    login = staticmethod(login)    
+  
+  
   
 class AuthError(Exception):
     """Exception raised for authorization errors.

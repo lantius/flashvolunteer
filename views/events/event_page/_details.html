@@ -15,7 +15,7 @@
 				{% if not event.inpast %}
 					<li><form action="{{event.url}}/volunteer" method="post" >
 						<input type=hidden name="delete" value="true" />
-						<input type=hidden name="session_id" value="{{ volunteer.session_id }}" />
+						<input type=hidden name="session_id" value="{{ session_id }}" />
 						<input type=submit title="Unvolunteer for this event" class="operation" value="&raquo; Unvolunteer" id="s_unvolunteer" />
 					</form></li>
 				{% endif %}
@@ -33,7 +33,7 @@
 				{% endif %}
             
 			<li><form action="{{event.url}}/volunteer" method="post">
-				<input type=hidden name="session_id" value="{{ volunteer.session_id }}" />
+				<input type=hidden name="session_id" value="{{ session_id }}" />
 				<input type=submit title="Volunteer for this event" class="volunteer_button" value="{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}" id="s_volunteer"/>
 			</form></li>
 			

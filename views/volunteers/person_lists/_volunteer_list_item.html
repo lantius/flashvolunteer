@@ -33,7 +33,7 @@
 					  {% else %} 
 					    <div class="fl">
 			                <form title="Add to your Team" action="{{volunteer_in_list.url}}/follow" method="post">
-			                    <input type=hidden name="session_id" value="{{ volunteer.session_id }}">
+			                    <input type=hidden name="session_id" value="{{ session_id }}">
 			                    <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=image src="/stylesheets/media/add.png" value=""/>
 			                </form>
 						</div>

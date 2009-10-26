@@ -17,7 +17,7 @@ class="current"
 <div id="full100">
 	<form action="/events/{{event.key.id}}/add_coordinator" method="post">
 	
-	    <input type="hidden" name="session_id" value="{{ volunteer.session_id }}">
+	    <input type="hidden" name="session_id" value="{{ session_id }}">
 	    <ul>	
 	        <li><span class="label">Volunteer:</span> {% include "_select_volunteer_event_coordinator.html"%}</li>
 			<li><input type="submit" id="s_add_coordinator" value="Add as organizer"></li>

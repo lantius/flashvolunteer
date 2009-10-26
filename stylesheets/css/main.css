@@ -619,10 +619,6 @@ span.verification_warning_wrapper {
     margin-right: 10px; 
 }
 
-#createvolunteer #createnameinput {
-    width: 100%;
-}
-
 #createvolunteer select {
 	width: 100%;
 }
@@ -898,3 +894,29 @@ ul.event_header img{
 	padding-left: 25px;
 }
 
+
+form input.text:focus, 
+form input.password:focus, 
+form input.textarea:focus {
+	background-color:#E6F4F4;
+	background-image:none;
+	border:1px solid #008c98;
+}
+
+
+form input.text, 
+form input.password {
+	width: 95%;
+	border:1px solid #aaa;
+	color:#000000;
+	font-size:125%;
+	letter-spacing:-1px;
+	line-height:normal;
+	padding:2px 5px;
+	margin-bottom: 10px;
+}
+
+form input.submit {
+	font-size:145%;
+	letter-spacing:-1px;
+}
