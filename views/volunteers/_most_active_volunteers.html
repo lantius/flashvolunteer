@@ -1,0 +1,44 @@
+<script>
+    $(function() {
+$('table.zebra tr:even').addClass('even');
+$('table.zebra tr:odd').addClass('odd');
+});
+</script>
+
+<div id="active_volunteers" class="hardmodule">                     
+        <div class="moduletitle">
+            <h3>Most Active</h3>
+        </div> 
+        <div id="mostactiveintro">
+              <span class="label">Most active volunteers.</span>
+        </div> 
+              <table class="zebra">                 
+                <thead><tr>
+                    <th></th>
+                        <th>Events<br />attended</th>                    
+                        <th>Events<br />coordinated</th>                                                                    
+                    </tr>                   
+                </thead>
+                <tfoot></tfoot> 
+                <tbody>                             
+                   {% for v in most_active_volunteers %} 				                                               
+                        <tr>
+                            <th>
+                                <a href="{{ v.0.url }}">{{ v.0.name }}</a>                        
+                            </th>                               
+                            <td>
+                                {% if v.1.0 %}                                    
+                                  {{ v.1.0 }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if v.1.1 %}                                    
+                                  {{ v.1.1 }} 
+                                {% endif %}
+                        </tr>
+						
+                    {% endfor %} 
+                </tbody>                  
+            </table>                                                                   
+</div>      
+       
