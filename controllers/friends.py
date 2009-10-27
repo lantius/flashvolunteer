@@ -33,15 +33,12 @@ class FriendsPage(AbstractHandler):
             for v in volunteers:
                 vhours = 0
                 attended = 0
-                isowner = 0                   
-               
+                isowner = 0
+                                                  
                 for ev in v.eventvolunteers:                
-                    if ev.hours:
-                        vhours += sum([ev.hours])
-                    if ev.attended:
-                        attended += 1
-                    if ev.isowner:
-                        isowner += 1 
+                    vhours += sum([ev.hours for ev in v.eventvolunteers if ev.hours])
+                    attended += sum([ev.attended for ev in v.eventvolunteers if ev.attended])
+                    isowner += sum([ev.isowner for ev in v.eventvolunteers if ev.isowner]) 
                         
                 stats[v] = [attended,isowner]          
             
