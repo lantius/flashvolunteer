@@ -16,7 +16,7 @@ Volunteer Settings
 		      <fieldset>
 				  <ul>			
 				  
-                        <li><span class="label">Your Name:</span><input class="text" id="createnameinput" type="text" name="name" tabindex="0"
+                        <li><label for="name">Your Name:</label><input class="text" id="createnameinput" type="text" name="name" tabindex="0"
                             {% if account.error.name %}
                                 value="{{ account.error.name.1 }}"
                             {% else %}
@@ -32,7 +32,7 @@ Volunteer Settings
                             {% endif %}
                         </li>
 						
-					<li><span class="label">Email (required):</span><input class="text" id="createnameinput" type="text" name="email" tabindex="1"
+					<li><label for="email">Email (required):</label><input class="text" id="createnameinput" type="text" name="email" tabindex="1"
 						{% if account.error.email %}
 							value="{{ account.error.email.1 }}"
 						{% else %}
@@ -66,20 +66,20 @@ Volunteer Settings
 				    </fieldset>
 					
                     <fieldset>
-			        <ul><li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
-			        <li><span class="label">I work nearest to:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
+			        <ul><li><div class="label">I live nearest to:</div> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
+			        <li><div class="label">I work nearest to:</div> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
                     </ul>
 					</fieldset>
                     <fieldset>
                     <ul>	
-					<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
+					<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I accept the <a href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
 					{% if account.error.tosagree %}
 						<br/><strong class="error">{{account.error.tosagree.0}}</strong>
 					{% endif %}
 					</li>
-					<li><input class="submit" type="submit" value="Create my account" id="s_create_account"/></li>
 				</ul>
 			</fieldset>
+			<input class="submit" type="submit" value="Create my account" id="s_create_account"/>
 		</form>
 	</div>
 </div>
@@ -89,7 +89,8 @@ Volunteer Settings
 	        <h3>Account Creation Information</h3>
 	    </div>
 	    <ul>
-	        <li>Your account name can be different from your google account name.  Your Flash Volunteer account name is how you will be known on this site.</li>
+	        <li>Make sure to write down your username and password for next time!</li>
+            <li>Please only create one Flash Volunteer account.</li>
 	    </ul>
 	</div>
 </div>

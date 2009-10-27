@@ -622,7 +622,7 @@ span.verification_warning_wrapper {
 /* the following is for the create module */
 
 #createvolunteer .label {
-    margin-right: 10px; 
+    margin: 0 10px 2px 10px; 
 }
 
 #createvolunteer select {
@@ -630,7 +630,7 @@ span.verification_warning_wrapper {
 }
 
 #createvolunteer li {
-	padding-top: 10px;
+	padding-top: 5px;
 }
 /******************************************************
  * >> UNORGANIZED
@@ -901,6 +901,7 @@ ul.event_header img{
 }
 
 
+form textarea:focus,
 form input.text:focus, 
 form input.password:focus, 
 form input.textarea:focus {
@@ -925,6 +926,21 @@ form input.password {
 form input.submit {
 	font-size:145%;
 	letter-spacing:-1px;
+	margin-top: 20px;
 }
 
 .error{padding: 15px}
+
+
+form select option {
+	padding: 0px 10px;
+	font-size: 110%;	
+}
+
+form textarea,
+form input.textarea {
+	width: 98%;
+	height: 5em;
+	font-size: 110%;
+	padding: 3px 5px;
+}

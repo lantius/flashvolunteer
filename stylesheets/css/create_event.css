@@ -20,14 +20,8 @@ div.eventinput {
     top: -30px; 
 }
 
-div.eventinput textarea{
-    width: 465px;
-    height: 120px;
-}
-
 div.eventinput input {
-    width: 230px;
-    margin: 1px;
+    width: 98%;
 }
 
 div.eventinput input.checkbox {
@@ -53,7 +47,6 @@ div.eventinput input#minattend {
 
 div.eventinput input#address1, 
 div.eventinput input#address2 {
-    width: 50%;
 }
 
 div.eventinput input#city {

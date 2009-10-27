@@ -7,16 +7,18 @@
     <input type="hidden" name="session_id" value="{{ session_id }}">
     <ul>
 	
-        <li><span class="label">Name:</span> 
+        <li><label for="name">Name:</label> 
 <input class="text" type="text" name="name" value="{% if volunteer.error.name %}{{ volunteer.error.name.1|striptags }}{% else %}{{ volunteer.name|striptags }}{% endif %}" /></li>
 		{% if volunteer.error.name %}
 			<br/><strong class="error" id="error_name" >{{volunteer.error.name.0}}</strong>
 		{% endif %}
-        <li><span class="label">Email:</span> <input class="text" type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
-        <li><span class="label">Quote:</span> <input class="text" type="text" name="quote" value="{{ volunteer.get_quote|striptags }}"  /></li>
-        <li><span class="label">I live in:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
-        <li><span class="label">I work in:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
+        <li><label for="email">Email:</label> <input class="text" type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
+        <li><label for="quote">About:</label> <textarea class="textarea" name="quote" value="{{ volunteer.get_quote|striptags }}"></textarea></li>
     </ul>
+    <table><tr><td><label for="home_neighborhood">I live nearest to:</label></td><td>{% include "../volunteers/settings/_select_home_neighborhood.html" %}</td></tr>
+    <tr><td><label for="work_neighborhood">I work nearest to:</label></td><td>{% include "../volunteers/settings/_select_work_neighborhood.html" %} </td></tr>
+    </table>
+
 </div>
 
 <script>
