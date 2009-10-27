@@ -458,7 +458,8 @@ tr.message {
 	
 }
 
-#active_neighborhoods table {
+#active_neighborhoods table,
+#active_volunteers table {
     margin-top:10px;
     font-size: 9pt;
     border-collapse: collapse;
@@ -466,7 +467,8 @@ tr.message {
     text-align: center;
 }
 
-#active_neighborhoods td {   
+#active_neighborhoods td,
+#active_volunteers td {   
 
     text-align: right;
     padding:3px 10px;
@@ -474,21 +476,25 @@ tr.message {
 }
 
 #active_neighborhoods thead th,
-#active_neighborhoods td {
-    text-align: center	
+#active_neighborhoods td,
+#active_volunteers thead th,
+#active_volunteers td {
+    text-align: center  
 }
 
 #active_neighborhoods .small {
-	font-size:smaller;
-	color:#CCC;
+    font-size:smaller;
+    color:#CCC;
 }
 
-#active_neighborhoods thead th {
+#active_neighborhoods thead th,
+#active_volunteers thead th {
     padding-left:4px;
     padding-right:4px;
 }
 
-#active_neighborhoods tbody th {
+#active_neighborhoods tbody th,
+#active_volunteers tbody th {
     text-align: left;
     border-top: 0px;
 }
@@ -499,9 +505,9 @@ tr.message {
     font-size:8pt;
 }
 
-#active_neighborhoods th a:link, #active_neighborhoods th a:visited {
+#active_neighborhoods th a:link, #active_neighborhoods th a:visited,
+#active_volunteers th a:link, #active_volunteers th a:visited {
     font-weight: bold;
-}
 
 /*
 ======================================================
