@@ -479,7 +479,7 @@ tr.message {
 #active_neighborhoods td,
 #active_volunteers thead th,
 #active_volunteers td {
-    text-align: center  
+    text-align: center;
 }
 
 #active_neighborhoods .small {
@@ -505,10 +505,12 @@ tr.message {
     font-size:8pt;
 }
 
-#active_neighborhoods th a:link, #active_neighborhoods th a:visited,
-#active_volunteers th a:link, #active_volunteers th a:visited {
+#active_neighborhoods th a:link, 
+#active_neighborhoods th a:visited,
+#active_volunteers th a:link, 
+#active_volunteers th a:visited {
     font-weight: bold;
-
+}
 /*
 ======================================================
 >>Miscellaneous Styles
@@ -723,10 +725,6 @@ a.event_name {
 #volunteer_summary_work {
     padding-left: 10px;
 }
-
-
-
-
 
 .button{
     display: block;
