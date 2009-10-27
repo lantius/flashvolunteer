@@ -920,3 +920,5 @@ form input.submit {
 	font-size:145%;
 	letter-spacing:-1px;
 }
+
+.error{padding: 15px}

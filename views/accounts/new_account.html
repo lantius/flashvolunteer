@@ -15,13 +15,29 @@ Volunteer Settings
 		  <input type="hidden" name="session_id" value="{{ session_id }}" />
 		      <fieldset>
 				  <ul>			
-			
+				  
+                        <li><span class="label">Your Name:</span><input class="text" id="createnameinput" type="text" name="name" tabindex="0"
+                            {% if account.error.name %}
+                                value="{{ account.error.name.1 }}"
+                            {% else %}
+                                {% if account.name %}
+                                    value="{{ account.name|striptags }}"
+                                {% else %}
+                                    value=""
+                                {% endif %}
+                            {% endif %}
+                            />
+                            {% if account.error.name %}
+                                <br/><strong class="error">{{account.error.name.0}}</strong>
+                            {% endif %}
+                        </li>
+						
 					<li><span class="label">Email (required):</span><input class="text" id="createnameinput" type="text" name="email" tabindex="1"
 						{% if account.error.email %}
 							value="{{ account.error.email.1 }}"
 						{% else %}
-							{% if account.email %}
-								value="{{ account.email|striptags }}"
+							{% if account.preferred_email %}
+								value="{{ account.preferred_email|striptags }}"
 							{% else %}
 								value=""
 							{% endif %}
@@ -41,34 +57,21 @@ Volunteer Settings
                         <li>
                           <label for="password">Confirm Password</label>
                           <input class="password" id="password" name="passwordcheck" tabindex="3" type="password" />
-                
+	                      {% if account.error.passwords %}
+	                            <br/><strong class="error">{{account.error.passwords.0}}</strong>
+	                      {% endif %}                
                         </li>					
 					{% endif %}
+					</ul>
 				    </fieldset>
+					
                     <fieldset>
-	                    <li><span class="label">Your Name:</span><input class="text" id="createnameinput" type="text" name="name" tabindex="4"
-	                        {% if account.error.name %}
-	                            value="{{ account.error.name.1 }}"
-	                        {% else %}
-	                            {% if account.name %}
-	                                value="{{ account.name|striptags }}"
-	                            {% else %}
-	                                value=""
-	                            {% endif %}
-	                        {% endif %}
-	                        />
-	                        {% if account.error.name %}
-	                            <br/><strong class="error">{{account.error.name.0}}</strong>
-	                        {% endif %}
-	                    </li>
-                    
-                    </fieldset>
-                    <fieldset>
-			        <li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
+			        <ul><li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
 			        <li><span class="label">I work nearest to:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
-                    </fieldset>
+                    </ul>
+					</fieldset>
                     <fieldset>
-                    	
+                    <ul>	
 					<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
 					{% if account.error.tosagree %}
 						<br/><strong class="error">{{account.error.tosagree.0}}</strong>

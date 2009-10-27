@@ -26,7 +26,7 @@ from google.appengine.api.users import User
 # MainPage
 class Login(AbstractHandler):
     LIMIT = 12 
-    def get(self):
+    def get(self, errors = None):
         
         volunteer = Authorize.login(self, requireVolunteer=False)
     
@@ -52,12 +52,14 @@ class Login(AbstractHandler):
         session['user'] = user
         self.redirect('/settings')
       
-    def login(self):
+    def login(self, errors = None, email = None):
                   
         dev_server = is_debugging() 
         
         template_values = { 
           'dev_server': dev_server,
+          'errors': errors,
+          'email': email
         }
         
         if dev_server:
@@ -65,6 +67,7 @@ class Login(AbstractHandler):
             template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
         else:
             template_values['token_url'] = self.request.host_url + '/login'
+            
             
         session = Session()
         logging.info('login referrer:'+self.request.referrer)
@@ -84,15 +87,14 @@ class Login(AbstractHandler):
             
     def fv_auth(self):
         from models.auth import Account, Auth
+        errors = {}
         
-        #TODO: error check on email / password        
         params = Parameters.parameterize(self.request)
         
         session = Session()
         
         if params['session_id'] != session.sid:
-            self.redirect('/error')
-            return
+            self.redirect('/timeout')            
 
         email = params['email']
         password = params['password']
@@ -100,13 +102,15 @@ class Login(AbstractHandler):
         auth = Auth.all().filter('identifier =', email).filter('strategy =', 'fv').get()
         if not auth:
             logging.info('could not log user in, no user by that name')
-            self.redirect('/login')
+            errors['user_not_found'] = 1
+            self.login(errors = errors, email = email)
             return
         
         hash = hashlib.sha224(password + auth.salt).hexdigest()
         if hash != auth.digest:
             logging.info('could not log user in, wrong password')
-            self.redirect('/login')
+            errors['wrong_password'] = 1
+            self.login(errors = errors, email = email)
             return
         
         session['auth'] = auth                               

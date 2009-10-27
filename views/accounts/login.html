@@ -25,14 +25,14 @@ Flash Volunteer
 		            <fieldset>
 		              <ol>
 		                <li>
-		                  <label for="email">Email</label>
-		                  <input class="text" id="email" name="email" tabindex="1" type="text" />
+		                  <label for="email">Email</label>{% if errors.user_not_found %}<strong class="error">No user with that email</strong>{% endif %}  
+		                  <input class="text" id="email" name="email" tabindex="1" type="text" {%if email %}value={{email}}{%endif%} />
+       
 		                </li>
 		                <li>
-		                  <label for="password">Password</label>
-		                  <input class="password" id="password" name="password" tabindex="2" type="password" />
-		        
-		                </li>
+		                  <label for="password">Password</label>{% if errors.wrong_password %}<strong class="error">Wrong password</strong>{% endif %}              
+		                  <input class="password" id="password" name="password" tabindex="2" type="password" />             
+						</li>
 		              </ol>
 		            </fieldset>
 		            <input class="submit" name="commit" tabindex="4" type="submit" value="Enter" />

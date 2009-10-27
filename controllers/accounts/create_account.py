@@ -1,26 +1,23 @@
-import os, logging, hashlib
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp import template
-
+from components.sessions import Session
 from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
-from controllers._utils import is_debugging
+from controllers._params import Parameters
+from controllers._utils import is_debugging, send_message 
+from controllers.abstract_handler import AbstractHandler
+from controllers.accounts.login import check_avatar
+
+from google.appengine.api.users import User
+from google.appengine.ext import webapp, db
+from google.appengine.ext.webapp import template
 
 from models.auth import Account, Auth
 from models.volunteer import Volunteer
 
-from controllers._utils import send_message 
-from components.sessions import Session
-from controllers._params import Parameters
-
+import os, logging, hashlib
 import urllib
 
-from controllers.abstract_handler import AbstractHandler
-
-from google.appengine.api.users import User
-from controllers.accounts.login import check_avatar
-
 class CreateAccount(AbstractHandler):
+    
     def get(self, account = None, volunteer = None):
         session = Session()
 
@@ -49,9 +46,10 @@ class CreateAccount(AbstractHandler):
             
         template_values = {
             'volunteer': volunteer,
-            'home_neighborhoods': NeighborhoodHelper().selected(None),
-            'work_neighborhoods': NeighborhoodHelper().selected(None),
-            'fv_account': login_info is None
+            'account': account,
+            'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+            'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
+            'fv_account': login_info is None,
           }
         self._add_base_template_values(vals = template_values)
         
@@ -62,19 +60,21 @@ class CreateAccount(AbstractHandler):
         
         params = Parameters.parameterize(self.request)    
         session = Session()
-        account = session.get('account', None)
-        volunteer = session.get('volunteer', None)
-        
-        #TODO: make sure that an account with this email does not already exist
+        account = session.get('account')
+        volunteer = session.get('volunteer')
         
         if params['session_id'] != session.sid:
-            self.redirect('/error')
-            return
+            self.redirect('/timeout')
+            return        
         
-        if 'password' in params and params['password'] != params['passwordcheck']:
-            logging.info('PASSWORDS DO NOT MATCH')
+        #can't combine these two less risk short circuiting...
+        valid_entry = volunteer.validate(params) 
+        valid_entry = account.validate(params) and valid_entry
+        
+        if not valid_entry:
             self.get(account = account, volunteer = volunteer)
-        
+            return False
+
         login_info = session.get('login_info', None)
         if not login_info:
             salt = session.sid
@@ -98,10 +98,6 @@ class CreateAccount(AbstractHandler):
             self.redirect('/new')
             return False
 
-        if not volunteer.validate(params) or not account.validate(params):
-            self.get(account = account, volunteer = volunteer)
-            return False
-        
         user = User(email = account.preferred_email)
         account.user = user
         
