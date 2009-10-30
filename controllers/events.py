@@ -1,33 +1,24 @@
-import os, string, random, datetime
-import exceptions
-import logging
-
-from controllers._utils import is_debugging, get_application, get_google_maps_api_key
-
 from components.geostring import *
 from components.time_zones import Pacific, now
-
-
-from google.appengine.ext.webapp import template
-from google.appengine.ext import webapp
+from controllers._auth import Authorize
+from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
+from controllers._params import Parameters
+from controllers._utils import is_debugging, get_application, get_google_maps_api_key
+from controllers.abstract_handler import AbstractHandler
+from google.appengine.api import memcache
 from google.appengine.ext import db
-
-from models.volunteer import Volunteer
+from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 from models.event import Event
-from models.eventvolunteer import EventVolunteer
-from models.neighborhood import Neighborhood
-from models.interestcategory import InterestCategory
 from models.eventinterestcategory import EventInterestCategory
 from models.eventphoto import EventPhoto
-
-from controllers._auth import Authorize
-from controllers._params import Parameters
-
-from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
-
-from controllers.abstract_handler import AbstractHandler
-
-from google.appengine.api import memcache
+from models.eventvolunteer import EventVolunteer
+from models.interestcategory import InterestCategory
+from models.neighborhood import Neighborhood
+from models.volunteer import Volunteer
+import exceptions
+import logging
+import os, string, random, datetime
 
 def _get_upcoming_events():
     region = get_application()
@@ -260,7 +251,7 @@ class EventsPage(AbstractHandler):
       for ev in event.eventvolunteers:
         #TODO notify everyone who was going to attend that this was cancelled.
         ev.delete() 
-      for ei in event.eventinterestcategories:
+      for ei in event.event_categories:
         ei.delete()
       event.delete()
   
@@ -318,7 +309,7 @@ class EventsPage(AbstractHandler):
         eic = EventInterestCategory(event = event, interestcategory = interestcategory)
         eic.put()
     
-    eventVolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=True)
+    eventVolunteer = EventVolunteer(account=volunteer.account, event=event, isowner=True)
     eventVolunteer.put()
     
     return event.key().id()
@@ -471,7 +462,7 @@ class EventsPage(AbstractHandler):
         catid = int(params['interestcategory'])
         interestcategory = InterestCategory.get_by_id(catid)
         events = [event for event in events if 
-                    catid in [ic.interestcategory.key().id() for ic in event.eventinterestcategories]]
+                    catid in [ic.interestcategory.key().id() for ic in event.event_categories]]
       except:
         pass
                 
@@ -487,7 +478,7 @@ class EventsPage(AbstractHandler):
       for last_eventphoto in last_eventphotos: 
         display_weight = last_eventphoto.display_weight + 1
       eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
-                                       volunteer=volunteer,
+                                       account=volunteer.account,
                                        content=params['content'], 
                                        display_weight = display_weight,
                                        type=EventPhoto.RSS_ALBUM, 

@@ -134,7 +134,7 @@ class CreateAccount(AbstractHandler):
         from components.message_text import type3  
         from models.messages import MessageType
                   
-        send_message(to = [volunteer], 
+        send_message(to = [account], 
                      subject = type3.subject%msg_params,
                      body = type3.body%msg_params,
                      type= MessageType.all().filter('name =', 'welcome').get(), 

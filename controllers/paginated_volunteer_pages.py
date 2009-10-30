@@ -102,7 +102,7 @@ class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
       self.set_context()
         
   def _get_volunteer_generator(self):
-     return (self.category.volunteerinterestcategories, 'indirect')
+     return (self.category.user_interests, 'indirect')
  
   def _get_title(self):
      return 'Interested in %s'%self.category.name

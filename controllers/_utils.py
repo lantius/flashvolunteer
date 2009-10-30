@@ -72,7 +72,7 @@ def send_message(to, subject, body, type, sender = None, immediate=False, autoge
     message = Message(
       subject = subject,
       body = body,
-      sent_by = sender,
+      sender = sender,
       type = type,
       autogen = autogen
     )
@@ -80,7 +80,7 @@ def send_message(to, subject, body, type, sender = None, immediate=False, autoge
     mrs = []        
     for recipient in to:
         mr = MessageReceipt(
-          recipient = recipient,
+          recipient2 = recipient,
           message = message)
         mrs.append(mr)
 

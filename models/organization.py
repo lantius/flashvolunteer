@@ -5,11 +5,13 @@ from models.abstractuser import AbstractUser
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
 
+from models.auth.account import Account
 
 ################################################################################
 # Organization
 class Organization(AbstractUser):
   
+  account = db.ReferenceProperty(Account, collection_name = 'org_user')
 
   def validate(self, params):
     AbstractUser.validate(self, params)

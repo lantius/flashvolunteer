@@ -51,8 +51,7 @@ class VolunteerForEvent(AbstractHandler):
                                                                   volunteer = volunteer,
                                                                   sign_up = True)
         
-              send_message(sender = volunteer, 
-                            to = to, 
+              send_message( to = to, 
                             subject = subject, 
                             body = body, 
                             type = MessageType.all().filter('name =', 'event_coord').get())
@@ -61,8 +60,7 @@ class VolunteerForEvent(AbstractHandler):
         return
 
     def get_message_text(self, event, volunteer, sign_up = True):
-        to = [ev.volunteer for ev in EventVolunteer.gql("WHERE isowner = true AND event = :event" ,
-                          event=event).fetch(limit=10)]
+        to = (ev.account for ev in event.eventvolunteers.filter('isowner =', True).fetch(limit=10))
                           
         if sign_up:
             msg = type1_vol

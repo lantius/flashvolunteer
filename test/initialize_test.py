@@ -1,6 +1,11 @@
-import unittest
+import unittest, logging
 from webtest import TestApp
 from google.appengine.ext import webapp
+
+
+import os
+for k,v in os.environ.items():
+    logging.info(k+': '+v)
 
 from controllers._helpers import InitializeStore
 

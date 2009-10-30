@@ -55,7 +55,7 @@ class VolunteersTest(unittest.TestCase):
     follower = Volunteer()
     follower.put()
     
-    vf = VolunteerFollower(volunteer = volunteer, follower = follower)
+    vf = VolunteerFollower(follows = volunteer.account, follower = follower.account)
     vf.put()
     
     self.assertEqual(volunteer.volunteerfollowing.count(), 0)
@@ -67,7 +67,7 @@ class VolunteersTest(unittest.TestCase):
     self.assertEqual(volunteer.followers().next().key().id, follower.key().id )
     self.assertEqual(follower.following().next().key().id, volunteer.key().id )
     
-    fv = VolunteerFollower(volunteer = follower, follower = volunteer)
+    fv = VolunteerFollower(follows = follower.account, follower = volunteer.account)
     fv.put()
     
     self.assertEqual(volunteer.volunteerfollowing.count(), 1)

@@ -36,8 +36,8 @@ class Mailbox(AbstractHandler):
         
         message = Message.get_by_id(int(id))
         if message:
-            mr = message.sent_to.filter('recipient =', volunteer).get()
-        if not message or not (mr or volunteer.key().id() == message.sent_by.key().id()):
+            mr = message.sent_to.filter('recipient2 =', volunteer.account).get()
+        if not message or not (mr or volunteer.account.key().id() == message.sender.key().id()):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
             else:
@@ -47,7 +47,7 @@ class Mailbox(AbstractHandler):
         template_values = {
             'volunteer': volunteer,
             'message': message,
-            'sender_viewing': message.sent_by is not None and message.sent_by.key().id() == volunteer.key().id()
+            'sender_viewing': message.sender is not None and message.sender.key().id() == volunteer.account.key().id()
             
           }
         self._add_base_template_values(vals = template_values)
@@ -85,9 +85,9 @@ class Mailbox(AbstractHandler):
         except:
             raise
         
-        messages = volunteer.get_messages()
+        messages = volunteer.account.get_messages()
         
-        sent_messages = volunteer.get_sent_messages()
+        sent_messages = volunteer.account.get_sent_messages()
         
         bookmark = self.request.get("bookmark", None)
         if bookmark:

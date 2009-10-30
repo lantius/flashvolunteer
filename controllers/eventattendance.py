@@ -4,9 +4,9 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 
-from models.volunteer import *
-from models.event import *
-from models.eventvolunteer import *
+from models.volunteer import Volunteer
+from models.event import Event
+from models.eventvolunteer import EventVolunteer
 
 from controllers._auth import Authorize
 from controllers._params import Parameters
@@ -55,16 +55,16 @@ class VerifyEventAttendance(AbstractHandler):
       self.redirect("/events/" + url_data)
       return
     
-    ev = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                        volunteer=volunteer, event=event).get()
+    ev = event.eventvolunteers.filter('account =', volunteer.account).get()
+                        
     if not ev:
       self.redirect("/events/" + url_data)
       return
     
     template_values = {
         'eventvolunteer': ev,
-        'volunteer' : ev.volunteer,
-        'event' : ev.event,
+        'volunteer' : volunteer,
+        'event' : event,
         'now' : now().strftime("%A, %d %B %Y"),
       }
     

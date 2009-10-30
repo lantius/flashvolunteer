@@ -40,7 +40,7 @@ class SettingsTest(unittest.TestCase):
     self.assertEqual(v.work_neighborhood, Neighborhood.get_by_id(params['work_neighborhood']))
     self.assertEqual(v.quote, params['quote'])
     self.assertEqual(v.name, params['name'])
-    self.assertEqual(v.volunteerinterestcategories.count(), 0)
+    self.assertEqual(v.user_interests.count(), 0)
     
     # now update the new volunteeer
     params = {'home_neighborhood' : 2,
@@ -55,7 +55,7 @@ class SettingsTest(unittest.TestCase):
     self.assertEqual(v.work_neighborhood, Neighborhood.get_by_id(params['work_neighborhood']))
     self.assertEqual(v.quote, params['quote'])
     self.assertEqual(v.name, params['name'])
-    self.assertEqual(v.volunteerinterestcategories.count(), 1)
+    self.assertEqual(v.user_interests.count(), 1)
     self.assertEqual(v.interestcategories().next().key().id, self.interestcategory1.key().id )
 
     params = {'home_neighborhood' : 2,
@@ -70,7 +70,7 @@ class SettingsTest(unittest.TestCase):
     self.assertEqual(v.work_neighborhood, Neighborhood.get_by_id(params['work_neighborhood']))
     self.assertEqual(v.quote, params['quote'])
     self.assertEqual(v.name, params['name'])
-    self.assertEqual(v.volunteerinterestcategories.count(), 1)
+    self.assertEqual(v.interests.count(), 1)
     self.assertEqual(v.interestcategories().next().key().id, self.interestcategory2.key().id )
 
   
@@ -84,22 +84,22 @@ class SettingsTest(unittest.TestCase):
     
     n = Volunteer.all().count()
     
-    vf = VolunteerFollower(volunteer = v, follower = follower)
+    vf = VolunteerFollower(follows = v.account, follower = follower.account)
     vf.put()
-    fv = VolunteerFollower(volunteer = follower, follower = v)
+    fv = VolunteerFollower(follows = follower.account, follower = follower.account)
     fv.put()
     
-    self.assertEqual(v.volunteerfollowing.count(), 1)
-    self.assertEqual(v.volunteerfollowers.count(), 1)
+    self.assertEqual(v.following.count(), 1)
+    self.assertEqual(v.followers.count(), 1)
 
-    self.assertEqual(follower.volunteerfollowers.count(), 1)
-    self.assertEqual(follower.volunteerfollowing.count(), 1)
+    self.assertEqual(follower.followers.count(), 1)
+    self.assertEqual(follower.following.count(), 1)
     
     s.delete(v)
     
     self.assertEqual(n-1, Volunteer.all().count())
-    self.assertEqual(follower.volunteerfollowers.count(), 0)
-    self.assertEqual(follower.volunteerfollowing.count(), 0)  
+    self.assertEqual(follower.followers.count(), 0)
+    self.assertEqual(follower.following.count(), 0)  
     
     
     

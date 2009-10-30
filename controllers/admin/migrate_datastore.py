@@ -36,34 +36,74 @@ class MigrateDatastore(AbstractHandler):
 
         from models.auth import Auth, Account
         for v in Volunteer.all():
-            account = Account(
-                user = v.user,
-                preferred_email = v.get_email(),
-                active_applications = v.applications,
-                name = v.get_name()
-            )
-            
-            if v.user.email().find('@yahoo') > -1:
-                strategy = 'Yahoo!'
-            elif v.user.email().find('@Facebook') > -1:
-                strategy = 'Facebook'
-            elif v.user.email().find('/') > -1:
-                strategy = 'OpenID'
-            else: 
-                strategy = 'Google'
+            if not v.account:
+                account = Account(
+                    user = v.user,
+                    preferred_email = v.get_email(),
+                    active_applications = v.applications,
+                    name = v.get_name()
+                )
                 
-
-            account.put()
-
-            auth = Auth(
-                strategy = strategy,
-                identifier = v.user.email(),
-                account = account
-            )
-            auth.put()
+                if v.user.email().find('@yahoo') > -1:
+                    strategy = 'Yahoo!'
+                elif v.user.email().find('@Facebook') > -1:
+                    strategy = 'Facebook'
+                elif v.user.email().find('/') > -1:
+                    strategy = 'OpenID'
+                else: 
+                    strategy = 'Google'
+                    
+    
+                account.put()
+    
+                auth = Auth(
+                    strategy = strategy,
+                    identifier = v.user.email(),
+                    account = account
+                )
+                auth.put()
+                
+                v.account = account
+                v.put()
+        
+        
+        from models.messages import MessageReceipt, MessagePreference, Message
+        for mp in MessagePreference.all():
+            if mp.volunteer:
+                mp.account = mp.volunteer.account
+                mp.put()
+        for m in Message.all():
+            if m.sent_by:
+                m.sender = m.sent_by.account
+                m.put()
+        for mr in MessageReceipt.all():
+            mr.recipient2 = mr.recipient.account
+            mr.put()
+        
+        from models.eventphoto import EventPhoto
+        for ep in EventPhoto.all():
+            ep.account = ep.volunteer.account
+            ep.put()
             
-            v.account = account
-            v.put()
+        from models.eventvolunteer import EventVolunteer
+        for ev in EventVolunteer.all():
+            if ev.volunteer:
+                ev.account = ev.volunteer.account
+                ev.put()
+            
+        from models.volunteerfollower import VolunteerFollower
+        for vf in VolunteerFollower.all():
+            if vf.volunteer:
+                vf.follows = vf.volunteer.account
+                vf.follower2 = vf.follower.follower2
+                vf.put()
+            
+        from models.interest import Interest
+        from models.volunteerinterestcategory import VolunteerInterestCategory
+        for vic in VolunteerInterestCategory.all():
+            if vic.volunteer:
+                i = Interest(account = vic.volunteer.account, interestcategory = vic.interestcategory)
+                i.put()
             
         return
     

@@ -4,6 +4,7 @@ from google.appengine.ext import db
 from google.appengine.api import mail
 
 from models.volunteer import Volunteer
+from models.auth.account import Account
 
 from controllers._utils import get_domain
 
@@ -27,7 +28,7 @@ class Message(db.Model):
     
     sent_by = db.ReferenceProperty(Volunteer, collection_name = 'sent_messages')
     
-    recipient = db.ReferenceProperty(Volunteer)
+    sender = db.ReferenceProperty(Account, collection_name = 'sent_messages')
     
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)

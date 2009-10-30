@@ -147,13 +147,13 @@ class Event(db.Model):
         return '/events'
       
     def volunteers(self):
-        return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', False))
+        return (ev.account.get_user() for ev in self.eventvolunteers.filter('isowner = ', False))
     
     def volunteer_count(self):
         return self.eventvolunteers.filter('isowner = ', False).count()
     
     def hosts(self):
-        return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', True))
+        return (ev.account.get_user() for ev in self.eventvolunteers.filter('isowner = ', True))
     
     def contact_email(self):
         return ','.join([v.get_email() for v in self.hosts()])
@@ -163,7 +163,7 @@ class Event(db.Model):
         return len(eventphotosphotos)
     
     def interestcategories(self):
-        return (eic.interestcategory for eic in self.eventinterestcategories)
+        return (eic.interestcategory for eic in self.event_categories)
     
     def geocode(self):
         response = urlfetch.fetch('http://maps.google.com/maps/geo?q=' + urllib.quote_plus(self.address) + '&output=csv&oe=utf8&sensor=false&key=' + get_google_maps_api_key())

@@ -5,6 +5,7 @@ from models.abstractuser import AbstractUser
 #For verifying volunteer creation
 from controllers._twitter import Twitter 
 from google.appengine.api import memcache
+from models.auth.account import Account
 
 ################################################################################
 # Volunteer
@@ -14,7 +15,8 @@ class Volunteer(AbstractUser):
     work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
     
     privacy__event_attendance = db.StringProperty(default='friends')
-    
+    account = db.ReferenceProperty(Account, collection_name = 'vol_user')
+
     def validate(self, params):
       
       # Not verifying these updates
@@ -49,7 +51,7 @@ class Volunteer(AbstractUser):
                   #### ERROR HERE, can't do volunteer = self
                   #    vol_message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, volunteer = self)
                   # BadValueError: Volunteer instance must have a complete key before it can be stored as a reference
-                  vol_message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, volunteer = self)
+                  vol_message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, account = self.account)
                   vol_message_prefs.put()
                   
               for mp in MessagePropagationType.all():
@@ -79,43 +81,23 @@ class Volunteer(AbstractUser):
       return '/volunteers/' + str(self.key().id())
     
     def interestcategories(self):
-      return (vic.interestcategory for vic in self.volunteerinterestcategories)
-    
-    def following(self):
-      return (f.volunteer for f in self.volunteerfollowing)
-    
-    def following_len(self):
-      return len(self.following())
-    
-    def followers(self):
-      return (f.follower for f in self.volunteerfollowers)
-    
-    def followers_len(self):
-      return len(self.followers())
-    
-    def teammates_ids(self):
-        return dict([(v.key().id(),1) for v in self.following() ])
+      return (vic.interestcategory for vic in self.account.user_interests)
     
     # both following and follower
     def friends(self):
-      fr = []
-      
-      following = dict([(f.key().id(),1) for f in self.following()])
-      for follower in self.followers():
-          if follower.key().id() in following:            
-            fr.append(follower)
-      return [f for f in fr]
-    
-    def friends_len(self):
-      return len(self.friends())
+        following = dict([(vf.follows.key().id(),1) for vf in self.account.following])
+        fr = [vf.follower2.get_user() for vf in self.account.followers if vf.follower2.key().id() in following]
+        return fr
     
     def followers_only(self):
-        friends = dict([(f.key().id(),1) for f in self.friends()])
-        return (f for f in self.followers() if f.key().id() not in friends)
+        following = dict([(vf.follows.key().id(),1) for vf in self.account.following])
+        fr = [vf.follower2.get_user() for vf in self.account.followers if vf.follower2.key().id() not in following]
+        return fr
     
     def following_only(self):
-        friends = dict([(f.key().id(),1) for f in self.friends()])
-        return (f for f in self.following() if f.key().id() not in friends)
+        followers = dict([(vf.follower2.key().id(),1) for vf in self.account.followers])
+        fr = [vf.follows.get_user() for vf in self.account.following if vf.follows.key().id() not in followers]
+        return fr
     
     def event_access(self, volunteer):
         friends = [f.key().id() for f in self.friends()]
@@ -172,17 +154,4 @@ class Volunteer(AbstractUser):
         memcache.add('%s_rec_events'%self.key().id(), recommended_events, 120)
         return recommended_events
 
-    def get_messages(self):
-        return self.incoming_messages.order('-timestamp')
-    
-    def get_unread_message_count(self):
-        return self.incoming_messages.filter('read =', False).count()
 
-    def get_sent_messages(self):
-        return self.sent_messages.order('-trigger')
-    
-    def is_recipient(self, message):
-        from models.messages import MessageReceipt
-        mr = MessageReceipt.gql('WHERE recipient = :name',
-                name = self)
-        return mr.get() is not None

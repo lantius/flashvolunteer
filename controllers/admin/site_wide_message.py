@@ -10,6 +10,7 @@ from controllers._auth import Authorize
 
 from models.messages import MessageType
 from models.volunteer import Volunteer
+from models.auth.account import Account
 
 from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging, send_message
@@ -37,9 +38,9 @@ class SiteWideMessage(AbstractSendMessage):
         last_key = None
         while True:
             if last_key:
-                query = Volunteer.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
+                query = Account.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
             else:
-                query = Volunteer.gql('ORDER BY __key__')
+                query = Account.gql('ORDER BY __key__')
             
             recips = query.fetch(limit = CHUNK_SIZE + 1)
             
@@ -50,7 +51,7 @@ class SiteWideMessage(AbstractSendMessage):
                 recipients += recips
                 break
 
-        self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params)
+        self._send_message(sender = volunteer.account, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
         if 'message_redirect' in session:
@@ -58,18 +59,4 @@ class SiteWideMessage(AbstractSendMessage):
             del session['message_redirect']
         else:
             self.redirect('/messages#sent')
-        
-    def get(self):
-        try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
-        except:
-            return
-        params = Parameters.parameterize(self.request)
-        session = Session()
-        if 'redirect' in params:
-            session['message_redirect'] = params['redirect']
-        
-        recipients =  Volunteer.all().fetch(limit = 20) 
-        url = '/admin'
-        self._get_helper(recipients = recipients, url = url)
 

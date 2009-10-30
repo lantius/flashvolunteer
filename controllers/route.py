@@ -67,6 +67,7 @@ class TimeoutPage(AbstractHandler):
 # /events/1/volunteer?delete=true POST: unsign up for an event
 # /events/1?delete=true POST: delete up for an event
 
+
 def profile_main():
     # This is the main function for profiling 
     # We've renamed our original main() above to real_main()

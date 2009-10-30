@@ -11,15 +11,13 @@ from google.appengine.api.urlfetch import fetch
 
 from models.volunteer import Volunteer
 from models.interestcategory import InterestCategory
-from models.volunteerinterestcategory import VolunteerInterestCategory
+from models.interest import Interest
 from models.messages import MessageType, MessagePropagationType
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from components.sessions import Session
 
 from controllers.abstract_handler import AbstractHandler
-
-from controllers._utils import send_message
 
 ################################################################################
 # Settings page
@@ -83,10 +81,10 @@ class SettingsPage(AbstractHandler):
             param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
             if not param_name in params:
                 continue
-            vic = VolunteerInterestCategory.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
+            vic = Interest.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
                             volunteer = volunteer, interestcategory = interestcategory).get()
             if params[param_name] == ['1','1'] and not vic:          
-                vic = VolunteerInterestCategory(volunteer = volunteer, interestcategory = interestcategory)
+                vic = Interest(volunteer = volunteer, interestcategory = interestcategory)
                 vic.put()
             elif params[param_name] == '1' and vic:
                 vic.delete()
@@ -100,22 +98,22 @@ class SettingsPage(AbstractHandler):
     # DELETE
     def delete(self, volunteer):
       # Remove followers relationship
-      followers = volunteer.volunteerfollowers;
+      followers = volunteer.followers
       for f in followers:
         f.delete()
     
       # Remove following relationship
-      following = volunteer.volunteerfollowing;
+      following = volunteer.following
       for f in following:
         f.delete()
     
       # Remove volunteer interest categories
-      interests = volunteer.volunteerinterestcategories;
+      interests = volunteer.user_interests
       for interest in interests:
         interest.delete()
 
       # Remove your message preferences
-      prefs = volunteer.message_preferences;
+      prefs = volunteer.message_preferences
       for pref in prefs:
         pref.delete()
             

@@ -118,7 +118,7 @@ class EventsTest(unittest.TestCase):
     self.assertEqual(event.date.strftime("%m/%d/%Y"), params['date'])    
     self.assertEqual(event.description, params['description'])
     self.assertEqual(event.neighborhood, Neighborhood.get_by_id(int(params['neighborhood'])))
-    self.assertEqual(event.eventinterestcategories.count(), 1)
+    self.assertEqual(event.event_categories.count(), 1)
     self.assertEqual(event.interestcategories().next().key().id, self.interestcategory2.key().id )
 
   # SEARCH
@@ -192,7 +192,7 @@ class EventsTest(unittest.TestCase):
     
     event = events[0]
     self.assertEqual(event.neighborhood.key().id(), int(search_params['neighborhood']))
-    cats = [ic.interestcategory.key().id() for ic in event.eventinterestcategories]
+    cats = [ic.interestcategory.key().id() for ic in event.event_categories]
     self.assertTrue(self.interestcategory1.key().id() in cats)
 
     search_params = { 'neighborhood' : 'bad neighborhood',

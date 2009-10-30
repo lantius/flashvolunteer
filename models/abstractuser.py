@@ -29,8 +29,6 @@ class AbstractUser(db.Model):
     
     error = {}
     
-    account = db.ReferenceProperty(Account)
-    
     
     def validate(self, params):
       self.error.clear()
@@ -113,7 +111,7 @@ class AbstractUser(db.Model):
       return events
     
     def interestcategories(self):
-      return (vic.interestcategory for vic in self.volunteerinterestcategories)
+      return (vic.interestcategory for vic in self.user_interests)
     
     def events_past_count(self):
       return len(self.events_past())

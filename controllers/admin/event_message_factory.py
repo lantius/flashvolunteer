@@ -37,7 +37,7 @@ class EventMessageFactory(AbstractHandler):
                 continue
             #it appears that model instances accessed in a cron job do not have referenceproperties resolved; 
             #thats why we're not using e.volunteers() below (and e.hosts() later on...)
-            recipients = [ev.volunteer for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, False).fetch(limit=500)]
+            recipients = [ev.account for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, False).fetch(limit=500)]
             params = {
                 'event_name': e.name,
                 'event_url': '%s%s'%(self._get_base_url(), e.url()),
@@ -55,7 +55,7 @@ class EventMessageFactory(AbstractHandler):
                 params['participation_statement'] = "You currently have %i Flash Volunteers signed up."%len(recipients)
             else:
                 params['participation_statement'] = "At this time, there are no Flash Volunteers signed up."
-            hosts = [ev.volunteer for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, True).fetch(limit=500)]
+            hosts = [ev.account for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, True).fetch(limit=500)]
             send_message(to = hosts, 
                          subject = type6.subject%params, 
                          body = type6.body%params, 
@@ -76,7 +76,7 @@ class EventMessageFactory(AbstractHandler):
                     'event_name': e.name,
                     'event_url': '%s%s'%(self._get_base_url(), e.url()),
                 }
-                recipients = [ev.volunteer for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, False).fetch(limit=500)]
+                recipients = [ev.account for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, False).fetch(limit=500)]
                 if len(recipients) > 0:
                     send_message(to = recipients, 
                                  subject = type7.subject%params, 
@@ -89,7 +89,7 @@ class EventMessageFactory(AbstractHandler):
                 else:
                     params['participation_statement'] = "Unfortunately, it appears that no Flash Volunteers signed up to help out at your event (%(event_url)s)."%params
                 
-                hosts = [ev.volunteer for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, True).fetch(limit=500)]
+                hosts = [ev.account for ev in EventVolunteer.gql("WHERE event=:1 AND isowner=:2", e, True).fetch(limit=500)]
                 send_message(to = hosts, 
                              subject = type8.subject%params, 
                              body = type8.body%params, 
@@ -112,7 +112,6 @@ class RecommendedEventMessageFactory(AbstractHandler):
         cached_descs = {}
         
         for v in Volunteer.all():
-            v.volunteerinterestcategories
             rec_events = [e for e in v.recommended_events() 
                             if e.enddate and (e.enddate - right_now).days < 7][:10]
             

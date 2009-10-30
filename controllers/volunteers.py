@@ -55,11 +55,9 @@ class VolunteersPage(AbstractHandler):
       self.error(404)
       return
 
-    volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
-                      volunteer=page_volunteer, follower=volunteer).get()
+    volunteerfollower = page_volunteer.account.followers.filter('account =', volunteer.account).get()
                       
-    volunteerfollowing = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
-                      volunteer=volunteer, follower=page_volunteer).get()
+    volunteerfollowing = volunteer.account.followers.filter('account =', page_volunteer.account).get()
                                             
     event_access = page_volunteer.event_access(volunteer = volunteer) 
                       
@@ -159,20 +157,20 @@ class FollowVolunteer(AbstractHandler):
         to_follow = Volunteer.get_by_id(int(url_data))
         
         if to_follow:
-            volunteerfollower = VolunteerFollower.gql("WHERE volunteer = :volunteer AND follower = :follower" ,
-            volunteer=to_follow, follower=volunteer).get()
+            volunteerfollower = to_follow.account.followers.filter('account =', volunteer.account).get()
+
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if volunteerfollower:
                     volunteerfollower.delete()
             else:
                 if not volunteerfollower:
-                    volunteerfollower = VolunteerFollower(volunteer=to_follow, follower=volunteer)
+                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower2=volunteer.account)
                     volunteerfollower.put()
-                    params = self.get_message_params(adder = volunteer, volunteer = to_follow)
+                    params = self.get_message_params(adder = volunteer, account = to_follow.account, volunteer = to_follow)
                     subject = type2.subject%params
                     body = type2.body%params
                     send_message( 
-                        to = [to_follow], 
+                        to = [to_follow.account], 
                         subject = subject, 
                         body = body, 
                         type = MessageType.all().filter('name =', 'added_to_team').get())   
@@ -182,16 +180,16 @@ class FollowVolunteer(AbstractHandler):
         
         return
     
-    def get_message_params(self,adder, volunteer):
+    def get_message_params(self,adder, account, volunteer):
         params = {
             'adder_name': adder.name,
-            'vol_name': volunteer.name,
+            'vol_name': account.name,
             'adder_url': '%s%s'%(self._get_base_url(), adder.url()),
             'vol_team_url': '%s%s'%(self._get_base_url(), volunteer.url()), 
             'reciprocation':''
         }
         
-        reciprocal = adder.key().id() in volunteer.teammates_ids()
+        reciprocal = adder.account.following.filter('account =', volunteer.account).get()
         if reciprocal:
             params['reciprocation'] = ' also'
         

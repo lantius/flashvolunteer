@@ -1,12 +1,15 @@
 
-<div id="following" class="softmodule">
-	<div class="moduletitle">
-		<h3>People requesting to be in your team</h3>
-	</div>
-	<ul class="imagenamelinklist">
-		{% for volunteer_in_list in volunteer.followers_only %}
-			{% include "person_lists/_volunteer_list_item.html" %}
-		{% endfor %}
-    </ul>
-</div>
-
+{% if volunteer.followers_only %}
+    {% ifnotequal friends|length 0 %}
+		<div id="following" class="softmodule">
+			<div class="moduletitle">
+				<h3>People requesting to be in your team</h3>
+			</div>
+			<ul class="imagenamelinklist">
+				{% for volunteer_in_list in volunteer.followers_only %}
+					{% include "person_lists/_volunteer_list_item.html" %}
+				{% endfor %}
+		    </ul>
+		</div>
+	{% endif %}
+{% endif %}

@@ -60,13 +60,13 @@ class SendMessage_Personal(AbstractSendMessage):
             return
         
         id = url_data
-        recipients = [Volunteer.get_by_id(int(id))]
+        recipients = [Volunteer.get_by_id(int(id)).account]
         params = Parameters.parameterize(self.request)
         mt = MessageType.all().filter('name = ', 'person_to_person').get()
         
         from_header = 'From: %s\n\n'%volunteer.name
         params['body'] = from_header + params['body']
-        self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params)
+        self._send_message(sender = volunteer.account, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
         if 'message_redirect' in session:

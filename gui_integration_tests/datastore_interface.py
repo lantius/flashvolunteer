@@ -34,8 +34,9 @@ def create_environment(name, session_id):
     from models.eventvolunteer import EventVolunteer
     from models.eventphoto import EventPhoto
     from models.volunteerfollower import VolunteerFollower
-    from models.volunteerinterestcategory import VolunteerInterestCategory
+    from models.interest import Interest
     from models.interestcategory import InterestCategory
+    from models.auth.account import Account
     
     from components.applications.operations import synchronize_apps
     synchronize_apps()
@@ -63,9 +64,12 @@ def create_environment(name, session_id):
             privacy__event_attendance = v['privacy__event_attendance']
         else:
             privacy__event_attendance = 'friends'
-            
+        
+        account = Account(user = u, name = k, preferred_email=email)
+        account.put()
         v = Volunteer(
           name = k,
+          account = account,
           user = u,
           avatar = v['avatar'],
           quote = v['quote'],
@@ -83,9 +87,11 @@ def create_environment(name, session_id):
     for k,v in organizations.items():
         email = k.replace(' ', '_').lower() + '@organization.org'
         u = User(email)
-    
+        account = Account(user = u, name = k, preferred_email=email)
+        account.put()
         v = Volunteer(
           name = k,
+          account = account,
           user = u,
           avatar = v['avatar'],
           quote = v['quote'],
@@ -133,9 +139,9 @@ def create_environment(name, session_id):
 
     ic_volunteers = []    
     for k,v in volunteers.items():
-        ic = VolunteerInterestCategory(
+        ic = Interest(
             interestcategory = cat,
-            volunteer = v,
+            account = v.account,
         )
         ic_volunteers.append(ic)
         
@@ -147,7 +153,7 @@ def create_environment(name, session_id):
             volunteer = volunteers[vol['volunteer']]
             ev = EventVolunteer(
                 event = events[k],
-                volunteer = volunteer,
+                account = volunteer.account,
                 isowner = 'is_owner' in vol and vol['is_owner']
             )
             ev_volunteers.append(ev)
@@ -162,8 +168,8 @@ def create_environment(name, session_id):
     volunteer_followers = []
     for follower, followed in followers:
         vf = VolunteerFollower(
-           follower = volunteers[follower],
-           volunteer = volunteers[followed]
+           follower2 = volunteers[follower].account,
+           follows = volunteers[followed].account
         )
         volunteer_followers.append(vf)
 
@@ -296,11 +302,11 @@ def delete_testinterestcategories():
     ic.delete()
 
 def get_volunteerinterestcategories():
-  vics = db.GqlQuery('SELECT * from VolunteerInterestCategory')
+  vics = db.GqlQuery('SELECT * from Interest')
   return vics
     
 def delete_volunteerinterestcategories():
-  vics = db.GqlQuery('SELECT * from VolunteerInterestCategory')
+  vics = db.GqlQuery('SELECT * from Interest')
   for vic in vics:
     vic.delete()
 

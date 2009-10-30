@@ -1,6 +1,5 @@
 from google.appengine.ext import webapp
 from django import template
-from models.messages import MessagePreference
 
 register = webapp.template.create_template_register()
 
@@ -21,7 +20,7 @@ class RelationshipStatusNode(template.Node):
         volunteer_in_list = template.resolve_variable(self.volunteer_in_list,context)
         
         if volunteer:
-          context['is_teammate'] = volunteer_in_list.key().id() in volunteer.teammates_ids()
+            context['is_teammate'] = volunteer.account.following.filter('account =', volunteer_in_list.account).get() is not None
         return ''
 
 register.tag(team_status)
@@ -49,7 +48,7 @@ class MessageTypePrefNode(template.Node):
         message_type = template.resolve_variable(self.message_type,context)
         
         if volunteer:
-            mp = volunteer.message_preferences.filter('type =', message_type).get()
+            mp = volunteer.account.message_preferences.filter('type =', message_type).get()
             if not mp: 
                 prop = message_type.default_propagation
             else:
@@ -59,27 +58,3 @@ class MessageTypePrefNode(template.Node):
         return ''
 
 register.tag(message_type_pref)
-
-#####################################################################
-def message_read_by_volunteer(parser, token):
-    try:
-        tag_name, volunteer, message = token.split_contents()
-    except ValueError:
-        return None
-    return MessageReadNode(volunteer = volunteer, 
-                           message = message)
-
-class MessageReadNode(template.Node):
-    def __init__(self, volunteer, message):
-        self.volunteer = volunteer
-        self.message = message
-        
-    def render(self, context):
-        volunteer = template.resolve_variable(self.volunteer,context)
-        message = template.resolve_variable(self.message,context)
-        
-        if volunteer:            
-            context['message_read'] = message.read
-        return ''
-
-register.tag(message_read_by_volunteer)

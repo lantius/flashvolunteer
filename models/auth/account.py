@@ -43,3 +43,24 @@ class Account(db.Model):
             self.error['passwords'] = ('Passwords do not match',)
             
         return len(self.error) == 0
+    
+    def get_user(self):
+        if self.vol_user:
+            return self.vol_user.get()
+        elif self.org_user:
+            return self.org_user.get()
+        
+        
+    def get_messages(self):
+        return self.incoming_messages.order('-timestamp')
+    
+    def get_unread_message_count(self):
+        return self.incoming_messages.filter('read =', False).count()
+
+    def get_sent_messages(self):
+        return self.sent_messages.order('-trigger')
+    
+    def is_recipient(self, message):
+        from models.messages import MessageReceipt
+        mr = MessageReceipt.filter('recipient =', self.account)
+        return mr.get() is not None

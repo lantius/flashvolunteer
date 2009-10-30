@@ -12,15 +12,12 @@ class="current"
 
 
 <div id="lefthalf">
-
-    {% include "../volunteers/team/_team.html" %}
-
-  	{% include "../volunteers/team/_neighbors.html" %}
-	
-	{% include "../volunteers/_find_volunteer_wide.html" %}	
+    {% include "../volunteers/_find_volunteer_wide.html" %} 
+    {% include "../volunteers/_most_active_volunteers.html" %}	
 </div>
 <div id="righthalf">
-	{% include "../volunteers/_most_active_volunteers.html" %}
+    {% include "../volunteers/team/_neighbors.html" %}
+    {% include "../volunteers/team/_team.html" %}
 </div>
 
 {% endblock content %}

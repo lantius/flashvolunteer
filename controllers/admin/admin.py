@@ -5,7 +5,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext import db
 
 from models.volunteer import Volunteer
-from models.volunteerfollower import VolunteerFollower
 
 from controllers._params import Parameters
 from controllers._auth import Authorize

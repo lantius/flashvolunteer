@@ -34,7 +34,7 @@ class AbstractHandler(webapp.RequestHandler):
         
         volunteer = self.auth()
         if volunteer:
-            vals['unread_message_count'] = volunteer.get_unread_message_count()
+            vals['unread_message_count'] = volunteer.account.get_unread_message_count()
     
     def auth(self):
         s = Session()
