@@ -64,3 +64,31 @@ class Account(db.Model):
         from models.messages import MessageReceipt
         mr = MessageReceipt.filter('recipient =', self.account)
         return mr.get() is not None
+    
+    def get_first_name(self):
+        if self.get_name().find('@') > -1:
+            return '@'.join(self.get_name().split('@')[:-1])
+        else:
+            return ' '.join(self.get_name().split(' ')[:-1])
+    
+    def get_last_name(self):
+        if self.get_name().find('@') > -1:
+            return '@' + self.get_name().split('@')[-1]
+        else:
+            return self.get_name().split(' ')[-1]
+        
+    def get_name(self):
+        if self.name:
+            return self.name
+        
+        return self.user.nickname()
+    
+    def get_email(self):
+        if self.preferred_email is None:
+            return self.user.email()
+        else:
+            return self.preferred_email
+        
+    def _get_message_pref(self, type):
+        prefs = self.message_preferences.filter('type =', type).get()
+        return prefs

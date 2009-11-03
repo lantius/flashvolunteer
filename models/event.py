@@ -156,7 +156,7 @@ class Event(db.Model):
         return (ev.account.get_user() for ev in self.eventvolunteers.filter('isowner = ', True))
     
     def contact_email(self):
-        return ','.join([v.get_email() for v in self.hosts()])
+        return ','.join([ev.account.get_email() for ev in self.eventvolunteers.filter('isowner = ', True)])
     
     def get_numphotoalbums(self):
         eventphotosphotos = [photo for photo in self.eventphotos]

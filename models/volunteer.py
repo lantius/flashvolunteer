@@ -65,17 +65,7 @@ class Volunteer(AbstractUser):
     
       return AbstractUser.validate(self, params)
          
-    def get_first_name(self):
-        if self.get_name().find('@') > -1:
-            return '@'.join(self.get_name().split('@')[:-1])
-        else:
-            return ' '.join(self.get_name().split(' ')[:-1])
-    
-    def get_last_name(self):
-        if self.get_name().find('@') > -1:
-            return '@' + self.get_name().split('@')[-1]
-        else:
-            return self.get_name().split(' ')[-1]
+
     
     def url(self):
       return '/volunteers/' + str(self.key().id())
@@ -102,10 +92,6 @@ class Volunteer(AbstractUser):
     def event_access(self, volunteer):
         friends = [f.key().id() for f in self.friends()]
         return self.privacy__event_attendance == 'everyone' or (self.privacy__event_attendance == 'friends' and volunteer.key().id() in friends)
-        
-    def _get_message_pref(self, type):
-          prefs = self.message_preferences.filter('type =', type).get()
-          return prefs
 
     def recommended_events(self):
         #TODO make more efficient
@@ -154,4 +140,35 @@ class Volunteer(AbstractUser):
         memcache.add('%s_rec_events'%self.key().id(), recommended_events, 120)
         return recommended_events
 
+
+
+###### DEPRECATED; USE ACCOUNT'S METHODS INSTEAD #############
+
+    def get_first_name(self):
+        if self.get_name().find('@') > -1:
+            return '@'.join(self.get_name().split('@')[:-1])
+        else:
+            return ' '.join(self.get_name().split(' ')[:-1])
+    
+    def get_last_name(self):
+        if self.get_name().find('@') > -1:
+            return '@' + self.get_name().split('@')[-1]
+        else:
+            return self.get_name().split(' ')[-1]
+        
+    def get_name(self):
+        if self.name:
+            return self.name
+        
+        return self.user.nickname()
+    
+    def get_email(self):
+        if self.preferred_email is None:
+            return self.user.email()
+        else:
+            return self.preferred_email
+        
+    def _get_message_pref(self, type):
+        prefs = self.message_preferences.filter('type =', type).get()
+        return prefs
 

@@ -55,7 +55,7 @@ class VolunteerForEventTestCase(BaseTestCase):
     try:
       self.assertTrue(len(ev) == 1) #Make sure we are only signed up once
       self.assertEqual(ev[0].event.name, self.event_name)
-      self.assertEqual(ev[0].volunteer.name, self.test_env.login_name)
+      self.assertEqual(ev[0].account.name, self.test_env.login_name)
 
       self.failUnless(sel.is_text_present(self.event_name))
       self.failUnless(sel.is_element_present("//input[@id='s_unvolunteer']"))  

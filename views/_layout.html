@@ -25,7 +25,7 @@
 			<div id="logo-strip">
 				<div id="logo" class="fl"><a href="/"><img src="/stylesheets/media/logo.png" alt="Flash Volunteer Logo"/></a></div>
 				<div id="beta" class="fl"><a href="/static/help#beta"><img src="/stylesheets/media/beta.png" alt="Flash Volunteer is in Beta"/></a></div>		
-				{%if volunteer and volunteer.is_saved%}
+				{%if account and account.is_saved%}
 				    <div id="volavatar">
 		    	        <div class="volunteer_summary_pic">
 				            <a href="/settings" >
@@ -35,10 +35,10 @@
 				            {% else %}
 				                /stylesheets/media/default-profile-pic-small.png
 				            {% endif %}
-				            " alt="{{ volunteer.get_name }}" /></a>
+				            " alt="{{ account.get_name }}" /></a>
 				        </div>
 				    </div>
-					<div id="volunteerwelcome">Welcome, {{ volunteer.get_name|striptags }} <br /><a href="{{ volunteer.logout_url }}" id="l_logout">Log Out</a></div>
+					<div id="volunteerwelcome">Welcome, {{ account.get_name|striptags }} <br /><a href="/logout" id="l_logout">Log Out</a></div>
 				{% else %}
 					<div id="volunteerwelcome"><a href="/login" id="l_logout">Log in or signup</a></div>			
 				{% endif %}

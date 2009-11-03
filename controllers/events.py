@@ -245,8 +245,7 @@ class EventsPage(AbstractHandler):
   def delete(self, event_id, volunteer):
     event = Event.get_by_id(int(event_id))
     
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner = true" ,
-                        volunteer=volunteer, event=event).get()
+    eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
     if eventvolunteer:
       for ev in event.eventvolunteers:
         #TODO notify everyone who was going to attend that this was cancelled.
@@ -316,62 +315,63 @@ class EventsPage(AbstractHandler):
   
   ################################################################################
   # EDIT
-  def edit(self, event): 
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
-    except:
-      return   
+    def edit(self, event): 
+        try:
+            volunteer = Authorize.login(self, requireVolunteer=True)
+        except:
+            return   
+        
+        eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True)
+        
+        if not eventvolunteer:
+            self.redirect("/events/" + event.id)
+            return
+        
+        owners = event.hosts()
     
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
-                           volunteer=volunteer, event=event).get()
-    if not eventvolunteer:
-      self.redirect("/events/" + event.id)
-      return
+        event.description = event.description.replace('\n<br>','\n')
+        event.special_instructions = event.special_instructions.replace('\n<br>','\n')
     
-    owners = EventVolunteer.gql("where isowner=true AND event = :event", event=event).fetch(limit=100)
-    event.description = event.description.replace('\n<br>','\n')
-    event.special_instructions = event.special_instructions.replace('\n<br>','\n')
-
-    template_values = { 
-      'event' : event, 
-      'eventvolunteer': eventvolunteer, 
-      'owners': owners, 
-      'volunteer': volunteer, 
-      'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
-      'interestcategories' : InterestCategoryHelper().selected(event),
-    }
-    self._add_base_template_values(vals = template_values)
-    
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
-    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
-  
+        template_values = { 
+            'event' : event, 
+            'eventvolunteer': eventvolunteer, 
+            'owners': owners, 
+            'volunteer': volunteer, 
+            'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
+            'interestcategories' : InterestCategoryHelper().selected(event),
+        }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
+        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+      
   ################################################################################
   # UPDATE
-  def update(self, params, volunteer):
-    event = Event.get_by_id(int(params['id']))
-    
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true",
-                           volunteer=volunteer, event=event).get()
-    if not eventvolunteer:
-      return None
-    
-    if not event.validate(params):
-      self.edit(event)
-      return False
-    
-    #TODO: convert interest category helper to application-specific data model
-    for interestcategory in InterestCategory.all():
-      param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-      eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
-                          event = event, interestcategory = interestcategory).get()
-      if params[param_name] == ['1','1'] and not eic:          
-        eic = EventInterestCategory(event = event, interestcategory = interestcategory)
-        eic.put()
-      elif params[param_name] == '1' and eic:
-        eic.delete()
-    
-    event.put()
-    return event.key().id()
+    def update(self, params, volunteer):
+        event = Event.get_by_id(int(params['id']))
+        
+        eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
+        if not eventvolunteer:
+            return None
+        
+        if not event.validate(params):
+            self.edit(event)
+            return False
+        
+        #TODO: convert interest category helper to application-specific data model
+        for interestcategory in InterestCategory.all():
+          param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
+          eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
+                              event = event, interestcategory = interestcategory).get()
+          if params[param_name] == ['1','1'] and not eic:          
+              eic = EventInterestCategory(event = event, interestcategory = interestcategory)
+              eic.put()
+          elif params[param_name] == '1' and eic:
+              eic.delete()    
+        
+        event.put()
+        return event.key().id()
   
      
   ################################################################################
@@ -539,8 +539,8 @@ class EventAddCoordinatorPage(AbstractHandler):
     
     event = Event.get_by_id(int(event_id))
 
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
-                           volunteer=volunteer, event=event).get()
+    eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
     if not eventvolunteer:
         self.redirect("/events") #TODO REDIRECT to error page
         return
@@ -567,8 +567,8 @@ class EventAddCoordinatorPage(AbstractHandler):
     
     event = Event.get_by_id(int(event_id))
 
-    eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event AND isowner=true" ,
-                           volunteer=volunteer, event=event).get()
+    eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
     if not eventvolunteer:
         self.redirect("/events") #TODO REDIRECT to error page
         return

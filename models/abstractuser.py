@@ -76,17 +76,7 @@ class AbstractUser(db.Model):
         return False
     
     
-    def get_name(self):
-      if self.name:
-        return self.name
-    
-      return self.volunteer.nickname
-    
-    def get_email(self):
-      if self.preferred_email is None:
-        return self.user.email()
-      else:
-        return self.preferred_email
+
     
     def get_quote(self):
       if self.quote:
@@ -96,10 +86,7 @@ class AbstractUser(db.Model):
       
     def url(self):
       raise Exception("extend url function")
-    
-    def logout_url(self):
-      return '/logout'
-    
+
     def events(self):
       events = [ev.event for ev in self.eventvolunteers.filter('isowner =',False) if not ev.event.hidden]
       events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))

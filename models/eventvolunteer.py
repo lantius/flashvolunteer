@@ -12,7 +12,7 @@ class EventVolunteer(db.Model):
                                required = True,
                                collection_name = 'eventvolunteers')
   volunteer = db.ReferenceProperty(Volunteer,
-                                    required = True,
+                   #                 required = True,
                                     collection_name = 'eventvolunteers')
   account = db.ReferenceProperty(Account,
                    #                 required = True,

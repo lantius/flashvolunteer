@@ -5,11 +5,10 @@
 		{% else %}
 		/stylesheets/media/default-profile-pic.png
 		{% endif %}"  
-	alt="{{ volunteer.get_name|striptags }}"
+	alt="{{ account.get_name|striptags }}"
 />
 
 <ul>
-<!--	<li id="personname">{{ volunteer.get_name|striptags }}</li>-->	
     {% if volunteer.get_quote|striptags %}
 		<li id="personstatement">{{ volunteer.get_quote|striptags }}</li>
 	{% endif %}

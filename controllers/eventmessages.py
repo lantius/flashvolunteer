@@ -60,8 +60,8 @@ class EventMessagesPage(MessagesPage):
     except:
       return
 
-    eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
-                event = event, volunteer = volunteer).get()
+    eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
 
     message = Message()
     template_values = {
@@ -78,8 +78,8 @@ class EventMessagesPage(MessagesPage):
   ################################################################################
   # CREATE
   def create(self, params, event, volunteer):
-    ev = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
-                event = event, volunteer = volunteer).get()
+    ev = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
     if not ev:
       return None
     
@@ -97,8 +97,8 @@ class EventMessagesPage(MessagesPage):
     eventvolunteer = None  
 
     if volunteer:
-      eventvolunteer = EventVolunteer.gql("WHERE event = :event AND volunteer = :volunteer AND isowner = true",
-              event = event, volunteer = volunteer).get()
+      eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
     
     template_values = {
         'eventvolunteer' : eventvolunteer,

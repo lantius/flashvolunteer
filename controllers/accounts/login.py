@@ -10,6 +10,7 @@ from models.volunteer import Volunteer
 from models.neighborhood import Neighborhood
 from models.event import Event
 from models.interestcategory import InterestCategory
+from models.auth import Account, Auth
 
 from components.sessions import Session
 from controllers._params import Parameters
@@ -47,10 +48,36 @@ class Login(AbstractHandler):
     def dev_login(self):
         from google.appengine.api import users
         session = Session()
+        user = users.get_current_user()   
         
-        user = users.get_current_user()    
+        auth = Auth.all().filter('identifier =', user.email()).filter('strategy =', 'dev').get()
+        if auth is None:
+            account = Account(
+                preferred_email = user.email(),
+                name = user.email()
+            )
+            account.put()
+
+            auth = Auth(
+                strategy = 'dev',
+                identifier = user.email()
+            )
+            auth.account = account
+            auth.put()
+            v = Volunteer(account = account)
+            v.put()
+        else:
+            account = auth.account
+            v = self.auth()
+            
+        session['auth'] = auth
         session['user'] = user
+        session['account'] = account
+        session['volunteer'] = v
+        
         self.redirect('/settings')
+
+                  
       
     def login(self, errors = None, email = None):
                   

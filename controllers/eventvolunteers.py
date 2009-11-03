@@ -24,34 +24,33 @@ class VolunteerForEvent(AbstractHandler):
   # POST
     def post(self, url_data):
         try:
-          volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = Authorize.login(self, requireVolunteer=True)
         except:
-          return
+            return
         
         event = Event.get_by_id(int(url_data))
         
         if event:
-          eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = false AND event = :event" ,
-                              volunteer=volunteer, event=event).get()
-          if self.request.get('delete') and self.request.get('delete') == "true":
-            if eventvolunteer:
-              eventvolunteer.delete()
-              (to, subject, body) = self.get_message_text(event = event, 
-                                                                  volunteer = volunteer, 
-                                                                  sign_up = False)
-              send_message( to = to, 
-                            subject = subject, 
-                            body = body, 
-                            type = MessageType.all().filter('name =', 'event_coord').get())
-          else:
-            if not eventvolunteer:
-              eventvolunteer = EventVolunteer(volunteer=volunteer, event=event, isowner=False)
-              eventvolunteer.put()
-              (to, subject, body) = self.get_message_text(event = event, 
-                                                                  volunteer = volunteer,
-                                                                  sign_up = True)
+            eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).get()
+            if self.request.get('delete') and self.request.get('delete') == "true":
+                if eventvolunteer:
+                    eventvolunteer.delete()
+                    (to, subject, body) = self.get_message_text(event = event, 
+                                                                      volunteer = volunteer, 
+                                                                      sign_up = False)
+                    send_message( to = to, 
+                                subject = subject, 
+                                body = body, 
+                                type = MessageType.all().filter('name =', 'event_coord').get())
+            else:
+                if not eventvolunteer:
+                    eventvolunteer = EventVolunteer(account=volunteer.account, event=event, isowner=False)
+                    eventvolunteer.put()
+                    (to, subject, body) = self.get_message_text(event = event, 
+                                                                      volunteer = volunteer,
+                                                                      sign_up = True)
         
-              send_message( to = to, 
+                    send_message( to = to, 
                             subject = subject, 
                             body = body, 
                             type = MessageType.all().filter('name =', 'event_coord').get())
@@ -71,8 +70,8 @@ class VolunteerForEvent(AbstractHandler):
             'event_name': event.name.strip(),
             'owner_name': ', '.join([owner.get_name().strip() for owner in to]),
             'event_url': '%s%s'%(self._get_base_url(), event.url()),
-            'vol_count': EventVolunteer.gql("WHERE isowner = false AND event = :event" ,event=event).count(),
-            'vol_name': volunteer.get_name()
+            'vol_count': event.volunteer_count(),
+            'vol_name': volunteer.account.get_name()
         }
         body = msg.body%params
         subject = msg.subject%params

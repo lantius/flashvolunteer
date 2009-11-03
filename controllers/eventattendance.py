@@ -80,8 +80,8 @@ class VerifyEventAttendance(AbstractHandler):
     if not event:
       return
     
-    owner = EventVolunteer.gql("WHERE volunteer = :volunteer AND isowner = true AND event = :event" ,
-                        volunteer=volunteer, event=event).get()
+    owner = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+
     
     if not owner:
       return
