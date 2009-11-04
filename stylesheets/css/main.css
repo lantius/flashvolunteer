@@ -221,6 +221,17 @@ ul.leftformlist {
     width: 49%;
 }
 
+ul.leftformlist li.submiteventsearch,
+ul.formlist li.submiteventsearch {
+	text-align:right; 
+	padding-right: 10px;
+	}
+	
+ul.leftformlist input#search_past_events,
+ul.formlist input#search_past_events {
+	vertical-align:middle;
+	}
+
 ul.rightformlist {
     float: right;
     width: 49%;
@@ -572,7 +583,7 @@ div.shortevent {
 /*for finding events*/
 
 div#findaneventwide {
-    height: 130px;
+    /*height: 130px;*/
 }
 
 /*for event display*/
