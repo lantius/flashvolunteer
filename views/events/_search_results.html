@@ -1,18 +1,18 @@
 <div id="eventssearchresult" class="hardmodule" >
 	<div class="moduletitle">
-		<h3>Search Results</h3>
+		<h3>Search Results ({{ events|length }})</h3>
 	</div>
-	<div id="eventyousearchedfor" >
+	<div id="eventyousearchedfor"  style="padding-bottom:6px">
 		<span class="label">You have searched for events
 		{% if neighborhood %}
-			in {{neighborhood.name}}
+			in {{neighborhood.name}}.
 		{% else %}
-			in all neighborhoods
+			in all neighborhoods.
 		{% endif %}
 		{% if fromdate %}
 			on or after {{fromdate|date:"F jS, Y" }}
 			{% if todate %}
-				and on or before {{todate|date:"F jS, Y" }}
+				and on or before {{todate|date:"F jS, Y" }}.
 			{% endif %}
 		{% endif %}
         {% if interestcategory %}
