@@ -79,7 +79,7 @@ indexes:
 
 - kind: Message
   properties:
-  - name: sent
+  - name: sender
   - name: trigger
     direction: desc
 
@@ -87,6 +87,12 @@ indexes:
   properties:
   - name: sent
   - name: trigger
+
+- kind: Message
+  properties:
+  - name: sent
+  - name: trigger
+    direction: desc
 
 - kind: Message
   properties:
@@ -99,6 +105,18 @@ indexes:
   properties:
   - name: sent_by
   - name: trigger
+    direction: desc
+
+- kind: MessageReceipt
+  properties:
+  - name: recipient
+  - name: timestamp
+    direction: desc
+
+- kind: MessageReceipt
+  properties:
+  - name: recipient2
+  - name: timestamp
     direction: desc
 
 - kind: MessageType
@@ -110,11 +128,3 @@ indexes:
   properties:
   - name: application
   - name: name
-
-- kind: MessageReceipt
-  properties:
-  - name: recipient
-  - name: timestamp
-    direction: desc
-    
-  
