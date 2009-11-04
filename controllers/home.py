@@ -14,14 +14,16 @@ class MainPage(AbstractHandler):
   LIMIT = 3 
   def get(self):
     try:
-      volunteer = self.auth()
+      account = self.auth()
     except:
       return    
-  
+    if account: user = account.get_user()
+    else: user = None
+      
     upcoming_events = _get_upcoming_events().fetch(MainPage.LIMIT)
 
     template_values = {
-        'volunteer' : volunteer,
+        'volunteer' : user,
         'upcoming_events': upcoming_events,
       }
     self._add_base_template_values(vals = template_values)

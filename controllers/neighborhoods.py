@@ -16,10 +16,13 @@ from google.appengine.api import memcache
 class NeighborhoodsPage(AbstractHandler):
   def get(self, url_data):    
     try:
-      volunteer = self.auth()
+      account = self.auth()
     except:
       return
-    
+
+    if account: user = account.get_user()
+    else: user = None
+            
     params = Parameters.parameterize(self.request)
     
     application = get_application()
@@ -32,7 +35,7 @@ class NeighborhoodsPage(AbstractHandler):
 
     template_values = {                              
         'neighborhoods': neighborhoods,
-        'volunteer': volunteer                                
+        'volunteer': user                                
       }
     self._add_base_template_values(vals = template_values)
 
@@ -113,10 +116,12 @@ class NeighborhoodDetailPage(AbstractHandler):
   def show(self, neighborhood_id):
     LIMIT = 12
     try:
-      volunteer = self.auth()
+      account = self.auth()
     except:
       return
 
+    if account: user = account.get_user()
+    else: user = None
     neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
     if not neighborhood:
       self.error(404)
@@ -129,7 +134,7 @@ class NeighborhoodDetailPage(AbstractHandler):
     upcoming_events = list(neighborhood.events_future())    
     
     template_values = {
-        'volunteer': volunteer,
+        'volunteer': user,
         'neighborhood': neighborhood,
         'volunteers_living_here': random.sample(candidates_living, min(len(candidates_living),LIMIT)), 
         'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 

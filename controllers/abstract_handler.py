@@ -3,13 +3,7 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
-from controllers._helpers import NeighborhoodHelper
 from controllers._utils import is_debugging, get_domain, get_application
-
-from models.volunteer import Volunteer
-from models.neighborhood import Neighborhood
-from models.event import Event
-from models.interestcategory import InterestCategory
 
 from components.sessions import Session
 
@@ -31,51 +25,45 @@ class AbstractHandler(webapp.RequestHandler):
             'session_id':  session.sid
         })
         
-        volunteer = self.auth()
-        if volunteer:
-            vals['unread_message_count'] = volunteer.account.get_unread_message_count()
-            vals['account'] = volunteer.account
+        account = self.auth()
+        if account:
+            vals['unread_message_count'] = account.get_unread_message_count()
+            vals['account'] = account
             
             
-    def auth(self, requireVolunteer = False, redirectTo = '/login', requireAdmin = False):
+    def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
         s = Session()
-        volunteer = self._auth(requireVolunteer=requireVolunteer, redirectTo = redirectTo, requireAdmin = requireAdmin)
-        return volunteer
+        account = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
+        
+        return account
     
-    def _auth(self, requireVolunteer, redirectTo, requireAdmin):
+    def _auth(self, require_login, redirect_to, require_admin):
         session = Session()
-        #user_object = session.get('user_object', None)
-        user_object = None
-        if user_object is None:
-            auth = session.get('auth', None)
-            if requireVolunteer and (not auth or not auth.account):
-                req.redirect(redirectTo)
-                if redirectTo == '/login': 
-                    session['login_redirect'] = req.request.path
-                raise AuthError("You must be signed in to perform this action.")
-            
-            user_object = None
-            if auth:
-                user_object = Volunteer.all().filter('account =', auth.account).get()
-                if not user_object:
-                    user_object = Organization.all().filter('account = ', account=account).get()
+        auth = session.get('auth', None)
+        if require_login and (not auth or not auth.account):
+            self.redirect(redirect_to)
+            if redirect_to == '/login': 
+                session['login_redirect'] = self.request.path
+            raise AuthError("You must be signed in to perform this action.")
+        
+        if auth:
+            application = get_application()
+            if not application.key().id() in auth.account.active_applications:
+                auth.account.add_application(application)                      
 
-                application = get_application()
-                if not application.key().id() in auth.account.active_applications:
-                    auth.account.add_application(application)                      
-
-            if requireVolunteer:
-                if self.request.method == 'POST' and not user_object.check_session_id(self.request.get('session_id')):
-                    self.redirect('/timeout')
-                    raise TimeoutError("Session has timed out.")
-                    #return (None)       # shouldn't get here except in tests    
-                elif requireAdmin and not users.is_current_user_admin():
-                    self.redirect(redirectTo)
-                    raise AuthError('You do not have permission to view this page.')
+        if require_login:
+            if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id')):
+                self.redirect('/timeout')
+                raise TimeoutError("Session has timed out.")
+                #return (None)       # shouldn't get here except in tests    
+            elif require_admin and not users.is_current_user_admin():
+                self.redirect(redirect_to)
+                raise AuthError('You do not have permission to view this page.')
             
-            #if user_object: 
-            #    session['user_object'] = user_object
-        return user_object
+        if not auth:
+            return None
+        
+        return auth.account
         #return session.get('user_object')
       
   

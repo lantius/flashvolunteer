@@ -29,14 +29,15 @@ class Mailbox(AbstractHandler):
     
     def show(self, id):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return
         
         message = Message.get_by_id(int(id))
+        viewer_is_sender = account.key().id() == message.sender.key().id()
         if message:
-            mr = message.sent_to.filter('recipient2 =', volunteer.account).get()
-        if not message or not (mr or volunteer.account.key().id() == message.sender.key().id()):
+            mr = message.sent_to.filter('recipient2 =', account).get()
+        if not message or not (mr or viewer_is_sender):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
             else:
@@ -44,14 +45,14 @@ class Mailbox(AbstractHandler):
             return
                 
         template_values = {
-            'volunteer': volunteer,
+            'volunteer': account.get_user(),
             'message': message,
-            'sender_viewing': message.sender is not None and message.sender.key().id() == volunteer.account.key().id()
+            'sender_viewing': message.sender is not None and message.sender.key().id() == account.key().id()
             
           }
         self._add_base_template_values(vals = template_values)
         
-        if not mr.read: 
+        if not viewer_is_sender and not mr.read: 
             mr.read = True
             mr.put()
         
@@ -80,13 +81,13 @@ class Mailbox(AbstractHandler):
     # LIST
     def list(self):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             raise
         
-        messages = volunteer.account.get_messages()
+        messages = account.get_messages()
         
-        sent_messages = volunteer.account.get_sent_messages()
+        sent_messages = account.get_sent_messages()
         
         bookmark = self.request.get("bookmark", None)
         if bookmark:
@@ -110,7 +111,7 @@ class Mailbox(AbstractHandler):
             sent_next = None
 
         template_values = {
-            'volunteer': volunteer,
+            'volunteer': account.get_user(),
             'messages': messages,
             'next': next,
             'sent_messages': sent_messages,

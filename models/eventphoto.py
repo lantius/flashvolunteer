@@ -46,12 +46,12 @@ class EventPhoto(db.Model):
     #want to know if requester can edit; 
     
     #can edit if the original poster
-    if (requester.key() == self.volunteer.key()):
+    if (requester.key() == self.account.key()):
       return True
   
     #can edit if event owner 
     eventvolunteers_owners = self.event.hosts()
-    owner_keys = [ev.volunteer.key() for ev in eventvolunteers_owners]
+    owner_keys = [ev.account.key() for ev in eventvolunteers_owners]
     
     if (requester.key() in owner_keys):
       return True

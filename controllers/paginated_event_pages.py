@@ -23,9 +23,12 @@ class BaseEventListPage(AbstractHandler):
     
   def set_context(self):  
     try:
-      self.volunteer = self.auth()
+      self.account = self.auth()
     except:
       return
+  
+    if self.account: self.volunteer = self.account.get_user()
+    else: self.volunteer = None
     
     LIST_LIMIT = BaseEventListPage.LIST_LIMIT
 

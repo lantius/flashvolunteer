@@ -33,7 +33,7 @@ class OrganizationsPage(AbstractHandler):
   # SHOW
   def show(self, volunteer_id):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      volunteer = self.auth(require_login=True)
     except:
       return
 
@@ -55,7 +55,7 @@ class OrganizationsPage(AbstractHandler):
     organizationfollower = OrganizationFollower.gql("WHERE organization = :organization AND follower = :follower" ,
                       organization=page_organization, follower=volunteer).get()
 
-    event_access = page_volunteer.event_access(volunteer = volunteer) 
+    event_access = page_volunteer.event_access(account = volunteer.account) 
 
     future_events = page_volunteer.events_future()[:VolunteersPage.LIMIT]
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
@@ -81,7 +81,7 @@ class OrganizationsPage(AbstractHandler):
   # SEARCH
   def search(self, params):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      volunteer = self.auth(require_login=True)
     except:
       return
     
@@ -139,7 +139,7 @@ class FollowOrganization(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      volunteer = self.auth(require_login=True)
     except:
       return
 
@@ -179,7 +179,7 @@ class OrganizationLogo(AbstractHandler):
   # POST
   def post(self):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      volunteer = self.auth(require_login=True)
     except:
       return
       

@@ -2,6 +2,7 @@ from controllers._utils import get_google_maps_api_key, get_application
 from google.appengine.api import urlfetch
 from google.appengine.ext import db
 import datetime, logging, urllib
+from components.sessions import Session
 
 ################################################################################
 # Event
@@ -41,6 +42,33 @@ class Account(db.Model):
         
         if 'password' in params and params['password'] != params['passwordcheck']:
             self.error['passwords'] = ('Passwords do not match',)
+
+
+        if self.is_saved():
+            from models.messages import MessageType, MessagePreference, MessagePropagationType
+            
+            for message_type in MessageType.all():
+                try:
+                    message_prefs = self.message_preferences.filter('type =', message_type).get()
+                except:
+                    message_prefs = None
+                    
+                if not message_prefs:
+                    #### ERROR HERE, can't do volunteer = self
+                    #    message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, volunteer = self)
+                    # BadValueError: Volunteer instance must have a complete key before it can be stored as a reference
+                    message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, account = self)
+                    message_prefs.put()
+                    
+                for mp in MessagePropagationType.all():
+                    key = '%s[%s]'%(message_type.key().id(), mp.key().id())
+                    if key in params and mp.key().id() not in message_prefs.propagation:
+                        message_prefs.propagation.append(mp.key().id())
+                        message_prefs.put()
+                    elif key not in params and mp.key().id() in message_prefs.propagation:
+                        message_prefs.propagation.remove(mp.key().id())
+                        message_prefs.put()
+
             
         return len(self.error) == 0
     
@@ -92,3 +120,7 @@ class Account(db.Model):
     def _get_message_pref(self, type):
         prefs = self.message_preferences.filter('type =', type).get()
         return prefs
+
+    def check_session_id(self, form_session_id):
+      session = Session()
+      return form_session_id == session.sid

@@ -34,7 +34,7 @@ class EventMessagesPage(MessagesPage):
   # POST
   def post(self, event_data, message_data):
     try:
-      volunteer = self.auth(requireVolunteer=True, redirectTo='/settings')
+      account = self.auth(require_login=True, redirect_to='/settings')
     except:
       return
     
@@ -42,11 +42,11 @@ class EventMessagesPage(MessagesPage):
     params = Parameters.parameterize(self.request)
     
     if 'is_delete' in params and params['is_delete'] == 'true':
-      self.delete(message_data[1:], volunteer)
+      self.delete(message_data[1:], account)
       self.redirect(event.url() + '/messages')
       return
 
-    self.create(params, event, volunteer)
+    self.create(params, event, account)
     session = Session()
     self.redirect('/')
     return
@@ -55,7 +55,7 @@ class EventMessagesPage(MessagesPage):
   # NEW
   def new(self, event):
     try:
-      volunteer = self.auth(requireVolunteer=True, redirectTo='/settings')
+      volunteer = self.auth(require_login=True, redirect_to='/settings')
     except:
       return
 
@@ -90,18 +90,23 @@ class EventMessagesPage(MessagesPage):
   # LIST
   def list(self, event):
     try:
-      volunteer = self.auth(requireVolunteer=False, redirectTo='/settings')
+      account = self.auth(redirect_to='/settings')
     except:
       return
+    
+    if account: user = account.get_user()
+    else: user = None
+    
     eventvolunteer = None  
+    
+    if account:
+      eventvolunteer = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
 
-    if volunteer:
-      eventvolunteer = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
-
+    
     
     template_values = {
         'eventvolunteer' : eventvolunteer,
-        'volunteer': volunteer,
+        'volunteer': user,
         'event' : event,
       }
     self._add_base_template_values(vals = template_values)

@@ -28,18 +28,18 @@ class Login(AbstractHandler):
     LIMIT = 12 
     def get(self, errors = None):
         
-        volunteer = self.auth()
+        account = self.auth()
     
         if self.request.path.find('dev_login') > -1:    
             self.dev_login()    
-        elif not volunteer:
+        elif not account:
             self.login()
         elif self.request.path.find('logout') > -1:    
-            self.logout(volunteer)
+            self.logout()
         else:
             self.redirect('/')
 
-    def logout(self, volunteer):
+    def logout(self):
         session = Session()
         session.delete()
         self.redirect('/')
@@ -73,13 +73,8 @@ class Login(AbstractHandler):
         session['auth'] = auth
         session['user'] = user
         session['account'] = account
-        if not v:
-            v = self.auth()
-        session['volunteer'] = v
         
         self.redirect('/settings')
-
-                  
       
     def login(self, errors = None, email = None):
                   
@@ -180,8 +175,8 @@ class Login(AbstractHandler):
 
             if auth:
                 session['auth'] = auth
-                volunteer = self.auth()
-                check_avatar(volunteer = volunteer)
+                account = self.auth()
+                check_avatar(account = account)
                 if 'login_redirect' in session:
                     self.redirect(session['login_redirect'])
                     del session['login_redirect']
@@ -193,8 +188,10 @@ class Login(AbstractHandler):
         else:
             self.redirect('/login')      
 
-def check_avatar(volunteer):
-    if not volunteer: return
+def check_avatar(account):
+    if not account: return
+    volunteer = account.get_user()
+    
     session = Session()
     if volunteer and \
       volunteer.avatar is None and \

@@ -16,10 +16,12 @@ class BaseVolunteerListPage(AbstractHandler):
     
   def set_context(self):  
     try:
-      volunteer = self.auth(requireVolunteer=True)
-      self.volunteer = volunteer
+      self.account = self.auth(require_login=True)
     except:
       return
+
+    if self.account: self.volunteer = self.account.get_user()
+    else: self.volunteer = None
     
     LIST_LIMIT = BaseVolunteerListPage.LIST_LIMIT
     
@@ -34,7 +36,7 @@ class BaseVolunteerListPage(AbstractHandler):
         if extract_style == 'direct':
             volunteers = generator[offset:offset+LIST_LIMIT]      
         else:
-            volunteers = [v.volunteer for v in generator[offset:offset+LIST_LIMIT]]      
+            volunteers = [v.account.get_user() for v in generator[offset:offset+LIST_LIMIT]]      
 
     else:
         total = generator.count()
@@ -42,7 +44,7 @@ class BaseVolunteerListPage(AbstractHandler):
         if extract_style == 'direct':
             volunteers = [v for v in generator.fetch(limit = LIST_LIMIT, offset = offset)]        
         else:
-            volunteers = [v.volunteer for v in generator.fetch(limit = LIST_LIMIT, offset = offset)]
+            volunteers = [v.account.get_user() for v in generator.fetch(limit = LIST_LIMIT, offset = offset)]
     
     end = start + len(volunteers) - 1
                                                 
@@ -58,7 +60,7 @@ class BaseVolunteerListPage(AbstractHandler):
         
     template_values = { 
                         'title' : self._get_title(),
-                        'volunteer' : volunteer,
+                        'volunteer' : self.volunteer,
                         'team': volunteers,
                         'total': total,
                         'start': start,
@@ -182,13 +184,13 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
       self.set_context()
         
   def _get_volunteer_generator(self):
-     eventvolunteer = event.eventvolunteers.filter('account =', self.volunteer.account).get() 
+     eventvolunteer = self.event.eventvolunteers.filter('account =', self.account).get() 
                                              
      if eventvolunteer and (eventvolunteer.isowner or self.event.inpast()): 
         return (self.event.eventvolunteers,'indirect')        
 
      return ([v for v in self.event.volunteers() \
-              if v.event_access(volunteer=self.volunteer) and \
+              if v.event_access(account=self.account) and \
                  v.key().id() != self.volunteer.key().id()],
             'direct')
  

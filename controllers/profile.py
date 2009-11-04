@@ -16,26 +16,28 @@ class ProfilePage(AbstractHandler):
     LIMIT = 2
     def get(self):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return    
         
-        events = { 'Your events' : volunteer.events() }
+        user = account.get_user()
+        
+        events = { 'Your events' : user.events() }
         byinterest = []
         
-        if volunteer.home_neighborhood:
-            events['Neighborhood events'] = volunteer.home_neighborhood.events
+        if user.home_neighborhood:
+            events['Neighborhood events'] = user.home_neighborhood.events
         
-        for ic in volunteer.interestcategories():
+        for ic in user.interestcategories():
             if ic.events():
                 byinterest.append(ic)
         
-        recommended_events = list(volunteer.recommended_events())[:ProfilePage.LIMIT]
-        my_future_events = volunteer.events_future()[:ProfilePage.LIMIT]
+        recommended_events = list(user.recommended_events())[:ProfilePage.LIMIT]
+        my_future_events = user.events_future()[:ProfilePage.LIMIT]
         
         template_values = {
-            'volunteer' : volunteer,
-            'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+            'volunteer' : user,
+            'neighborhoods': NeighborhoodHelper().selected(user.home_neighborhood),
             'recommended_events': recommended_events,
             'my_future_events': my_future_events,
             #TODO: convert to application-specific data model

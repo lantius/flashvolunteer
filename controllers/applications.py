@@ -13,14 +13,13 @@ from models.application import Application
 class AllApplications(AbstractHandler):
   def get(self):    
 
-    volunteer = self.auth()
+    account = self.auth()
     
     params = Parameters.parameterize(self.request)
     
     applications = Application.all()
     
     template_values = {
-        'volunteer': volunteer,
         'applications': applications
     }
     self._add_base_template_values(vals = template_values)
@@ -46,14 +45,16 @@ class AllApplications(AbstractHandler):
     
 class ThisApplication(AbstractHandler):
   def get(self):    
-    volunteer = self.auth(redirectTo='/settings')
+    account = self.auth(redirect_to='/settings')
+    if account: user = account.get_user()
+    else: user = None
     
     params = Parameters.parameterize(self.request)
     
     application = get_application()
     
     template_values = {
-        'volunteer': volunteer,
+        'volunteer': user,
         'applications': [application]
     }
     self._add_base_template_values(vals = template_values)

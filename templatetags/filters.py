@@ -5,22 +5,25 @@ register = webapp.template.create_template_register()
 
 def team_status(parser, token):
     try:
-        tag_name, volunteer, volunteer_in_list = token.split_contents()
+        tag_name, account, account2 = token.split_contents()
     except ValueError:
         return None
-    return RelationshipStatusNode(volunteer = volunteer, volunteer_in_list = volunteer_in_list)
+    return RelationshipStatusNode(account = account, account2 = account2)
 
 class RelationshipStatusNode(template.Node):
-    def __init__(self, volunteer, volunteer_in_list):
-        self.volunteer = volunteer
-        self.volunteer_in_list = volunteer_in_list 
+    def __init__(self, account, account2):
+        self.account = account
+        self.account2 = account2 
         
     def render(self, context):
-        volunteer = template.resolve_variable(self.volunteer,context)
-        volunteer_in_list = template.resolve_variable(self.volunteer_in_list,context)
-        
-        if volunteer:
-            context['is_teammate'] = volunteer.account.following.filter('follows =', volunteer_in_list.account).get() is not None
+        account = template.resolve_variable(self.account,context)
+        try:
+            account2 = template.resolve_variable(self.account2,context)
+        except:
+            context['is_teammate'] = False
+            return ''
+        if account:
+            context['is_teammate'] = account.following.filter('follows =', account2).get() is not None
         return ''
 
 register.tag(team_status)

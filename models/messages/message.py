@@ -68,7 +68,7 @@ class Message(db.Model):
         return self.sent_by
     
     def get_recipient(self):
-        return self.sent_to.get().recipient2
+        return self.sent_to.get().recipient2.get_user()
 
     def _get_message_pref(self, recipient, prop):
         prefs = recipient._get_message_pref(type = self.type)

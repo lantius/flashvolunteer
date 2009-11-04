@@ -38,30 +38,6 @@ class Volunteer(AbstractUser):
           self.privacy__event_attendance = params['privacy__event_attendance']
       
       
-      if self.is_saved():
-          from models.messages import MessageType, MessagePreference, MessagePropagationType
-          
-          for message_type in MessageType.all():
-              try:
-                  vol_message_prefs = self.message_preferences.filter('type =', message_type).get()
-              except:
-                  vol_message_prefs = None
-                  
-              if not vol_message_prefs:
-                  #### ERROR HERE, can't do volunteer = self
-                  #    vol_message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, volunteer = self)
-                  # BadValueError: Volunteer instance must have a complete key before it can be stored as a reference
-                  vol_message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, account = self.account)
-                  vol_message_prefs.put()
-                  
-              for mp in MessagePropagationType.all():
-                  key = '%s[%s]'%(message_type.key().id(), mp.key().id())
-                  if key in params and mp.key().id() not in vol_message_prefs.propagation:
-                      vol_message_prefs.propagation.append(mp.key().id())
-                      vol_message_prefs.put()
-                  elif key not in params and mp.key().id() in vol_message_prefs.propagation:
-                      vol_message_prefs.propagation.remove(mp.key().id())
-                      vol_message_prefs.put()
     
       return AbstractUser.validate(self, params)
          
@@ -89,9 +65,10 @@ class Volunteer(AbstractUser):
         fr = [vf.follows.get_user() for vf in self.account.following if vf.follows.key().id() not in followers]
         return fr
     
-    def event_access(self, volunteer):
-        friends = [f.key().id() for f in self.friends()]
-        return self.privacy__event_attendance == 'everyone' or (self.privacy__event_attendance == 'friends' and volunteer.key().id() in friends)
+    def event_access(self, account):
+        if self.privacy__event_attendance == 'everyone': return True
+        friends = [f.account.key().id() for f in self.friends()]
+        return self.privacy__event_attendance == 'friends' and account.key().id() in friends
 
     def recommended_events(self):
         #TODO make more efficient

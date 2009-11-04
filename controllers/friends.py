@@ -18,10 +18,11 @@ class FriendsPage(AbstractHandler):
         LIMIT = 12
         LIMIT2 = 15
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return       
     
+        volunteer = account.get_user()
         candidates = list(volunteer.friends()) + list(volunteer.following_only())
         volunteers = Volunteer.all().fetch(limit=500)
              

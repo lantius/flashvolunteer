@@ -32,7 +32,7 @@ class AbstractSendMessage(AbstractHandler):
 
     def _get_helper(self, recipients, url):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return
             
@@ -42,7 +42,7 @@ class AbstractSendMessage(AbstractHandler):
             recipients = ', '.join([r.name for r in recipients])
             
         template_values = {
-          'volunteer': volunteer,
+          'volunteer': account.get_user(),
           'recipients': recipients,
           'url': url
           }
@@ -54,7 +54,7 @@ class AbstractSendMessage(AbstractHandler):
 class SendMessage_Personal(AbstractSendMessage):
     def post(self, url_data):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return
         
@@ -63,9 +63,9 @@ class SendMessage_Personal(AbstractSendMessage):
         params = Parameters.parameterize(self.request)
         mt = MessageType.all().filter('name = ', 'person_to_person').get()
         
-        from_header = 'From: %s\n\n'%volunteer.name
+        from_header = 'From: %s\n\n'%account.name
         params['body'] = from_header + params['body']
-        self._send_message(sender = volunteer.account, recipients = recipients, type = mt, params = params)
+        self._send_message(sender = account, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
         if 'message_redirect' in session:
@@ -76,7 +76,7 @@ class SendMessage_Personal(AbstractSendMessage):
         
     def get(self, url_data):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return
         params = Parameters.parameterize(self.request)

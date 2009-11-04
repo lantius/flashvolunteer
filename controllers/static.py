@@ -12,12 +12,15 @@ class StaticPage(AbstractHandler):
   def get(self, urldata):    
     
     try:
-      volunteer = self.auth()
+      account = self.auth()
     except:
       return
-    
+
+    if account: user = account.get_user()
+    else: user = None
+            
     template_values = {
-        'volunteer': volunteer,
+        'volunteer': user,
       }
     self._add_base_template_values(vals = template_values)
     

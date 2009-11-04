@@ -6,9 +6,7 @@ from google.appengine.ext import webapp
 
 from controllers._params import Parameters
 
-
 from models.messages import MessageType
-from models.volunteer import Volunteer
 from models.auth.account import Account
 
 from controllers.abstract_handler import AbstractHandler
@@ -21,7 +19,7 @@ from controllers.message_writer import AbstractSendMessage
 class SiteWideMessage(AbstractSendMessage):
     def post(self):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return
         
@@ -50,7 +48,7 @@ class SiteWideMessage(AbstractSendMessage):
                 recipients += recips
                 break
 
-        self._send_message(sender = volunteer.account, recipients = recipients, type = mt, params = params)
+        self._send_message(sender = account, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
         if 'message_redirect' in session:

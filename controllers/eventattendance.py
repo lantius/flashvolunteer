@@ -22,39 +22,39 @@ class VerifyEventAttendance(AbstractHandler):
   # GET
   def get(self, url_data):
     try:
-        volunteer = self.auth(requireVolunteer=True)
+        account = self.auth(require_login=True)
     except:
         return
     
     params = Parameters.parameterize(self.request)
     params['id'] = url_data
 
-    self.show(params, volunteer)
+    self.show(params, account)
 
   ################################################################################
   # POST
   def post(self, url_data):
     try:
-        volunteer = self.auth(requireVolunteer=True)
+        account = self.auth(require_login=True)
     except:
         return
     
     params = Parameters.parameterize(self.request)
     params['id'] = url_data
 
-    self.update(params, volunteer)
+    self.update(params, account)
 
     self.redirect("/events/" + url_data)
 
   ################################################################################
   # SHOW
-  def show(self, params, volunteer):
+  def show(self, params, account):
     event = Event.get_by_id(int(params['id']))    
     if not event:
       self.redirect("/events/" + url_data)
       return
     
-    ev = event.eventvolunteers.filter('account =', volunteer.account).get()
+    ev = event.eventvolunteers.filter('account =', account).get()
                         
     if not ev:
       self.redirect("/events/" + url_data)
@@ -62,7 +62,7 @@ class VerifyEventAttendance(AbstractHandler):
     
     template_values = {
         'eventvolunteer': ev,
-        'volunteer' : volunteer,
+        'volunteer' : account.get_user(),
         'event' : event,
         'now' : now().strftime("%A, %d %B %Y"),
       }
@@ -73,27 +73,27 @@ class VerifyEventAttendance(AbstractHandler):
     
   ################################################################################
   # UPDATE
-  def update(self, params, volunteer):
+  def update(self, params, account):
     event = Event.get_by_id(int(params['id']))
 
     if not event:
       return
     
-    owner = event.eventvolunteers.filter('account =', volunteer.account).filter('isowner =', True).get()
+    owner = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
 
     
     if not owner:
       return
       
     for key in params.keys():
-      if key.startswith('event_volunteer_'):
-        i = len('event_volunteer_')
-        event_volunteer_id = key[i:]
-        attended = params[key]
-        hours = None
-        if 'hours_' + event_volunteer_id in params.keys():
-          hours = params['hours_' + event_volunteer_id]
-        self.update_volunteer_attendance(event_volunteer_id, attended, hours)
+        if key.startswith('event_volunteer_'):
+            i = len('event_volunteer_')
+            event_volunteer_id = key[i:]
+            attended = params[key]
+            hours = None
+            if 'hours_' + event_volunteer_id in params.keys():
+                hours = params['hours_' + event_volunteer_id]
+            self.update_volunteer_attendance(event_volunteer_id, attended, hours)
 
   ################################################################################
   # UPDATE VOLUNTEER ATTENDANCE

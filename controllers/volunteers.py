@@ -35,10 +35,11 @@ class VolunteersPage(AbstractHandler):
   # SHOW
   def show(self, volunteer_id):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      account = self.auth(require_login=True)
     except:
       return
-
+  
+    volunteer = account.get_user()
     if volunteer and volunteer.key().id() == int(volunteer_id):
       self.redirect("/settings");
       return
@@ -54,11 +55,11 @@ class VolunteersPage(AbstractHandler):
       self.error(404)
       return
 
-    volunteerfollower = page_volunteer.account.followers.filter('account =', volunteer.account).get()
+    volunteerfollower = page_volunteer.account.followers.filter('account =', account).get()
                       
-    volunteerfollowing = volunteer.account.followers.filter('account =', page_volunteer.account).get()
+    volunteerfollowing = account.followers.filter('account =', page_volunteer.account).get()
                                             
-    event_access = page_volunteer.event_access(volunteer = volunteer) 
+    event_access = page_volunteer.event_access(account = account) 
                       
     future_events = page_volunteer.events_future()[:VolunteersPage.LIMIT]
     template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
@@ -84,7 +85,7 @@ class VolunteersPage(AbstractHandler):
   # SEARCH
   def search(self, params):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      account = self.auth(require_login=True)
     except:
       return
     
@@ -94,7 +95,7 @@ class VolunteersPage(AbstractHandler):
       'email' : email,
       'name' : name,
       'volunteers' : volunteers,
-      'volunteer' : volunteer,
+      'volunteer' : account.get_user(),
     }
     self._add_base_template_values(vals = template_values)
     
@@ -149,23 +150,23 @@ class FollowVolunteer(AbstractHandler):
     # POST
     def post(self, url_data):
         try:
-            volunteer = self.auth(requireVolunteer=True)
+            account = self.auth(require_login=True)
         except:
             return
         
         to_follow = Volunteer.get_by_id(int(url_data))
         
         if to_follow:
-            volunteerfollower = to_follow.account.followers.filter('account =', volunteer.account).get()
+            volunteerfollower = to_follow.account.followers.filter('account =', account).get()
 
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if volunteerfollower:
                     volunteerfollower.delete()
             else:
                 if not volunteerfollower:
-                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower2=volunteer.account)
+                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower2=account)
                     volunteerfollower.put()
-                    params = self.get_message_params(adder = volunteer, account = to_follow.account, volunteer = to_follow)
+                    params = self.get_message_params(adder = account, account = to_follow.account, volunteer = to_follow)
                     subject = type2.subject%params
                     body = type2.body%params
                     send_message( 
@@ -183,12 +184,12 @@ class FollowVolunteer(AbstractHandler):
         params = {
             'adder_name': adder.name,
             'vol_name': account.name,
-            'adder_url': '%s%s'%(self._get_base_url(), adder.url()),
+            'adder_url': '%s%s'%(self._get_base_url(), adder.get_user().url()),
             'vol_team_url': '%s%s'%(self._get_base_url(), volunteer.url()), 
             'reciprocation':''
         }
         
-        reciprocal = adder.account.following.filter('account =', volunteer.account).get()
+        reciprocal = adder.following.filter('account =', volunteer.account).get()
         if reciprocal:
             params['reciprocation'] = ' also'
         
@@ -211,28 +212,29 @@ class VolunteerAvatar(AbstractHandler):
   # POST
   def post(self):
     try:
-      volunteer = self.auth(requireVolunteer=True)
+      account = self.auth(require_login=True)
     except:
       return
       
     params = Parameters.parameterize(self.request)
     
     if 'delete_avatar' in params and params['delete_avatar'] == 'true':
-      self.delete(volunteer)
+      self.delete(account)
     else:
-      self.update(params, volunteer)
+      self.update(params, account)
 
     self.redirect('/settings')
   
   ################################################################################
   # DELETE
-  def delete(self, volunteer):
-    volunteer.avatar = None
-    volunteer.put()
+  def delete(self, account):
+    user = account.get_user()
+    user.avatar = None
+    user.put()
     
   ################################################################################
   # UPDATE
-  def update(self, params, volunteer):
+  def update(self, params, account):
     if 'avatar' in params and params['avatar']:
       if len(params['avatar']) > 50 * 2**10:
         return
@@ -241,8 +243,9 @@ class VolunteerAvatar(AbstractHandler):
       if not content_type:
         return
 
-      volunteer.avatar_type = 'image/' + content_type
-      volunteer.avatar = params['avatar']
-      volunteer.put()
+      user = account.get_user()
+      user.avatar_type = 'image/' + content_type
+      user.avatar = params['avatar']
+      user.put()
 
     
