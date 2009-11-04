@@ -417,7 +417,7 @@ class EventsPage(AbstractHandler):
   def do_search(self, params):
     application = get_application()
     
-    if 'pastevents' in params and params['pastevents']:
+    if 'past_events' in params and params['past_events']:
         events_query = application.events.filter(
             'hidden = ', False).order(
             'date')
