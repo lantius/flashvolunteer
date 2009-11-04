@@ -417,11 +417,17 @@ class EventsPage(AbstractHandler):
      
   def do_search(self, params):
     application = get_application()
-    events_query = application.events.filter(
-        'date >= ', now()).filter(
-        'hidden = ', False).order(
-        'date')
-        
+    
+    if 'pastevents' in params and params['pastevents']:
+        events_query = application.events.filter(
+            'hidden = ', False).order(
+            'date')
+    else:
+        events_query = application.events.filter(
+            'date >= ', now()).filter(
+            'hidden = ', False).order(
+            'date')             
+              
     neighborhood = None
     interestcategory = None
     ur = None
