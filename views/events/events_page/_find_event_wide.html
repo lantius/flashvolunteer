@@ -8,8 +8,8 @@
 						{% include "_select_event_type.html" %}
 					</li>
 					<li>
-                        <input type="checkbox" id="search_past_events" name="pastevents" {% if past_events %} checked {% endif %} />
-						<label class="checkboxlabel" title="Include past and future events in search results." for="pastevents">Include past events {{ past_events }}</label>
+                        <input type="checkbox" id="search_past_events" name="past_events" />
+						<label class="checkboxlabel" title="Include past and future events in search results." for="past_events">Include past events</label>
                     </li>
 					<li class="submiteventsearch">
 						<input type="submit"  id="s_events_wide_search" value="Search" />						
