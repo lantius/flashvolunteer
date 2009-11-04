@@ -56,9 +56,9 @@ class AbstractHandler(webapp.RequestHandler):
             
             user_object = None
             if auth:
-                user_object = Volunteer.gql("where account = :account", account=auth.account).get()
+                user_object = Volunteer.all().filter('account =', auth.account).get()
                 if not user_object:
-                    user_object = Organization.gql("where account = :account", account=account).get()
+                    user_object = Organization.all().filter('account = ', account=account).get()
 
                 application = get_application()
                 if not application.key().id() in auth.account.active_applications:

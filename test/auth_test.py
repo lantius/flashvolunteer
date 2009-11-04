@@ -3,7 +3,6 @@ from webtest import TestApp
 from google.appengine.ext import webapp
 from google.appengine.api import users
 
-from controllers._auth import *
 
 # http://appengine-cookbook.appspot.com/recipe/testing-apps-with-authentication/
 class AuthorizeTest(unittest.TestCase):
@@ -44,7 +43,7 @@ class AuthorizeTest(unittest.TestCase):
     self.login('test@example.com')
     
     user = users.get_current_user()
-    volunteer = Authorize.login(req, requireVolunteer=False, redirectTo='/test_url')
+    volunteer = req.auth(requireVolunteer=False, redirectTo='/test_url')
     
     self.assertEqual(volunteer, None)
 
@@ -52,20 +51,20 @@ class AuthorizeTest(unittest.TestCase):
     volunteer.user = user
     volunteer.put()
     
-    volunteer = Authorize.login(req, requireVolunteer=False, redirectTo='/test_url')
+    volunteer = req.auth( requireVolunteer=False, redirectTo='/test_url')
     self.assertEqual(volunteer.user.email(), 'test@example.com')
     
     self.logout()
-    self.assertRaises(AuthError, Authorize.login, req, requireVolunteer=True, redirectTo='/test_url')
+    self.assertRaises(AuthError, req.auth, req, requireVolunteer=True, redirectTo='/test_url')
     try:
-      volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+      volunteer = req.auth(requireVolunteer=True, redirectTo='/test_url')
     except:
       self.assertEqual(req.new_url, '/test_url')    
 
     self.login('test-2@example.com')
-    self.assertRaises(AuthError, Authorize.login, req, requireVolunteer=True, redirectTo='/test_url')
+    self.assertRaises(AuthError, req.auth, req, requireVolunteer=True, redirectTo='/test_url')
     try:
-      volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+      volunteer = req.auth(requireVolunteer=True, redirectTo='/test_url')
     except:
       self.assertEqual(req.new_url, '/test_url')    
     
@@ -85,7 +84,7 @@ class AuthorizeTest(unittest.TestCase):
     self.assertEqual(req.request.get('session_id'), '12345')
     self.assertEqual(volunteer.session_id, '12345')
     self.assertTrue(volunteer.check_session_id(req.request.get('session_id')))
-    volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+    volunteer = req.auth(requireVolunteer=True, redirectTo='/test_url')
     self.assertEqual(volunteer.user.email(), 'test@example.com')
     
     volunteer.session_id = 'abcde'
@@ -96,9 +95,9 @@ class AuthorizeTest(unittest.TestCase):
     self.assertEqual(volunteer.session_id, 'abcde')
     self.assertFalse(volunteer.check_session_id(req.request.get('session_id')))
     
-    self.assertRaises(TimeoutError, Authorize.login, req, requireVolunteer=True, redirectTo='/test_url')
+    self.assertRaises(TimeoutError, req.auth, req, requireVolunteer=True, redirectTo='/test_url')
     try:
-      volunteer = Authorize.login(req, requireVolunteer=True, redirectTo='/test_url')
+      volunteer = req.auth(requireVolunteer=True, redirectTo='/test_url')
     except:
       self.assertEqual(req.new_url, '/timeout')
     

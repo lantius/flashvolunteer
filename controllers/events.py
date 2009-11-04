@@ -186,7 +186,7 @@ class EventsPage(AbstractHandler):
     ###################
         
     owners = event.hosts()
-    eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight ASC", event=event).fetch(limit=100)
+    eventphotos = event.eventphotos.order('display_weight').fetch(limit=100)
     
     for ep in eventphotos:
       if (ep.can_edit(volunteer)):
@@ -361,8 +361,7 @@ class EventsPage(AbstractHandler):
         #TODO: convert interest category helper to application-specific data model
         for interestcategory in InterestCategory.all():
           param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
-          eic = EventInterestCategory.gql("WHERE event = :event AND interestcategory = :interestcategory" ,
-                              event = event, interestcategory = interestcategory).get()
+          eic = event.event_categories.filter('interestcategory = ', interestcategory).get()
           if params[param_name] == ['1','1'] and not eic:          
               eic = EventInterestCategory(event = event, interestcategory = interestcategory)
               eic.put()
@@ -478,7 +477,10 @@ class EventsPage(AbstractHandler):
   def _handle_photos(self, params, volunteer):
     event_id = params['event_id']
     if params['action'] == 's_addexternalalbum':
-      last_eventphotos = EventPhoto.gql("WHERE event = :event ORDER BY display_weight DESC", event=Event.get_by_id(int(event_id))).fetch(limit=1)
+      event = Event.get_by_id(int(event_id))
+      if not event:
+          raise
+      last_eventphotos = event.eventphotos.order('-display_weight').get()
       display_weight = 0
       for last_eventphoto in last_eventphotos: 
         display_weight = last_eventphoto.display_weight + 1
@@ -498,10 +500,8 @@ class EventsPage(AbstractHandler):
       album_id = params['album_id']
       eventphoto = EventPhoto.get_by_id(int(album_id))
       #look for photo with display_weight lower than curent, start with highest
-      lowers = EventPhoto.gql("WHERE event = :event AND display_weight < :cur_display_weight ORDER BY display_weight DESC", 
-                                        event=Event.get_by_id(int(event_id)), 
-                                        cur_display_weight=eventphoto.display_weight
-                                        ).fetch(limit=1)
+      lowers = event.eventphotos.filter('display_weight <', eventphoto.display_weight).order('-display_weight').get()
+
       #swap weights
       for lower in lowers:
         temp = eventphoto.display_weight
@@ -513,10 +513,8 @@ class EventsPage(AbstractHandler):
       album_id = params['album_id']
       eventphoto = EventPhoto.get_by_id(int(album_id))
       #look for photo with display_weight higher than curent, start with lowest
-      highers = EventPhoto.gql("WHERE event = :event AND display_weight > :cur_display_weight ORDER BY display_weight ASC", 
-                                        event=Event.get_by_id(int(event_id)), 
-                                        cur_display_weight=eventphoto.display_weight
-                                        ).fetch(limit=1)
+      highers = event.eventphotos.filter('display_weight >', eventphoto.display_weight).order('display_weight').get()
+
       #swap weights
       for higher in highers:
         temp = eventphoto.display_weight

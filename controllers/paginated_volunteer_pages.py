@@ -182,8 +182,7 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
       self.set_context()
         
   def _get_volunteer_generator(self):
-     eventvolunteer = EventVolunteer.gql("WHERE volunteer = :volunteer AND event = :event" ,
-                         volunteer=self.volunteer, event=self.event).get() 
+     eventvolunteer = event.eventvolunteers.filter('account =', self.volunteer.account).get() 
                                              
      if eventvolunteer and (eventvolunteer.isowner or self.event.inpast()): 
         return (self.event.eventvolunteers,'indirect')        
