@@ -1,5 +1,4 @@
 from components.sessions import Session
-from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 from controllers._params import Parameters
 from controllers._utils import is_debugging, send_message 

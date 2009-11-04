@@ -9,7 +9,6 @@ from models.event import Event
 from models.eventvolunteer import EventVolunteer
 from models.messages import MessageType
 
-from controllers._auth import Authorize
 from controllers._utils import send_message
 
 from controllers.abstract_handler import AbstractHandler
@@ -24,7 +23,7 @@ class VolunteerForEvent(AbstractHandler):
   # POST
     def post(self, url_data):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return
         

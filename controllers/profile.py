@@ -3,7 +3,6 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
-from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 
 from models.neighborhood import Neighborhood
@@ -17,7 +16,7 @@ class ProfilePage(AbstractHandler):
     LIMIT = 2
     def get(self):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return    
         

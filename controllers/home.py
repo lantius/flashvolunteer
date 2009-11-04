@@ -3,7 +3,6 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
-from controllers._auth import Authorize
 
 from controllers.events import _get_upcoming_events 
 
@@ -15,7 +14,7 @@ class MainPage(AbstractHandler):
   LIMIT = 3 
   def get(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = self.auth()
     except:
       return    
   

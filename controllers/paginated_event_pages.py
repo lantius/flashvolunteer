@@ -11,7 +11,6 @@ from models.neighborhood import Neighborhood
 from models.eventinterestcategory import EventInterestCategory
 from models.interestcategory import InterestCategory
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 
 from controllers.events import _get_upcoming_events 
@@ -24,7 +23,7 @@ class BaseEventListPage(AbstractHandler):
     
   def set_context(self):  
     try:
-      self.volunteer = Authorize.login(self, requireVolunteer=False)
+      self.volunteer = self.auth()
     except:
       return
     

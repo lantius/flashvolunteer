@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 
 from controllers._utils import get_application
@@ -13,10 +12,8 @@ from models.application import Application
 
 class AllApplications(AbstractHandler):
   def get(self):    
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
-    except:
-      return
+
+    volunteer = self.auth()
     
     params = Parameters.parameterize(self.request)
     
@@ -49,10 +46,7 @@ class AllApplications(AbstractHandler):
     
 class ThisApplication(AbstractHandler):
   def get(self):    
-    try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
-    except:
-      return
+    volunteer = self.auth(redirectTo='/settings')
     
     params = Parameters.parameterize(self.request)
     

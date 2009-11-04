@@ -20,7 +20,7 @@ class RelationshipStatusNode(template.Node):
         volunteer_in_list = template.resolve_variable(self.volunteer_in_list,context)
         
         if volunteer:
-            context['is_teammate'] = volunteer.account.following.filter('account =', volunteer_in_list.account).get() is not None
+            context['is_teammate'] = volunteer.account.following.filter('follows =', volunteer_in_list.account).get() is not None
         return ''
 
 register.tag(team_status)

@@ -8,7 +8,6 @@ from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 from components.time_zones import Pacific, now
 
@@ -23,10 +22,10 @@ class VerifyEventAttendance(AbstractHandler):
   # GET
   def get(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+        volunteer = self.auth(requireVolunteer=True)
     except:
-      return
-
+        return
+    
     params = Parameters.parameterize(self.request)
     params['id'] = url_data
 
@@ -36,10 +35,10 @@ class VerifyEventAttendance(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+        volunteer = self.auth(requireVolunteer=True)
     except:
-      return
-
+        return
+    
     params = Parameters.parameterize(self.request)
     params['id'] = url_data
 

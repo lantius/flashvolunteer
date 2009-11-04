@@ -7,7 +7,6 @@ from google.appengine.ext import db
 from models.volunteer import Volunteer
 
 from controllers._params import Parameters
-from controllers._auth import Authorize
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -20,7 +19,7 @@ class AdminPage(AbstractHandler):
   # GET
   def get(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
 
@@ -30,7 +29,7 @@ class AdminPage(AbstractHandler):
   # POST
   def post(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
     

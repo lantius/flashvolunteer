@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 from models.interestcategory import InterestCategory
 
@@ -49,7 +48,7 @@ class CategoryPage(AbstractHandler):
   def show(self, category_id):
     LIMIT = 12
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = self.auth()
     except:
       return
 

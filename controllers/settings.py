@@ -1,6 +1,5 @@
 import os, logging
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 
 from google.appengine.ext.webapp import template
@@ -30,7 +29,7 @@ class SettingsPage(AbstractHandler):
     def get(self, volunteer = None):      
         if not volunteer:
             try:
-                volunteer = Authorize.login(self, requireVolunteer=True)
+                volunteer = self.auth(requireVolunteer=True)
             except:
                 return
 
@@ -52,7 +51,7 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     def post(self):
       try:
-          volunteer = Authorize.login(self, requireVolunteer=False)
+          volunteer = self.auth()
       except:
           return
         
@@ -72,24 +71,23 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     # UPDATE
     def update(self, params, volunteer):
-      
-        if not volunteer.validate(params):
-            self.get(volunteer)
-            return False
+  
+        valid_entry = volunteer.validate(params) 
+        valid_entry = volunteer.account.validate(params) and valid_entry
       
         for interestcategory in InterestCategory.all():
             param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
             if not param_name in params:
                 continue
-            vic = Interest.gql("WHERE volunteer = :volunteer AND interestcategory = :interestcategory" ,
-                            volunteer = volunteer, interestcategory = interestcategory).get()
+            vic = volunteer.account.user_interests.filter('interestcategory =', interestcategory).get()
             if params[param_name] == ['1','1'] and not vic:          
-                vic = Interest(volunteer = volunteer, interestcategory = interestcategory)
+                vic = Interest(account = volunteer.account, interestcategory = interestcategory)
                 vic.put()
             elif params[param_name] == '1' and vic:
                 vic.delete()
     
         volunteer.put()
+        volunteer.account.put()
         if memcache.get('%s_rec_events'%volunteer.key().id()):
             memcache.delete('%s_rec_events'%volunteer.key().id())
         return True

@@ -6,7 +6,6 @@ from google.appengine.ext import webapp
 
 from controllers._params import Parameters
 
-from controllers._auth import Authorize
 
 from models.messages import MessageType
 from models.volunteer import Volunteer
@@ -33,7 +32,7 @@ class AbstractSendMessage(AbstractHandler):
 
     def _get_helper(self, recipients, url):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return
             
@@ -55,7 +54,7 @@ class AbstractSendMessage(AbstractHandler):
 class SendMessage_Personal(AbstractSendMessage):
     def post(self, url_data):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return
         
@@ -77,7 +76,7 @@ class SendMessage_Personal(AbstractSendMessage):
         
     def get(self, url_data):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return
         params = Parameters.parameterize(self.request)

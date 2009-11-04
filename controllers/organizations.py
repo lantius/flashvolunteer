@@ -4,7 +4,6 @@ import imghdr
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 from controllers._utils import get_application
 
@@ -34,7 +33,7 @@ class OrganizationsPage(AbstractHandler):
   # SHOW
   def show(self, volunteer_id):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
 
@@ -82,7 +81,7 @@ class OrganizationsPage(AbstractHandler):
   # SEARCH
   def search(self, params):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
     
@@ -140,7 +139,7 @@ class FollowOrganization(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
 
@@ -180,7 +179,7 @@ class OrganizationLogo(AbstractHandler):
   # POST
   def post(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
       

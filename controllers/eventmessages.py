@@ -8,7 +8,6 @@ from models.event import Event
 from models.messages.message import Message
 from models.eventvolunteer import EventVolunteer
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 from controllers.messages import MessagesPage
 
@@ -35,7 +34,7 @@ class EventMessagesPage(MessagesPage):
   # POST
   def post(self, event_data, message_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = self.auth(requireVolunteer=True, redirectTo='/settings')
     except:
       return
     
@@ -56,7 +55,7 @@ class EventMessagesPage(MessagesPage):
   # NEW
   def new(self, event):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True, redirectTo='/settings')
+      volunteer = self.auth(requireVolunteer=True, redirectTo='/settings')
     except:
       return
 
@@ -91,7 +90,7 @@ class EventMessagesPage(MessagesPage):
   # LIST
   def list(self, event):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False, redirectTo='/settings')
+      volunteer = self.auth(requireVolunteer=False, redirectTo='/settings')
     except:
       return
     eventvolunteer = None  

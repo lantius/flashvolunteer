@@ -1,6 +1,5 @@
 from components.geostring import *
 from components.time_zones import Pacific, now
-from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from controllers._params import Parameters
 from controllers._utils import is_debugging, get_application, get_google_maps_api_key
@@ -83,7 +82,7 @@ class EventsPage(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
     
@@ -116,7 +115,7 @@ class EventsPage(AbstractHandler):
   # LIST
   def list(self):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = self.auth()
     except:
       return
 
@@ -164,7 +163,7 @@ class EventsPage(AbstractHandler):
     
     offset = 0
     
-    volunteer = Authorize.login(self)
+    volunteer = self.auth()
     application = get_application()
     
     event = Event.get_by_id(int(event_id))
@@ -202,7 +201,7 @@ class EventsPage(AbstractHandler):
     
     if volunteer:
 
-      eventvolunteer = event.eventvolunteers.filter('volunteer = ', volunteer).get()
+      eventvolunteer = event.eventvolunteers.filter('account = ', volunteer.account).get()
                                
       if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
         # TODO: randomize this...
@@ -258,7 +257,7 @@ class EventsPage(AbstractHandler):
   # NEW
   def new(self, event):
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
     
@@ -317,7 +316,7 @@ class EventsPage(AbstractHandler):
   # EDIT
     def edit(self, event): 
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return   
         
@@ -539,7 +538,7 @@ class EventAddCoordinatorPage(AbstractHandler):
   # GET
   def get(self, event_id):   
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
     
@@ -565,7 +564,7 @@ class EventAddCoordinatorPage(AbstractHandler):
     
   def post(self, event_id):   
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
     except:
       return
 

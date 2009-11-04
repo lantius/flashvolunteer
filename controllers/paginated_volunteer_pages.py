@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._auth import Authorize
 
 from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
@@ -17,7 +16,7 @@ class BaseVolunteerListPage(AbstractHandler):
     
   def set_context(self):  
     try:
-      volunteer = Authorize.login(self, requireVolunteer=True)
+      volunteer = self.auth(requireVolunteer=True)
       self.volunteer = volunteer
     except:
       return

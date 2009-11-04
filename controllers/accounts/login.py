@@ -2,7 +2,6 @@ import os, logging, hashlib
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 from controllers._utils import is_debugging
 
@@ -29,7 +28,7 @@ class Login(AbstractHandler):
     LIMIT = 12 
     def get(self, errors = None):
         
-        volunteer = Authorize.login(self, requireVolunteer=False)
+        volunteer = self.auth()
     
         if self.request.path.find('dev_login') > -1:    
             self.dev_login()    
@@ -49,6 +48,7 @@ class Login(AbstractHandler):
         from google.appengine.api import users
         session = Session()
         user = users.get_current_user()   
+        v = None
         
         auth = Auth.all().filter('identifier =', user.email()).filter('strategy =', 'dev').get()
         if auth is None:
@@ -68,11 +68,13 @@ class Login(AbstractHandler):
             v.put()
         else:
             account = auth.account
-            v = self.auth()
+            
             
         session['auth'] = auth
         session['user'] = user
         session['account'] = account
+        if not v:
+            v = self.auth()
         session['volunteer'] = v
         
         self.redirect('/settings')
@@ -178,10 +180,7 @@ class Login(AbstractHandler):
 
             if auth:
                 session['auth'] = auth
-                try:
-                    volunteer = Authorize.login(self, requireVolunteer=False)
-                except:
-                    raise
+                volunteer = self.auth()
                 check_avatar(volunteer = volunteer)
                 if 'login_redirect' in session:
                     self.redirect(session['login_redirect'])

@@ -16,7 +16,7 @@ Volunteer Settings
 		      <fieldset>
 				  <ul>			
 				  
-                        <li><label for="name">Your Name:</label><input class="text" id="createnameinput" type="text" name="name" tabindex="0"
+                        <li><label for="name">Your Name:</label><input class="text" id="createnameinput" type="text" name="name" tabindex="1"
                             {% if account.error.name %}
                                 value="{{ account.error.name.1 }}"
                             {% else %}
@@ -32,7 +32,7 @@ Volunteer Settings
                             {% endif %}
                         </li>
 						
-					<li><label for="email">Email (required):</label><input class="text" id="createnameinput" type="text" name="email" tabindex="1"
+					<li><label for="email">Email (required):</label><input class="text" id="createnameinput" type="text" name="email" tabindex="2"
 						{% if account.error.email %}
 							value="{{ account.error.email.1 }}"
 						{% else %}
@@ -51,12 +51,12 @@ Volunteer Settings
 					{% if fv_account %}
                         <li>
                           <label for="password">Password</label>
-                          <input class="password" id="password" name="password" tabindex="2" type="password" />
+                          <input class="password" id="password" name="password" tabindex="3" type="password" />
                 
                         </li>
                         <li>
                           <label for="password">Confirm Password</label>
-                          <input class="password" id="password" name="passwordcheck" tabindex="3" type="password" />
+                          <input class="password" id="password" name="passwordcheck" tabindex="4" type="password" />
 	                      {% if account.error.passwords %}
 	                            <br/><strong class="error">{{account.error.passwords.0}}</strong>
 	                      {% endif %}                

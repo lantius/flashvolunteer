@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os
 
-from controllers._auth import Authorize
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -13,7 +12,7 @@ class StaticPage(AbstractHandler):
   def get(self, urldata):    
     
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = self.auth()
     except:
       return
     

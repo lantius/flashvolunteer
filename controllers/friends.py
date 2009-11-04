@@ -3,7 +3,6 @@ from google.appengine.ext.webapp import template
 import os
 import random 
 from models.eventvolunteer import EventVolunteer
-from controllers._auth import Authorize
 from controllers._helpers import NeighborhoodHelper
 from models.event import Event
 from controllers.abstract_handler import AbstractHandler
@@ -19,7 +18,7 @@ class FriendsPage(AbstractHandler):
         LIMIT = 12
         LIMIT2 = 15
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return       
     

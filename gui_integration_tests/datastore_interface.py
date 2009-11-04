@@ -37,6 +37,7 @@ def create_environment(name, session_id):
     from models.interest import Interest
     from models.interestcategory import InterestCategory
     from models.auth.account import Account
+    from models.auth.auth import Auth
     
     from components.applications.operations import synchronize_apps
     synchronize_apps()
@@ -67,6 +68,13 @@ def create_environment(name, session_id):
         
         account = Account(user = u, name = k, preferred_email=email)
         account.put()
+        auth = Auth(
+                strategy = 'dev',
+                identifier = email,
+                account = account
+            )
+        auth.put()
+
         v = Volunteer(
           name = k,
           account = account,

@@ -13,7 +13,6 @@ from controllers._utils import send_message
 from components.message_text import type5, type6, type7, type8, type9
 
 from components.sessions import Session
-from controllers._auth import Authorize
 
 from models.volunteer import Volunteer
 

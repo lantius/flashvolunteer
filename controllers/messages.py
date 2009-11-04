@@ -4,7 +4,6 @@ from datetime import datetime
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._auth import Authorize
 
 from models.messages import MessageType, Message
 from controllers.abstract_handler import AbstractHandler
@@ -30,7 +29,7 @@ class Mailbox(AbstractHandler):
     
     def show(self, id):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return
         
@@ -81,7 +80,7 @@ class Mailbox(AbstractHandler):
     # LIST
     def list(self):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             raise
         

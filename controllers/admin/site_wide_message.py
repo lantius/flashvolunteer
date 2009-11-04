@@ -6,7 +6,6 @@ from google.appengine.ext import webapp
 
 from controllers._params import Parameters
 
-from controllers._auth import Authorize
 
 from models.messages import MessageType
 from models.volunteer import Volunteer
@@ -22,7 +21,7 @@ from controllers.message_writer import AbstractSendMessage
 class SiteWideMessage(AbstractSendMessage):
     def post(self):
         try:
-            volunteer = Authorize.login(self, requireVolunteer=True)
+            volunteer = self.auth(requireVolunteer=True)
         except:
             return
         

@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._auth import Authorize
 from controllers._params import Parameters
 from models.neighborhood import Neighborhood
 from models.eventvolunteer import EventVolunteer
@@ -17,7 +16,7 @@ from google.appengine.api import memcache
 class NeighborhoodsPage(AbstractHandler):
   def get(self, url_data):    
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = self.auth()
     except:
       return
     
@@ -114,7 +113,7 @@ class NeighborhoodDetailPage(AbstractHandler):
   def show(self, neighborhood_id):
     LIMIT = 12
     try:
-      volunteer = Authorize.login(self, requireVolunteer=False)
+      volunteer = self.auth()
     except:
       return
 
