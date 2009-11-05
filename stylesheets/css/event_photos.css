@@ -9,7 +9,9 @@
 
 #eventphotos_addalbum {
     display: block; 
+    position: relative;
     float: right;
+    top: -18px;
     width: 160px;
     height: 20px;
 }
