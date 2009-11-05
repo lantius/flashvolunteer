@@ -11,9 +11,9 @@ class="current"
 
 <div id="left75">
 	<div id="eventmessagescreate" class="softmodule">
-	    <div class="moduletitle"><h3>Send a message</h3></div>
+	    <div class="moduletitle"><h3>{% block sendmessage %}Send a message{% endblock sendmessage %}</h3></div>
         <div id="emto">
-        	<span class="label">To: </span>{{recipients}}
+        	<span class="label">{% block recipientlabel %}To: {% endblock recipientlabel %}</span>{{recipients}}
 		</div>
 	    
 	    <form action="{{url}}/send_message" method="post">
@@ -40,8 +40,10 @@ class="current"
 	<div id="creationtips" class="hardmodule">
 	    <div class="moduletitle"><h3>Tips</h3></div>
 	    <ul>
+	    {% block creationtips %}
 	        <li>Your message will be sent to the recipients according to each of their notification settings.</li>
 			<li>Do not send messages that reasonable people would consider to be spam.</li>
+	    {% endblock creationtips %}
 	    </ul>
 	</div>	
 </div><!--end right25-->

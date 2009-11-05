@@ -11,6 +11,8 @@ from google.appengine.ext.webapp import template
 from models.event import Event
 from models.eventinterestcategory import EventInterestCategory
 from models.eventphoto import EventPhoto
+from models.messages.message import Message
+from models.messages.message_receipt import MessageReceipt
 from models.eventvolunteer import EventVolunteer
 from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
@@ -201,7 +203,25 @@ class EventsPage(AbstractHandler):
         
         attendees_anonymous = []
         attendees = []
+
+
+        #fill forum block
+        forum = {}
+        query = db.Query(MessageReceipt)
+        #message_receipts = MessageReceipt.gql("WHERE recipient2 = :1 ORDER BY timestamp DESC", event.key()).fetch(limit=6)
+        message_receipts = query.filter('recipient2 = ', event.key()).order('-timestamp').fetch(limit=6)
+        messages = []
+        for mr in message_receipts:
+            messages.append(mr.message)
         
+        if (len(messages) > 5): 
+            messages = messages[0:4]
+            forum['more_messages'] = True
+            
+        forum['messages'] = messages 
+        forum['path'] = self.request.path
+        #end fill forum block
+
         if account:
         
             eventvolunteer = event.eventvolunteers.filter('account = ', account).get()
@@ -223,8 +243,8 @@ class EventsPage(AbstractHandler):
         else: user = None
         
         template_values = { 
-                           'volunteer': user,
-                           'event' : event, 
+                            'volunteer': user,
+                            'event' : event, 
                             'eventvolunteer': eventvolunteer, 
                             'eventphotos': eventphotos,
                             'event_categories': ', '.join([ic.name for ic in event.interestcategories()]),
@@ -233,6 +253,7 @@ class EventsPage(AbstractHandler):
                             'attendees_anonymous': attendees_anonymous,
                             'num_anon': len(attendees_anonymous),
                             'GOOGLE_MAPS_API_KEY' : get_google_maps_api_key(),
+                            'forum': forum,
                             }
         self._add_base_template_values(vals = template_values)
         

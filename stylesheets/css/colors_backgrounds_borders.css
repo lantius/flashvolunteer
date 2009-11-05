@@ -146,6 +146,10 @@ tr.message {
     border-bottom: 3px solid #E6E6E6;
 }
 
+#forum tr.message {
+    border-top: 3px solid #E6E6E6;
+}
+
 tr.message.unread {
 	background-color: #F5F5F5;
 }

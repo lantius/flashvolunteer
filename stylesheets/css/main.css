@@ -340,8 +340,17 @@ img.smallavatar {
     max-width: 60px;
 }
 
+.message img.microavatar {
+    max-height: 40px;
+    max-width: 40px;
+}
+
 .message td img.smallavatar {
     margin: 10px 0px 0px 10px;
+}
+
+.message td img.microavatar {
+    margin: 5px 0px 0px 5px;
 }
 
 #footer .badge {
@@ -869,9 +878,50 @@ ul.event_header img{
 	padding: 20px;
 }
 
+
+#forum .message td.minfo {
+	min-width: 95px;
+	width: 95px;
+	padding: 5px;
+}
+
 .messages td.msubject{
     padding: 5px 20px 0px 0px;	
 }	
+
+#forum .message td.msubject {
+    padding: 5px 5px 5px 0px;	
+}
+
+#forum .message td {
+	vertical-align: top;
+	text-align: left;
+}
+
+#forum .morediv {
+	display: none;
+}
+
+#forum .lessdiv {
+	display: block;
+}
+
+#forum .subjectline {
+	font-weight: bold;
+    padding-bottom: 5px;	
+}
+
+#forum.nonembed .message .subtext {
+	font-size: small;
+}
+
+#forum.embed .message .subtext {
+	font-size: x-small;
+}
+
+#forum.nonembed ul {
+	padding-bottom: 10px;
+}
 
 #emcreatesubject input,
 #emcreatebody textarea {

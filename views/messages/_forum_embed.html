@@ -1,0 +1,108 @@
+
+{% block head %}
+{{ block.super }}
+<script language="JavaScript" type="text/javascript">
+	$(document).ready(function(){
+		//copy from all morebody to all lessbody, so that there is two versions of each message
+		$(".morebody").each(function(ii) {
+			id = $(this).attr("keyid");
+			text = $(this).html();
+			//limit text
+			if (text.length < 300) {
+				//no need to show label
+				$('#lesslabel_'+id).css("display", "none");
+			} else {
+				text = text.substring(0, 300) + "...";
+			}
+
+			ret = $('#lessbody_'+id).html(text);
+		});
+	});
+
+	function showmore(message_id, more) {
+		if (more) {
+			//show more, hide less
+			$("#morediv_" + message_id).css("display", "block");
+			$("#lessdiv_" + message_id).css("display", "none");
+		} else {
+			//hide more, show less
+			$("#morediv_" + message_id).css("display", "none");
+			$("#lessdiv_" + message_id).css("display", "block");
+		}
+	}
+</script>
+{% endblock head %}
+
+<div class="hardmodule">
+	<div class="moduletitle">
+		<h3>Forum</h3>
+	</div>
+
+	<div id="forum" class="embed">
+		<div class="softmodule">
+		    <div class="messages">
+		        <table>
+	                {% for message in forum.messages %}
+	                    <tr class="message unread">
+	            	        <td class="minfo">
+	            	        	<div>
+	                                <a href="{{ message.get_sender.url }}" >
+	                                    <img class="microavatar" src="
+	                                    {% if message.get_sender %}
+	                                        {% if message.get_sender.avatar %}
+	                                            {{ message.get_sender.url }}/avatar
+	                                        {% else %}
+	                                            /stylesheets/media/default-profile-pic-small.png
+	                                        {% endif %}
+	                                    {% else %}
+	                                       /stylesheets/media/fv_avatar.png
+	                                    {% endif %}
+	                                    " alt="{{ message.get_sender.get_name }}" />
+	                                </a>
+                                </div>
+	                        	{% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
+	                        	<div>{% if message.get_sender %}
+								         <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
+									 {% else %}
+									    Flash Volunteer
+									 {%endif%}
+							    </div>
+								<div class="subtext">
+									{{ message.time_sent }}
+								</div>
+							</td>
+	                        <td class="msubject">
+	                        	<div><a href="{{message.url}}">{{ message.subject }}</a></div>
+							    <div id="morediv_{{message.key.id}}" class="subtext morediv">
+								    <span class="morebody" keyid="{{message.key.id}}" >{{ message.body}}</span>
+									<a href="javascript: showmore({{message.key.id}}, false);">&raquo; Less</a>
+							    </div>
+							    <div id="lessdiv_{{message.key.id}}" class="subtext lessdiv">
+								    <span id="lessbody_{{message.key.id}}" ></span>
+									<a id="lesslabel_{{message.key.id}}" href="javascript: showmore({{message.key.id}}, true);">&raquo; More</a>
+							    </div>
+							</td>
+	                    </tr>
+	                {% endfor %}
+
+	            </table>
+		    </div>
+		</div><!--end forum-->
+		<ul>
+			{% if forum.more_messages %}
+			<li>
+				<a class="operation" title="Show all messages" href="{{forum.path}}/messages">
+					&raquo;Show all messages
+				</a>
+			</li>
+			{% endif %}
+			<li>
+				<a class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}">
+					&raquo;Post new message
+				</a>
+			</li>
+		</ul>
+
+	</div>
+
+</div><!--end eventforum-->

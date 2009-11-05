@@ -21,7 +21,7 @@ from controllers.accounts import Login, CreateAccount
 
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
-from controllers.messages import Mailbox
+from controllers.messages import Mailbox, Forum
 from controllers.message_writer import SendMessage_Personal
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
@@ -126,11 +126,15 @@ def real_main():
            ('/events/upcoming/category/(\d+)/(\d+)', PaginatedCategoryUpcomingPage),         
            ('/events/upcoming/(\d+)', PaginatedUpcomingPage),
            ('/events/recommended/(\d+)', PaginatedRecommendedPage),
+           ('/events/(\d+)/send_message', SendMessage_Personal),
+           ('/events/(\d+)/messages', Forum),
            
            ('/neighborhoods/(\d+)', NeighborhoodDetailPage),
            ('/neighborhoods/(\d+)/volunteers_work/(\d+)', PaginatedNeighborhoodVolunteerWorkPage),
            ('/neighborhoods/(\d+)/volunteers_live/(\d+)', PaginatedNeighborhoodVolunteerHomePage),
            ('/neighborhoods(|)', NeighborhoodsPage),     
+           ('/neighborhoods/(\d+)/send_message', SendMessage_Personal),
+           ('/neighborhoods/(\d+)/messages', Forum),
            
            ('/team', FriendsPage),
            ('/team/(\d+)', PaginatedTeamPage),

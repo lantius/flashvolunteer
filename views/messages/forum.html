@@ -1,0 +1,85 @@
+{% extends "../_layout.html" %}
+
+{% block title %}
+Forum Messages
+{% endblock title %}
+
+{% block eventsactive %}
+	{% ifequal forum.recipient_type "event" %}
+		class="current"
+	{% endifequal %}
+{% endblock %}
+{% block neighborhoodsactive %}
+	{% ifequal forum.recipient_type "neighborhood" %}
+		class="current"
+	{% endifequal %}
+{% endblock %}
+
+{% block pagespectitle %}
+<h1>Forum for 
+{% ifequal forum.recipient_type "event" %}
+Event: 
+{% else %}
+Neighborhood: 
+{% endifequal %}
+<a href="{{ forum.path }}" >{{forum.name}}</a></h1>
+{% endblock %}
+
+{% block content %}
+
+<div id="middle100">
+	<div id="inbox">
+
+		<div id="forum" class="nonembed softmodule">
+			<ul >
+				<li>
+					<a class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}/messages">
+						&raquo;Post new message
+					</a>
+				</li>
+			</ul>
+		    <div class="messages">
+		        <table>
+	                {% for mr in forum.messages %}
+	                    <tr class="message read">
+	            	        <td>
+	                            <div class="volunteer_summary_pic">
+	                                <a href="{{ mr.message.sent_by.url }}" >
+	                                    <img class="smallavatar" src="
+	                                    {% if mr.message.sent_by %}
+	                                        {% if mr.message.sent_by.avatar %}
+	                                            {{ mr.message.sent_by.url }}/avatar
+	                                        {% else %}
+	                                            /stylesheets/media/default-profile-pic-small.png
+	                                        {% endif %}
+	                                    {% else %}
+	                                       /stylesheets/media/fv_avatar.png
+	                                    {% endif %}
+	                                    " alt="{{ mr.message.sent_by.get_name }}" />
+	                                </a>
+	                            </div>
+							</td>
+	                        <td class="minfo">
+	                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %}{%endif%}
+	                        	<div>{% if mr.message.sent_by %}
+								         <a href="{{ mr.message.sent_by.url }}">{{ mr.message.sent_by.name }}</a>
+									 {% else %}
+									    Flash Volunteer
+									 {%endif%}
+							      </div>
+								<div class="subtext">{{ mr.message.time_sent }}</div>
+							</td>
+	                        <td class="msubject">
+	                        	<div class="subjectline">{{ mr.message.subject }}</div>
+							    <div class="subtext">{{ mr.message.body}}...</div>
+							</td>
+	                    </tr>
+	                {% endfor %}
+
+	            </table>
+		    </div>
+		</div>
+
+	</div>
+</div>
+{% endblock content %}

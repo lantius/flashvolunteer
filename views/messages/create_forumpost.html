@@ -1,0 +1,22 @@
+{% extends "create_message.html" %}
+
+{% block title %}
+Post to Forum
+{% endblock title %}
+
+{% block sendmessage %}
+Post to Forum
+{% endblock sendmessage %}
+
+{% block recipientlabel %}
+{% ifequal recipient_type "event" %}
+To Forum of Event:
+{% else %} 
+To Forum of Neighborhood:
+{% endifequal %}
+{% endblock recipientlabel %}
+
+{% block creationtips %}
+<li>Do not send messages that reasonable people would consider to be spam.</li>
+{% endblock creationtips %}
+

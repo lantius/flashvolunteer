@@ -1,10 +1,13 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from google.appengine.ext import db
 import os, random
 
 from controllers._params import Parameters
 from models.neighborhood import Neighborhood
 from models.eventvolunteer import EventVolunteer
+from models.messages.message import Message
+from models.messages.message_receipt import MessageReceipt
 from controllers._utils import get_application
 
 from controllers.abstract_handler import AbstractHandler
@@ -133,6 +136,25 @@ class NeighborhoodDetailPage(AbstractHandler):
     past_events = list(neighborhood.events_past()) 
     upcoming_events = list(neighborhood.events_future())    
     
+
+    #fill forum block
+    forum = {}
+    query = db.Query(MessageReceipt)
+    message_receipts = query.filter('recipient2 = ', neighborhood.key()).order('-timestamp').fetch(limit=6)
+    messages = []
+    for mr in message_receipts:
+        messages.append(mr.message)
+    
+    if (len(messages) > 5): 
+        messages = messages[0:4]
+        forum['more_messages'] = True
+        
+    forum['messages'] = messages 
+    forum['path'] = self.request.path
+    #end fill forum block
+
+    
+    
     template_values = {
         'volunteer': user,
         'neighborhood': neighborhood,
@@ -140,6 +162,7 @@ class NeighborhoodDetailPage(AbstractHandler):
         'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 
         'past_events': past_events[-LIMIT:],
         'upcoming_events':upcoming_events[:LIMIT],
+        'forum': forum
       }
     self._add_base_template_values(vals = template_values)
     

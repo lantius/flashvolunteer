@@ -4,8 +4,11 @@ from datetime import datetime
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
+from controllers._utils import get_application
 
 from models.messages import MessageType, Message
+from models.event import Event
+from models.neighborhood import Neighborhood
 from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging, send_message
 
@@ -120,4 +123,54 @@ class Mailbox(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'mailbox.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=is_debugging()))    
+    
+################################################################################
+# Forum page
+################################################################################
+class Forum(Mailbox):
+
+    ################################################################################
+    # GET
+    def get(self, url_data):
+        try:
+            account = self.auth(require_login=False)
+        except:
+            return
+
+        application = get_application()
+
+        forum = {}
+        if self.request.path.find('events') == 1:
+          #event forum 
+          event = Event.get_by_id(int(url_data))
+          if not event or event.application.key().id() != application.key().id():
+            self.error(404)
+            return
+          forum['name'] = event.name
+          forum['path'] = '/events/' + str(event.key().id())
+          forum['recipient_type'] = 'event'
+          messages = event.incoming_messages.order('-timestamp')
+        elif self.request.path.find('neighborhoods') == 1:
+          #neighborhood forum 
+          neighborhood = Neighborhood.get_by_id(int(url_data))
+          forum['name'] = neighborhood.name
+          forum['path'] = '/neighborhoods/' + str(neighborhood.key().id())
+          forum['recipient_type'] = 'neighborhood'
+          messages = neighborhood.incoming_messages.order('-timestamp')
+        else:
+          raise
+      
+        forum['messages'] = messages.fetch(1000)
+            
+        template_values = {
+            'volunteer': account.get_user(),
+            'forum': forum,
+          }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'forum.html')
+        self.response.out.write(template.render(path, template_values, debug=is_debugging()))         
+       
+            
+   
