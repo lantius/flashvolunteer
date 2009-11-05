@@ -126,7 +126,7 @@ class CreateAccount(AbstractHandler):
         session['auth'] = auth
         session['login_info'] = login_info
         
-        check_avatar(volunteer = volunteer)
+        check_avatar(account = volunteer.account)
                 
         msg_params = {'name': volunteer.name} 
                 
