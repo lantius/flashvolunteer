@@ -1,6 +1,6 @@
 
 		<div id="findaneventwide" class="hardmodule">
-			<div class="moduletitle"><h3>Find An Event <a style="cursor:pointer" title="Search for events, optionally specifying a neighborhood and/or event category.">(?)</a></h3></div>
+			<div class="moduletitle"><h3>Find An Event<a style="cursor:pointer" title="Search for events, optionally specifying a neighborhood and/or event category.">(?)</a></h3></div>
 			<form action="/events/search" method="get">
 				<ul class="leftformlist">
 					<li>
@@ -8,8 +8,9 @@
 						{% include "_select_event_type.html" %}
 					</li>
 					<li>
-                        <input type="checkbox" id="search_past_events" name="past_events" />
-						<label class="checkboxlabel" title="Include past and future events in search results." for="past_events">Include past events</label>
+                        <input type="checkbox" id="search_past_events" name="past_events" 
+						  {% if past_events and searchurl %} checked {% endif %}  />
+						<label class="checkboxlabel" title="Include past and future events in search results." for="past_events">Include past events </label>
                     </li>
 					<li class="submiteventsearch">
 						<input type="submit"  id="s_events_wide_search" value="Search" />						
