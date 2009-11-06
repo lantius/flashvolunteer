@@ -65,7 +65,7 @@ class Message(db.Model):
         return self.trigger.replace(tzinfo=utc).astimezone(Pacific).strftime("%m/%d/%Y %H:%M")
     
     def get_sender(self):
-        return self.sent_by
+        return self.sender
     
     def get_recipient(self):
         return self.sent_to.get().recipient
@@ -104,6 +104,7 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
         
         for mr in self.sent_to.filter('emailed =', False):    
             if mr.recipient is None or \
+                not isinstance(mr.recipient, Account) or \
                 not self._get_message_pref(recipient = mr.recipient, prop = prop): 
                 continue
             message.to = mr.recipient.name + "<" + mr.recipient.get_email() + ">"
@@ -111,7 +112,7 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
             try:
                 mr.emailed = True
                 mr.put()
-                message.send()
+                message.send() #TODO: put this on a task queue
             except:
                 mr.emailed = False
                 mr.put()

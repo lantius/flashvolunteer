@@ -36,12 +36,8 @@ class Volunteer(AbstractUser):
     
       if 'privacy__event_attendance' in params and self.privacy__event_attendance != params['privacy__event_attendance']:
           self.privacy__event_attendance = params['privacy__event_attendance']
-      
-      
     
       return AbstractUser.validate(self, params)
-         
-
     
     def url(self):
       return '/volunteers/' + str(self.key().id())
@@ -52,16 +48,16 @@ class Volunteer(AbstractUser):
     # both following and follower
     def friends(self):
         following = dict([(vf.follows.key().id(),1) for vf in self.account.following])
-        fr = [vf.follower2.get_user() for vf in self.account.followers if vf.follower2.key().id() in following]
+        fr = [vf.follower.get_user() for vf in self.account.followers if vf.follower.key().id() in following]
         return fr
     
     def followers_only(self):
         following = dict([(vf.follows.key().id(),1) for vf in self.account.following])
-        fr = [vf.follower2.get_user() for vf in self.account.followers if vf.follower2.key().id() not in following]
+        fr = [vf.follower.get_user() for vf in self.account.followers if vf.follower.key().id() not in following]
         return fr
     
     def following_only(self):
-        followers = dict([(vf.follower2.key().id(),1) for vf in self.account.followers])
+        followers = dict([(vf.follower.key().id(),1) for vf in self.account.followers])
         fr = [vf.follows.get_user() for vf in self.account.following if vf.follows.key().id() not in followers]
         return fr
     

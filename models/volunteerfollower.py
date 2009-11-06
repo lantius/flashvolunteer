@@ -8,11 +8,9 @@ class VolunteerFollower(db.Model):
   volunteer = db.ReferenceProperty(Volunteer,
                                    #required = True,
                                    collection_name = 'volunteerfollowers')
-  follower = db.ReferenceProperty(Volunteer,
+  follower = db.ReferenceProperty(reference_class = None,
                                   #required = True,
-                                  collection_name = 'volunteerfollowing')
+                                  collection_name = 'following')
 
   follows = db.ReferenceProperty(Account,
                                  collection_name = 'followers')
-  follower2 = db.ReferenceProperty(Account,
-                                  collection_name = 'following')

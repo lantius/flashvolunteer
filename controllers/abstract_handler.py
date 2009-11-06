@@ -17,18 +17,19 @@ class AbstractHandler(webapp.RequestHandler):
     
     def _add_base_template_values(self, vals):
         session = Session()
+        account = self.auth()
         
         vals.update( {
             'domain': self._get_base_url(),
             'path': self.request.path,
             'application_alias': get_application().get_alias(),
-            'session_id':  session.sid
+            'session_id':  session.sid,
+            'account': account
         })
         
-        account = self.auth()
+        
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
-            vals['account'] = account
             
             
     def auth(self, require_login = False, redirect_to = '/login', require_admin = False):

@@ -164,7 +164,7 @@ class FollowVolunteer(AbstractHandler):
                     volunteerfollower.delete()
             else:
                 if not volunteerfollower:
-                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower2=account)
+                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower=account)
                     volunteerfollower.put()
                     params = self.get_message_params(adder = account, account = to_follow.account, volunteer = to_follow)
                     subject = type2.subject%params

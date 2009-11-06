@@ -97,7 +97,10 @@ class MigrateDatastore(AbstractHandler):
         for vf in VolunteerFollower.all():
             if vf.volunteer:
                 vf.follows = vf.volunteer.account
-                vf.follower2 = vf.follower.follower2
+                try:
+                    vf.follower = vf.follower.account
+                except:
+                    pass
                 vf.put()
             
         from models.interest import Interest
