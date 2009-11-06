@@ -2,7 +2,7 @@ import os
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
-
+from google.appengine.api import memcache
 from controllers._helpers import NeighborhoodHelper
 
 from models.neighborhood import Neighborhood
@@ -35,13 +35,18 @@ class ProfilePage(AbstractHandler):
         recommended_events = list(user.recommended_events())[:ProfilePage.LIMIT]
         my_future_events = user.events_future()[:ProfilePage.LIMIT]
         
+        past_events = memcache.get('past_events')
+        searchurl = memcache.get('searchurl')
+        
         template_values = {
             'volunteer' : user,
             'neighborhoods': NeighborhoodHelper().selected(user.home_neighborhood),
             'recommended_events': recommended_events,
             'my_future_events': my_future_events,
             #TODO: convert to application-specific data model
-            'interest_categories': InterestCategory.all()
+            'interest_categories': InterestCategory.all(),
+            'past_events': past_events,
+            'searchurl': searchurl
           }
         self._add_base_template_values(vals = template_values)
         
