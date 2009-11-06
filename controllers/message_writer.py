@@ -35,7 +35,7 @@ class AbstractSendMessage(AbstractHandler):
     def _redirect_to(self):
         return '/messages'
 
-    def _get_recipients(self, id):
+    def _get_recipients(self, id, sender):
         raise
     def _get_message_type(self):
         raise
@@ -52,7 +52,7 @@ class AbstractSendMessage(AbstractHandler):
         
         id = url_data
         
-        recipients = self._get_recipients(id)
+        recipients = self._get_recipients(id, account)
          
         params = Parameters.parameterize(self.request)
         
@@ -80,7 +80,7 @@ class AbstractSendMessage(AbstractHandler):
         id = url_data
  
         template_values = {}
-        recipients = self._get_recipients(id)
+        recipients = self._get_recipients(id, account)
         render_path = self._get_render_path()
         
         url = recipients[0].url()
@@ -103,7 +103,7 @@ class AbstractSendMessage(AbstractHandler):
 class SendMessage_Personal(AbstractSendMessage):
     #enter message into database
 
-    def _get_recipients(self, id):
+    def _get_recipients(self, id, sender):
         #send to person
         return [Volunteer.get_by_id(int(id)).account]
 
@@ -117,9 +117,10 @@ class SendMessage_Personal(AbstractSendMessage):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
     
 class SendMessage_Event(AbstractSendMessage):
-    def _get_recipients(self, id):
-        #send to person
-        return [Event.get_by_id(int(id))]
+    def _get_recipients(self, id, sender):
+        event = Event.get_by_id(int(id))
+        attendees = [ev.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
+        return [event] + attendees
 
     def _get_message_type(self):
         return 'event_forum'
@@ -132,9 +133,12 @@ class SendMessage_Event(AbstractSendMessage):
     
 
 class SendMessage_Neighborhood(AbstractSendMessage):
-    def _get_recipients(self, id):
-        #send to person
-        return [Neighborhood.get_by_id(int(id))]
+    def _get_recipients(self, id, sender):
+        neighborhood = Neighborhood.get_by_id(int(id))
+        recips = dict([(v.account.key().id(),v.account) for v in neighborhood.home_neighborhood if v.account.key().id() != sender.key().id()])
+        recips.update(dict([(v.account.key().id(),v.account) for v in neighborhood.work_neighborhood if v.account.key().id() != sender.key().id()]))
+            
+        return [neighborhood] + recips.values()
 
     def _get_message_type(self):
         return 'neighborhood_forum'

@@ -176,7 +176,7 @@ def create_environment(name, session_id):
     volunteer_followers = []
     for follower, followed in followers:
         vf = VolunteerFollower(
-           follower2 = volunteers[follower].account,
+           follower = volunteers[follower].account,
            follows = volunteers[followed].account
         )
         volunteer_followers.append(vf)
