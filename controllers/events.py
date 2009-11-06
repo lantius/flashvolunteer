@@ -144,6 +144,9 @@ class EventsPage(AbstractHandler):
             #TODO: convert to application-specific data model
             interest_categories = InterestCategory.all()
             
+        past_events = memcache.get('past_events')
+        searchurl = memcache.get('searchurl')
+            
         template_values = {
             'volunteer': user,
             'eventvolunteer': event_volunteers,
@@ -153,6 +156,8 @@ class EventsPage(AbstractHandler):
             'upcoming_events': upcoming_events,
             'my_future_events': my_future_events,
             'my_past_events': my_past_events,
+            'past_events': past_events,
+            'searchurl': searchurl
           }
         self._add_base_template_values(vals = template_values)
         
@@ -418,13 +423,17 @@ class EventsPage(AbstractHandler):
         if 'past_events' in params and params['past_events']:
             events_query = application.events.filter(
                 'hidden = ', False).order(
-                'date')
+                'date')         
+            memcache.add('past_events', str(params['past_events']),0)
+            memcache.add('searchurl', True,0)             
         else:
             events_query = application.events.filter(
                 'date >= ', now()).filter(
                 'hidden = ', False).order(
-                'date')             
-                  
+                'date')
+        memcache.delete('past_events')
+        memcache.delete('searchurl')
+        
         neighborhood = None
         interestcategory = None
         ur = None
