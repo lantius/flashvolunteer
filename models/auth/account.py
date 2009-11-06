@@ -122,5 +122,13 @@ class Account(db.Model):
         return prefs
 
     def check_session_id(self, form_session_id):
-      session = Session()
-      return form_session_id == session.sid
+        session = Session()
+        return form_session_id == session.sid
+ 
+ 
+    def url(self):
+        return self.get_user().url()
+  
+    def avatar(self):
+        return self.get_user().avatar
+  

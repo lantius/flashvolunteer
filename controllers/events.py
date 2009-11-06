@@ -175,20 +175,6 @@ class EventsPage(AbstractHandler):
         if not event or event.application.key().id() != application.key().id():
             self.error(404)
             return
-        
-        ##### datastore conversion: remove when updated ######
-        if event.address and not event.location:
-            event.geocode()
-            event.put()
-        
-        if not event.verified:
-            event.verified = False
-            event.put()
-        
-        if not event.hidden:
-            event.hidden = False
-            event.put()
-        ###################
             
         owners = event.hosts()
         eventphotos = event.eventphotos.order('display_weight').fetch(limit=100)
@@ -204,15 +190,10 @@ class EventsPage(AbstractHandler):
         attendees_anonymous = []
         attendees = []
 
-
         #fill forum block
         forum = {}
-        query = db.Query(MessageReceipt)
-        #message_receipts = MessageReceipt.gql("WHERE recipient2 = :1 ORDER BY timestamp DESC", event.key()).fetch(limit=6)
-        message_receipts = query.filter('recipient2 = ', event.key()).order('-timestamp').fetch(limit=6)
-        messages = []
-        for mr in message_receipts:
-            messages.append(mr.message)
+        message_receipts = event.incoming_messages.order('-timestamp').fetch(limit=6)
+        messages = [mr.message for mr in message_receipts]
         
         if (len(messages) > 5): 
             messages = messages[0:4]

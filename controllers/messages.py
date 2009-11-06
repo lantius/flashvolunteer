@@ -37,9 +37,9 @@ class Mailbox(AbstractHandler):
             return
         
         message = Message.get_by_id(int(id))
-        viewer_is_sender = account.key().id() == message.sender.key().id()
+        viewer_is_sender = message.sender and account.key().id() == message.sender.key().id()
         if message:
-            mr = message.sent_to.filter('recipient2 =', account).get()
+            mr = message.sent_to.filter('recipient =', account).get()
         if not message or not (mr or viewer_is_sender):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
@@ -142,24 +142,24 @@ class Forum(Mailbox):
 
         forum = {}
         if self.request.path.find('events') == 1:
-          #event forum 
-          event = Event.get_by_id(int(url_data))
-          if not event or event.application.key().id() != application.key().id():
-            self.error(404)
-            return
-          forum['name'] = event.name
-          forum['path'] = '/events/' + str(event.key().id())
-          forum['recipient_type'] = 'event'
-          messages = event.incoming_messages.order('-timestamp')
+            #event forum 
+            event = Event.get_by_id(int(url_data))
+            if not event or event.application.key().id() != application.key().id():
+              self.error(404)
+              return
+            forum['name'] = event.name
+            forum['path'] = '/events/' + str(event.key().id())
+            forum['recipient_type'] = 'event'
+            messages = event.incoming_messages.order('-timestamp')
         elif self.request.path.find('neighborhoods') == 1:
-          #neighborhood forum 
-          neighborhood = Neighborhood.get_by_id(int(url_data))
-          forum['name'] = neighborhood.name
-          forum['path'] = '/neighborhoods/' + str(neighborhood.key().id())
-          forum['recipient_type'] = 'neighborhood'
-          messages = neighborhood.incoming_messages.order('-timestamp')
+            #neighborhood forum 
+            neighborhood = Neighborhood.get_by_id(int(url_data))
+            forum['name'] = neighborhood.name
+            forum['path'] = '/neighborhoods/' + str(neighborhood.key().id())
+            forum['recipient_type'] = 'neighborhood'
+            messages = neighborhood.incoming_messages.order('-timestamp')
         else:
-          raise
+            raise
       
         forum['messages'] = messages.fetch(1000)
             

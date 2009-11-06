@@ -66,6 +66,8 @@ def add_messaging():
         (7, 'added_to_team', 'If someone adds me to their Flash team', ['email'], True),
         (8, 'welcome', 'When you create an account', [], False),
 
+        (9, 'event_forum', 'When a message is posted for an event to which you are signed up', ['email'], True),
+        (10, 'neighborhood_forum', 'When a message is posted to a neighborhood in which you are interested', [], True),
 
     )
 

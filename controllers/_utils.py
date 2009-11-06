@@ -80,7 +80,7 @@ def send_message(to, subject, body, type, sender = None, immediate=False, autoge
     mrs = []        
     for recipient in to:
         mr = MessageReceipt(
-          recipient2 = recipient,
+          recipient = recipient,
           message = message)
         mrs.append(mr)
 

@@ -31,10 +31,19 @@ class AbstractSendMessage(AbstractHandler):
                      autogen = False)
         
         return
+    
+    def _redirect_to(self):
+        return '/messages'
 
-
-class SendMessage_Personal(AbstractSendMessage):
-    #enter message into database
+    def _get_recipients(self, id):
+        raise
+    def _get_message_type(self):
+        raise
+    def _get_recipient_type(self):
+        raise
+    def _get_render_path(self):
+        raise
+    
     def post(self, url_data):
         try:
             account = self.auth(require_login=True)
@@ -42,21 +51,13 @@ class SendMessage_Personal(AbstractSendMessage):
             return
         
         id = url_data
-        if self.request.path.find('volunteers') == 1: #found at pos 1
-          #send to person
-          recipients = [Volunteer.get_by_id(int(id))]
-        elif self.request.path.find('events') == 1:
-          #send to event forum 
-          recipients = [Event.get_by_id(int(id))]
-        elif self.request.path.find('neighborhoods') == 1:
-          #send to neighborhood forum 
-          recipients = [Neighborhood.get_by_id(int(id))]
+        
+        recipients = self._get_recipients(id)
          
         params = Parameters.parameterize(self.request)
-        mt = MessageType.all().filter('name = ', 'person_to_person').get()
         
-        #from_header = 'From: %s\n\n'%account.name
-        #params['body'] = from_header + params['body']
+        mt = MessageType.all().filter('name = ', self._get_message_type()).get()  
+        
         self._send_message(sender = account, recipients = recipients, type = mt, params = params)
         session = Session()
         self.redirect(session.get('message_redirect','/'))
@@ -64,8 +65,8 @@ class SendMessage_Personal(AbstractSendMessage):
             self.redirect(session['message_redirect'])
             del session['message_redirect']
         else:
-            self.redirect('/messages')
-
+            self.redirect(self._redirect_to())
+            
     #show message entry form
     def get(self, url_data):
         try:
@@ -79,24 +80,10 @@ class SendMessage_Personal(AbstractSendMessage):
         id = url_data
  
         template_values = {}
-        if self.request.path.find('volunteers') == 1: #found at pos 1
-          #send to person
-          recipient = Volunteer.get_by_id(int(id))
-          template_values = {'recipient_type': 'volunteer'}
-          render_path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
-        elif self.request.path.find('events') == 1:
-          #send to event forum 
-          recipient = Event.get_by_id(int(id))
-          template_values = {'recipient_type': 'event'}
-          render_path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
-        elif self.request.path.find('neighborhoods') == 1:
-          #send to neighborhood forum 
-          recipient = Neighborhood.get_by_id(int(id))
-          template_values = {'recipient_type': 'neighborhood'}
-          render_path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
+        recipients = self._get_recipients(id)
+        render_path = self._get_render_path()
         
-        recipients = [recipient]
-        url = recipient.url()
+        url = recipients[0].url()
         
         if len(recipients) > 10: 
             recipients = ', '.join([r.name for r in recipients[:10]]) + '...'
@@ -106,9 +93,54 @@ class SendMessage_Personal(AbstractSendMessage):
         template_values.update({
           'volunteer': account.get_user(),
           'recipients': recipients,
-          'url': url
+          'url': url,
+          'recipient_type': self._get_recipient_type()
           })
         self._add_base_template_values(vals = template_values)
       
-        self.response.out.write(template.render(render_path, template_values))
+        self.response.out.write(template.render(render_path, template_values))        
+            
+class SendMessage_Personal(AbstractSendMessage):
+    #enter message into database
 
+    def _get_recipients(self, id):
+        #send to person
+        return [Volunteer.get_by_id(int(id)).account]
+
+    def _get_message_type(self):
+        return 'person_to_person'
+    
+    def _get_recipient_type(self):
+        return 'account'
+    
+    def _get_render_path(self):
+        return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
+    
+class SendMessage_Event(AbstractSendMessage):
+    def _get_recipients(self, id):
+        #send to person
+        return [Event.get_by_id(int(id))]
+
+    def _get_message_type(self):
+        return 'event_forum'
+
+    def _get_recipient_type(self):
+        return 'event'
+    
+    def _get_render_path(self):
+        return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
+    
+
+class SendMessage_Neighborhood(AbstractSendMessage):
+    def _get_recipients(self, id):
+        #send to person
+        return [Neighborhood.get_by_id(int(id))]
+
+    def _get_message_type(self):
+        return 'neighborhood_forum'
+
+    def _get_recipient_type(self):
+        return 'neighborhood'
+    
+    def _get_render_path(self):
+        return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')

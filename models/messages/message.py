@@ -68,7 +68,7 @@ class Message(db.Model):
         return self.sent_by
     
     def get_recipient(self):
-        return self.sent_to.get().recipient2.get_user()
+        return self.sent_to.get().recipient
 
     def _get_message_pref(self, recipient, prop):
         prefs = recipient._get_message_pref(type = self.type)
@@ -103,10 +103,10 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
         body = self.body + footer
         
         for mr in self.sent_to.filter('emailed =', False):    
-            if mr.recipient2 is None or \
-                not self._get_message_pref(recipient = mr.recipient2, prop = prop): 
+            if mr.recipient is None or \
+                not self._get_message_pref(recipient = mr.recipient, prop = prop): 
                 continue
-            message.to = mr.recipient2.name + "<" + mr.recipient2.get_email() + ">"
+            message.to = mr.recipient.name + "<" + mr.recipient.get_email() + ">"
             message.body = body
             try:
                 mr.emailed = True

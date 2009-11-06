@@ -140,7 +140,7 @@ class NeighborhoodDetailPage(AbstractHandler):
     #fill forum block
     forum = {}
     query = db.Query(MessageReceipt)
-    message_receipts = query.filter('recipient2 = ', neighborhood.key()).order('-timestamp').fetch(limit=6)
+    message_receipts = query.filter('recipient = ', neighborhood.key()).order('-timestamp').fetch(limit=6)
     messages = []
     for mr in message_receipts:
         messages.append(mr.message)

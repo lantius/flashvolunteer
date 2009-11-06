@@ -45,25 +45,25 @@ Flash Volunteer
 		                    <tr class="message {% if mr.read %}read{%else%}unread{%endif%}">
 		            	        <td>
 		                            <div class="volunteer_summary_pic">
-		                                <a href="{{ mr.message.sent_by.url }}" >
+		                                <a href="{{ mr.message.sender.url }}" >
 		                                    <img class="smallavatar" src="
-		                                    {% if mr.message.sent_by %}
-		                                        {% if mr.message.sent_by.avatar %}
-		                                            {{ mr.message.sent_by.url }}/avatar
+		                                    {% if mr.message.sender %}
+		                                        {% if mr.message.sender.avatar %}
+		                                            {{ mr.message.sender.url }}/avatar
 		                                        {% else %}
 		                                            /stylesheets/media/default-profile-pic-small.png
 		                                        {% endif %}
 		                                    {% else %}
 		                                       /stylesheets/media/fv_avatar.png
 		                                    {% endif %}
-		                                    " alt="{{ mr.message.sent_by.get_name }}" />
+		                                    " alt="{{ mr.message.sender.name }}" />
 		                                </a>
 		                            </div>
 								</td>
 		                        <td class="minfo">
 		                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %} From: {%endif%}
-		                        	<div>{% if mr.message.sent_by %}
-									         <a href="{{ mr.message.sent_by.url }}">{{ mr.message.sent_by.name }}</a>
+		                        	<div>{% if mr.message.sender %}
+									         <a href="{{ mr.message.sender.url }}">{{ mr.message.sender.name }}</a>
 										 {% else %}
 										    Flash Volunteer
 										 {%endif%}
@@ -107,7 +107,7 @@ Flash Volunteer
                                             {% else %}
                                                /stylesheets/media/fv_avatar.png
                                             {% endif %}
-                                            " alt="{{ message.get_recipient.get_name }}" />
+                                            " alt="{{ message.get_recipient.name }}" />
                                         </a>
                                     </div>
                                 </td>

@@ -77,9 +77,11 @@ class MigrateDatastore(AbstractHandler):
                 m.sender = m.sent_by.account
                 m.put()
         for mr in MessageReceipt.all():
-            mr.recipient2 = mr.recipient.account
-            mr.put()
-        
+            try:
+                mr.recipient = mr.recipient.account
+                mr.put()
+            except:
+                pass
         from models.eventphoto import EventPhoto
         for ep in EventPhoto.all():
             ep.account = ep.volunteer.account

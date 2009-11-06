@@ -29,21 +29,21 @@ Flash Volunteer
 	                            {% else %}
 								   /stylesheets/media/fv_avatar.png
 								{% endif %}
-	                            " alt="{{ message.get_recipient.get_name }}" />
+	                            " alt="{{ message.get_recipient.name }}" />
 							</a>
 						{% else %}
-	                        <a href="{{ message.sent_by.url }}" >
+	                        <a href="{{ message.sender.url }}" >
 	                            <img class="smallavatar" src="
-	                            {% if message.sent_by %}
-	                                {% if message.sent_by.avatar %}
-	                                    {{ message.sent_by.url }}/avatar
+	                            {% if message.sender %}
+	                                {% if message.sender.avatar %}
+	                                    {{ message.sender.url }}/avatar
 	                                {% else %}
 	                                    /stylesheets/media/default-profile-pic-small.png
 	                                {% endif %}
 	                            {% else %}
 	                               /stylesheets/media/fv_avatar.png
 	                            {% endif %}
-	                            " alt="{{ message.sent_by.get_name }}" />
+	                            " alt="{{ message.sender.name }}" />
 	                        </a>
 						
 						{% endif %}
@@ -59,8 +59,8 @@ Flash Volunteer
 						    {% else %}
 							     From:
                             {%endif%}
-                            {% if message.sent_by %}
-                                     <a href="{{ message.sent_by.url }}">{{ message.sent_by.name }}</a>
+                            {% if message.sender %}
+                                     <a href="{{ message.sender.url }}">{{ message.sender.name }}</a>
                              {% else %}
                                      Flash Volunteer
                              {%endif%}						
@@ -70,7 +70,7 @@ Flash Volunteer
 					{% if message.autogen %}
 					{% else %}
 					   <div class="operations">
-					   	   {% if sender_viewing %}{% else %}<a href="{{message.sent_by.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
+					   	   {% if sender_viewing %}{% else %}<a href="{{message.sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
 					   </div>
 					{%endif%}
 				</li>

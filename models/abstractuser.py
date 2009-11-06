@@ -112,8 +112,6 @@ class AbstractUser(db.Model):
     def events_future(self):
       return [e for e in self.events() if not e.inpast() and not e.hidden]
     
-
-    
     def add_application(self, application):
         self.applications.append(application.key().id())
         self.put()
