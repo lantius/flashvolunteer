@@ -41,6 +41,8 @@ from controllers.abstract_handler import AbstractHandler
 
 from controllers._utils import get_server, is_debugging
 
+from controllers.admin.home import AdminPage
+
 webapp.template.register_template_library('templatetags.filters')
 
 ################################################################################
@@ -153,7 +155,10 @@ def real_main():
            ('/timeout', TimeoutPage),
            
            ('/api/applications/all', AllApplications), 
-           ('/api/applications/this', ThisApplication)
+           ('/api/applications/this', ThisApplication),
+
+           #TODO: route here? admin tools
+           ('/admin', AdminPage)
           ],
           debug=debug)
     wsgiref.handlers.CGIHandler().run(application)

@@ -54,7 +54,8 @@ class Login(AbstractHandler):
         if auth is None:
             account = Account(
                 preferred_email = user.email(),
-                name = user.email()
+                name = user.email(),
+                group_wheel = False
             )
             account.put()
 

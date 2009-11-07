@@ -1,0 +1,51 @@
+{% extends "../_layout.html" %}
+{% block title %}
+Flash Volunteer Admin Page
+{% endblock title %}
+
+{% block adminactive %}class="current"{% endblock adminactive %}
+
+{% block head %} 
+        <!-- 
+        <script type="text/javascript" src="/stylesheets/javascript/mtaTwitterStatuses.js"></script>
+        -->
+{% endblock head %}
+
+
+{% block content %}
+
+{% if not account.is_admin %}
+<div id="home-top">
+
+    <div id="home-error">
+        This section is for Flash Volunteer {{application_alias}} administrators!  Volunteer through the <a href='../'>mainpage</a> or change your admin status
+    </div>
+    
+{%else%}
+
+<div id="home-top">
+	
+	<div id="home-about" class="fl">
+		 
+	    <div id="about">
+	        <p>FV Admin task page (doesn't do anything yet!)</p>
+	    </div>
+	</div>				
+	
+	<div style="clear: both;"></div>
+</div>
+<div id="admintask">
+
+	{% include "_unverified_event_list.html" %}
+
+    <div class="submit_verify_events">
+        <input type="submit" id="s_verify_events" value="Verify These Events" /> 
+    </div>
+
+	<div style="clear: both;"></div>
+
+</div>
+
+{%endif%}
+
+{% endblock content %}

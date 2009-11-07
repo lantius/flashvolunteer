@@ -9,6 +9,7 @@ from components.sessions import Session
 class Account(db.Model):
     user = db.UserProperty()
     name = db.StringProperty()    
+    group_wheel = db.BooleanProperty() #admin permissions flag
 
     preferred_email = db.StringProperty(default=None)
     active_applications = db.ListProperty(int)
@@ -131,4 +132,8 @@ class Account(db.Model):
   
     def avatar(self):
         return self.get_user().avatar
+
+    def is_admin(self):
+#TODO: make sure this test is valid...
+        return self.group_wheel
   
