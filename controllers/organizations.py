@@ -31,38 +31,37 @@ class OrganizationsPage(AbstractHandler):
 
   ################################################################################
   # SHOW
-  def show(self, volunteer_id):
+  def show(self, organization_id):
     try:
-      volunteer = self.auth(require_login=True)
+      account = self.auth(require_login=True)
     except:
       return
 
-    if volunteer and volunteer.key().id() == int(volunteer_id):
+    user = account.get_user()
+    if user and uer.key().id() == int(organization_id):
       self.redirect("/settings")
       return
     
     session = Session()
-    if not volunteer or not session.sid:
+    if not user or not session.sid:
       self.redirect("/setting")
       return
 
     page_organization = Organization.get_by_id(int(organization_id))
 
-    if not page_volunteer:
+    if not page_organization:
       self.error(404)
       return
 
-    organizationfollower = OrganizationFollower.gql("WHERE organization = :organization AND follower = :follower" ,
-                      organization=page_organization, follower=volunteer).get()
-
-    event_access = page_volunteer.event_access(account = volunteer.account) 
-
-    future_events = page_volunteer.events_future()[:VolunteersPage.LIMIT]
-    template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
-                        'volunteerfollower' : volunteerfollower,
-                        'volunteerfollowing' : volunteerfollowing,
-                        'page_volunteer': page_volunteer,
-                        'volunteer' : volunteer,
+    organizationfollower = page_organization.account.followers.filter('account =', account).get()
+    event_access = page_organization.event_access(account=account)
+    
+    future_events = page_organization.events_future()[:VolunteersPage.LIMIT]
+    
+    template_values = { 'eventvolunteer': page_organization.eventvolunteers, 
+                        'volunteerfollower' : organizationfollower,
+                        'page_volunteer': page_organization,
+                        'volunteer' : user,
                         'event_access': event_access,
                         'future_events': future_events
                         }
@@ -81,7 +80,7 @@ class OrganizationsPage(AbstractHandler):
   # SEARCH
   def search(self, params):
     try:
-      volunteer = self.auth(require_login=True)
+      account = self.auth(require_login=True)
     except:
       return
     
@@ -139,15 +138,15 @@ class FollowOrganization(AbstractHandler):
   # POST
   def post(self, url_data):
     try:
-      volunteer = self.auth(require_login=True)
+      account = self.auth(require_login=True)
     except:
       return
 
     to_follow = Organization.get_by_id(int(url_data))
 
     if to_follow:
-      organizationfollower = OrganizationFollower.gql("WHERE organization = :organization AND follower = :follower" ,
-      organization=to_follow, follower=volunteer).get()
+      organizationfollower = to_follow.account.followers.filter('account =', account).get()
+      
       if self.request.get('delete') and self.request.get('delete') == "true":
         if organizationfollower:
           organizationfollower.delete()
@@ -155,6 +154,7 @@ class FollowOrganization(AbstractHandler):
         if not organizationfollower:
           orgaizationfollower = OrganizationFollower(organization=to_follow, follower=volunteer)
           orgaizationfollower.put()
+          
 
     #self.redirect('/volunteers/' + url_data)
     self.redirect(self.request.referrer)
@@ -164,13 +164,13 @@ class FollowOrganization(AbstractHandler):
 
 ################################################################################
 # VolunteerAvatar
-class OrganizationLogo(AbstractHandler):
+class OrganizationAvatar(AbstractHandler):
   ################################################################################
   # GET
   def get(self, url_data):
     organization = Organization.get_by_id(int(url_data))
-    if organization.logo:
-      self.response.headers['Content-Type'] = str(organization.logo_type)
+    if organization.avatar:
+      self.response.headers['Content-Type'] = str(organization.avatar_type)
       self.response.out.write(organization.avatar)
     else:
       self.error(404)
@@ -179,7 +179,7 @@ class OrganizationLogo(AbstractHandler):
   # POST
   def post(self):
     try:
-      volunteer = self.auth(require_login=True)
+      account = self.auth(require_login=True)
     except:
       return
       
@@ -201,16 +201,17 @@ class OrganizationLogo(AbstractHandler):
   ################################################################################
   # UPDATE
   def update(self, params, organization):
-    if 'logo' in params and params['logo']:
-      if len(params['logo']) > 50 * 2**10:
+    if 'avatar' in params and params['avatar']:
+      if len(params['avatar']) > 50 * 2**10:
         return
         
-      content_type = imghdr.what(None, params['logo'])
+      content_type = imghdr.what(None, params['avatar'])
       if not content_type:
         return
-
-      organization.logo_type = 'image/' + content_type
-      organization.logo = params['logo']
-      organization.put()
+    
+      user = account.get_user()
+      user.avatar_type = 'image/' + content_type
+      user.avatar = params['avatar']
+      user.put()
 
     
