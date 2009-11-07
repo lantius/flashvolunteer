@@ -1,0 +1,23 @@
+<div id="unverifiedevents" class="hardmodule">
+    <div class="moduletitle"><h3>Unverified Events <a style="cursor:pointer" title="A list of the next few upcoming events hosted by Flash Volunteers. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
+    <ul>            
+        {% for event in unverified_events %}
+            {% include "_verifiable_event_list_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
+{% if unverified_events %}
+    {% ifnotequal unverified_events|length 0 %}
+    <div class="pagination_entry">
+    <!--
+    <a href="/events/upcoming/1">&raquo; View all</a>
+    -->
+    </div>
+    {% endifnotequal %}
+{%else%}
+	<div>
+        Found no unverified Events.
+	</div>
+{% endif %}
+
+
