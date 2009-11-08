@@ -96,14 +96,28 @@ def send_message(to, subject, body, type, sender = None, immediate=False, autoge
                     logging.error('Could not add message receipt of message %i for recipient %i'%(message.key().id(), mr.recipient.key().id()))
 
     if immediate:
-        check_messages()
+        message.send()
 
 from datetime import datetime
+from google.appengine.ext import deferred
+
 def check_messages():
+    deferred.defer(_check_messages)
+    
+def _check_messages():
     from models.messages.message import Message
     from components.time_zones import now
 
-    messages_to_send = Message.all().filter('sent =', False).filter('trigger <', datetime.now())
+    messages_to_send = Message.all().filter('sent =', False).filter('in_task_queue =', False).filter('trigger <', datetime.now())
 
     for message in messages_to_send:
-        message.send()    
+        message.in_task_queue = True
+        message.put()
+    
+    for message in messages_to_send:
+        try:
+            message.send()    
+        finally:
+            message.in_task_queue = False
+            message.put()
+    

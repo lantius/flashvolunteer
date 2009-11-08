@@ -10,12 +10,13 @@ class EventPhoto(db.Model):
                                required = True,
                                collection_name = 'eventphotos')
   
+  ##### DEPRECATED
   #person who posted photo or created album
   volunteer = db.ReferenceProperty(Volunteer,
                                     required = True,
                                     collection_name = 'eventphotos')
-  
-  #todo: remove volunteer
+  ###########################
+    
   account = db.ReferenceProperty(Account,
 #                                 required = True,
                                  collection_name = 'eventphotos')  

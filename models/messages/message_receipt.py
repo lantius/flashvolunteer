@@ -15,8 +15,6 @@ class MessageReceipt(db.Model):
     message = db.ReferenceProperty(Message, collection_name = 'sent_to', required = True)
     recipient = db.ReferenceProperty(reference_class = None, collection_name = 'incoming_messages')
 
-    #recipient2 = db.ReferenceProperty(reference_class = None, collection_name = 'incoming_messages')
-
     read = db.BooleanProperty(default = False)
 
     timestamp = db.DateTimeProperty(auto_now_add = True)

@@ -11,7 +11,7 @@ from models.volunteer import Volunteer
 from models.event import Event
 from models.neighborhood import Neighborhood
 
-from components.message_text import event_forum_txt, neigborhood_forum_txt
+from components.message_text import event_forum_txt, neighborhood_forum_txt
 
 from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging, send_message
@@ -64,7 +64,7 @@ class AbstractSendMessage(AbstractHandler):
         mt = MessageType.all().filter('name = ', self._get_message_type()).get()  
         
         self._send_message(sender = account, recipients = recipients, type = mt, params = params)
-        _do_additional_post_processing(id= id, sender = sender, params = params)
+        self._do_additional_post_processing(id = id, sender = account, params = params)
 
         session = Session()
                 
@@ -126,8 +126,7 @@ class SendMessage_Personal(AbstractSendMessage):
 class SendMessage_Event(AbstractSendMessage):
     def _get_recipients(self, id, sender):
         event = Event.get_by_id(int(id))
-        attendees = [ev.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
-        return [event] + attendees
+        return [event]
 
     def _get_message_type(self):
         return 'event_forum_main_message'
@@ -138,7 +137,7 @@ class SendMessage_Event(AbstractSendMessage):
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
     
-    def _do_additional_post_processing(id, sender, params):
+    def _do_additional_post_processing(self, id, sender, params):
         event = Event.get_by_id(int(id))
         recipients = [ev.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
         
@@ -148,13 +147,13 @@ class SendMessage_Event(AbstractSendMessage):
             'message_subject': params['subject'],
             'sender_name' : sender.name,
             'event_name': event.name,
-            'event_url' : event.url()
+            'event_url' : self._get_base_url() + event.url()
         }
         
         params['body'] = event_forum_txt.body%substitution_params
         params['subject'] = event_forum_txt.subject%substitution_params
         
-        self._send_message(sender = account, recipients = recipients, type = mt, params = params, autogen = True, forum = False)
+        self._send_message(sender = sender, recipients = recipients, type = mt, params = params, autogen = True, forum = False)
         
 
 class SendMessage_Neighborhood(AbstractSendMessage):
@@ -171,7 +170,7 @@ class SendMessage_Neighborhood(AbstractSendMessage):
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
 
-    def _do_additional_post_processing(id, sender, params):
+    def _do_additional_post_processing(self, id, sender, params):
         neighborhood = Neighborhood.get_by_id(int(id))
         recips = dict([(v.account.key().id(),v.account) for v in neighborhood.home_neighborhood if v.account.key().id() != sender.key().id()])
         recips.update(dict([(v.account.key().id(),v.account) for v in neighborhood.work_neighborhood if v.account.key().id() != sender.key().id()]))
@@ -183,10 +182,10 @@ class SendMessage_Neighborhood(AbstractSendMessage):
             'message_subject': params['subject'],
             'sender_name' : sender.name,
             'neighborhood_name': neighborhood.name,
-            'neighborhood_url' : neighborhood.url()
+            'neighborhood_url' : self._get_base_url() + neighborhood.url()
         }
         
         params['body'] = neighborhood_forum_txt.body%substitution_params
         params['subject'] = neighborhood_forum_txt.subject%substitution_params
         
-        self._send_message(sender = account, recipients = recipients, type = mt, params = params, autogen = True, forum = False)
+        self._send_message(sender = sender, recipients = recipients, type = mt, params = params, autogen = True, forum = False)

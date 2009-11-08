@@ -11,9 +11,13 @@ class EventVolunteer(db.Model):
   event = db.ReferenceProperty(Event,
                                required = True,
                                collection_name = 'eventvolunteers')
+  
+  ##### DEPRECATED
   volunteer = db.ReferenceProperty(Volunteer,
                    #                 required = True,
                                     collection_name = 'eventvolunteers')
+  #####################
+  
   account = db.ReferenceProperty(Account,
                    #                 required = True,
                                     collection_name = 'eventvolunteers')

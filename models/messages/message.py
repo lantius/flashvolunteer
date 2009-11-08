@@ -1,4 +1,4 @@
-import re, logging
+import re, logging, time
 
 from google.appengine.ext import db
 from google.appengine.api import mail
@@ -24,9 +24,10 @@ class Message(db.Model):
     
     trigger = db.DateTimeProperty(auto_now_add = True)
     
-    sent = db.BooleanProperty(default = False)
     
+    ##### DEPRECATED; user sender
     sent_by = db.ReferenceProperty(Volunteer, collection_name = 'sent_messages')
+    ###############
     
     sender = db.ReferenceProperty(Account, collection_name = 'sent_messages')
     
@@ -38,6 +39,11 @@ class Message(db.Model):
     autogen = db.BooleanProperty(default = True)
     
     forum_msg = db.BooleanProperty(default = False)
+
+    #### state of message sending 
+    sent = db.BooleanProperty(default = False)
+    in_task_queue = db.BooleanProperty(default = False)
+    ##############
     
     def send(self):
         if self.flagged and not self.verified: return
@@ -50,9 +56,9 @@ class Message(db.Model):
                 self.email()
             except Exception, e:
                 logging.error('could not send message %i %s: %s'%(self.key().id(), self.subject, str(e)))
-                self.sent = False
+                self.sent = False            
                 self.put()
-
+            
     def get_mailbox_friendly_body(self):
         reg = r"(http://(www\.)?([-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]))"
         msg = re.sub(reg,r'<a rel="nofollow" target="_blank" href="\1">\1</a>', remove_html_tags(self.body).replace('\n','<br>'))
@@ -123,7 +129,9 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
             try:
                 mr.emailed = True
                 mr.put()
-                message.send() #TODO: put this on a task queue
+                #rate limiting for email sending. quota is 8 per minute free
+                time.sleep(8)
+                message.send()
             except:
                 mr.emailed = False
                 mr.put()
