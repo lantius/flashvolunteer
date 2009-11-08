@@ -37,6 +37,8 @@ class Message(db.Model):
     
     autogen = db.BooleanProperty(default = True)
     
+    forum_msg = db.BooleanProperty(default = False)
+    
     def send(self):
         if self.flagged and not self.verified: return
 
@@ -82,7 +84,16 @@ class Message(db.Model):
     def email(self):
         domain = 'http://www.' + get_domain()
 
-        footer = """\n
+        if self.forum_msg:
+            footer = """\n
+---
+If you have feedback for us at Flash Volunteer, please visit http://flashvolunteer.uservoice.com/. 
+
+If you would prefer not to receive these types of messages, visit %(domain)s/settings and adjust your Message preferences.
+"""%{'domain': domain, 'message_url': self.url()}  
+
+        else:
+            footer = """\n
 ---
 To view and reply to this message on Flash Volunteer, visit %(domain)s%(message_url)s.
 

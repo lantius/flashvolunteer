@@ -156,3 +156,39 @@ Here are the events we think you might be interested in, based on the neighborho
 %(recommendation_text)s 
 """
 )
+
+
+###############################################################
+# post to forum
+###############################################################
+
+event_forum_txt = msg(
+
+    subject = '%(sender_name)s posted a message to event "%(event_name)s"',
+    body = """Hello, 
+
+%(sender_name)s sent a message to event "%(event_name)s". 
+
+Subject: "%(message_subject)s"
+Body: "%(message_body)s"
+
+To see this event's message forum, follow the link below: 
+%(event_url)s 
+"""
+)
+
+neighborhood_forum_txt = msg(
+
+    subject = '%(sender_name)s posted a message to "%(neighborhood_name)s"',
+    body = """Hello, 
+
+%(sender_name)s sent a message to "%(neighborhood_name)s". 
+
+Subject: "%(message_subject)s"
+Body: "%(message_body)s"
+
+To see this event's message forum, follow the link below: 
+%(neighborhood_url)s 
+"""
+)
+

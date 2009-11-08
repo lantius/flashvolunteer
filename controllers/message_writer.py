@@ -6,11 +6,12 @@ from google.appengine.ext import webapp
 
 from controllers._params import Parameters
 
-
 from models.messages import MessageType
 from models.volunteer import Volunteer
 from models.event import Event
 from models.neighborhood import Neighborhood
+
+from components.message_text import event_forum_txt, neigborhood_forum_txt
 
 from controllers.abstract_handler import AbstractHandler
 from controllers._utils import is_debugging, send_message
@@ -20,7 +21,7 @@ from components.sessions import Session
 class AbstractSendMessage(AbstractHandler):
     ################################################################################
     # POST
-    def _send_message(self, sender, recipients, type, params):            
+    def _send_message(self, sender, recipients, type, params, autogen = False, forum = True):            
         if len(recipients) == 0: return
         
         send_message(to = recipients, 
@@ -28,7 +29,8 @@ class AbstractSendMessage(AbstractHandler):
                      body = params['body'], 
                      type = type, 
                      sender = sender,
-                     autogen = False)
+                     autogen = autogen,
+                     forum = forum)
         
         return
     
@@ -43,6 +45,9 @@ class AbstractSendMessage(AbstractHandler):
         raise
     def _get_render_path(self):
         raise
+    
+    def _do_additional_post_processing(self, id, sender, params):
+        pass
     
     def post(self, url_data):
         try:
@@ -59,8 +64,10 @@ class AbstractSendMessage(AbstractHandler):
         mt = MessageType.all().filter('name = ', self._get_message_type()).get()  
         
         self._send_message(sender = account, recipients = recipients, type = mt, params = params)
+        _do_additional_post_processing(id= id, sender = sender, params = params)
+
         session = Session()
-        self.redirect(session.get('message_redirect','/'))
+                
         if 'message_redirect' in session:
             self.redirect(session['message_redirect'])
             del session['message_redirect']
@@ -123,7 +130,7 @@ class SendMessage_Event(AbstractSendMessage):
         return [event] + attendees
 
     def _get_message_type(self):
-        return 'event_forum'
+        return 'event_forum_main_message'
 
     def _get_recipient_type(self):
         return 'event'
@@ -131,20 +138,55 @@ class SendMessage_Event(AbstractSendMessage):
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
     
+    def _do_additional_post_processing(id, sender, params):
+        event = Event.get_by_id(int(id))
+        recipients = [ev.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
+        
+        mt = MessageType.all().filter('name = ', 'event_forum').get()
+        substitution_params = {
+            'message_body': params['body'],
+            'message_subject': params['subject'],
+            'sender_name' : sender.name,
+            'event_name': event.name,
+            'event_url' : event.url()
+        }
+        
+        params['body'] = event_forum_txt.body%substitution_params
+        params['subject'] = event_forum_txt.subject%substitution_params
+        
+        self._send_message(sender = account, recipients = recipients, type = mt, params = params, autogen = True, forum = False)
+        
 
 class SendMessage_Neighborhood(AbstractSendMessage):
     def _get_recipients(self, id, sender):
         neighborhood = Neighborhood.get_by_id(int(id))
-        recips = dict([(v.account.key().id(),v.account) for v in neighborhood.home_neighborhood if v.account.key().id() != sender.key().id()])
-        recips.update(dict([(v.account.key().id(),v.account) for v in neighborhood.work_neighborhood if v.account.key().id() != sender.key().id()]))
-            
-        return [neighborhood] + recips.values()
-
+        return [neighborhood]
+    
     def _get_message_type(self):
-        return 'neighborhood_forum'
+        return 'neighborhood_forum_main_message'
 
     def _get_recipient_type(self):
         return 'neighborhood'
     
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
+
+    def _do_additional_post_processing(id, sender, params):
+        neighborhood = Neighborhood.get_by_id(int(id))
+        recips = dict([(v.account.key().id(),v.account) for v in neighborhood.home_neighborhood if v.account.key().id() != sender.key().id()])
+        recips.update(dict([(v.account.key().id(),v.account) for v in neighborhood.work_neighborhood if v.account.key().id() != sender.key().id()]))
+        recipients = recips.values()
+        
+        mt = MessageType.all().filter('name = ', 'neighborhood_forum').get()
+        substitution_params = {
+            'message_body': params['body'],
+            'message_subject': params['subject'],
+            'sender_name' : sender.name,
+            'neighborhood_name': neighborhood.name,
+            'neighborhood_url' : neighborhood.url()
+        }
+        
+        params['body'] = neighborhood_forum_txt.body%substitution_params
+        params['subject'] = neighborhood_forum_txt.subject%substitution_params
+        
+        self._send_message(sender = account, recipients = recipients, type = mt, params = params, autogen = True, forum = False)

@@ -60,7 +60,7 @@ def get_google_maps_api_key():
 
 
 
-def send_message(to, subject, body, type, sender = None, immediate=False, autogen = True):
+def send_message(to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
     from models.messages.message import Message
     from models.messages import MessageReceipt
     from components.time_zones import now
@@ -74,7 +74,8 @@ def send_message(to, subject, body, type, sender = None, immediate=False, autoge
       body = body,
       sender = sender,
       type = type,
-      autogen = autogen
+      autogen = autogen,
+      forum_msg = forum
     )
     message.put()
     mrs = []        

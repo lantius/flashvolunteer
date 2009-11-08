@@ -66,9 +66,14 @@ def add_messaging():
         (7, 'added_to_team', 'If someone adds me to their Flash team', ['email'], True),
         (8, 'welcome', 'When you create an account', [], False),
 
+        #### Event_forum and neighborhood forum are the notifications that event_forum_main_message or neighborhood_main_message
+        # was send. So individuals never receive an event of the latter two.
         (9, 'event_forum', 'When a message is posted for an event to which you are signed up', ['email'], True),
         (10, 'neighborhood_forum', 'When a message is posted to a neighborhood in which you are interested', [], True),
 
+        (11, 'event_forum_main_message', '', [], False),
+        (12, 'neighborhood_forum_main_message', '', [], False),
+        ###########################################
     )
 
     for order, name, prompt, mpts, in_settings in message_types:
