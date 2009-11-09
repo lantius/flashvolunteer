@@ -14,6 +14,9 @@ from controllers._utils import is_debugging
 
 from components.time_zones import Pacific, utc
 
+from google.appengine.ext import deferred
+
+    
 def remove_html_tags(data):
     p = re.compile(r'<.*?>')
     return p.sub('', data)
@@ -24,13 +27,10 @@ class Message(db.Model):
     
     trigger = db.DateTimeProperty(auto_now_add = True)
     
-    
     ##### DEPRECATED; user sender
-    sent_by = db.ReferenceProperty(Volunteer, collection_name = 'sent_messages')
+    sent_by = db.ReferenceProperty(reference_class = None, collection_name = 'sent_messages')
     ###############
-    
-    sender = db.ReferenceProperty(Account, collection_name = 'sent_messages')
-    
+        
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)
         
@@ -73,7 +73,7 @@ class Message(db.Model):
         return self.trigger.replace(tzinfo=utc).astimezone(Pacific).strftime("%m/%d/%Y %H:%M")
     
     def get_sender(self):
-        return self.sender
+        return self.sent_by
     
     def get_recipient(self):
         return self.sent_to.get().recipient
@@ -112,10 +112,6 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
             footer = "\n\nThanks!\nThe Flash Volunteer team%s"%footer 
         
         prop = MessagePropagationType.all().filter('name =', 'email').get()
-
-        message = mail.EmailMessage(
-            sender="Flash Volunteer <noreply@flashvolunteer.org>",
-            subject=self.subject)
            
         body = self.body + footer
         
@@ -124,15 +120,28 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
                 not isinstance(mr.recipient, Account) or \
                 not self._get_message_pref(recipient = mr.recipient, prop = prop): 
                 continue
-            message.to = mr.recipient.name + "<" + mr.recipient.get_email() + ">"
-            message.body = body
+            
             try:
-                mr.emailed = True
+                mr.emailed = True    
                 mr.put()
                 #rate limiting for email sending. quota is 8 per minute free
-                time.sleep(8)
-                message.send()
-            except:
+                deferred.defer(send_email, 
+                               subject = self.subject,
+                               to = mr.recipient.name + "<" + mr.recipient.get_email() + ">", 
+                               body = body,
+                               _queue="email")
+                
+            except Exception, e:
                 mr.emailed = False
                 mr.put()
+                raise
                 
+def send_email(subject, to, body):
+    message = mail.EmailMessage(
+            sender="Flash Volunteer <noreply@flashvolunteer.org>",
+            subject=subject,
+            to = to,
+            body = body
+            )
+    message.send()
+    

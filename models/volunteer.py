@@ -74,6 +74,7 @@ class Volunteer(AbstractUser):
             return recommended_events
     
         vol_events = dict([(e.key().id(),1) for e in self.events_future()])
+        vol_events.update(dict([(e.key().id(),1) for e in self.events_coordinating()]))
     
         neighborhoods = {}
         if(self.work_neighborhood):

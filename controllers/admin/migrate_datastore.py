@@ -74,8 +74,11 @@ class MigrateDatastore(AbstractHandler):
                 mp.put()
         for m in Message.all():
             if m.sent_by:
-                m.sender = m.sent_by.account
-                m.put()
+                try:
+                    m.sent_by = m.sent_by.account
+                    m.put()
+                except:
+                    pass
         for mr in MessageReceipt.all():
             try:
                 mr.recipient = mr.recipient.account

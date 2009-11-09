@@ -45,25 +45,25 @@ Flash Volunteer
 		                    <tr class="message {% if mr.read %}read{%else%}unread{%endif%}">
 		            	        <td>
 		                            <div class="volunteer_summary_pic">
-		                                <a href="{{ mr.message.sender.url }}" >
+		                                <a href="{{ mr.message.get_sender.url }}" >
 		                                    <img class="smallavatar" src="
-		                                    {% if mr.message.sender %}
-		                                        {% if mr.message.sender.avatar %}
-		                                            {{ mr.message.sender.url }}/avatar
+		                                    {% if mr.message.get_sender %}
+		                                        {% if mr.message.get_sender.avatar %}
+		                                            {{ mr.message.get_sender.url }}/avatar
 		                                        {% else %}
 		                                            /stylesheets/media/default-profile-pic-small.png
 		                                        {% endif %}
 		                                    {% else %}
 		                                       /stylesheets/media/fv_avatar.png
 		                                    {% endif %}
-		                                    " alt="{{ mr.message.sender.name }}" />
+		                                    " alt="{{ mr.message.get_sender.name }}" />
 		                                </a>
 		                            </div>
 								</td>
 		                        <td class="minfo">
 		                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %} From: {%endif%}
-		                        	<div>{% if mr.message.sender %}
-									         <a href="{{ mr.message.sender.url }}">{{ mr.message.sender.name }}</a>
+		                        	<div>{% if mr.message.get_sender %}
+									         <a href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
 										 {% else %}
 										    Flash Volunteer
 										 {%endif%}

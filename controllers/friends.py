@@ -24,29 +24,19 @@ class FriendsPage(AbstractHandler):
     
         volunteer = account.get_user()
         candidates = list(volunteer.friends()) + list(volunteer.following_only())
-        volunteers = Volunteer.all().fetch(limit=500)
              
         volunteer_stats = memcache.get('volunteer_stats')
         if not volunteer_stats: 
-            stats = {}       
+            volunteers = get_all_volunteers()
+            all_scores = []
                                       
             for v in volunteers:
-                vhours = 0
-                attended = 0
-                isowner = 0
-                                                  
-                for ev in v.account.eventvolunteers:                
-                    vhours += sum([ev.hours for ev in v.eventvolunteers if ev.hours])
-                    attended += sum([ev.attended for ev in v.eventvolunteers if ev.attended])
-                    isowner += sum([ev.isowner for ev in v.eventvolunteers if ev.isowner]) 
+                vhours = sum([ev.hours for ev in v.eventvolunteers if ev.hours])
+                attended = len([ev for ev in v.eventvolunteers if ev.attended])
+                isowner = len([ev for ev in v.eventvolunteers if ev.isowner]) 
 
-                        
-                stats[v] = [attended,isowner]          
-            
-            all_scores = []                                             
-            for ev,scores in stats.items():
-                if sum(scores):
-                    all_scores.append((ev, sum(scores), scores))
+                total = attended + isowner
+                all_scores.append((v, total, [attended, isowner]))
     
             all_scores.sort(lambda (ev, total, scores), (ev2, total2, scores2): int(total-total2), reverse=True)                                                                    
             
@@ -68,3 +58,24 @@ class FriendsPage(AbstractHandler):
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'team.html')
         self.response.out.write(template.render(path, template_values))
         return
+
+def get_all_volunteers():
+    vols = []
+    CHUNK_SIZE = 250
+    
+    last_key = None
+    while True:
+        if last_key:
+            query = Volunteer.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
+        else:
+            query = Volunteer.gql('ORDER BY __key__')
+        
+        vol_in_chunk = query.fetch(limit = CHUNK_SIZE + 1)
+        
+        if len(vol_in_chunk) == CHUNK_SIZE + 1:
+            recipients += vol_in_chunk[:-1]
+            last_key = vol_in_chunk[-1].key()
+        else:
+            vols += vol_in_chunk
+            break
+    return vols

@@ -24,6 +24,8 @@ class AbstractSendMessage(AbstractHandler):
     def _send_message(self, sender, recipients, type, params, autogen = False, forum = True):            
         if len(recipients) == 0: return
         
+        logging.info('recipient list size is %i'%len(recipients))
+        
         send_message(to = recipients, 
                      subject = params['subject'], 
                      body = params['body'], 
@@ -45,11 +47,16 @@ class AbstractSendMessage(AbstractHandler):
         raise
     def _get_render_path(self):
         raise
+    def _is_forum_post(self):
+        return False
+    def _get_url(self, recipients):
+        return recipients[0].url()
+
     
     def _do_additional_post_processing(self, id, sender, params):
         pass
     
-    def post(self, url_data):
+    def post(self, url_data = None):
         try:
             account = self.auth(require_login=True)
         except:
@@ -63,7 +70,7 @@ class AbstractSendMessage(AbstractHandler):
         
         mt = MessageType.all().filter('name = ', self._get_message_type()).get()  
         
-        self._send_message(sender = account, recipients = recipients, type = mt, params = params)
+        self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = self._is_forum_post())
         self._do_additional_post_processing(id = id, sender = account, params = params)
 
         session = Session()
@@ -75,7 +82,7 @@ class AbstractSendMessage(AbstractHandler):
             self.redirect(self._redirect_to())
             
     #show message entry form
-    def get(self, url_data):
+    def get(self, url_data = None):
         try:
             account = self.auth(require_login=True)
         except:
@@ -90,7 +97,7 @@ class AbstractSendMessage(AbstractHandler):
         recipients = self._get_recipients(id, account)
         render_path = self._get_render_path()
         
-        url = recipients[0].url()
+        url = self._get_url(recipients)
         
         if len(recipients) > 10: 
             recipients = ', '.join([r.name for r in recipients[:10]]) + '...'
@@ -136,7 +143,11 @@ class SendMessage_Event(AbstractSendMessage):
     
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
-    
+
+    def _is_forum_post(self):
+        return True
+
+
     def _do_additional_post_processing(self, id, sender, params):
         event = Event.get_by_id(int(id))
         recipients = [ev.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
@@ -169,6 +180,9 @@ class SendMessage_Neighborhood(AbstractSendMessage):
     
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_forumpost.html')
+
+    def _is_forum_post(self):
+        return True
 
     def _do_additional_post_processing(self, id, sender, params):
         neighborhood = Neighborhood.get_by_id(int(id))

@@ -6,7 +6,7 @@
 				<li>
 					{% for m in event.messages %}
 						<div class="eventmessage">
-						<div class="emsender"><span class="label">From:</span> <a href="{{ m.sender.url }}">{{ m.sender.name }}</a></div>
+						<div class="emsender"><span class="label">From:</span> <a href="{{ m.sent_by.url }}">{{ m.sent_by.name }}</a></div>
 						<div class="emsenttime">{{ m.get_sent_time }}</div>
 						<div class="emsubject"><span class="label">Subject:</span> {{ m.title }}</div>
 						<div class="emmessage">{{ m.content }}</div>

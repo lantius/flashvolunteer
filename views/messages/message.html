@@ -32,18 +32,18 @@ Flash Volunteer
 	                            " alt="{{ message.get_recipient.name }}" />
 							</a>
 						{% else %}
-	                        <a href="{{ message.sender.url }}" >
+	                        <a href="{{ message.get_sender.url }}" >
 	                            <img class="smallavatar" src="
-	                            {% if message.sender %}
-	                                {% if message.sender.avatar %}
-	                                    {{ message.sender.url }}/avatar
+	                            {% if message.get_sender %}
+	                                {% if message.get_sender.avatar %}
+	                                    {{ message.get_sender.url }}/avatar
 	                                {% else %}
 	                                    /stylesheets/media/default-profile-pic-small.png
 	                                {% endif %}
 	                            {% else %}
 	                               /stylesheets/media/fv_avatar.png
 	                            {% endif %}
-	                            " alt="{{ message.sender.name }}" />
+	                            " alt="{{ message.get_sender.name }}" />
 	                        </a>
 						
 						{% endif %}
@@ -59,8 +59,8 @@ Flash Volunteer
 						    {% else %}
 							     From:
                             {%endif%}
-                            {% if message.sender %}
-                                     <a href="{{ message.sender.url }}">{{ message.sender.name }}</a>
+                            {% if message.get_sender %}
+                                     <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
                              {% else %}
                                      Flash Volunteer
                              {%endif%}						
@@ -70,7 +70,7 @@ Flash Volunteer
 					{% if message.autogen %}
 					{% else %}
 					   <div class="operations">
-					   	   {% if sender_viewing %}{% else %}<a href="{{message.sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
+					   	   {% if sender_viewing %}{% else %}<a href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
 					   </div>
 					{%endif%}
 				</li>

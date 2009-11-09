@@ -17,7 +17,7 @@ from components.sessions import Session
 from controllers.message_writer import AbstractSendMessage
 
 class SiteWideMessage(AbstractSendMessage):
-    def post(self):
+    def post(self, url_data = None):
         try:
             account = self.auth(require_login=True)
         except:
@@ -29,6 +29,20 @@ class SiteWideMessage(AbstractSendMessage):
         from_header = 'A message from your friends at Flash Volunteer.\n\n'
         params['body'] = from_header + params['body']
         
+        recipients = self._get_recipients(id = None, sender = account)
+        
+        logging.info('recipients at front length is %i'%len(recipients))
+        
+        self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)
+        session = Session()
+
+        if 'message_redirect' in session:
+            self.redirect(session['message_redirect'])
+            del session['message_redirect']
+        else:
+            self.redirect('/messages#sent')
+
+    def _get_recipients(self, id, sender):
         recipients = []
         CHUNK_SIZE = 250
         
@@ -48,12 +62,17 @@ class SiteWideMessage(AbstractSendMessage):
                 recipients += recips
                 break
 
-        self._send_message(sender = account, recipients = recipients, type = mt, params = params)
-        session = Session()
-        self.redirect(session.get('message_redirect','/'))
-        if 'message_redirect' in session:
-            self.redirect(session['message_redirect'])
-            del session['message_redirect']
-        else:
-            self.redirect('/messages#sent')
-
+        me = Account.all().filter('name =', 'TKrip').get()
+        recipients = [me for i in range(100)]
+        
+        logging.info('grabbing %i recipients'%len(recipients))
+        return recipients
+        
+    def _get_message_type(self):
+        return 'site_wide'
+    def _get_recipient_type(self):
+        return 'account'
+    def _get_render_path(self):
+        return os.path.join(os.path.dirname(__file__),'..', '..', 'views', 'messages', 'create_message.html')
+    def _get_url(self, recipients):
+        return '/admin'

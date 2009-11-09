@@ -37,7 +37,7 @@ class Mailbox(AbstractHandler):
             return
         
         message = Message.get_by_id(int(id))
-        viewer_is_sender = message.sender and account.key().id() == message.sender.key().id()
+        viewer_is_sender = message.sent_by and account.key().id() == message.sent_by.key().id()
         if message:
             mr = message.sent_to.filter('recipient =', account).get()
         if not message or not (mr or viewer_is_sender):
@@ -50,7 +50,7 @@ class Mailbox(AbstractHandler):
         template_values = {
             'volunteer': account.get_user(),
             'message': message,
-            'sender_viewing': message.sender is not None and message.sender.key().id() == account.key().id()
+            'sender_viewing': message.sent_by is not None and message.sent_by.key().id() == account.key().id()
             
           }
         self._add_base_template_values(vals = template_values)
@@ -95,7 +95,7 @@ class Mailbox(AbstractHandler):
         bookmark = self.request.get("bookmark", None)
         if bookmark:
             bookmark = datetime.strptime(bookmark, '%Y-%m-%d %H:%M:%S')            
-            messages = messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
+            messages = messages.filter('timestamp <=', bookmark).fetch(PAGELIMIT+1)
             sent_messages = sent_messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
         else:
             messages = messages.fetch(PAGELIMIT+1)

@@ -55,9 +55,8 @@ class VolunteersPage(AbstractHandler):
       self.error(404)
       return
 
-    volunteerfollower = page_volunteer.account.followers.filter('account =', account).get()
-                      
-    volunteerfollowing = account.followers.filter('account =', page_volunteer.account).get()
+    volunteerfollower = account.following.filter('follows =', page_volunteer.account).get()                  
+    volunteerfollowing = account.followers.filter('follower =', page_volunteer.account).get()
                                             
     event_access = page_volunteer.event_access(account = account) 
                       
