@@ -89,14 +89,14 @@ indexes:
 - kind: Message
   properties:
   - name: sent
+  - name: in_task_queue
   - name: trigger
 
 - kind: Message
   properties:
   - name: sent
-  - name: in_task_queue
   - name: trigger
-  
+
 - kind: Message
   properties:
   - name: sent

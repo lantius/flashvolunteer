@@ -1,5 +1,5 @@
-application: flashvolunteer
-version: v01-10
+application: flashvolunteer-dev
+version: development
 runtime: python
 api_version: 1
 
@@ -20,6 +20,10 @@ handlers:
   script: controllers/admin/route.py
   login: admin
     
+- url: /_ah/queue/deferred
+  script: $PYTHON_LIB/google/appengine/ext/deferred/deferred.py
+  login: admin
+      
 - url: /.*
   script: controllers/route.py
 
