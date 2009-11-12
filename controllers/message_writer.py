@@ -4,7 +4,6 @@ from datetime import datetime
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._params import Parameters
 
 from models.messages import MessageType
 from models.volunteer import Volunteer
@@ -14,7 +13,7 @@ from models.neighborhood import Neighborhood
 from components.message_text import event_forum_txt, neighborhood_forum_txt
 
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging, send_message
+from controllers._utils import is_debugging
 
 from components.sessions import Session
 
@@ -26,7 +25,7 @@ class AbstractSendMessage(AbstractHandler):
         
         logging.info('recipient list size is %i'%len(recipients))
         
-        send_message(to = recipients, 
+        self.send_message(to = recipients, 
                      subject = params['subject'], 
                      body = params['body'], 
                      type = type, 
@@ -66,7 +65,7 @@ class AbstractSendMessage(AbstractHandler):
         
         recipients = self._get_recipients(id, account)
          
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         
         mt = MessageType.all().filter('name = ', self._get_message_type()).get()  
         
@@ -87,7 +86,7 @@ class AbstractSendMessage(AbstractHandler):
             account = self.auth(require_login=True)
         except:
             return
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         session = Session()
         if 'redirect' in params:
             session['message_redirect'] = params['redirect']

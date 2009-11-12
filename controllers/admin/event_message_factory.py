@@ -9,7 +9,6 @@ from models.eventvolunteer import EventVolunteer
 
 from components.time_zones import now
 
-from controllers._utils import send_message
 from components.message_text import type5, type6, type7, type8, type9
 
 from components.sessions import Session
@@ -44,7 +43,7 @@ class EventMessageFactory(AbstractHandler):
                 'event_start_time': e.get_start_time()
             }
             if len(recipients) > 0:
-                send_message(to = recipients, 
+                self.send_message(to = recipients, 
                              subject = type5.subject%params, 
                              body = type5.body%params, 
                              type = type5_msg, 
@@ -55,7 +54,7 @@ class EventMessageFactory(AbstractHandler):
             else:
                 params['participation_statement'] = "At this time, there are no Flash Volunteers signed up."
             hosts = [ev.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
-            send_message(to = hosts, 
+            self.send_message(to = hosts, 
                          subject = type6.subject%params, 
                          body = type6.body%params, 
                          type = type6_msg, 
@@ -77,7 +76,7 @@ class EventMessageFactory(AbstractHandler):
                 }
                 recipients = [ev.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
                 if len(recipients) > 0:
-                    send_message(to = recipients, 
+                    self.send_message(to = recipients, 
                                  subject = type7.subject%params, 
                                  body = type7.body%params, 
                                  type = type7_msg, 
@@ -89,7 +88,7 @@ class EventMessageFactory(AbstractHandler):
                     params['participation_statement'] = "Unfortunately, it appears that no Flash Volunteers signed up to help out at your event (%(event_url)s)."%params
                 
                 hosts = [ev.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
-                send_message(to = hosts, 
+                self.send_message(to = hosts, 
                              subject = type8.subject%params, 
                              body = type8.body%params, 
                              type = type8_msg, 
@@ -139,7 +138,7 @@ class RecommendedEventMessageFactory(AbstractHandler):
                     'recommendation_text': '\n\n'.join(desc)
                 }
 
-                send_message(to = [v], 
+                self.send_message(to = [v], 
                              subject = type9.subject%params, 
                              body = type9.body%params, 
                              type = type9_msg, 

@@ -2,8 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._params import Parameters
-
 from controllers._utils import get_application
 
 from controllers.abstract_handler import AbstractHandler
@@ -15,7 +13,7 @@ class AllApplications(AbstractHandler):
 
     account = self.auth()
     
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     
     applications = Application.all()
     
@@ -49,7 +47,7 @@ class ThisApplication(AbstractHandler):
     if account: user = account.get_user()
     else: user = None
     
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     
     application = get_application()
     

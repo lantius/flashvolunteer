@@ -30,7 +30,6 @@ def get_server():
         
 def get_domain():
     session = Session()
-    logging.info('HTTP_HOST=%s'%os.environ['HTTP_HOST'])
     if 'this_domain' not in session:
         domain = os.environ['HTTP_HOST']
         if domain.startswith('www.'):
@@ -68,66 +67,3 @@ def get_google_maps_api_key():
 
 
 
-def send_message(to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
-    from models.messages.message import Message
-    from models.messages import MessageReceipt
-    from components.time_zones import now
-    from google.appengine.ext.db import put, delete
-    
-    logging.info('to size is %i'%len(to))
-    
-    if subject == '' or subject is None:
-        subject = '(No subject)'
-
-    message = Message(
-      subject = subject,
-      body = body,
-      sent_by = sender,
-      type = type,
-      autogen = autogen,
-      forum_msg = forum
-    )
-    message.put()
-    mrs = []        
-    for recipient in to:
-        mr = MessageReceipt(
-          recipient = recipient,
-          message = message)
-        mrs.append(mr)
-
-    try:
-        logging.info('putting %i recipients'%len(mrs))
-        put(mrs)
-    except:
-        for mr in mrs:
-            if not mr.is_saved():
-                try:
-                    mr.put()
-                except:
-                    logging.error('Could not add message receipt of message %i for recipient %i'%(message.key().id(), mr.recipient.key().id()))
-
-    if immediate:
-        message.send()
-
-from datetime import datetime
-from google.appengine.ext import deferred
-
-def check_messages():
-    from models.messages.message import Message
-    if Message.all().filter('sent =', False).filter('in_task_queue =', False).filter('trigger <', datetime.now()).count() > 0:
-        deferred.defer(_check_messages)
-    
-def _check_messages():
-    from models.messages.message import Message
-    
-    logging.info('Checking messages in task queue')
-    messages_to_send = Message.all().filter('sent =', False).filter('in_task_queue =', False).filter('trigger <', datetime.now())
-
-    for message in messages_to_send:
-        try:
-            message.in_task_queue = True
-            message.put()
-            message.send()    
-        finally:
-            message.in_task_queue = False
-            message.put()

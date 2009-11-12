@@ -11,7 +11,6 @@ from models.neighborhood import Neighborhood
 from models.eventinterestcategory import EventInterestCategory
 from models.interestcategory import InterestCategory
 
-from controllers._params import Parameters
 
 from controllers.events import _get_upcoming_events 
 

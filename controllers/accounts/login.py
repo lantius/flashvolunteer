@@ -12,7 +12,6 @@ from models.interestcategory import InterestCategory
 from models.auth import Account, Auth
 
 from components.sessions import Session
-from controllers._params import Parameters
 
 import urllib
 
@@ -118,7 +117,7 @@ class Login(AbstractHandler):
         from models.auth import Account, Auth
         errors = {}
         
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         
         session = Session()
         

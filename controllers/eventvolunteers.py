@@ -8,8 +8,6 @@ from models.event import Event
 from models.eventvolunteer import EventVolunteer
 from models.messages import MessageType
 
-from controllers._utils import send_message
-
 from controllers.abstract_handler import AbstractHandler
 
 from components.message_text import type1_vol, type1_unvol
@@ -36,7 +34,7 @@ class VolunteerForEvent(AbstractHandler):
                     (to, subject, body) = self.get_message_text(event = event, 
                                                                   account = account, 
                                                                   sign_up = False)
-                    send_message( to = to, 
+                    self.send_message( to = to, 
                                 subject = subject, 
                                 body = body, 
                                 type = MessageType.all().filter('name =', 'event_coord').get())
@@ -48,7 +46,7 @@ class VolunteerForEvent(AbstractHandler):
                                                                   account = account,
                                                                   sign_up = True)
         
-                    send_message( to = to, 
+                    self.send_message( to = to, 
                             subject = subject, 
                             body = body, 
                             type = MessageType.all().filter('name =', 'event_coord').get())

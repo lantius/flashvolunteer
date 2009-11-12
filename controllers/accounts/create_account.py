@@ -1,7 +1,6 @@
 from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper
-from controllers._params import Parameters
-from controllers._utils import is_debugging, send_message 
+from controllers._utils import is_debugging 
 from controllers.abstract_handler import AbstractHandler
 from controllers.accounts.login import check_avatar
 
@@ -57,7 +56,7 @@ class CreateAccount(AbstractHandler):
         
     def post(self):
         
-        params = Parameters.parameterize(self.request)    
+        params = self.parameterize()    
         session = Session()
         account = session.get('account')
         volunteer = session.get('volunteer')
@@ -133,7 +132,7 @@ class CreateAccount(AbstractHandler):
         from components.message_text import type3  
         from models.messages import MessageType
                   
-        send_message(to = [account], 
+        self.send_message(to = [account], 
                      subject = type3.subject%msg_params,
                      body = type3.body%msg_params,
                      type= MessageType.all().filter('name =', 'welcome').get(), 

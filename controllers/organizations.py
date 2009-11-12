@@ -4,7 +4,6 @@ import imghdr
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._params import Parameters
 from controllers._utils import get_application
 
 from models.organization import Organization
@@ -22,7 +21,7 @@ class OrganizationsPage(AbstractHandler):
 
     if url_data:
       if '/search' == url_data:
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         self.search(params)
       else:
         self.show(url_data[1:])        
@@ -183,7 +182,7 @@ class OrganizationAvatar(AbstractHandler):
     except:
       return
       
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     
     if 'delete_logo' in params and params['delete_logo'] == 'true':
       self.delete(organization)

@@ -10,7 +10,7 @@ from models.messages import MessageType, Message
 from models.event import Event
 from models.neighborhood import Neighborhood
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging, send_message
+from controllers._utils import is_debugging
 
 from components.sessions import Session
 

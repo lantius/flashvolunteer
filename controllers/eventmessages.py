@@ -8,7 +8,6 @@ from models.event import Event
 from models.messages.message import Message
 from models.eventvolunteer import EventVolunteer
 
-from controllers._params import Parameters
 from controllers.messages import MessagesPage
 
 from components.sessions import Session
@@ -39,7 +38,7 @@ class EventMessagesPage(MessagesPage):
       return
     
     event = Event.get_by_id(int(event_data))
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     
     if 'is_delete' in params and params['is_delete'] == 'true':
       self.delete(message_data[1:], account)

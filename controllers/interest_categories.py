@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._params import Parameters
 from models.interestcategory import InterestCategory
 
 from controllers.abstract_handler import AbstractHandler
@@ -16,7 +15,7 @@ class CategoryPage(AbstractHandler):
     if url_data:
       self.show(url_data)
     else:
-      params = Parameters.parameterize(self.request)
+      params = self.parameterize() 
       #TODO: convert to application-specific data model
       categories = InterestCategory.all().order('name').fetch(limit=500)
       template_values = {

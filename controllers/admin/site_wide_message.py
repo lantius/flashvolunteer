@@ -4,13 +4,11 @@ from datetime import datetime
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._params import Parameters
-
 from models.messages import MessageType
 from models.auth.account import Account
 
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging, send_message
+from controllers._utils import is_debugging
 
 from components.sessions import Session
 
@@ -23,15 +21,13 @@ class SiteWideMessage(AbstractSendMessage):
         except:
             return
         
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize()
         mt = MessageType.all().filter('name = ', 'site_wide').get()
         
         from_header = 'A message from your friends at Flash Volunteer.\n\n'
         params['body'] = from_header + params['body']
         
         recipients = self._get_recipients(id = None, sender = account)
-        
-        logging.info('recipients at front length is %i'%len(recipients))
         
         self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)
         session = Session()
@@ -62,10 +58,6 @@ class SiteWideMessage(AbstractSendMessage):
                 recipients += recips
                 break
 
-        me = Account.all().filter('name =', 'TKrip').get()
-        recipients = [me for i in range(200)]
-        
-        logging.info('grabbing %i recipients'%len(recipients))
         return recipients
         
     def _get_message_type(self):

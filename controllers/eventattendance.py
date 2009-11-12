@@ -8,7 +8,6 @@ from models.volunteer import Volunteer
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
 
-from controllers._params import Parameters
 from components.time_zones import Pacific, now
 
 from controllers.abstract_handler import AbstractHandler
@@ -26,7 +25,7 @@ class VerifyEventAttendance(AbstractHandler):
     except:
         return
     
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     params['id'] = url_data
 
     self.show(params, account)
@@ -39,7 +38,7 @@ class VerifyEventAttendance(AbstractHandler):
     except:
         return
     
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     params['id'] = url_data
 
     self.update(params, account)

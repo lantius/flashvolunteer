@@ -1,6 +1,5 @@
 import os, logging
 
-from controllers._params import Parameters
 
 from google.appengine.ext.webapp import template
 from google.appengine.api import users, images, memcache
@@ -56,7 +55,7 @@ class SettingsPage(AbstractHandler):
       except:
           return
         
-      params = Parameters.parameterize(self.request)
+      params = self.parameterize() 
       session = Session()      
 
       if 'is_delete' in params and params['is_delete'] == 'true':     

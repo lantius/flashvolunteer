@@ -6,8 +6,6 @@ from google.appengine.ext import webapp
 
 from controllers._utils import get_application
 
-from controllers._params import Parameters
-
 from models.volunteer import Volunteer
 from models.volunteerfollower import VolunteerFollower
 
@@ -24,7 +22,7 @@ class VolunteersPage(AbstractHandler):
 
     if url_data:
       if '/search' == url_data:
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         self.search(params)
       else:
         self.show(url_data[1:])        
@@ -140,7 +138,6 @@ class VolunteersPage(AbstractHandler):
 # FollowVolunteer
 
 from components.message_text import type2
-from controllers._utils import send_message
 from models.messages import MessageType
 
 class FollowVolunteer(AbstractHandler):
@@ -168,7 +165,7 @@ class FollowVolunteer(AbstractHandler):
                     params = self.get_message_params(adder = account, account = to_follow.account, volunteer = to_follow)
                     subject = type2.subject%params
                     body = type2.body%params
-                    send_message( 
+                    self.send_message( 
                         to = [to_follow.account], 
                         subject = subject, 
                         body = body, 
@@ -215,7 +212,7 @@ class VolunteerAvatar(AbstractHandler):
     except:
       return
       
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     
     if 'delete_avatar' in params and params['delete_avatar'] == 'true':
       self.delete(account)

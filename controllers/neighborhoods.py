@@ -3,7 +3,6 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 import os, random
 
-from controllers._params import Parameters
 from models.neighborhood import Neighborhood
 from models.eventvolunteer import EventVolunteer
 from models.messages.message import Message
@@ -26,7 +25,7 @@ class NeighborhoodsPage(AbstractHandler):
         if account: user = account.get_user()
         else: user = None
                 
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         
         application = get_application()
         neighborhoods = application.neighborhoods.fetch(limit=500) 

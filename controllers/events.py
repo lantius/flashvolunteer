@@ -1,7 +1,6 @@
 from components.geostring import *
 from components.time_zones import Pacific, now
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
-from controllers._params import Parameters
 from controllers._utils import is_debugging, get_application, get_google_maps_api_key
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
@@ -70,7 +69,7 @@ class EventsPage(AbstractHandler):
             if '/new' == url_data:
                 self.new({})
             elif '/search' == url_data:
-                params = Parameters.parameterize(self.request)
+                params = self.parameterize() 
                 self.search(params)
             elif '/edit' == url_data[-5:]:
                 event = Event.get_by_id(int(url_data[1:-5]))
@@ -88,7 +87,7 @@ class EventsPage(AbstractHandler):
         except:
             return
         
-        params = Parameters.parameterize(self.request)
+        params = self.parameterize() 
         event_id = None
         
         if'/edit' == url_data[-5:]:
@@ -571,7 +570,7 @@ class EventAddCoordinatorPage(AbstractHandler):
     except:
       return
 
-    params = Parameters.parameterize(self.request)
+    params = self.parameterize() 
     
     event = Event.get_by_id(int(event_id))
 

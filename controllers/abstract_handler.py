@@ -66,7 +66,59 @@ class AbstractHandler(webapp.RequestHandler):
         
         return auth.account
         #return session.get('user_object')
-      
+
+
+    def send_message(self, to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
+        from models.messages.message import Message
+        from models.messages import MessageReceipt
+        from google.appengine.ext.db import put, delete
+        
+        if subject == '' or subject is None:
+            subject = '(No subject)'
+    
+        message = Message(
+          subject = subject,
+          body = body,
+          sent_by = sender,
+          type = type,
+          autogen = autogen,
+          forum_msg = forum
+        )
+        message.put()
+        mrs = []        
+        for recipient in to:
+            mr = MessageReceipt(
+              recipient = recipient,
+              message = message)
+            mrs.append(mr)
+    
+        try:
+            put(mrs)
+        except:
+            for mr in mrs:
+                if not mr.is_saved():
+                    try:
+                        mr.put()
+                    except:
+                        logging.error('Could not add message receipt of message %i for recipient %i'%(message.key().id(), mr.recipient.key().id()))
+    
+        if immediate:
+            message.send()
+
+    def parameterize(self, req):
+        params = {}
+    
+        for name in self.request.arguments():
+          # TODO: if name = foo[1] then make a sub-hash of foos
+          # accessed as params['foo'][1]
+          
+          params[name] = self.request.get_all(name)
+          if len(params[name]) == 1:
+            if self.request.content_type.startswith('multipart/form-data'):
+              params[name] = params[name][0]
+            else:
+              params[name] = unicode(params[name][0])
+        return params
   
 class AuthError(Exception):
     """Exception raised for authorization errors.
