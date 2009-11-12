@@ -142,4 +142,5 @@ class CreateAccount(AbstractHandler):
         if 'login_redirect' in session:
             self.redirect(session['login_redirect'])
             del session['login_redirect']
-        self.redirect('/settings')
+        else:
+            self.redirect('/settings')

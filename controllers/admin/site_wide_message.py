@@ -63,7 +63,7 @@ class SiteWideMessage(AbstractSendMessage):
                 break
 
         me = Account.all().filter('name =', 'TKrip').get()
-        recipients = [me for i in range(100)]
+        recipients = [me for i in range(200)]
         
         logging.info('grabbing %i recipients'%len(recipients))
         return recipients

@@ -75,7 +75,11 @@ class Login(AbstractHandler):
         session['user'] = user
         session['account'] = account
         
-        self.redirect('/settings')
+        if 'login_redirect' in session:
+            self.redirect(session['login_redirect'])
+            del session['login_redirect']
+        else:
+            self.redirect('/settings')
       
     def login(self, errors = None, email = None):
                   
@@ -97,8 +101,8 @@ class Login(AbstractHandler):
         session = Session()
         logging.info('login referrer:'+self.request.referrer)
         #TODO: make this more secure?
-        if self.request.referrer and not self.request.referrer.endswith('org/') and self.request.referrer.find('flashvolunteer') > -1:
-            session['login_redirect'] = self.request.referrer
+        #if self.request.referrer and not self.request.referrer.endswith('org/') and self.request.referrer.find('flashvolunteer') > -1:
+        #    session['login_redirect'] = self.request.referrer
             
         self._add_base_template_values(vals = template_values)
         path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'accounts', 'login.html')

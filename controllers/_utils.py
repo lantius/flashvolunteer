@@ -30,11 +30,17 @@ def get_server():
         
 def get_domain():
     session = Session()
+    logging.info('HTTP_HOST=%s'%os.environ['HTTP_HOST'])
     if 'this_domain' not in session:
-        if os.environ['HTTP_HOST'].startswith('www.'):
-            domain = os.environ['HTTP_HOST'][4:].replace('appspot.com', 'org')
-        else:
-            domain = os.environ['HTTP_HOST'].replace('appspot.com', 'org')
+        domain = os.environ['HTTP_HOST']
+        if domain.startswith('www.'):
+            domain = domain[4:]
+        
+        if domain.endswith('flashvolunteer.appspot.com') > -1:
+            domain = domain.replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
+        elif domain.endswith('flashvolunteer-dev.appspot.com') > -1: 
+            domain = 'development.flashvolunteer.org'
+
         session['this_domain'] = domain
     return session['this_domain']
 
@@ -44,6 +50,8 @@ def get_application(just_id = False):
     app_domain = memcache.get(key)
     if app_domain is None:
         app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
+        if app_domain is None:
+            logging.error('got bad domain name: %s'%domain)
         memcache.add(key, app_domain, 100000)
 
     if just_id: return app_domain.application.key().id()

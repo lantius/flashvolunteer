@@ -15,7 +15,7 @@ from controllers._utils import is_debugging
 from components.time_zones import Pacific, utc
 
 from google.appengine.ext import deferred
-
+from google.appengine.runtime import apiproxy_errors 
     
 def remove_html_tags(data):
     p = re.compile(r'<.*?>')
@@ -143,5 +143,7 @@ def send_email(subject, to, body):
             to = to,
             body = body
             )
-    message.send()
-    
+    try: 
+        message.send()
+    except apiproxy_errors.DeadlineExceededError, e:
+        logging.warning('got deadline exceeded error on send mail; assuming that mail was delivered successfully')

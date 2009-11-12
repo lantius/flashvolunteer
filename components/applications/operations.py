@@ -103,7 +103,7 @@ def add_applications(applications):
         from gui_integration_tests.test_settings import host
         domains = [host]
     elif server == 1:
-        domains = ['flashvolunteer-dev.appspot.com', 'development.flashvolunteer.org']
+        domains = ['development.flashvolunteer.org', 'flashvolunteer-dev.appspot.com']
     else:
         domains = ['flashvolunteer.org']
 
