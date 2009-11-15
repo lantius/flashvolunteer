@@ -10,8 +10,8 @@
 			{% if volunteer.error.name %}
 				value="{{ volunteer.error.name.1 }}"
 			{% else %}
-				{% if volunteer.name %}
-					value="{{ volunteer.name|striptags }}"
+				{% if account.name %}
+					value="{{ account.name|striptags }}"
 				{% else %}
 					value="{{ default_name|striptags }}"
 				{% endif %}

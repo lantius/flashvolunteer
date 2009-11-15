@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/stylesheets/javascript/dialog_box.js"></script>
 		
 <div id="personpastevents" class="softmodule">
 	<div class="moduletitle"><h3>My Completed Events</h3> <a style="cursor:pointer" title="These are the events that you have volunteered at and/or coordinated.">(?)</a></div>
@@ -11,7 +12,7 @@
 {% if my_past_events %}
 	{% ifnotequal my_past_events|length 0 %}
 	<div class="pagination_entry">
-	    <a href="/events/past/volunteer/{{ volunteer.key.id }}/1">&raquo; View all</a>
+        <a onclick="build_dialog(4,{{volunteer.key.id }})">&raquo; View all</a>
 	</div>
 	{% endifnotequal %}
 {% endif %}

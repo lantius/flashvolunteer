@@ -2,7 +2,7 @@
 	<option value="none">Select a volunteer...</option>
 	{% for ev in event.eventvolunteers %}
 		{% if not ev.isowner %}
-		<option value="{{ev.account.key.id}}">{{ev.account.name}}</option>
+		<option value="{{ev.volunteer.key.id}}">{{ev.volunteer.account.name}}</option>
 		{% endif %}
 	{% endfor %}
 </select>

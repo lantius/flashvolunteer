@@ -1,4 +1,4 @@
-
+<script type="text/javascript" src="/stylesheets/javascript/dialog_box.js"></script>
 
 <div id="eventattendees" class="hardmodule">
 	<div class="moduletitle"><h3>Volunteers</h3></div>
@@ -44,7 +44,7 @@
 {% if attendees %}
 {% ifnotequal attendees|length 0 %}
 <div class="pagination_entry">
-  <a href="/events/{{event.key.id}}/attendees/1">&raquo; View all public attendees</a>
+  <a onclick="build_dialog(20,{{event.key.id}})">&raquo; View all</a>
 </div>
 {% endifnotequal %}
 {% endif %}

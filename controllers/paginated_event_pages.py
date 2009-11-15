@@ -6,7 +6,6 @@ from google.appengine.ext.webapp import template
 
 from models.volunteer import Volunteer
 from models.event import Event
-from models.eventvolunteer import EventVolunteer
 from models.neighborhood import Neighborhood
 from models.eventinterestcategory import EventInterestCategory
 from models.interestcategory import InterestCategory

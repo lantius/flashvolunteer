@@ -2,7 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os
 import random 
-from models.eventvolunteer import EventVolunteer
 from controllers._helpers import NeighborhoodHelper
 from models.event import Event
 from controllers.abstract_handler import AbstractHandler

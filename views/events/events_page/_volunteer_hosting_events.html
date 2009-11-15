@@ -1,4 +1,5 @@
-		
+<script type="text/javascript" src="/stylesheets/javascript/dialog_box.js"></script>
+
 <div id="personupcomingevents" class="softmodule">
 	<div class="moduletitle"><h3>Events I am Coordinating</h3><a style="cursor:pointer" title="These are the events that you are currently helping to coordinate. Past events you have coordinated are listed in the Completed Events list. Go to Create Event if you want to coordinate a new event.">(?)</a></div>
 	{% for event in volunteer.events_coordinating %}
@@ -9,7 +10,7 @@
 {% if volunteer.events_coordinating %}
     {% ifnotequal volunteer.events_coordinating|length 0 %}
     <div class="pagination_entry">
-        <a href="/events/hosted/volunteer/{{volunteer.key.id}}/1">&raquo; View all</a>
+    	<a onclick="build_dialog(3, {{volunteer.key.id}})">&raquo; View all</a>
     </div>
     {% endifnotequal %}
 {%else%}

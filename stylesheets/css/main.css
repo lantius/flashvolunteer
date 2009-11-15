@@ -1007,3 +1007,30 @@ form input.textarea {
 	font-size: 110%;
 	padding: 3px 5px;
 }
+
+
+#generic_dialog h2 {
+	background-color:#008C98;
+	color:#FFFFFF;
+	font-size:14px;
+	font-weight:bold;
+	display:block;
+	padding:5px 10px;
+	margin:0px;
+}
+
+#generic_dialog {
+	position:absolute;
+	z-index:1000;
+	top:200px;
+    width:500px;
+	margin-left: 135px;
+	border: 5px #aaa solid;
+	background-color:#fff;
+}
+
+#generic_dialog .buttons {
+	background:#eee none repeat scroll 0 0;
+	padding:8px;
+	text-align:right;
+}

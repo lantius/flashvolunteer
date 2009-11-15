@@ -1,6 +1,6 @@
 {% extends "../_layout.html" %}
 {% block title %}
-Receipt for {{eventvolunteer.volunteer.name}} attending {{eventvolunteer.event.name}}
+Receipt for {{eventvolunteer.volunteer.account.name}} attending {{eventvolunteer.event.name}}
 {% endblock title %}
 
 {% block eventsactive %}
@@ -16,14 +16,14 @@ class="current"
 
   <p>{{event.hosts}} certifies that 
 
-  {{volunteer.name}}
+  {{volunteer.account.name}}
 
   attended 
 
   {{event.name}}, held in {{event.neighborhood.name}} on {{event.get_startdate_long}}.</p>
 
   {% if eventvolunteer.hours %}
-  <p>{{volunteer.name}} volunteered for {{eventvolunteer.hours}} hours.</p>
+  <p>{{volunteer.account.name}} volunteered for {{eventvolunteer.hours}} hours.</p>
   {% endif %}
 
 <hr>

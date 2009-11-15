@@ -1,3 +1,6 @@
+
+<script type="text/javascript" src="/stylesheets/javascript/dialog_box.js"></script>
+
 <div id="recommendedevents" class="softmodule">
 	<div class="moduletitle"><h3>My Recommended Events</h3> <a href="/static/help#recommended-events" title="Events are recommended based on the interest categories you have selected, as well as your home and work neighborhood. You can modify your interest categories and neighborhoods by editing your profile.">(?)</a></div>
 	<ul>            
@@ -10,7 +13,7 @@
 {% if recommended_events %}
 	{% ifnotequal recommended_events|length 0 %}
 	<div class="pagination_entry">
-	    <a href="/events/recommended/1">&raquo; View all</a>
+	    <a onclick="build_dialog(2)">&raquo; View all</a>
 	</div>
 	{% endifnotequal %}
 {%else%}

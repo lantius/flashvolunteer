@@ -26,9 +26,10 @@ class VolunteerForEvent(AbstractHandler):
             return
         
         event = Event.get_by_id(int(url_data))
+        user = account.get_user()
         
         if event:
-            eventvolunteer = event.eventvolunteers.filter('account =', account).get()
+            eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if eventvolunteer:
                     eventvolunteer.delete()
@@ -41,7 +42,7 @@ class VolunteerForEvent(AbstractHandler):
                                 type = MessageType.all().filter('name =', 'event_coord').get())
             else:
                 if not eventvolunteer:
-                    eventvolunteer = EventVolunteer(account=account, event=event, isowner=False)
+                    eventvolunteer = EventVolunteer(volunteer=user, event=event, isowner=False)
                     eventvolunteer.put()
                     (to, subject, body) = self.get_message_text(event = event, 
                                                                   account = account,
@@ -58,7 +59,7 @@ class VolunteerForEvent(AbstractHandler):
         return
 
     def get_message_text(self, event, account, sign_up = True):
-        to = (ev.account for ev in event.eventvolunteers.filter('isowner =', True).fetch(limit=10))
+        to = (ev.volunteer.account for ev in event.eventvolunteers.filter('isowner =', True).fetch(limit=10))
                           
         if sign_up:
             msg = type1_vol

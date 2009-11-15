@@ -4,7 +4,6 @@ from google.appengine.ext import db
 import os, random
 
 from models.neighborhood import Neighborhood
-from models.eventvolunteer import EventVolunteer
 from models.messages.message import Message
 from models.messages.message_receipt import MessageReceipt
 from controllers._utils import get_application

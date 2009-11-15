@@ -31,7 +31,7 @@ class AbstractHandler(webapp.RequestHandler):
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
         
-        if session['notification_message'] and len(session['notification_message']) > 0:
+        if 'notification_message' in session and len(session['notification_message']) > 0:
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])
                 
             session['notification_message'] = []

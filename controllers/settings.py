@@ -119,13 +119,14 @@ class SettingsPage(AbstractHandler):
       for pref in prefs:
         pref.delete()
             
+      user = account.get_user()
       # Remove events you've volunteered for
-      evs = account.eventvolunteers
+      evs = user.eventvolunteers
       for ev in evs:
         ev.delete()
     
       # Finally remove the volunteer
-      account.get_user().delete()
+      user.delete()
       account.delete()
       
       self.redirect('/')

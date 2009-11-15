@@ -212,8 +212,8 @@ class EventsPage(AbstractHandler):
         #end fill forum block
 
         if account:
-        
-            eventvolunteer = event.eventvolunteers.filter('account = ', account).get()
+            user = account.get_user()
+            eventvolunteer = event.eventvolunteers.filter('volunteer = ', user).get()
         
             if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
                 # TODO: randomize this...
@@ -257,8 +257,9 @@ class EventsPage(AbstractHandler):
     # DELETE
     def delete(self, event_id, account):
         event = Event.get_by_id(int(event_id))
+        if account: user = account.get_user()
         
-        eventvolunteer = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
         if eventvolunteer:
             for ev in event.eventvolunteers:
                 #TODO notify everyone who was going to attend that this was cancelled.
@@ -314,7 +315,8 @@ class EventsPage(AbstractHandler):
                 eic = EventInterestCategory(event = event, interestcategory = interestcategory)
                 eic.put()
         
-        eventVolunteer = EventVolunteer(account=account, event=event, isowner=True)
+        user = account.get_user()
+        eventVolunteer = EventVolunteer(volunteer=user, event=event, isowner=True)
         eventVolunteer.put()
         
         return event.key().id()
@@ -327,7 +329,9 @@ class EventsPage(AbstractHandler):
         except:
             return   
         
-        eventvolunteer = event.eventvolunteers.filter('account =', account).filter('isowner =', True)
+        if account: user = account.get_user()
+        
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True)
         
         if not eventvolunteer:
             self.redirect("/events/" + event.id)
@@ -355,8 +359,9 @@ class EventsPage(AbstractHandler):
   # UPDATE
     def update(self, params, account):
         event = Event.get_by_id(int(params['id']))
+        if account: user = account.get_user()
         
-        eventvolunteer = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
 
         if not eventvolunteer:
             return None
@@ -552,8 +557,9 @@ class EventAddCoordinatorPage(AbstractHandler):
       return
     
     event = Event.get_by_id(int(event_id))
-
-    eventvolunteer = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
+    if account: user = account.get_user()
+    
+    eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
 
     if not eventvolunteer:
         self.redirect("/events") #TODO REDIRECT to error page
@@ -577,8 +583,9 @@ class EventAddCoordinatorPage(AbstractHandler):
     params = self.parameterize() 
     
     event = Event.get_by_id(int(event_id))
-
-    eventvolunteer = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
+    if account: user = account.get_user()
+    
+    eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
 
     if not eventvolunteer:
         self.redirect("/events") #TODO REDIRECT to error page
@@ -586,7 +593,7 @@ class EventAddCoordinatorPage(AbstractHandler):
   
     try:
         new_coord_id = int(params['coordinator'])
-        new_coord_account = Account.get_by_id(new_coord_id)
+        new_coord_account = Volunteer.get_by_id(new_coord_id)
         if not new_coord_account: 
             raise
 

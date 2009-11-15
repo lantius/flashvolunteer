@@ -147,16 +147,16 @@ class Event(db.Model):
         return '/events'
       
     def volunteers(self):
-        return (ev.account.get_user() for ev in self.eventvolunteers.filter('isowner = ', False))
+        return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', False))
     
     def volunteer_count(self):
         return self.eventvolunteers.filter('isowner = ', False).count()
     
     def hosts(self):
-        return (ev.account.get_user() for ev in self.eventvolunteers.filter('isowner = ', True))
+        return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', True))
     
     def contact_email(self):
-        return ','.join([ev.account.get_email() for ev in self.eventvolunteers.filter('isowner = ', True)])
+        return ','.join([ev.volunteer.account.get_email() for ev in self.eventvolunteers.filter('isowner = ', True)])
     
     def get_numphotoalbums(self):
         eventphotosphotos = [photo for photo in self.eventphotos]

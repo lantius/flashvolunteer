@@ -7,7 +7,6 @@ from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
 from models.event import Event
-from models.eventvolunteer import EventVolunteer
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -36,15 +35,15 @@ class BaseVolunteerListPage(AbstractHandler):
         if extract_style == 'direct':
             volunteers = generator[offset:offset+LIST_LIMIT]      
         else:
-            volunteers = [v.account.get_user() for v in generator[offset:offset+LIST_LIMIT]]      
+            volunteers = [ev.volunteer for ev in generator[offset:offset+LIST_LIMIT]]      
 
     else:
         total = generator.count()
         
         if extract_style == 'direct':
-            volunteers = [v for v in generator.fetch(limit = LIST_LIMIT, offset = offset)]        
+            volunteers = [ev for ev in generator.fetch(limit = LIST_LIMIT, offset = offset)]        
         else:
-            volunteers = [v.account.get_user() for v in generator.fetch(limit = LIST_LIMIT, offset = offset)]
+            volunteers = [ev.volunteer for ev in generator.fetch(limit = LIST_LIMIT, offset = offset)]
     
     end = start + len(volunteers) - 1
                                                 
@@ -184,7 +183,8 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
       self.set_context()
         
   def _get_volunteer_generator(self):
-     eventvolunteer = self.event.eventvolunteers.filter('account =', self.account).get() 
+      
+     eventvolunteer = self.event.eventvolunteers.filter('volunteer =', self.volunteer).get() 
                                              
      if eventvolunteer and (eventvolunteer.isowner or self.event.inpast()): 
         return (self.event.eventvolunteers,'indirect')        

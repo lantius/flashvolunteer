@@ -12,14 +12,8 @@ class EventVolunteer(db.Model):
                                required = True,
                                collection_name = 'eventvolunteers')
   
-  ##### DEPRECATED
   volunteer = db.ReferenceProperty(Volunteer,
-                   #                 required = True,
-                                    collection_name = 'eventvolunteers')
-  #####################
-  
-  account = db.ReferenceProperty(Account,
-                   #                 required = True,
+                                    required = True,
                                     collection_name = 'eventvolunteers')
   
   isowner = db.BooleanProperty(required = True)

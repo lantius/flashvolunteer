@@ -13,12 +13,26 @@
 	<link type="text/css" href="/stylesheets/jquery/css/flashvolunteer/jquery-ui-1.7.2.custom.css" rel="Stylesheet" />	
 	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-ui-1.7.2.custom.min.js"></script>
+	<!--<script type="text/javascript" src="/stylesheets/jquery.ezjax.js"></script>-->
+    <script type="text/javascript" src="/stylesheets/json/json2.min.js"></script>
+    <script type="text/javascript" src="/stylesheets/javascript/dialog_box.js"></script>
+
 	<!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>-->
     <!--[if IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie7.css" /><![endif]-->
     <!--[if lt IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie6.css" /><![endif]-->
 	{% block head %}{% endblock head %}
   </head>
  <body>
+ 	<!--<script>
+ 		$(document).ready(function(){
+		  $('.ezjax').ezjax({
+		  	container: '#columns',
+			effect: 'fade',
+		  });
+		});
+ 	</script>-->
+	
+	
  	<div id="container">
  		
       {% if notification_message %}		
@@ -41,7 +55,7 @@
 				{%if account and account.is_saved%}
 				    <div id="volavatar">
 		    	        <div class="volunteer_summary_pic">
-				            <a href="/settings" >
+				            <a class="ezjax" href="/settings" >
 				            <img class="smallavatar" src="
 				            {% if volunteer.avatar %}
 				                {{ volunteer.url }}/avatar
@@ -61,19 +75,19 @@
 
 	<div id="navtabs">
 		<ul>
-			<li id="homelink"><a href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
+			<li id="homelink"><a class="ezjax" href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
             {%if volunteer and volunteer.is_saved%}
-                <li id="profilelink"><a href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
-				<li id="mailboxlink"><a href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>        
+                <li id="profilelink"><a class="ezjax" href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
+				<li id="mailboxlink"><a class="ezjax" href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>        
             {% endif %}                
-			<li id="eventslink"><a href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
-			<li id="neighborhoodslink"><a href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
+			<li id="eventslink"><a class="ezjax" href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
+			<li id="neighborhoodslink"><a class="ezjax" href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
 			{%if volunteer and volunteer.is_saved%}
-				<li id="teamlink"><a href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
+				<li id="teamlink"><a class="ezjax" href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
 			{% endif %}
-			<li id="helplink"><a href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
+			<li id="helplink"><a class="ezjax" href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
 			{%if account and account.is_admin %}
-				<li id="adminlink"><a href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>
+				<li id="adminlink"><a class="ezjax" href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>
 			{% endif %}
 		</ul>
 	</div><!--end navtabs-->

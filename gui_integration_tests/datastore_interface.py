@@ -161,7 +161,7 @@ def create_environment(name, session_id):
             volunteer = volunteers[vol['volunteer']]
             ev = EventVolunteer(
                 event = events[k],
-                account = volunteer.account,
+                volunteer = volunteer,
                 isowner = 'is_owner' in vol and vol['is_owner']
             )
             ev_volunteers.append(ev)

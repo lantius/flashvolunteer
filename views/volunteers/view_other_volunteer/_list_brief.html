@@ -13,7 +13,8 @@
 {% if page_volunteer.friends %}
     {% ifnotequal page_volunteer.friends|length 0 %}
     <div class="pagination_entry">
-    <a href="/volunteers/{{page_volunteer.key.id}}/team/1">&raquo; View all</a>
+	      <a onclick="build_dialog(25,{{page_volunteer.key.id}})">&raquo; View all</a>
+
     </div>
     {% endifnotequal %}
 {% endif %}

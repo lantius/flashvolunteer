@@ -9,7 +9,7 @@
 {% if volunteers_working_here %}
     {% ifnotequal volunteers_working_here|length 0 %}
     <div class="pagination_entry">
-    <a href="/neighborhoods/{{neighborhood.key.id}}/volunteers_work/1">&raquo; View everyone</a>
+       <a onclick="build_dialog(24,{{neighborhood.key.id}})">&raquo; View all</a>
     </div>
     {% endifnotequal %}
 {% endif %}

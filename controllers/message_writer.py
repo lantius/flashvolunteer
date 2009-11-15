@@ -151,7 +151,7 @@ class SendMessage_Event(AbstractSendMessage):
 
     def _do_additional_post_processing(self, id, sender, params):
         event = Event.get_by_id(int(id))
-        recipients = [ev.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
+        recipients = [ev.volunteer.account for ev in event.eventvolunteers if ev.account.key().id() != sender.key().id()]
         
         mt = MessageType.all().filter('name = ', 'event_forum').get()
         substitution_params = {

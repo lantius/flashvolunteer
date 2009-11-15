@@ -1,15 +1,50 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Search
-{% endblock title %}
+<div id="generic_dialog">
+    <h2>Event search results ({{ events|length }})</h2>
 
-{% block eventsactive %}
-	class="current"
-{% endblock eventsactive %}
-
-{%block content %}
-<div id="centerwhole">
-	{% include "../events/_search_results.html" %}
+	<div id="centerwhole">
+		<div id="eventssearchresult" class="hardmodule" >
+		    <div id="eventyousearchedfor"  style="padding-bottom:6px">
+		        <span class="label">You have searched for events
+		        {% if neighborhood %}
+		            in {{neighborhood.name}}.
+		        {% else %}
+		            in all neighborhoods.
+		        {% endif %}
+		        {% if fromdate %}
+		            on or after {{fromdate|date:"F jS, Y" }}
+		            {% if todate %}
+		                and on or before {{todate|date:"F jS, Y" }}.
+		            {% endif %}
+		        {% endif %}
+		        {% if interestcategory %}
+		            related to {{ interestcategory.name}}
+		        {% else %}
+		        {% endif %}
+		        </span>
+		    </div>
+		    <div class="search_results">
+		        {% if events %}
+		        <ol>
+		            {% for event in events %}
+		                {% include "../events/_event_list_item.html" %}
+		            {% endfor %}
+		        </ol>
+		        {% else %}
+		        <p>No search results found.</p>
+		        {% endif %}
+		    </div>
+		</div>
+	    <div class="buttons">
+	        <div class="pagination">
+	            {% ifnotequal prev_page -1 %} 
+	                <a href="{{url}}{{prev_page}}">&laquo;  </a>
+	            {% endifnotequal %}
+	            {{ start }} - {{end}} of {{ total }}
+	            {% ifnotequal next_page -1 %} 
+	                <a href="{{url}}{{next_page}}">  &raquo;</a>
+	            {% endifnotequal %}
+	        </div>
+	    <input type="button" class="closedialog" name="close" value="Close"/>
+	    </div>  
+	</div>
 </div>
-
-{% endblock content %}

@@ -53,7 +53,8 @@ class VerifyEventAttendance(AbstractHandler):
       self.redirect("/events/" + url_data)
       return
     
-    ev = event.eventvolunteers.filter('account =', account).get()
+    if account: user = account.get_user()
+    ev = event.eventvolunteers.filter('volunteer =', user).get()
                         
     if not ev:
       self.redirect("/events/" + url_data)
@@ -78,7 +79,8 @@ class VerifyEventAttendance(AbstractHandler):
     if not event:
       return
     
-    owner = event.eventvolunteers.filter('account =', account).filter('isowner =', True).get()
+    if account: user = account.get_user()
+    owner = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
 
     
     if not owner:
