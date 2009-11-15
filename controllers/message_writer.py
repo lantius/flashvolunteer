@@ -73,7 +73,9 @@ class AbstractSendMessage(AbstractHandler):
         self._do_additional_post_processing(id = id, sender = account, params = params)
 
         session = Session()
-                
+        
+        session['notification_message'] = ['Message delivered.']
+        
         if 'message_redirect' in session:
             self.redirect(session['message_redirect'])
             del session['message_redirect']

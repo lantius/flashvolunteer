@@ -1,5 +1,6 @@
 from components.geostring import *
 from components.time_zones import Pacific, now
+from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from controllers._utils import is_debugging, get_application, get_google_maps_api_key
 from controllers.abstract_handler import AbstractHandler
@@ -102,6 +103,9 @@ class EventsPage(AbstractHandler):
             return
         else:
             event_id = self.create(params, account)
+            event = Event.get_by_id(event_id)
+            session = Session()
+            session['notification_message'] = ['Event "%s" has been created!'%event.name]
         
         if event_id is None:
             self.redirect('/events')

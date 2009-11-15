@@ -11,6 +11,7 @@ from models.messages import MessageType
 from controllers.abstract_handler import AbstractHandler
 
 from components.message_text import type1_vol, type1_unvol
+from components.sessions import Session
 ################################################################################
 # VolunteerForEvent
 ################################################################################
@@ -51,6 +52,8 @@ class VolunteerForEvent(AbstractHandler):
                             body = body, 
                             type = MessageType.all().filter('name =', 'event_coord').get())
               
+        session = Session()
+        session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
         self.redirect('/events/' + url_data)
         return
 

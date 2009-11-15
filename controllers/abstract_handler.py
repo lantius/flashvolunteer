@@ -30,7 +30,11 @@ class AbstractHandler(webapp.RequestHandler):
         
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
-            
+        
+        if session['notification_message'] and len(session['notification_message']) > 0:
+            vals['notification_message'] = '<br><br>'.join(session['notification_message'])
+                
+            session['notification_message'] = []
             
     def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
         s = Session()
@@ -105,7 +109,7 @@ class AbstractHandler(webapp.RequestHandler):
         if immediate:
             message.send()
 
-    def parameterize(self, req):
+    def parameterize(self):
         params = {}
     
         for name in self.request.arguments():

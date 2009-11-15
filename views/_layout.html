@@ -21,6 +21,19 @@
  <body>
  	<div id="container">
  		
+      {% if notification_message %}		
+		<script type="text/javascript">
+		    $.ui.dialog.defaults.bgiframe = true;
+		    $(function() {
+		        $("#dialog").dialog();
+		    });
+		</script>
+		
+        <div id="dialog" title="Notifications">
+            <p>{{ notification_message }}</p>
+        </div>
+	  {% endif %}	
+
 	<div id="top">
 			<div id="logo-strip">
 				<div id="logo" class="fl"><a href="/"><img src="/stylesheets/media/logo.png" alt="Flash Volunteer Logo"/></a></div>
