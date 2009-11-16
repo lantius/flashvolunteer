@@ -1,15 +1,42 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Search
-{% endblock title %}
+<div id="generic_dialog">
+    <h2>Person search results ({{ volunteers|length }})</h2>
 
-{% block friendsactive %}
-	class="current"
-{% endblock friendsactive %}
-
-{%block content %}
-<div id="centerwhole">
-	{% include "../volunteers/_search_results.html" %}
+	<div id="eventssearchresult" class="hardmodule" >
+	    <div id="eventyousearchedfor" >
+	        <ul>
+	        	<li><span class="label">You have searched for volunteers 
+			        {% if name %}
+			         with a name matching '{{name}}'
+			        {% endif %}
+			        {% if email %}
+			            and the email address {{email}}
+			        {% endif %}
+			        {% if neighborhood %}
+			            in {{neighborhood.name}}
+			        {% endif %}
+			    </span></li>
+			</ul>
+		    {% if volunteers %}
+			    <ol>
+			        {% for volunteer_in_list in volunteers %}
+			            {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
+			        {% endfor %}
+			    </ol>
+		    {% else %}
+		      <ul><li>No search results found.</li></ul>
+		    {% endif %}
+	    </div>
+	</div>
+    <div class="buttons">
+        <div class="pagination">
+            {% ifnotequal prev_page -1 %} 
+                <a href="{{url}}{{prev_page}}">&laquo;  </a>
+            {% endifnotequal %}
+            {{ start }} - {{end}} of {{ total }}
+            {% ifnotequal next_page -1 %} 
+                <a href="{{url}}{{next_page}}">  &raquo;</a>
+            {% endifnotequal %}
+        </div>
+    <input type="button" class="closedialog" name="close" value="Close"/>
+    </div>  
 </div>
-
-{% endblock content %}

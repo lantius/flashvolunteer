@@ -1,10 +1,15 @@
-{% extends "../_layout.html" %}
+{% extends to_extend %}
 
-{% block title %}
-Create Event
-{% endblock title %}
 
 {% block content %}
+
+<script>
+      set_active('events');
+
+      $(document).ready(function() {
+            load_title('Create Event');
+      });
+</script>
 
 <div id="left75">
 	{% include "../events/create_event_page/_create_edit.html" %}

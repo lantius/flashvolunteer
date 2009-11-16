@@ -1,14 +1,14 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Receipt for {{eventvolunteer.volunteer.account.name}} attending {{eventvolunteer.event.name}}
-{% endblock title %}
-
-{% block eventsactive %}
-class="current"
-{% endblock %}
-
+{% extends to_extend %}
 
 {% block content %}
+
+<script>
+      set_active('events');
+
+      $(document).ready(function() {
+            load_title('Receipt for {{eventvolunteer.volunteer.account.name}} attending {{eventvolunteer.event.name}}');
+      });
+</script>
 
 <p>{{now}}</p>
 

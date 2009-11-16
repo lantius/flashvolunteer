@@ -1,37 +1,23 @@
-
-{% extends "../_layout.html" %}
-{% block title %}
-Flash Volunteer
-{% endblock title %}
-
-{% block mailboxactive %}class="current"{% endblock mailboxactive %}
-
-{% block pagespectitle %}
-<h1>Flash Mailbox</h1>
-{% endblock %}
-
-{% block head %}
-    <script type="text/javascript" src="/stylesheets/jquery/js/ui.core.js"></script>
-    <script type="text/javascript" src="/stylesheets/jquery/js/ui.tabs.js"></script>
-	
-	<script>
-	  $(document).ready(function(){
-	    $("#mailbox-tab-sections").tabs();
-	  });
-	
-	 </script> 
-{% endblock %}
+{% extends to_extend %}
 
 {% block content %}
 
 
+<script>
+      set_active('mailbox');
+
+      $(document).ready(function() {
+            load_title('Mailbox');
+            load_header('Flash Mailbox');
+      });
+</script>
 
  
 <div id="middle100">
 	
 	
 	<div id="mailbox-tab-sections">
-	  <ul id="nav" class="tab-links">
+	   <ul id="nav" class="tab-links">
 	        <li>
 	            <a href="#inbox">Inbox</a>              
 	        </li>
@@ -142,5 +128,7 @@ Flash Volunteer
 	</div>
 </div><!--end middle100-->
 
-
+<script>
+	$("#mailbox-tab-sections").tabs();
+</script>
 {% endblock content %}

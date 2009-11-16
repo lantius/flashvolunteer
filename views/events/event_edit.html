@@ -1,10 +1,15 @@
-{% extends "../_layout.html" %}
+{% extends to_extend %}
 
-{% block title %}
-Flash Volunteer Event : {{event.name}} : Edit
-{% endblock title %}
 
 {% block content %}
+
+<script>
+      set_active('events');
+
+      $(document).ready(function() {
+            load_title('Edit Event: {{event.name}}');
+      });
+</script>
 
 
 <div id="left75">

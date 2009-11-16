@@ -1,21 +1,22 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Events
-{% endblock title %}
 
-{% block eventsactive %}
-class="current"
-{% endblock %}
-
+{% extends to_extend %}
 
 {% block content %}
+<script>
+      set_active('events');
 
+      $(document).ready(function() {
+            load_title('Events');
+            load_header('');
+
+      });
+</script>
 	
 {% if volunteer %}
     <div id="lefthalf">
         {% include "events_page/_create_event.html" %}
         {% include "events_page/_upcoming_events.html" %}
-        {% include "events_page/_find_event_wide.html" %}
+        {% include "_find_event.html" %}
     </div><!--end righthalf-->
 	<div id="righthalf">
 
@@ -32,10 +33,10 @@ class="current"
 	</div><!--end lefthalf-->
 	
 	<div id="righthalf">
-		{% include "events_page/_find_event_wide.html" %}
+		{% include "_find_event.html" %}
 		{% include "events_page/_create_event.html" %}
 	</div><!--end righthalf-->
 
 {% endif %}
-	
-{% endblock content %}
+
+{% endblock %}

@@ -1,16 +1,14 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Flash Volunteer
-{% endblock title %}
-
-{% block homeactive %}class="current"{% endblock homeactive %}
-
-{% block head %} 
-        <script type="text/javascript" src="/stylesheets/javascript/mtaTwitterStatuses.js"></script>
-{% endblock head %}
-
+{% extends to_extend %}
 
 {% block content %}
+<script>
+      set_active('home');
+
+      $(document).ready(function() {
+            load_title('Home');
+            load_header('');
+      });
+</script>
 
 
 <div id="home-top">
@@ -47,17 +45,18 @@ Flash Volunteer
 	<div style="clear: both;"></div>
 </div>
 <div id="home-bottom">
-	<div id="mtaTwitter" class="fl">
-	    <div class="moduletitle">
-	    	<h3>News Feed</h3>
-		</div>
-		<div id="mtaTwitterbody"></div>
-	</div>
+
+    <script type="text/javascript">
+    	$(document).ready(function(){ 
+		    var html = "<script type=text/javascript src=http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=5><\/script>";
+			html += '<div id=mtaTwitter class=fl><div class=moduletitle><h3>News Feed</h3></div><div id=mtaTwitterbody></div></div>';
+		    $('#home-bottom').prepend(html);
+
+            mtaTwitterStatusesFilterReplies = false;
+		});
+    </script>
+
 	
-	<script type="text/javascript">
-	    mtaTwitterStatusesFilterReplies = false;
-	</script>
-	<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=5"></script>
 	
 	<div id="splash-leftmost">
 	    {% include "../events/events_page/_upcoming_events.html" %}

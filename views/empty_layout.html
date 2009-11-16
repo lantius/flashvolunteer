@@ -1,0 +1,35 @@
+
+        
+	    <!--page title--><div id="pagespectitle">{% block pagespectitle %}{% endblock pagespectitle %}</div><!--end pagespectitle-->
+
+        {% if notification_message %} 
+            <script type="text/javascript">
+
+                $(document).ready(function() {
+                    $('#container').append('<div id="dialog" title="Notifications"><p>{{ notification_message }}</p></div>');
+                    $.ui.dialog.defaults.bgiframe = true;
+                    $(function() {
+                        $("#dialog").dialog();
+                    });
+                });
+            </script>
+        {% endif %}
+
+        <script>
+            $(document).ready(function(){
+
+              $('#bottom a').click(function() {  
+                $.address.value($(this).attr('href').replace(/\/#/, ''));  
+              });
+              
+              $('#bottom a').address(function() {  
+                return $(this).attr('href').replace(/\/#/, '');  
+              });  
+            });
+        </script>
+		
+        {% block content %}
+        {% endblock content %}
+
+        <div style="clear:both"> </div>
+        

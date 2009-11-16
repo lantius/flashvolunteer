@@ -1,14 +1,7 @@
-<script>
-    function search_submit(past_events, neighborhoodid, categoryid){
-		build_dialog(100,'?past_events='+past_events+'&neighborhood='+neighborhoodid+'&interestcategory='+categoryid);
-	}
-	
-</script>
-
-<div id="findanevent" class="hardmodule">
+<div id="findaneventwide" class="hardmodule">
     <div class="moduletitle"><h3>Find An Event<a style="cursor:pointer" title="Search for events, optionally specifying a neighborhood and/or event category.">(?)</a></h3></div>
 
-    <form onSubmit="loader(this.past_events.value, this.neighborhood.value, this.interestcategory.value);">
+    <div id="event_search">     
         <ul class="formlist">
             <li>
                 {% include "../neighborhoods/_select_neighborhood__event_search.html" %}
@@ -16,12 +9,12 @@
             </li>
             <li>
                 <input type="checkbox" id="search_past_events" name="past_events" 
-				   {% if past_events and searchurl %} checked {% endif %}  />
+                   {% if past_events and searchurl %} checked {% endif %}  />
                 <label class="checkboxlabel" title="Include past and future events in search results." for="past_events">Include past events</label>
             </li>
             <li class="submiteventsearch">
-                <input type="submit" id="s_events_wide_search" value="Search" />                       
+                <button onclick="event_search_submit()" id="s_events_wide_search">Search</button>                       
             </li>                   
         </ul>
-    </form>
-</div><!--end findevent-->		
+    </div>
+</div><!--end findevent-->      

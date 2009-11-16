@@ -1,3 +1,31 @@
+function event_search_submit(){
+    if ($('#search_past_events:checked').val()) var past = 'on';
+    else var past='';
+
+    var nval = $('#event_search select.neighborhood_select option:selected').val();
+    if (nval && nval!='none') 
+       var nid = $('#event_search select.neighborhood_select option:selected').val();
+    else 
+	   var nid='';
+    
+    var cval = $('#event_search select.interest_category_select option:selected').text()
+    if (cval && cval!='none') var cid = cval;
+    else var cid='';
+    
+    build_dialog(100,'?past_events='+past+'&neighborhood='+nid+'&interestcategory='+cid);
+}
+
+
+function people_search_submit(){
+    var nval = $('#person_search select.neighborhood_select option:selected').val();
+    if (nval && nval!='none') 
+	   var nid = $('#person_search select.neighborhood_select option:selected').val();
+    else 
+	   var nid='';
+    
+    build_dialog(101,'?neighborhood='+nid);
+}
+
 function close_dialog(){
     $('#generic_dialog').remove();
 }
@@ -53,7 +81,9 @@ function build_dialog(d_type, id){
 		case 100:
 		    var url = '/events/search' + id;
 			break;
-			
+        case 101:
+            var url = '/volunteers/search' + id;
+            break;			
 	}
 
     $.get(url, function(data){

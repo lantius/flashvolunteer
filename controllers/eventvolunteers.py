@@ -55,7 +55,7 @@ class VolunteerForEvent(AbstractHandler):
               
         session = Session()
         session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
-        self.redirect('/events/' + url_data)
+        self.redirect('/#/events/' + url_data)
         return
 
     def get_message_text(self, event, account, sign_up = True):

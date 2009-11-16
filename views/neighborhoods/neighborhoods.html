@@ -1,13 +1,17 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Flash volunteer neighborhoods
-{% endblock title %}
-
-{% block neighborhoodsactive %}
-class="current"
-{% endblock %}
+{% extends to_extend %}
 
 {% block content %}
+
+<script>
+      set_active('neighborhoods');
+
+      $(document).ready(function() {
+            load_title('Neighborhoods');
+            load_header('');
+      });
+</script>
+
+
 
 {% include "../neighborhoods/_neighborhoods.html" %}
 {% endblock content %}

@@ -90,11 +90,14 @@ class MigrateDatastore(AbstractHandler):
             ep.account = ep.volunteer.account
             ep.put()
             
-#        from models.eventvolunteer import EventVolunteer
-#        for ev in EventVolunteer.all():
-#            if ev.volunteer:
-#                ev.account = ev.volunteer.account
-#                ev.put()
+        from models.eventvolunteer import EventVolunteer
+        for ev in EventVolunteer.all():
+            if ev.volunteer and not ev.account:
+                ev.account = ev.volunteer.account
+                ev.put()
+            elif ev.account and not ev.volunteer:
+                ev.volunteer = ev.account.get_user()
+                ev.put()
             
         from models.volunteerfollower import VolunteerFollower
         for vf in VolunteerFollower.all():

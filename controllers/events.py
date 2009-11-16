@@ -96,7 +96,7 @@ class EventsPage(AbstractHandler):
             event_id = self.update(params, account)
         elif 'is_delete' in params and params['is_delete'] == 'true':
             self.delete(url_data[1:], account)
-            self.redirect("/events")
+            self.redirect("/#/events")
             return
         elif 'action' in params: #add an event photo album
             self._handle_photos(params, account)
@@ -108,12 +108,12 @@ class EventsPage(AbstractHandler):
             session['notification_message'] = ['Event "%s" has been created!'%event.name]
         
         if event_id is None:
-            self.redirect('/events')
+            self.redirect('/#/events')
             return
         elif not event_id:
             return
           
-        self.redirect("/events/" + str(int(event_id)))
+        self.redirect("/#/events/" + str(int(event_id)))
         return
   
     ################################################################################
@@ -334,7 +334,7 @@ class EventsPage(AbstractHandler):
         eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True)
         
         if not eventvolunteer:
-            self.redirect("/events/" + event.id)
+            self.redirect("/#/events/" + event.id)
             return
         
         owners = event.hosts()
@@ -540,7 +540,7 @@ class EventsPage(AbstractHandler):
                 higher.put()
         
         if event_id and event_id != None:
-            self.redirect("/events/" + str(int(event_id)))
+            self.redirect("/#/events/" + str(int(event_id)))
       
       
 ################################################################################
@@ -562,7 +562,7 @@ class EventAddCoordinatorPage(AbstractHandler):
     eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
 
     if not eventvolunteer:
-        self.redirect("/events") #TODO REDIRECT to error page
+        self.redirect("/#/events") #TODO REDIRECT to error page
         return
 
     template_values = {
@@ -588,7 +588,7 @@ class EventAddCoordinatorPage(AbstractHandler):
     eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
 
     if not eventvolunteer:
-        self.redirect("/events") #TODO REDIRECT to error page
+        self.redirect("/#/events") #TODO REDIRECT to error page
         return
   
     try:
@@ -609,5 +609,5 @@ class EventAddCoordinatorPage(AbstractHandler):
     except:
         pass
 
-    self.redirect('/events/'+ event_id)
+    self.redirect('/#/events/'+ event_id)
     

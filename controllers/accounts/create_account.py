@@ -93,7 +93,7 @@ class CreateAccount(AbstractHandler):
 
 
         if not account:
-            self.redirect('/new')
+            self.redirect('/#/new')
             return False
 
         user = User(email = account.preferred_email)
@@ -142,4 +142,4 @@ class CreateAccount(AbstractHandler):
             self.redirect(session['login_redirect'])
             del session['login_redirect']
         else:
-            self.redirect('/settings')
+            self.redirect('/#/settings')

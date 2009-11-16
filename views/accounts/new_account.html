@@ -1,11 +1,13 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Volunteer Settings
-{% endblock title %}
-
-{% block profileactive %}class="current"{% endblock profileactive %}
+{% extends to_extend %}
 
 {% block content %}
+
+<script>
+      set_active('profile');
+      $(document).ready(function() {
+            load_title('New Account');
+      });
+</script>
 <div id="lefthalf">
 	<div id="createvolunteer" class="softmodule" >
 		<div class="moduletitle">

@@ -26,9 +26,12 @@
 </script>
 
 {% comment %} for RSS feed reading {% endcomment %} 
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
-  google.load("feeds", "1");
+  $(document).ready(function(){
+  	  //google's dynamic loader is interfering with the jquery-address dynamic loader; instead, directly include js/css in the header
+      //google.load("feeds", "1");
+  });
+  
 </script>
 
 <script type="text/javascript"><!--

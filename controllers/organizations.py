@@ -38,12 +38,12 @@ class OrganizationsPage(AbstractHandler):
 
     user = account.get_user()
     if user and uer.key().id() == int(organization_id):
-      self.redirect("/settings")
+      self.redirect("/#/settings")
       return
     
     session = Session()
     if not user or not session.sid:
-      self.redirect("/setting")
+      self.redirect("/#/setting")
       return
 
     page_organization = Organization.get_by_id(int(organization_id))
@@ -189,7 +189,7 @@ class OrganizationAvatar(AbstractHandler):
     else:
       self.update(params, organization)
 
-    self.redirect('/settings')
+    self.redirect('/#/settings')
   
   ################################################################################
   # DELETE

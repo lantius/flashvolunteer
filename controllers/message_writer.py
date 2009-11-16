@@ -36,7 +36,7 @@ class AbstractSendMessage(AbstractHandler):
         return
     
     def _redirect_to(self):
-        return '/messages'
+        return '/#/messages'
 
     def _get_recipients(self, id, sender):
         raise

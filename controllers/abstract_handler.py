@@ -7,6 +7,7 @@ from controllers._utils import is_debugging, get_domain, get_application
 
 from components.sessions import Session
 
+
 import urllib
 
 ################################################################################
@@ -18,16 +19,24 @@ class AbstractHandler(webapp.RequestHandler):
     def _add_base_template_values(self, vals):
         session = Session()
         account = self.auth()
-        
+        is_ajax_request = 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+        new_login = 'new_login' in session and session['new_login']
+        if is_ajax_request and not new_login:
+            to_extend = '../empty_layout.html'
+        else:
+            to_extend = "../_layout.html"
         vals.update( {
             'domain': self._get_base_url(),
             'path': self.request.path,
             'application_alias': get_application().get_alias(),
             'session_id':  session.sid,
-            'account': account
+            'account': account,
+            'to_extend': to_extend
         })
         
-        
+        if new_login:
+            del session['new_login']
+                
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
         
@@ -36,7 +45,7 @@ class AbstractHandler(webapp.RequestHandler):
                 
             session['notification_message'] = []
             
-    def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
+    def auth(self, require_login = False, redirect_to = '/#/login', require_admin = False):
         s = Session()
         account = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
         
@@ -46,11 +55,11 @@ class AbstractHandler(webapp.RequestHandler):
         session = Session()
         auth = session.get('auth', None)
         if require_login and (not auth or not auth.account):
-            self.redirect(redirect_to)
-            if redirect_to == '/login': 
-                session['login_redirect'] = self.request.path
+            self.redirect(redirect_to)        
+            if redirect_to == '/#/login': 
+                session['login_redirect'] = '/#' + self.request.path        
             raise AuthError("You must be signed in to perform this action.")
-        
+
         if auth:
             application = get_application()
             if not application.key().id() in auth.account.active_applications:

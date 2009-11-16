@@ -8,6 +8,7 @@ from controllers._utils import get_application
 
 from models.volunteer import Volunteer
 from models.volunteerfollower import VolunteerFollower
+from models.neighborhood import Neighborhood
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -39,12 +40,12 @@ class VolunteersPage(AbstractHandler):
   
     volunteer = account.get_user()
     if volunteer and volunteer.key().id() == int(volunteer_id):
-      self.redirect("/settings");
+      self.redirect("/#/settings");
       return
 
     #TODO: if application instances are closed, do not allow people to view
     if not volunteer:
-      self.redirect("/settings")
+      self.redirect("/#/settings")
       return
 
     page_volunteer = Volunteer.get_by_id(int(volunteer_id))
@@ -219,7 +220,7 @@ class VolunteerAvatar(AbstractHandler):
     else:
       self.update(params, account)
 
-    self.redirect('/settings')
+    self.redirect('/#/settings')
   
   ################################################################################
   # DELETE

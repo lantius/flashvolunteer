@@ -1,13 +1,18 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Terms of Use
-{% endblock title %}
+{% extends to_extend %}
 
 {% block pagespectitle %}
-	<h1>Terms of Use</h1>
+    <h1>Terms of Use</h1>
 {% endblock %}
 
 {% block content %}
+
+<script>
+      set_active('');
+      $(document).ready(function() {
+            load_title('Terms of Use');
+      });
+</script>
+
 <div id="middle100">
 	{% include "../static/_terms_of_use.html" %}
 </div>

@@ -1,19 +1,6 @@
-{% extends "../_layout.html" %}
+{% extends to_extend %}
 
-{% block title %}
-Forum Messages
-{% endblock title %}
 
-{% block eventsactive %}
-	{% ifequal forum.recipient_type "event" %}
-		class="current"
-	{% endifequal %}
-{% endblock %}
-{% block neighborhoodsactive %}
-	{% ifequal forum.recipient_type "neighborhood" %}
-		class="current"
-	{% endifequal %}
-{% endblock %}
 
 {% block pagespectitle %}
 <h1>Forum for 
@@ -26,6 +13,18 @@ Neighborhood:
 {% endblock %}
 
 {% block content %}
+
+<script>
+	  {% ifequal forum.recipient_type "event" %}
+        set_active('events');
+      {% endif %}
+	  {% ifequal forum.recipient_type "neighborhood" %}
+	    set_active('neighborhood');
+	  {% endif %}
+      $(document).ready(function() {
+            load_title('Forum Messages');
+      });
+</script>
 
 <div id="middle100">
 	<div id="inbox">

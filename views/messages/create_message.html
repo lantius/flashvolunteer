@@ -1,13 +1,14 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Send a message
-{% endblock title %}
-
-{% block eventactive %}
-class="current"
-{% endblock %}
+{% extends to_extend %}
 
 {% block content %}
+
+<script>
+      set_active('messages');
+
+      $(document).ready(function() {
+            load_title('Send a message');
+      });
+</script>
 
 <div id="left75">
 	<div id="eventmessagescreate" class="softmodule">

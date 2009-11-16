@@ -78,7 +78,8 @@ class Login(AbstractHandler):
             self.redirect(session['login_redirect'])
             del session['login_redirect']
         else:
-            self.redirect('/settings')
+            self.redirect('/#/settings')
+        session['new_login'] = True
       
     def login(self, errors = None, email = None):
                   
@@ -99,10 +100,7 @@ class Login(AbstractHandler):
             
         session = Session()
         logging.info('login referrer:'+self.request.referrer)
-        #TODO: make this more secure?
-        #if self.request.referrer and not self.request.referrer.endswith('org/') and self.request.referrer.find('flashvolunteer') > -1:
-        #    session['login_redirect'] = self.request.referrer
-            
+
         self._add_base_template_values(vals = template_values)
         path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'accounts', 'login.html')
         self.response.out.write(template.render(path, template_values))
@@ -112,6 +110,7 @@ class Login(AbstractHandler):
             self.rpx_auth()
         else:
             self.fv_auth()
+        session['new_login'] = True
             
     def fv_auth(self):
         from models.auth import Account, Auth
@@ -146,7 +145,7 @@ class Login(AbstractHandler):
             self.redirect(session['login_redirect'])
             del session['login_redirect']
         else:
-            self.redirect('/profile')
+            self.redirect('/#/profile')
                 
     def rpx_auth(self):
         token = self.request.get('token')
@@ -185,12 +184,12 @@ class Login(AbstractHandler):
                     self.redirect(session['login_redirect'])
                     del session['login_redirect']
                 else:
-                    self.redirect('/profile')
+                    self.redirect('/#/profile')
             else:
-                self.redirect('/new')
+                self.redirect('/#/new')
                 
         else:
-            self.redirect('/login')      
+            self.redirect('/#/login')      
 
 def check_avatar(account):
     if not account: return

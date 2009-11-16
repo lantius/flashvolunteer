@@ -43,21 +43,21 @@ class VerifyEventAttendance(AbstractHandler):
 
     self.update(params, account)
 
-    self.redirect("/events/" + url_data)
+    self.redirect("/#/events/" + url_data)
 
   ################################################################################
   # SHOW
   def show(self, params, account):
     event = Event.get_by_id(int(params['id']))    
     if not event:
-      self.redirect("/events/" + url_data)
+      self.redirect("/#/events/" + url_data)
       return
     
     if account: user = account.get_user()
     ev = event.eventvolunteers.filter('volunteer =', user).get()
                         
     if not ev:
-      self.redirect("/events/" + url_data)
+      self.redirect("/#/events/" + url_data)
       return
     
     template_values = {

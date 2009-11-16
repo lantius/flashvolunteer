@@ -1,15 +1,15 @@
-{% extends "../_layout.html" %}
-{% block title %}
-People
-{% endblock title %}
-
-{% block friendsactive %}
-class="current"
-{% endblock %}
-
+{% extends to_extend %}
 
 {% block content %}
 
+<script>
+      set_active('friends');
+
+      $(document).ready(function() {
+            load_title('People');
+            load_header('');
+      });
+</script>
 
 <div id="lefthalf">
     {% include "../volunteers/_find_volunteer_wide.html" %} 

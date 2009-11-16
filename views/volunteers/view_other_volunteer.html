@@ -1,14 +1,17 @@
-{% extends "../_layout.html" %}
-{% block title %}
-{{ page_volunteer.account.get_name }}'s public page
-{% endblock title %}
+{% extends to_extend %}
 
 {% block pagespectitle %}
     <h1>{{ page_volunteer.account.name }}</h1>
 {% endblock %}
 
-
 {% block content %}
+
+<script>
+      set_active('profile');
+      $(document).ready(function() {
+            load_title('{{ page_volunteer.account.get_name }}\'s public page');
+      });
+</script>
 
 
 
@@ -19,8 +22,6 @@
     </div>
     {% include "../volunteers/view_other_volunteer/_information.html" %}
     {% include "../volunteers/view_other_volunteer/_list_brief.html" %}
-
-
 </div><!--end leftthird-->
 
 <div id="middlethird">

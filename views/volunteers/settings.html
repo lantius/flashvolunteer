@@ -1,17 +1,20 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Volunteer Settings
-{% endblock title %}
-
-{% block profileactive %}class="current"{% endblock profileactive %}
+{% extends to_extend %}
 
 
 
 {% block pagespectitle %}
-	<h1>{{ account.name }}</h1>
+    <h1>{{ account.name }}</h1>
 {% endblock %}
 
 {% block content %}
+
+<script>
+      set_active('profile');
+      $(document).ready(function() {
+            load_title('Profile Settings');
+      });
+</script>
+
 <div id="left25">
     <div id="personblock" class="softmodule">
 	    {% include "../volunteers/home/_narrow_name.html" %}   
