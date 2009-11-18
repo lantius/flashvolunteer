@@ -82,7 +82,7 @@ class Login(AbstractHandler):
         session['new_login'] = True
       
     def login(self, errors = None, email = None):
-                  
+        logging.info('handling get')
         dev_server = is_debugging() 
         
         template_values = { 
@@ -106,10 +106,12 @@ class Login(AbstractHandler):
         self.response.out.write(template.render(path, template_values))
     
     def post(self):
+        logging.info('handling post .1')
         if self.request.get('token', None):
             self.rpx_auth()
         else:
             self.fv_auth()
+        session = Session()
         session['new_login'] = True
             
     def fv_auth(self):
@@ -148,6 +150,7 @@ class Login(AbstractHandler):
             self.redirect('/#/profile')
                 
     def rpx_auth(self):
+        logging.info('handling post1')
         token = self.request.get('token')
         url = 'https://rpxnow.com/api/v2/auth_info'
         args = {
@@ -161,7 +164,7 @@ class Login(AbstractHandler):
                            headers={'Content-Type':'application/x-www-form-urlencoded'}
                            )
         json = simplejson.loads(r.content)
-        
+        logging.info('handling post')
         if json['stat'] == 'ok':  
             login_info = json['profile']  
 
@@ -177,10 +180,12 @@ class Login(AbstractHandler):
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
 
             if auth:
+                logging.info('got auth')
                 session['auth'] = auth
                 account = self.auth()
                 check_avatar(account = account)
                 if 'login_redirect' in session:
+                    logging.info('redirecting to %s'%session['login_redirect'])
                     self.redirect(session['login_redirect'])
                     del session['login_redirect']
                 else:
