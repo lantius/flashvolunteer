@@ -16,6 +16,10 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin    
 
+- url: /admin
+  script: controllers/admin/route.py
+  login: admin
+    
 - url: /admin/.*
   script: controllers/admin/route.py
   login: admin
@@ -23,7 +27,10 @@ handlers:
 - url: /_ah/queue/deferred
   script: $PYTHON_LIB/google/appengine/ext/deferred/deferred.py
   login: admin
-      
+
+- url: /google/.*
+  script: controllers/google_api/route.py
+          
 - url: /.*
   script: controllers/route.py
 

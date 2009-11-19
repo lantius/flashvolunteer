@@ -1,22 +1,11 @@
 <div id="eventmap" class="hardmodule">
+	
 {% if event.location %}
-  <script type="text/javascript" src="http://www.google.com/jsapi?key={{GOOGLE_MAPS_API_KEY}}"></script>	
-	<script type="text/javascript">
-    google.load("maps", "2", {"other_params":"sensor=false"});
 
-	  // Call this function when the page has been loaded
-    function initialize() {
-      var map = new google.maps.Map2(document.getElementById("map_canvas"));
-      map.setUIToDefault();       
-	  var point = new GLatLng({{event.location.lat}},{{event.location.lon}})
-	  map.setCenter(point, 13);
-	  var marker = new GMarker(point);
-      map.addOverlay(marker);
-    }
-    google.setOnLoadCallback(initialize);
-	</script>
-
-	<div id="map_canvas"></div>
+  <iframe style="border:none" width="100%" height="200px" src="/google/map?lat={{event.location.lat}}&lon={{event.location.lon}}">
+  	
+  </iframe>
+  
 {%else%}
 {%endif%}
 </div><!--end eventmap-->

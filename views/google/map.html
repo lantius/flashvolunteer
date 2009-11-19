@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+  <head>
+  	<style type=text/css>
+  		div#map_canvas{height:169px;}
+  	</style>
+	
+  </head>
+
+  <body>
+  <script type="text/javascript" src="http://www.google.com/jsapi?key={{GOOGLE_MAPS_API_KEY}}"></script>
+  <script type="text/javascript">
+    google.load("maps", "2", {"other_params":"sensor=false"});
+
+      // Call this function when the page has been loaded
+    function initialize(){
+          var map = new google.maps.Map2(document.getElementById("map_canvas"));
+          map.setUIToDefault();       
+          var point = new GLatLng({{lat}},{{lon}});
+          map.setCenter(point, 13);
+          var marker = new GMarker(point);
+          map.addOverlay(marker);
+    };
+   
+
+    google.setOnLoadCallback(initialize);
+    </script>
+
+	<div id="map_canvas"></div>
+</body>
