@@ -9,7 +9,7 @@ Event:
 {% else %}
 Neighborhood: 
 {% endifequal %}
-<a href="{{ forum.path }}" >{{forum.name}}</a></h1>
+<a class="fv" href="{{ forum.path }}" >{{forum.name}}</a></h1>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +32,7 @@ Neighborhood:
 		<div id="forum" class="nonembed softmodule">
 			<ul >
 				<li>
-					<a class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}/messages">
+					<a class="fv" class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}/messages">
 						&raquo;Post new message
 					</a>
 				</li>
@@ -43,7 +43,7 @@ Neighborhood:
 	                    <tr class="message read">
 	            	        <td>
 	                            <div class="volunteer_summary_pic">
-	                                <a href="{{ mr.message.get_sender.url }}" >
+	                                <a class="fv" href="{{ mr.message.get_sender.url }}" >
 	                                    <img class="smallavatar" src="
 	                                    {% if mr.message.get_sender %}
 	                                        {% if mr.message.get_sender.avatar %}
@@ -61,7 +61,7 @@ Neighborhood:
 	                        <td class="minfo">
 	                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %}{%endif%}
 	                        	<div>{% if mr.message.get_sender %}
-								         <a href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
+								         <a class="fv" href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
 									 {% else %}
 									    Flash Volunteer
 									 {%endif%}

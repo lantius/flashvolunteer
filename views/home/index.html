@@ -1,6 +1,7 @@
 {% extends to_extend %}
 
 {% block content %}
+
 <script>
       set_active('home');
 
@@ -32,12 +33,12 @@
 	        <h3>Tips for Getting Started</h3>
 	    </div>              
 	        <ol>
-	            {%if not volunteer%}<li><a href="/login">Login or signup.</a></li>{%endif%}
-	            <li>Identify the <a href="/neighborhoods">neighborhoods</a> where you live and work{%if volunteer%}<a href="/settings"> by editing your volunteer profile</a>{%endif%}.</li>
-	            <li>Sign up to volunteer for an <a href="/events">event</a>.</li>
+	            {%if not volunteer%}<li><a  class="fv" href="/login">Login or signup.</a></li>{%endif%}
+	            <li>Identify the <a  class="fv" href="/neighborhoods">neighborhoods</a> where you live and work{%if volunteer%}<a href="/settings"> by editing your volunteer profile</a>{%endif%}.</li>
+	            <li>Sign up to volunteer for an <a  class="fv" href="/events">event</a>.</li>
 	            <li>Attend the event.</li>
-	            <li>Become {% if volunteer %} <a href="/team">Flash Friends</a>{%else%}Flash Friends{%endif%} with other volunteers.</li>
-	            <li>{%if volunteer %}<a href="/events/new">{%endif%}Create and organize events{%if volunteer%}</a>{%endif%} in your neighborhood.</li>
+	            <li>Become {% if volunteer %} <a  class="fv" href="/team">Flash Friends</a>{%else%}Flash Friends{%endif%} with other volunteers.</li>
+	            <li>{%if volunteer %}<a  class="fv" href="/events/new">{%endif%}Create and organize events{%if volunteer%}</a>{%endif%} in your neighborhood.</li>
 	            <li>Repeat.</li>
 	        </ol>                   
 	

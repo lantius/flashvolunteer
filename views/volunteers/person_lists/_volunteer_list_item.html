@@ -8,7 +8,7 @@
 
         
         <div class="volunteer_summary_pic">
-            <a href="{{ volunteer_in_list.url }}" >
+            <a class="fv" href="{{ volunteer_in_list.url }}" >
             <img class="smallavatar" src="
             {% if volunteer_in_list.avatar %}
                 {{ volunteer_in_list.url }}/avatar
@@ -19,7 +19,7 @@
         </div>
         <div class="volunteer_summary_name">
                 <div>
-                 <a id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
+                 <a class="fv" id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
                     {{ volunteer_in_list.account.get_first_name }}
                     <br/>
                     {{ volunteer_in_list.account.get_last_name }}
@@ -39,7 +39,7 @@
 						</div>
                       {% endif %}
                         <div class="fl">
-                        	<a class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">
+                        	<a class="fv" class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">
                         		<img src="/stylesheets/media/email_icon.gif" />
 							</a>
 	                    </div>

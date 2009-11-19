@@ -16,7 +16,7 @@ $('table.zebra tr:odd').addClass('odd');
             <ul>
                 {% for neighborhood in neighborhoods1 %}
                     <li>
-                        <a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
+                        <a class="fv" href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
                     </li>
                 {% endfor %}
             </ul>               
@@ -34,7 +34,7 @@ $('table.zebra tr:odd').addClass('odd');
             <ul>               
                 {% for neighborhood in neighborhoods3 %}
                     <li>     
-                        <a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
+                        <a class="fv" href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
                     </li>
                 {% endfor %}    
             </ul>
@@ -63,7 +63,7 @@ $('table.zebra tr:odd').addClass('odd');
                     {% for n in most_active_neighborhoods %}                                                    
                         <tr>
                             <th>
-                                <a href="{{ n.0.url }}">{{ n.0.name }}</a>                            
+                                <a class="fv" href="{{ n.0.url }}">{{ n.0.name }}</a>                            
                             </th>                               
                             <td>
                                 {% if n.1.0 or n.1.1 %}                                    

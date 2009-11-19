@@ -24,7 +24,7 @@ $('table.zebra tr:odd').addClass('odd');
                    {% for v in most_active_volunteers %} 				                                               
                         <tr>
                             <th>
-                                <a href="{{ v.0.url }}">{{ v.0.name }}</a>                        
+                                <a class="fv" href="{{ v.0.url }}">{{ v.0.name }}</a>                        
                             </th>                               
                             <td>
                                 {% if v.1.0 %}                                    

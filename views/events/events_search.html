@@ -37,11 +37,11 @@
 	    <div class="buttons">
 	        <div class="pagination">
 	            {% ifnotequal prev_page -1 %} 
-	                <a href="{{url}}{{prev_page}}">&laquo;  </a>
+	                <a  class="fv" href="{{url}}{{prev_page}}">&laquo;  </a>
 	            {% endifnotequal %}
 	            {{ start }} - {{end}} of {{ total }}
 	            {% ifnotequal next_page -1 %} 
-	                <a href="{{url}}{{next_page}}">  &raquo;</a>
+	                <a  class="fv" href="{{url}}{{next_page}}">  &raquo;</a>
 	            {% endifnotequal %}
 	        </div>
 	    <input type="button" class="closedialog" name="close" value="Close"/>

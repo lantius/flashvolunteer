@@ -3,7 +3,7 @@
 		
 		<div id="left_verify">
 	        <div class="volunteer_summary_pic">
-	            <a href="{{ ev.volunteer.url }}" >
+	            <a class="fv" href="{{ ev.volunteer.url }}" >
 	            <img class="smallavatar" src="
 	            {% if ev.volunteer.avatar %}
 	                {{ ev.volunteer.url }}/avatar
@@ -15,7 +15,7 @@
 	        
 	        <div id="volunteer_summary_desc" class="volunteer_summary_desc">
 	            <div class="volunteer_summary_name">
-	             <a id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
+	             <a class="fv" id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
 	            </div>
 			</div>
 		</div>

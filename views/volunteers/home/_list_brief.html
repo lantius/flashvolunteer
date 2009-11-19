@@ -5,7 +5,7 @@
 	</div>
 	<ul>
 		{% for f in volunteer.friends %}
-			<li><a href="{{f.url}}">{{ f.account.get_name }}</a></li>
+			<li><a class="fv" href="{{f.url}}">{{ f.account.get_name }}</a></li>
 		{% endfor %}
 	</ul>
 </div><!--end friends-->
@@ -13,7 +13,7 @@
 {% if volunteer.friends %}
     {% ifnotequal volunteer.friends|length 0 %}
 	    <div class="pagination_entry">
-	    <a href="/team">&raquo; View whole team</a>
+	    <a class="fv" href="/team">&raquo; View whole team</a>
 	    </div>
     {% endifnotequal %}
 {% else %}

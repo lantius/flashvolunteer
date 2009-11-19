@@ -74,7 +74,7 @@
 					</fieldset>
                     <fieldset>
                     <ul>	
-					<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I accept the <a href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
+					<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I accept the <a class="fv" target="_blank" href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
 					{% if account.error.tosagree %}
 						<br/><strong class="error">{{account.error.tosagree.0}}</strong>
 					{% endif %}

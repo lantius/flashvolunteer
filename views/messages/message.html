@@ -22,7 +22,7 @@
                 <li class="fl">
                 	<div class="volunteer_summary_pic">
                       {%if sender_viewing %}
-	                        <a href="{{ message.get_recipient.url }}" >
+	                        <a class="fv" href="{{ message.get_recipient.url }}" >
 	                            <img class="smallavatar" src="
 								{% if message.get_recipient %}
 		                            {% if message.get_recipient.avatar %}
@@ -36,7 +36,7 @@
 	                            " alt="{{ message.get_recipient.name }}" />
 							</a>
 						{% else %}
-	                        <a href="{{ message.get_sender.url }}" >
+	                        <a class="fv" href="{{ message.get_sender.url }}" >
 	                            <img class="smallavatar" src="
 	                            {% if message.get_sender %}
 	                                {% if message.get_sender.avatar %}
@@ -56,7 +56,7 @@
                 <li class="fl">
                     <div>
                     	{% if sender_viewing %}
-	                    	To: <a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+	                    	To: <a class="fv" href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
 						{% else %}
                             {% if message.autogen %}
                                  <span class="additionalinfo">Auto-sent on behalf of</span>
@@ -64,7 +64,7 @@
 							     From:
                             {%endif%}
                             {% if message.get_sender %}
-                                     <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
+                                     <a class="fv" href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
                              {% else %}
                                      Flash Volunteer
                              {%endif%}						
@@ -74,7 +74,7 @@
 					{% if message.autogen %}
 					{% else %}
 					   <div class="operations">
-					   	   {% if sender_viewing %}{% else %}<a href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
+					   	   {% if sender_viewing %}{% else %}<a class="fv" href="{{message.get_sender.url}}/send_message" title="Reply to this message">&raquo; Reply</a>{% endif %}
 					   </div>
 					{%endif%}
 				</li>
@@ -95,7 +95,7 @@
     <div id="creationtips" class="hardmodule">
         <div class="moduletitle"><h3>Message notes</h3></div>
         <ul>
-            <li>If you don't want to receive these kinds of messages, you can <a href='/settings'>change your message settings</a>.</li>
+            <li>If you don't want to receive these kinds of messages, you can <a class="fv" href='/settings'>change your message settings</a>.</li>
             <li><a href="mailto:info@flashvolunteer.org">Send us mail</a> to report inappropriate messages.</li>
         </ul>
     </div>  

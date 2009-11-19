@@ -1,6 +1,6 @@
 
         
-	    <!--page title--><div id="pagespectitle">{% block pagespectitle %}{% endblock pagespectitle %}</div><!--end pagespectitle-->
+	    <!--page title--><div id="pagespectitle"></div><!--end pagespectitle-->
 
         {% if notification_message %} 
             <script type="text/javascript">
@@ -18,13 +18,15 @@
         <script>
             $(document).ready(function(){
 
-              $('#bottom a').click(function() {  
-                $.address.value($(this).attr('href').replace(/\/#/, ''));  
-              });
-              
-              $('#bottom a').address(function() {  
-                return $(this).attr('href').replace(/\/#/, '');  
-              });  
+              $('#content a.fv').each(function(){
+	              $(this).click(function() {  
+	                $.address.value($(this).attr('href').replace(/\/#/, ''));  
+	              });
+	              
+	              $(this).address(function() {  
+	                return $(this).attr('href').replace(/\/#/, '');  
+	              });  
+			  });
             });
         </script>
 		

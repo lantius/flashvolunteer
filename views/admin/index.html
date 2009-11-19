@@ -1,27 +1,25 @@
-{% extends "../_layout.html" %}
-{% block title %}
-Flash Volunteer Admin Page
-{% endblock title %}
-
-{% block adminactive %}class="current"{% endblock adminactive %}
-
-{% block head %} 
-        <!-- 
-        <script type="text/javascript" src="/stylesheets/javascript/mtaTwitterStatuses.js"></script>
-        -->
-{% endblock head %}
-
+{% extends to_extend %}
 
 {% block content %}
 
-{% if not account.is_admin %}
+<script>
+      set_active('admin');
+
+      $(document).ready(function() {
+            load_title('Flash Volunteer Admin Page');
+            load_header('');
+      });
+</script>
+
+{% if not account.is_admin %}{% endif %}
+{% if 0 %}
 <div id="home-top">
 
     <div id="home-error">
-        This section is for Flash Volunteer {{application_alias}} administrators!  Volunteer through the <a href='../'>mainpage</a> or change your admin status
+        This section is for Flash Volunteer {{application_alias}} administrators!  Volunteer through the <a  class="fv" href='../'>mainpage</a> or change your admin status
     </div>
     
-{%else%}
+{% else %}
 
 <div id="home-top">
 	

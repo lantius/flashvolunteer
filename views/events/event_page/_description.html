@@ -8,7 +8,7 @@
             <li>            
                 <ul style="padding-top:5px">
                     {% for ic in event.interestcategories %}
-                        <li style="display:inline"><a id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a>{% if forloop.last %}{%else%},{%endif%}</li>
+                        <li style="display:inline"><a  class="fv" id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name }}</a>{% if forloop.last %}{%else%},{%endif%}</li>
                     {% endfor %}
                 </ul>
             </li>{% endifnotequal %}

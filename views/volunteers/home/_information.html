@@ -5,10 +5,10 @@
 			</div>
 			<ul>
 			  {% if volunteer.home_neighborhood %}
-				<li><span class="label">Live in</span> <a href="{{ volunteer.home_neighborhood.url }}">{{ volunteer.home_neighborhood.name }}</a></li>
+				<li><span class="label">Live in</span> <a class="fv" href="{{ volunteer.home_neighborhood.url }}">{{ volunteer.home_neighborhood.name }}</a></li>
 				{% endif %}
         {% if volunteer.work_neighborhood %}
-				<li><span class="label">Work in</span> <a href="{{ volunteer.work_neighborhood.url }}">{{ volunteer.work_neighborhood.name }}</a></li>
+				<li><span class="label">Work in</span> <a class="fv" href="{{ volunteer.work_neighborhood.url }}">{{ volunteer.work_neighborhood.name }}</a></li>
         {% endif %}
 				<li><span class="label">Volunteered at </span> {{ volunteer.events_past_count }} event(s)</li>
 				<li><span class="label">Signed up for</span> {{ volunteer.events_future_count }} event(s)</li>

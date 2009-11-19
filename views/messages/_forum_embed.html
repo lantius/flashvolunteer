@@ -46,7 +46,7 @@
 	                    <tr class="message unread">
 	            	        <td class="minfo">
 	            	        	<div>
-	                                <a href="{{ message.get_sender.url }}" >
+	                                <a class="fv" href="{{ message.get_sender.url }}" >
 	                                    <img class="microavatar" src="
 	                                    {% if message.get_sender %}
 	                                        {% if message.get_sender.avatar %}
@@ -62,7 +62,7 @@
                                 </div>
 	                        	{% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
 	                        	<div>{% if message.get_sender %}
-								         <a href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
+								         <a class="fv" href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
 									 {% else %}
 									    Flash Volunteer
 									 {%endif%}
@@ -72,7 +72,7 @@
 								</div>
 							</td>
 	                        <td class="msubject">
-	                        	<div><a href="{{message.url}}">{{ message.subject }}</a></div>
+	                        	<div><a class="fv" href="{{message.url}}">{{ message.subject }}</a></div>
 							    <div id="morediv_{{message.key.id}}" class="subtext morediv">
 								    <span class="morebody" keyid="{{message.key.id}}" >{{ message.body}}</span>
 									<a href="javascript: showmore({{message.key.id}}, false);">&raquo; Less</a>
@@ -91,13 +91,13 @@
 		<ul>
 			{% if forum.more_messages %}
 			<li>
-				<a class="operation" title="Show all messages" href="{{forum.path}}/messages">
+				<a class="fv" class="operation" title="Show all messages" href="{{forum.path}}/messages">
 					&raquo;Show all messages
 				</a>
 			</li>
 			{% endif %}
 			<li>
-				<a class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}">
+				<a class="fv" class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}">
 					&raquo;Post new message
 				</a>
 			</li>

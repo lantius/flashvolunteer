@@ -19,10 +19,10 @@
 	<div id="mailbox-tab-sections">
 	   <ul id="nav" class="tab-links">
 	        <li>
-	            <a href="#inbox">Inbox</a>              
+	            <a class="fv" href="#inbox">Inbox</a>              
 	        </li>
 	        <li>
-	            <a href="#sent">Sent</a>              
+	            <a class="fv" href="#sent">Sent</a>              
 	        </li>
 	    </ul>
 		<div id="inbox">
@@ -33,7 +33,7 @@
 		                    <tr class="message {% if mr.read %}read{%else%}unread{%endif%}">
 		            	        <td>
 		                            <div class="volunteer_summary_pic">
-		                                <a href="{{ mr.message.get_sender.url }}" >
+		                                <a class="fv" href="{{ mr.message.get_sender.url }}" >
 		                                    <img class="smallavatar" src="
 		                                    {% if mr.message.get_sender %}
 		                                        {% if mr.message.get_sender.avatar %}
@@ -51,7 +51,7 @@
 		                        <td class="minfo">
 		                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %} From: {%endif%}
 		                        	<div>{% if mr.message.get_sender %}
-									         <a href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
+									         <a class="fv" href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
 										 {% else %}
 										    Flash Volunteer
 										 {%endif%}
@@ -59,7 +59,7 @@
 									<div class="subtext">{{ mr.message.time_sent }}</div>
 								</td>
 		                        <td class="msubject">
-		                        	<div><a href="{{mr.message.url}}">{{ mr.message.subject }}</a></div>
+		                        	<div><a class="fv" href="{{mr.message.url}}">{{ mr.message.subject }}</a></div>
 								    <div class="subtext">{{ mr.message.body|slice:":200"}}...</div>
 								</td>
 		                    </tr>
@@ -71,7 +71,7 @@
 			
 			<div class="pagination">
 			    {% if next %} 
-			        <a href="{{domain}}/messages?bookmark={{next}}">  &raquo; next page</a>
+			        <a class="fv" href="{{domain}}/messages?bookmark={{next}}">  &raquo; next page</a>
 			    {% endif %}
 			</div>
         </div>
@@ -84,7 +84,7 @@
                             <tr class="message">
                                 <td>
                                     <div class="volunteer_summary_pic">
-                                        <a href="{{ message.get_recipient.url }}" >
+                                        <a class="fv" href="{{ message.get_recipient.url }}" >
                                             <img class="smallavatar" src="
                                             {% if message.get_recipient %}
                                                 {% if message.get_recipient.avatar %}
@@ -101,7 +101,7 @@
                                 </td>
                                 <td class="minfo">
                                     <div>{% if message.get_recipient %}
-                                             To: <a href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+                                             To: <a class="fv" href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
                                          {% else %}
                                             Flash Volunteer
                                          {%endif%}
@@ -109,7 +109,7 @@
                                     <div class="subtext">{{ message.time_sent }}</div>
                                 </td>
                                 <td class="msubject">
-                                    <div><a href="{{message.url}}">{{ message.subject }}</a></div>
+                                    <div><a class="fv" href="{{message.url}}">{{ message.subject }}</a></div>
                                     <div class="subtext">{{ message.body|slice:":200"}}...</div>
                                 </td>
                             </tr>
@@ -121,7 +121,7 @@
             
             <div class="pagination">
                 {% if sent_next %} 
-                    <a href="{{domain}}/messages?bookmark={{sent_next}}">  &raquo; next page</a>
+                    <a class="fv" href="{{domain}}/messages?bookmark={{sent_next}}">  &raquo; next page</a>
                 {% endif %}
             </div>
         </div>	

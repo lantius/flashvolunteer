@@ -114,8 +114,6 @@ def real_main():
            
            ('/events/(\d+)/volunteer', VolunteerForEvent),
            ('/events/(\d+)/add_coordinator', EventAddCoordinatorPage),
-    #         ('/events/(\d+)/contact_volunteers', Event)
-           #('/events/(\d+)/messages(|/\d+|/new)', EventMessagesPage),
            ('/events/(\d+)/verify', VerifyEventAttendance),
            ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
            ('/events/(\d+)/attendees/(\d+)', PaginatedEventAttendeesPage),
@@ -158,7 +156,7 @@ def real_main():
            ('/api/applications/this', ThisApplication),
 
            #TODO: route here? admin tools
-           ('/admin', AdminPage)
+           #('/admin', AdminPage)
           ],
           debug=debug)
     wsgiref.handlers.CGIHandler().run(application)

@@ -1,17 +1,17 @@
 
 	<div id="personinbox" class="softmodule">
-		<div class="moduletitle"><h3>Inbox</h3><a href="/messages">view all messages</a></div>
+		<div class="moduletitle"><h3>Inbox</h3><a class="fv" href="/messages">view all messages</a></div>
 		<div class="messages">
 			<ul>
 				<li>
 					<table>
 						<tr><th class="sender">From:</th><th class="subject">Subject:</th><th class="message">Message</th></tr>
 						{% for m in volunteer.messages %}
-							<tr><td class="sender"><a href="{{ m.get_sender.profile }}">{{ m.get_sender }}</a></td><td class="subject">{{ m.subject }}</td><td class="message"></td></tr>
+							<tr><td class="sender"><a class="fv" href="{{ m.get_sender.profile }}">{{ m.get_sender }}</a></td><td class="subject">{{ m.subject }}</td><td class="message"></td></tr>
 						{% endfor %}
 					</table>
 					</li>
-					<li class="tallerlistitem"><a href="/messages">&raquo; View All Messages</a></li>
+					<li class="tallerlistitem"><a class="fv" href="/messages">&raquo; View All Messages</a></li>
 				</ul>
 		</div>
 	</div><!--end profileinbox-->

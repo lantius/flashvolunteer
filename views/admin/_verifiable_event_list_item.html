@@ -3,14 +3,14 @@
     <!--
     <label class="checkboxlabel" title="Verify this event" for="do_verify__{{event.key.id}">Verify this</label>
     -->
-    <a id="event_upcoming[{{event.key.id}}]" class="event_name" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name }}</a>
+    <a  class="fv" id="event_upcoming[{{event.key.id}}]" class="event_name" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name }}</a>
     <ul>
         <!-- TODO: choose important info about each event -->
-        <li>{{ event.get_start_time }}, {{ event.get_startdate }}, <a href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>
+        <li>{{ event.get_start_time }}, {{ event.get_startdate }}, <a  class="fv" href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>
 		<li><span class="label">Organizers:</span> 
 			{% for owner in event.hosts %}
 				{% ifequal forloop.counter 1 %}
-					<a href="{{owner.url}}">{{owner.account.get_name}}</a>
+					<a  class="fv" href="{{owner.url}}">{{owner.account.get_name}}</a>
 				{% else %} 
 					{%ifequal forloop.counter 2 %}
 						(...)

@@ -57,8 +57,8 @@
 				$('#content').fadeTo('normal', 1.0);
 		    });
 
-          $('#navtabs a, a#l_login, #static_nav a').each(function(){
-		  	
+          //$('#navtabs a, a#l_login, #static_nav a').each(function(){
+		  $('#navtabs a.fv, a#l_login, #static_nav a.fv').each(function(){
 			
 			$(this).click(function() {  
                 $.address.value($(this).attr('href').replace(/^#/, ''));  
@@ -78,12 +78,12 @@
     <div id="loadingDiv" style="width:100%;position:absolute;top:200px;z-index:500;"><ul style="width:200px;margin:auto"><img src="/stylesheets/media/ajax-loader.gif" alt="Loading" /></ul></div>
 	<div id="top">
 			<div id="logo-strip">
-				<div id="logo" class="fl"><a href="/"><img src="/stylesheets/media/logo.png" alt="Flash Volunteer Logo"/></a></div>
-				<div id="beta" class="fl"><a href="/static/help#beta"><img src="/stylesheets/media/beta.png" alt="Flash Volunteer is in Beta"/></a></div>		
+				<div id="logo" class="fl"><a class="fv" href="/"><img src="/stylesheets/media/logo.png" alt="Flash Volunteer Logo"/></a></div>
+				<div id="beta" class="fl"><a class="fv" href="/static/help#beta"><img src="/stylesheets/media/beta.png" alt="Flash Volunteer is in Beta"/></a></div>		
 				{%if account and account.is_saved%}
 				    <div id="volavatar">
 		    	        <div class="volunteer_summary_pic">
-				            <a class="ezjax" href="/settings" >
+				            <a class="fv" href="/settings" >
 				            <img class="smallavatar" src="
 				            {% if volunteer.avatar %}
 				                {{ volunteer.url }}/avatar
@@ -93,9 +93,9 @@
 				            " alt="{{ account.get_name }}" /></a>
 				        </div>
 				    </div>
-					<div id="volunteerwelcome">Welcome, {{ account.get_name|striptags }} <br /><a href="/logout" id="l_logout">Log Out</a></div>
+					<div id="volunteerwelcome">Welcome, {{ account.get_name|striptags }} <br /><a class="fv" href="/logout" id="l_logout">Log Out</a></div>
 				{% else %}
-					<div id="volunteerwelcome"><a href="/login" id="l_login">Log in or signup</a></div>			
+					<div id="volunteerwelcome"><a class="fv" href="/login" id="l_login">Log in or signup</a></div>			
 				{% endif %}
 		    </div><!--end logo-strip-->
     </div><!--end top-->
@@ -103,19 +103,19 @@
 
 	<div id="navtabs">
 		<ul>
-			<li id="homelink"><a class="ezjax" href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
+			<li id="homelink"><a class="fv" href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
             {%if volunteer and volunteer.is_saved%}
-                <li id="profilelink"><a class="ezjax" href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
-				<li id="mailboxlink"><a class="ezjax" href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>        
+                <li id="profilelink"><a class="fv" href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
+				<li id="mailboxlink"><a class="fv" href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>        
             {% endif %}                
-			<li id="eventslink"><a class="ezjax" href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
-			<li id="neighborhoodslink"><a class="ezjax" href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
+			<li id="eventslink"><a class="fv" href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
+			<li id="neighborhoodslink"><a class="fv" href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
 			{%if volunteer and volunteer.is_saved%}
-				<li id="teamlink"><a class="ezjax" href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
+				<li id="teamlink"><a class="fv" href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
 			{% endif %}
-			<li id="helplink"><a class="ezjax" href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
+			<li id="helplink"><a class="fv" href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
 			{%if account and account.is_admin %}
-				<li id="adminlink"><a class="ezjax" href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>
+				<li id="adminlink"><a class="fv" href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>
 			{% endif %}
 		</ul>
 	</div><!--end navtabs-->
@@ -152,10 +152,10 @@
 
 <div id="footer">
 		<ul id="static_nav">
-			<li><a href="/static/about">About</a></li>
-			<li><a href="/static/partners">Partners</a></li>
-			<li><a href="/static/privacy">Privacy Policy</a></li>
-			<li><a href="/static/tos">Terms of Use</a></li>
+			<li><a class="fv" href="/static/about">About</a></li>
+			<li><a class="fv" href="/static/partners">Partners</a></li>
+			<li><a class="fv" href="/static/privacy">Privacy Policy</a></li>
+			<li><a class="fv" href="/static/tos">Terms of Use</a></li>
 		</ul>
         <div id="badges">
         	<ul>
@@ -166,7 +166,7 @@
 	                <a href="http://twitter.com/flashvolunteer"><img id="twitter-badge-img" src="/stylesheets/media/tw2_gif.gif" alt="Follow us on Twitter"/></a>                     
 	            </li>
 				<li class="badge" id="donate-badge">
-	                <a href="/static/donate"><img id="donate-badge-img" alt="" border="0" src="/stylesheets/media/donate.gif"></a>                     
+	                <a class="fv" href="/static/donate"><img id="donate-badge-img" alt="" border="0" src="/stylesheets/media/donate.gif"></a>                     
 	            </li>
 	        </ul>          
         </div>

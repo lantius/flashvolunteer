@@ -42,7 +42,7 @@
         <li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
         <li><span class="label">I work nearest to:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
 					
-		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a href="/static/tos">Terms of Use</a></li>
+		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a class="fv" href="/static/tos">Terms of Use</a></li>
 		{% if volunteer.error.tosagree %}
 			<br/><strong class="error">{{volunteer.error.tosagree.0}}</strong>
 		{% endif %}
