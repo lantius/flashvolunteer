@@ -39,6 +39,7 @@
     
 	<script>
       $.address.change(function(event) {
+	  	console.log("address change:"+event.value);
         $('#columns').load(event.value);    
       }); 
 	</script>

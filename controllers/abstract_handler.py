@@ -21,7 +21,8 @@ class AbstractHandler(webapp.RequestHandler):
         account = self.auth()
         is_ajax_request = 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
         new_login = 'new_login' in session and session['new_login']
-        if is_ajax_request and not new_login:
+        redirected = 'redirected' in session and session['redirected']
+        if (redirected or is_ajax_request) and not new_login:
             to_extend = '../empty_layout.html'
         else:
             to_extend = "../_layout.html"
@@ -36,6 +37,8 @@ class AbstractHandler(webapp.RequestHandler):
         
         if new_login:
             del session['new_login']
+        if redirected:
+            del session['redirected']
                 
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
@@ -67,7 +70,7 @@ class AbstractHandler(webapp.RequestHandler):
 
         if require_login:
             if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id')):
-                self.redirect('/timeout')
+                self.redirect('/#/timeout')
                 raise TimeoutError("Session has timed out.")
                 #return (None)       # shouldn't get here except in tests    
             elif require_admin and not users.is_current_user_admin():
@@ -132,7 +135,12 @@ class AbstractHandler(webapp.RequestHandler):
             else:
               params[name] = unicode(params[name][0])
         return params
-  
+    
+    
+#    def redirect(self, *args, **kwargs):
+#        webapp.RequestHandler.redirect(self, *args, **kwargs)
+        
+        
 class AuthError(Exception):
     """Exception raised for authorization errors.
 

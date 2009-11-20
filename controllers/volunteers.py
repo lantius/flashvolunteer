@@ -12,6 +12,8 @@ from models.neighborhood import Neighborhood
 
 from controllers.abstract_handler import AbstractHandler
 
+from components.sessions import Session
+
 
 ################################################################################
 # Volunteers page
@@ -34,19 +36,18 @@ class VolunteersPage(AbstractHandler):
   # SHOW
   def show(self, volunteer_id):
     try:
-      account = self.auth(require_login=True)
+        account = self.auth(require_login=True)
     except:
-      return
+        return
   
     volunteer = account.get_user()
+    session = Session()
     if volunteer and volunteer.key().id() == int(volunteer_id):
-      self.redirect("/#/settings");
-      return
+        session['redirected'] = True
+        self.redirect("/profile");
+        return
 
     #TODO: if application instances are closed, do not allow people to view
-    if not volunteer:
-      self.redirect("/#/settings")
-      return
 
     page_volunteer = Volunteer.get_by_id(int(volunteer_id))
 

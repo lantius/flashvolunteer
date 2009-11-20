@@ -20,11 +20,11 @@
 
               $('#content a.fv').each(function(){
 	              $(this).click(function() {  
-	                $.address.value($(this).attr('href').replace(/\/#/, ''));  
+	                $.address.value($(this).attr('href').replace(/^#/, ''));  
 	              });
 	              
 	              $(this).address(function() {  
-	                return $(this).attr('href').replace(/\/#/, '');  
+	                return $(this).attr('href').replace(/^#/, '');  
 	              });  
 			  });
             });
