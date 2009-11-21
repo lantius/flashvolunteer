@@ -25,7 +25,7 @@ $('table.zebra tr:odd').addClass('odd');
             <ul>
                 {% for neighborhood in neighborhoods2 %}
                     <li>
-                        <a href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
+                        <a class="fv" href="{{ neighborhood.url }}">{{ neighborhood.name }}</a>
                     </li>
                 {% endfor %}
             </ul>               
