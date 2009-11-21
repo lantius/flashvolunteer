@@ -467,7 +467,7 @@ class EventsPage(AbstractHandler):
             except:
                 pass
         
-        events = events_query.fetch(limit = 100)
+        events = events_query.fetch(limit = 10)
         
         if ur and ll:
             events = [event for event in events if 

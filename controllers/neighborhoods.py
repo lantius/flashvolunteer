@@ -27,7 +27,7 @@ class NeighborhoodsPage(AbstractHandler):
         params = self.parameterize() 
         
         application = get_application()
-        neighborhoods = application.neighborhoods.fetch(limit=500) 
+        neighborhoods = application.neighborhoods.order('name').fetch(limit=500) 
         is_json = self.is_json(params)
         
         col1 = None

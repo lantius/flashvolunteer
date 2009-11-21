@@ -60,7 +60,7 @@ class FriendsPage(AbstractHandler):
 
 def get_all_volunteers():
     vols = []
-    CHUNK_SIZE = 250
+    CHUNK_SIZE = 10
     
     last_key = None
     while True:
@@ -72,7 +72,7 @@ def get_all_volunteers():
         vol_in_chunk = query.fetch(limit = CHUNK_SIZE + 1)
         
         if len(vol_in_chunk) == CHUNK_SIZE + 1:
-            recipients += vol_in_chunk[:-1]
+            vols += vol_in_chunk[:-1]
             last_key = vol_in_chunk[-1].key()
         else:
             vols += vol_in_chunk

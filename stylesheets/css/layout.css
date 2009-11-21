@@ -72,99 +72,74 @@ div#container{
                 #left75, #right25,
                 #left25, #right75,
                 #middle100,
-                #splash-right, #splash-left, #splash-leftmost,
 				#left66, #right33 {
                     float: left; 
-                    top:0
+                    top:0;
+                    padding: 0 10px 0px 0;
+
                 }
+				
+				#left66, #lefthalf, #leftthird, #middlethird, 
+				#left75, #leftthirdequi,#middlethirdequi,#left25 {
+					margin-right: 20px;
+					
+				}
                     
                 /*the following is specific to the three column layout, 25% - 50% - 25% */
                 #leftthird {
-                    padding: 0 10px 10px 0;
                     width: 185px;
                 }
                 
                 #middlethird{
-                    padding: 0 10px 10px 10px;
                     width: 390px;
                 }
                 
                 #rightthird {
-                    padding: 0 0 10px 10px;
                     width: 185px;
                 }
 				
                 #right33 {
-                    padding: 0 0 10px 10px;
                     width: 260px;
                 }
 				
                 #left66 {
-                    padding: 0 10px 10px 0px;
                     width: 500px;
                 }				
 	
                 /*the following is specific to the three column layout, 33% - 33% - 33% */
                 #leftthirdequi,#middlethirdequi,#rightthirdequi {
-                    padding: 0 10px 10px 0;
-                    width: 30%;
+                    width: 28%;
                 }
                 
                 /*the following is specific to the two equal column layout, 50% - 50% */
+				#righthalf,
                 #lefthalf {
-                    padding: 0 10px 10px 0;
-                    width: 390px;
-                }
-                
-                #righthalf {
-                    padding: 0 0 10px 10px;
-                    width: 390px;
+                    width: 47%;
                 }
                 
                 /*the following is specific to the two column layout where it is 75% left 25% right */
                 #left75 {
-                    padding: 0 10px 10px 0;
                     width: 595px;
                 }
                 
                 #right25 {
-                    padding: 0 0 10px 10px;
                     width: 185px;
                 }
                 
                 /*the following is specific to the two column layout wehre it is 25% left 75% right*/
                 #left25 {
-                    padding: 0 10px 10px 0;
                     width: 185px;
                 }
                 
                 #right75 {
-                    padding: 0 0 10px 10px;
                     width: 595px;
                 }
                 
                 /* following is for center whole layout */
                 #middle100 {
                     width: 780px;
-                    padding: 0 10px 10px 10px;
-                }       
-                
-				#splash-leftmost,
-                #splash-right {
-                    padding:0px 20px;
                 }
-
-                #splash-leftmost {
-                	width: 45%;
-                }
-                #splash-right {
-                    width: 45%;
-                }
-				
-                #splash-left {
-                    width: 30%;
-                }
-        
+			
         div#clearfooter { height: 130px; }
 
 /* NOTE: the footer is NOT in the container. See http://www.wickham43.net/footerfix.php */

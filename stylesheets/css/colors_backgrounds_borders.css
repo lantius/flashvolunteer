@@ -31,7 +31,7 @@ div#top {
 }
 
 div.gradient {
-   background: #fff url(../media/gradient.png) repeat-x top center;
+   background: #000 repeat-x top center;
 }
 
 div#footer {
@@ -46,7 +46,7 @@ div#footer #copyright{
 }
 #navtabs li a.current,
 #navtabs li a:hover {
-    background-color: #3b3b3b;
+    background-color: #000;
 }
 
 
@@ -87,9 +87,6 @@ div.hardmodule .moduletitle{
     background-color: #666;
 }
 div.moduletitle {
-    border: 1px solid #008C98;
-    -moz-border-radius: 8px;
-    -webkit-border-radius:8px;
     color: #fff;
     background-color: #008C98;
 }
@@ -109,7 +106,7 @@ a.verification_warning:hover {
     color: #ff6900;
 }
 
-div#home-about div#slogan {
+div#slogan {
     color: #4eA0A7;
 }
 

@@ -41,7 +41,7 @@ div{
 
 p { margin: 8px 0 0 0; }
 
-#home-about p {
+#index_about p {
 	padding-bottom: 7px;
 	font-size: 110%;
 }
@@ -109,7 +109,6 @@ Contains navigation list items for header and footer
     padding: 15px 15px 14px 15px;
     font-size: 10pt;
     display: inline;
-	font-variant: small-caps;
 }
 
 
@@ -149,7 +148,7 @@ h3 {
 
 div.moduletitle{
     text-align: left;
-    padding: 5px 5px 5px 10px;
+    padding: 5px 5px 5px 5px;
     margin: 10px -10px;
     width: 100%;
 	font-size: 100%;
@@ -627,7 +626,7 @@ div.faq-link-wrapper {
 a.faq-link { font-size: 7pt;}
 
 /* for slogan on splash screen */
-div#home-about div#slogan {
+div#slogan {
     font-size: 215%;
     font-family: serif;
 	margin-top: 15px;
@@ -809,9 +808,6 @@ span#l_login {
 }
 
 
-#home-about {
-	width: 50%;
-}
 
 #home-bottom {
 	margin-top: 10px;
@@ -819,10 +815,7 @@ span#l_login {
 
 #home-top, #home-bottom {height: 100%; width: 100%;}
 
-#mtaTwitter { 
-    width: 49%; 
-}
-#mtaTwitter { padding: 0; }
+
 #mtaTwitter a img {
     height: 48px;
     width: 48px;
@@ -1012,6 +1005,7 @@ form input.textarea {
 	display:block;
 	padding:5px 10px;
 	margin:0px;
+	max-height:200px;
 }
 
 #generic_dialog {

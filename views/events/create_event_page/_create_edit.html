@@ -57,8 +57,9 @@
         <label class="checkboxlabel" title="Check this if you want to wait until later to let other people browse for this event." for="show_event" >List this event</label>
 
 	</div>
-			
-	<input type=hidden name="session_id" value="{{ session_id }}">
-	<input class="submit" id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
+	<div>		
+		<input type=hidden name="session_id" value="{{ session_id }}">
+		<input class="submit" id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
+	</div>
 	</form>
 </div>
