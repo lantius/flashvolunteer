@@ -1,0 +1,49 @@
+<div id="sent">
+    <div id="mailbox" class="softmodule">
+        <div class="messages">
+            <table>
+                {% for message in sent_messages %}
+                    <tr class="message">
+                        <td>
+                            <div class="volunteer_summary_pic">
+                                <a class="fv" href="{{ message.get_recipient.url }}" >
+                                    <img class="smallavatar" src="
+                                    {% if message.get_recipient %}
+                                        {% if message.get_recipient.avatar %}
+                                            {{ message.get_recipient.url }}/avatar
+                                        {% else %}
+                                            /stylesheets/media/default-profile-pic-small.png
+                                        {% endif %}
+                                    {% else %}
+                                       /stylesheets/media/fv_avatar.png
+                                    {% endif %}
+                                    " alt="{{ message.get_recipient.name }}" />
+                                </a>
+                            </div>
+                        </td>
+                        <td class="minfo">
+                            <div>{% if message.get_recipient %}
+                                     To: <a class="fv" href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+                                 {% else %}
+                                    Flash Volunteer
+                                 {%endif%}
+                              </div>
+                            <div class="subtext">{{ message.time_sent }}</div>
+                        </td>
+                        <td class="msubject">
+                            <div><a class="fv" href="{{message.url}}">{{ message.subject }}</a></div>
+                            <div class="subtext">{{ message.body|slice:":200"}}...</div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                    
+            </table>
+        </div>
+    </div><!--end eventmessages-->
+    
+    <div class="pagination">
+        {% if sent_next %} 
+            <a class="fv" href="{{domain}}/messages?bookmark={{sent_next}}">  &raquo; next page</a>
+        {% endif %}
+    </div>
+</div>  

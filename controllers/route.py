@@ -108,6 +108,7 @@ def real_main():
             ('/delete', SettingsPage),
            ('/profile', ProfilePage),
            ('/messages(|/\d+)', Mailbox),
+           ('/messages/(inbox|sent)', Mailbox),
            
            ('/settings', SettingsPage), #handles posts as well
            ('/settings/avatar', VolunteerAvatar),

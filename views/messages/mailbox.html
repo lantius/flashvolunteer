@@ -19,112 +19,13 @@
 	<div id="mailbox-tab-sections">
 	   <ul id="nav" class="tab-links">
 	        <li>
-	            <a class="fv" href="#inbox">Inbox</a>              
+	            <a class="fv" href="/messages/inbox">Inbox</a>              
 	        </li>
 	        <li>
-	            <a class="fv" href="#sent">Sent</a>              
+	            <a class="fv" href="/messages/sent">Sent</a>              
 	        </li>
 	    </ul>
-		<div id="inbox">
-			<div id="mailbox" class="softmodule">
-			    <div class="messages">
-			        <table>
-		                {% for mr in messages %}
-		                    <tr class="message {% if mr.read %}read{%else%}unread{%endif%}">
-		            	        <td>
-		                            <div class="volunteer_summary_pic">
-		                                <a class="fv" href="{{ mr.message.get_sender.url }}" >
-		                                    <img class="smallavatar" src="
-		                                    {% if mr.message.get_sender %}
-		                                        {% if mr.message.get_sender.avatar %}
-		                                            {{ mr.message.get_sender.url }}/avatar
-		                                        {% else %}
-		                                            /stylesheets/media/default-profile-pic-small.png
-		                                        {% endif %}
-		                                    {% else %}
-		                                       /stylesheets/media/fv_avatar.png
-		                                    {% endif %}
-		                                    " alt="{{ mr.message.get_sender.name }}" />
-		                                </a>
-		                            </div>
-								</td>
-		                        <td class="minfo">
-		                        	{% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %} From: {%endif%}
-		                        	<div>{% if mr.message.get_sender %}
-									         <a class="fv" href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
-										 {% else %}
-										    Flash Volunteer
-										 {%endif%}
-								      </div>
-									<div class="subtext">{{ mr.message.time_sent }}</div>
-								</td>
-		                        <td class="msubject">
-		                        	<div><a class="fv" href="{{mr.message.url}}">{{ mr.message.subject }}</a></div>
-								    <div class="subtext">{{ mr.message.body|slice:":200"}}...</div>
-								</td>
-		                    </tr>
-		                {% endfor %}
-			                
-		            </table>
-			    </div>
-			</div><!--end eventmessages-->
-			
-			<div class="pagination">
-			    {% if next %} 
-			        <a class="fv" href="/messages?bookmark={{next}}">  &raquo; older</a>
-			    {% endif %}
-			</div>
-        </div>
 		
-        <div id="sent">
-            <div id="mailbox" class="softmodule">
-                <div class="messages">
-                    <table>
-                        {% for message in sent_messages %}
-                            <tr class="message">
-                                <td>
-                                    <div class="volunteer_summary_pic">
-                                        <a class="fv" href="{{ message.get_recipient.url }}" >
-                                            <img class="smallavatar" src="
-                                            {% if message.get_recipient %}
-                                                {% if message.get_recipient.avatar %}
-                                                    {{ message.get_recipient.url }}/avatar
-                                                {% else %}
-                                                    /stylesheets/media/default-profile-pic-small.png
-                                                {% endif %}
-                                            {% else %}
-                                               /stylesheets/media/fv_avatar.png
-                                            {% endif %}
-                                            " alt="{{ message.get_recipient.name }}" />
-                                        </a>
-                                    </div>
-                                </td>
-                                <td class="minfo">
-                                    <div>{% if message.get_recipient %}
-                                             To: <a class="fv" href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
-                                         {% else %}
-                                            Flash Volunteer
-                                         {%endif%}
-                                      </div>
-                                    <div class="subtext">{{ message.time_sent }}</div>
-                                </td>
-                                <td class="msubject">
-                                    <div><a class="fv" href="{{message.url}}">{{ message.subject }}</a></div>
-                                    <div class="subtext">{{ message.body|slice:":200"}}...</div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                            
-                    </table>
-                </div>
-            </div><!--end eventmessages-->
-            
-            <div class="pagination">
-                {% if sent_next %} 
-                    <a class="fv" href="{{domain}}/messages?bookmark={{sent_next}}">  &raquo; next page</a>
-                {% endif %}
-            </div>
-        </div>	
 	</div>
 </div><!--end middle100-->
 

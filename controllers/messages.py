@@ -25,10 +25,14 @@ class Mailbox(AbstractHandler):
     ################################################################################
     # GET
     def get(self, url_data):
-        if url_data:
-            self.show(url_data[1:])
-        else:
+        if not url_data:
             self.list()
+        elif url_data == 'inbox':
+            self.inbox()
+        elif url_data == 'sent':
+            self.sent()
+        else:
+            self.show(url_data[1:])
     
     def show(self, id):
         try:
@@ -80,33 +84,21 @@ class Mailbox(AbstractHandler):
         next = next.strftime('%Y-%m-%d%H:%M:%S')   
         return next
              
-    ################################################################################
-    # LIST
-    def list(self):
+    def sent(self):
         try:
             account = self.auth(require_login=True)
         except:
             raise
-        
-        messages = account.get_messages()
         
         sent_messages = account.get_sent_messages()
         
         bookmark = self.request.get("bookmark", None)
         if bookmark:
             bookmark = datetime.strptime(bookmark, '%Y-%m-%d%H:%M:%S')            
-            messages = messages.filter('timestamp <=', bookmark).fetch(PAGELIMIT+1)
             sent_messages = sent_messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
         else:
-            messages = messages.fetch(PAGELIMIT+1)
             sent_messages = sent_messages.fetch(PAGELIMIT+1)
             
-        if len(messages) == PAGELIMIT+1:
-            next = self._get_next(lst = messages)                
-            messages = messages[:PAGELIMIT]
-        else:
-            next = None
-
         if len(sent_messages) == PAGELIMIT+1:
             sent_next = self._get_next(lst = sent_messages)                
             sent_messages = sent_messages[:PAGELIMIT]
@@ -115,10 +107,55 @@ class Mailbox(AbstractHandler):
 
         template_values = {
             'volunteer': account.get_user(),
-            'messages': messages,
-            'next': next,
             'sent_messages': sent_messages,
             'sent_next': sent_next,
+          }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', '_sent.html')
+        self.response.out.write(template.render(path, template_values, debug=is_debugging()))    
+                
+
+    def inbox(self):
+        try:
+            account = self.auth(require_login=True)
+        except:
+            raise
+        
+        messages = account.get_messages()
+        
+        bookmark = self.request.get("bookmark", None)
+        if bookmark:
+            bookmark = datetime.strptime(bookmark, '%Y-%m-%d%H:%M:%S')            
+            messages = messages.filter('timestamp <=', bookmark).fetch(PAGELIMIT+1)
+        else:
+            messages = messages.fetch(PAGELIMIT+1)
+            
+        if len(messages) == PAGELIMIT+1:
+            next = self._get_next(lst = messages)                
+            messages = messages[:PAGELIMIT]
+        else:
+            next = None
+
+        template_values = {
+            'volunteer': account.get_user(),
+            'messages': messages,
+            'next': next,
+          }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', '_inbox.html')
+        self.response.out.write(template.render(path, template_values, debug=is_debugging()))   
+    ################################################################################
+    # LIST
+    def list(self):
+        try:
+            account = self.auth(require_login=True)
+        except:
+            raise
+
+        template_values = {
+            'volunteer': account.get_user(),
           }
         self._add_base_template_values(vals = template_values)
         
