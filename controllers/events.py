@@ -453,7 +453,11 @@ class EventsPage(AbstractHandler):
                 if 'back' in params and params['back'] == '1':
                     prev = trace.pop() 
                     while prev >= bookmark_loc:
-                        prev = trace.pop()
+                        try:
+                            prev = trace.pop()
+                        except: 
+                            prev = '-'
+                            break
                 else:
                     prev = trace[-1]
                     trace.append(bookmark_loc)
