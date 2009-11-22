@@ -1,0 +1,102 @@
+<div id="generic_dialog">
+    <h2>{% block dialog_title %}{% endblock dialog_title %}</h2>
+
+    <style type=text/css>
+
+        #generic_dialog {
+            position:absolute;
+            z-index:1000;
+            top:175px;
+            width:600px;
+            margin-left: 110px;
+            border: 5px #aaa solid;
+            background-color:#fff;
+        }
+		
+		#generic_dialog h2 {
+		    background-color:#008C98;
+		    color:#FFFFFF;
+		    font-size:14px;
+		    font-weight:bold;
+		    display:block;
+		    padding:5px 10px;
+		    margin:0px;
+		    max-height:200px;
+		}
+		
+        #dialog_content {
+            height: 350px;
+            overflow-x:hidden; 
+            overflow-y:scroll;
+            margin: 10px;
+        }
+        
+        #dialog_content button, input {
+            border: none;
+            background-color: inherit;
+        }
+	
+		
+		#generic_dialog .dialog_header {
+			border-top: 3px solid #ddd;
+			height: 20px;
+            background:#efefef none repeat scroll 0 0;
+            padding:4px;
+
+		}
+		
+        #generic_dialog .dialog_footer {
+        	border-top: 3px solid #ddd;
+            height: 30px;
+			background:#efefef none repeat scroll 0 0;
+        }
+		#generic_dialog .dialog_footer input:hover{
+            background-color: #ddd;
+        }
+		
+		#generic_dialog .dialog_footer input {
+			width: 100%;
+			height:100%;
+		}
+		
+		a.pagination_link{
+		   color:#000;
+		   position: absolute;
+        }
+		a.pagination_link.next{
+			right: 40px;
+		}
+
+        a.pagination_link.prev{
+            left: 20px;
+        }
+		
+    </style>
+		
+    <div id="centerwhole">
+
+        
+                
+		<div id="dialog_content">
+		{% block dialog_content %}{% endblock dialog_content %}
+        </div>	
+
+        <div class="dialog_header">
+            {% if prev %}
+                <a class="submit pagination_link prev" title="Previous page" onclick=LoadNextPage('/events/search?bookmark={{prev}}&back=1')>&laquo; Previous</a>
+            {% endif %}
+            {% if next %}
+                <a class="submit pagination_link next" title="Next page" onclick=LoadNextPage('/events/search?bookmark={{next}}')>Next &raquo;</a></a>
+            {% endif %} 
+        </div>
+        <div class="dialog_footer">
+                <input type="button" onclick=close_dialog() class="submit closedialog fr" name="close" value="Close"/></li>
+        </div> 
+    </div>
+    <script>
+        function LoadNextPage(url){
+            search_params = get_search_params();
+            $('#dialogs').load(url+'&' + search_params);
+        }
+    </script>
+</div>

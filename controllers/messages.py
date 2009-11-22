@@ -19,7 +19,7 @@ from components.sessions import Session
 ################################################################################
 # Messages page
 ################################################################################
-PAGELIMIT = 10
+PAGELIMIT = 2
 class Mailbox(AbstractHandler):
 
     ################################################################################
@@ -73,11 +73,11 @@ class Mailbox(AbstractHandler):
             #this is because the comparison operator is working against a 
             #reverse sorted list & datetime.isotime returns a microsecond
             #in its str rep which cannot be recreated through strftime
-            next.replace(second=next.second+1)
+            next = next.replace(second=next.second+1)
         else:
-            next.replace(minute=next.minute+1, second = 0)
+            next = next.replace(minute=next.minute+1, second = 0)
             
-        next = next.strftime('%Y-%m-%d %H:%M:%S')   
+        next = next.strftime('%Y-%m-%d%H:%M:%S')   
         return next
              
     ################################################################################
@@ -94,7 +94,7 @@ class Mailbox(AbstractHandler):
         
         bookmark = self.request.get("bookmark", None)
         if bookmark:
-            bookmark = datetime.strptime(bookmark, '%Y-%m-%d %H:%M:%S')            
+            bookmark = datetime.strptime(bookmark, '%Y-%m-%d%H:%M:%S')            
             messages = messages.filter('timestamp <=', bookmark).fetch(PAGELIMIT+1)
             sent_messages = sent_messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
         else:

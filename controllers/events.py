@@ -19,7 +19,8 @@ from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
 import exceptions
 import logging
-import os, string, random, datetime
+import os, string, random
+from datetime import datetime
 
 def _get_upcoming_events():
     region = get_application()
@@ -387,17 +388,20 @@ class EventsPage(AbstractHandler):
     ################################################################################
     # SEARCH
     def search(self, params):
+        
         account = self.auth()
         if account: user = account.get_user()
         else: user = None
         
-        (neighborhood, events, interestcategory)  = self.do_search(params)
+        (neighborhood, events, interestcategory, next, prev)  = self.do_search(params)
         
         template_values = { 
           'neighborhood' : neighborhood,
           'events' : events,
           'interestcategory': interestcategory,
-          'volunteer': user
+          'volunteer': user,
+          'next': next,
+          'prev': prev
         }
         self._add_base_template_values(vals = template_values)
         
@@ -425,20 +429,50 @@ class EventsPage(AbstractHandler):
         else:
             return False
      
+    
     def do_search(self, params):
+        SEARCH_LIST = 10
         application = get_application()
+        session = Session()
         
-        if 'past_events' in params and params['past_events']:
-            events_query = application.events.filter(
-                'hidden = ', False).order(
-                'date')         
-            memcache.add('past_events', str(params['past_events']),0)
-            memcache.add('searchurl', True,0)             
+        events_query = application.events.filter('hidden = ', False)
+        bookmark_loc = self.request.get("bookmark", None)
+        
+        if bookmark_loc and bookmark_loc != '-':
+            #prev = bookmark
+            bookmark = datetime.strptime(bookmark_loc, '%Y-%m-%d%H:%M:%S')      
+            events_query = events_query.filter('date >=', bookmark)
+            #prev = session.get('events_search_prev', '-')
+            #session['events_search_prev'] = bookmark
+            
+            trace = session.get('events_search_prev', None)
+            if not trace or trace == []:
+                session['events_search_prev'] = [bookmark_loc]
+                prev = '-'
+            else:                
+                if 'back' in params and params['back'] == '1':
+                    prev = trace.pop() 
+                    while prev >= bookmark_loc:
+                        prev = trace.pop()
+                else:
+                    prev = trace[-1]
+                    trace.append(bookmark_loc)
+                    
+                session['events_search_prev'] = trace
+                
         else:
-            events_query = application.events.filter(
-                'date >= ', now()).filter(
-                'hidden = ', False).order(
-                'date')
+            if 'events_search_prev' in session:
+                del session['events_search_prev']
+                    
+            prev = ''
+            if 'past_events' in params and params['past_events']:
+                session['past_events'] = str(params['past_events'])
+                session['searchurl'] = True             
+            else:
+                events_query = events_query.filter('date >= ', now())
+        
+              
+        events_query = events_query.order('date') 
         memcache.delete('past_events')
         memcache.delete('searchurl')
         
@@ -467,8 +501,15 @@ class EventsPage(AbstractHandler):
             except:
                 pass
         
-        events = events_query.fetch(limit = 10)
+        events = events_query.fetch(limit = SEARCH_LIST + 1)
         
+        if len(events) == SEARCH_LIST+1:
+            next = events[-1].date.strftime('%Y-%m-%d%H:%M:%S')  
+            events = events[:SEARCH_LIST]
+        else:
+            next = None
+            
+            
         if ur and ll:
             events = [event for event in events if 
                              event.location.lon > ll.lon 
@@ -486,7 +527,7 @@ class EventsPage(AbstractHandler):
             except:
                 pass
                     
-        return (neighborhood, events, interestcategory)
+        return (neighborhood, events, interestcategory, next, prev)
   
     ################################################################################
     # all posts that deal with photo albums from the events page

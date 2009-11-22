@@ -1,4 +1,4 @@
-function event_search_submit(){
+function get_search_params(){
     if ($('#search_past_events:checked').val()) var past = 'on';
     else var past='';
 
@@ -6,13 +6,18 @@ function event_search_submit(){
     if (nval && nval!='none') 
        var nid = $('#event_search select.neighborhood_select option:selected').val();
     else 
-	   var nid='';
+       var nid='';
     
     var cval = $('#event_search select.interest_category_select option:selected').text()
     if (cval && cval!='none') var cid = cval;
     else var cid='';
-    
-    build_dialog(100,'?past_events='+past+'&neighborhood='+nid+'&interestcategory='+cid);
+	
+	return 'past_events='+past;//+'&neighborhood='+nid+'&interestcategory='+cid;
+}
+
+function event_search_submit(bookmark){
+	search_params = get_search_params();
+    build_dialog(100,'?' + search_params);
 }
 
 
@@ -87,7 +92,7 @@ function build_dialog(d_type, id){
 	}
 
     $.get(url, function(data){
-       $('#bottom').append(data);
+       $('#dialogs').append(data);
        $('.closedialog').click(close_dialog);
      });
 

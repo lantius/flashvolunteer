@@ -85,6 +85,8 @@ div#volunteerwelcome {
 div.hardmodule .moduletitle{
     border-color: #3b3b3b;
     background-color: #666;
+    -moz-border-radius: 2px;
+    -webkit-border-radius:2px;
 }
 div.moduletitle {
     color: #fff;
