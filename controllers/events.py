@@ -401,7 +401,8 @@ class EventsPage(AbstractHandler):
           'interestcategory': interestcategory,
           'volunteer': user,
           'next': next,
-          'prev': prev
+          'prev': prev,
+          'url': '/events/search'
         }
         self._add_base_template_values(vals = template_values)
         
@@ -439,11 +440,8 @@ class EventsPage(AbstractHandler):
         bookmark_loc = self.request.get("bookmark", None)
         
         if bookmark_loc and bookmark_loc != '-':
-            #prev = bookmark
             bookmark = datetime.strptime(bookmark_loc, '%Y-%m-%d%H:%M:%S')      
             events_query = events_query.filter('date >=', bookmark)
-            #prev = session.get('events_search_prev', '-')
-            #session['events_search_prev'] = bookmark
             
             trace = session.get('events_search_prev', None)
             if not trace or trace == []:

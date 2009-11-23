@@ -133,7 +133,14 @@
                     $('#container').append('<div id="dialog" title="Notifications"><p>{{ notification_message }}</p></div>');
                     $.ui.dialog.defaults.bgiframe = true;
                     $(function() {
-                        $("#dialog").dialog();
+                        $("#dialog").dialog({
+							buttons: { "Ok": function() { $(this).dialog("close"); } },
+							modal: true,
+							draggable: false,
+							resizable: false,
+							
+							 
+						});
                     });
                 });
             </script>

@@ -81,10 +81,10 @@
 
         <div class="dialog_header">
             {% if prev %}
-                <a class="submit pagination_link prev" title="Previous page" onclick=LoadNextPage('/events/search?bookmark={{prev}}&back=1')>&laquo; Previous</a>
+                <a class="submit pagination_link prev" title="Previous page" onclick=LoadNextPage('{{url}}?bookmark={{prev}}&back=1')>&laquo; Previous</a>
             {% endif %}
             {% if next %}
-                <a class="submit pagination_link next" title="Next page" onclick=LoadNextPage('/events/search?bookmark={{next}}')>Next &raquo;</a></a>
+                <a class="submit pagination_link next" title="Next page" onclick=LoadNextPage('{{url}}?bookmark={{next}}')>Next &raquo;</a></a>
             {% endif %} 
         </div>
         <div class="dialog_footer">
@@ -93,8 +93,7 @@
     </div>
     <script>
         function LoadNextPage(url){
-            search_params = get_search_params();
-            $('#dialogs').load(url+'&' + search_params);
+            $('#dialogs').load(url+'&' + get_params());
         }
     </script>
     <script>

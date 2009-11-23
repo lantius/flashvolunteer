@@ -32,7 +32,9 @@ function people_search_submit(){
 }
 
 function close_dialog(){
-    $('#generic_dialog').remove();
+	$('#generic_dialog').fadeOut('slow',function(){
+        $('#generic_dialog').remove();		
+	});
 }
 function build_dialog(d_type, id){
 

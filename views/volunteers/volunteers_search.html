@@ -1,6 +1,10 @@
-<div id="generic_dialog">
-    <h2>Person search results ({{ volunteers|length }})</h2>
+{% extends "../dialog_layout.html" %}
 
+{% block dialog_title %}
+    People search results
+{% endblock dialog_title %}
+
+{% block dialog_content %}
 	<div id="eventssearchresult" class="hardmodule" >
 	    <div id="eventyousearchedfor" >
 	        <ul>
@@ -27,16 +31,9 @@
 		    {% endif %}
 	    </div>
 	</div>
-    <div class="buttons">
-        <div class="pagination">
-            {% ifnotequal prev_page -1 %} 
-                <a class="fv" href="{{url}}{{prev_page}}">&laquo;  </a>
-            {% endifnotequal %}
-            {{ start }} - {{end}} of {{ total }}
-            {% ifnotequal next_page -1 %} 
-                <a class="fv" href="{{url}}{{next_page}}">  &raquo;</a>
-            {% endifnotequal %}
-        </div>
-    <input type="button" class="closedialog" name="close" value="Close"/>
-    </div>  
-</div>
+    <script>
+       function get_params(){
+           return '';
+       }
+    </script>
+{% endblock dialog_content %}
