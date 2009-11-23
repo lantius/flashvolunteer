@@ -3,6 +3,7 @@ import imghdr
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
+from google.appengine.ext.db import Key
 
 from controllers._utils import get_application
 
@@ -112,7 +113,7 @@ class VolunteersPage(AbstractHandler):
         
         bookmark = self.request.get("bookmark", None)
         if bookmark and bookmark != '-':
-            volunteers_query = volunteers_query.filter('__key__ >=', bookmark)
+            volunteers_query = volunteers_query.filter('__key__ >=', Key(encoded=bookmark))
             
             trace = session.get('volunteers_search_prev', None)
             if not trace or trace == []:
