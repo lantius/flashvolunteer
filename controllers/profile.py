@@ -32,8 +32,8 @@ class ProfilePage(AbstractHandler):
             if ic.events():
                 byinterest.append(ic)
         
-        recommended_events = list(user.recommended_events())[:ProfilePage.LIMIT]
-        my_future_events = user.events_future()[:ProfilePage.LIMIT]
+        recommended_events = user.recommended_events()[:ProfilePage.LIMIT]
+        my_future_events = user.events_future().fetch(ProfilePage.LIMIT)
         
         past_events = memcache.get('past_events')
         searchurl = memcache.get('searchurl')

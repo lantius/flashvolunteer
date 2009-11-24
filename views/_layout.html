@@ -58,16 +58,7 @@
 				$('#content').fadeTo('normal', 1.0);
 		    });
 
-          //$('#navtabs a, a#l_login, #static_nav a').each(function(){
-		  $('#navtabs a.fv, a#l_login, #static_nav a.fv').each(function(){
-			
-			$(this).click(function() {  
-                $.address.value($(this).attr('href').replace(/^#/, ''));  
-            });
-            $(this).address(function() {  
-                return $(this).attr('href').replace(/^#/, '');  
-            });
-		 });  
+          set_page_loader('#navtabs a.fv, a#l_login, #static_nav');
         });
     </script>
 	

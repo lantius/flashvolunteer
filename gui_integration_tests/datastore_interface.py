@@ -17,6 +17,7 @@ from controllers._utils import get_application
 
 import datetime, copy
 
+from components.time_zones import Pacific, now
 
 def auth_func():
     return auth_user, auth_psswd  
@@ -132,7 +133,8 @@ def create_environment(name, session_id):
           description = v['description'],
           special_instructions = v['special_instructions'],
           address = v['address'],
-          application = application
+          application = application,
+          in_past = date < now()
                   
         )
         e.put()
@@ -162,7 +164,11 @@ def create_environment(name, session_id):
             ev = EventVolunteer(
                 event = events[k],
                 volunteer = volunteer,
-                isowner = 'is_owner' in vol and vol['is_owner']
+                isowner = 'is_owner' in vol and vol['is_owner'],
+                event_is_upcoming = events[k].date < now(),
+                event_is_hidden = events[k].hidden,
+                event_date = events[k].date,
+                application = events[k].application
             )
             ev_volunteers.append(ev)
             

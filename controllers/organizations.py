@@ -55,7 +55,7 @@ class OrganizationsPage(AbstractHandler):
     organizationfollower = page_organization.account.followers.filter('account =', account).get()
     event_access = page_organization.event_access(account=account)
     
-    future_events = page_organization.events_future()[:VolunteersPage.LIMIT]
+    future_events = page_organization.events_future().fetch(VolunteersPage.LIMIT)
     
     template_values = { 'eventvolunteer': page_organization.eventvolunteers, 
                         'volunteerfollower' : organizationfollower,

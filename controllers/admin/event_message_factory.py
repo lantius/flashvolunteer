@@ -68,6 +68,14 @@ class EventMessageFactory(AbstractHandler):
         for e in post_events_to_check:
             if not e.enddate: continue
             
+            for ev in e.eventvolunteers:
+                ev.event_is_upcoming = False
+                ev.put()
+                
+            for eic in e.event_categories:
+                eic.event_is_upcoming = False
+                eic.put()
+            
             since_event = right_now - e.enddate
             if since_event.days == 0: 
                 params = {
@@ -95,6 +103,7 @@ class EventMessageFactory(AbstractHandler):
                              autogen = True)
                 print 'put post even message for ',e.name
                 e.post_event_message_sent = True
+            e.in_past = True
             e.put()
             
         return

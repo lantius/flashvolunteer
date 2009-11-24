@@ -66,15 +66,15 @@ class Volunteer(AbstractUser):
         friends = [f.account.key().id() for f in self.friends()]
         return self.privacy__event_attendance == 'friends' and account.key().id() in friends
 
-    def recommended_events(self):
+    def recommended_events(self, date = None):
         #TODO make more efficient
     
         recommended_events = memcache.get('%s_rec_events'%self.key().id())
         if recommended_events:
             return recommended_events
     
-        vol_events = dict([(e.key().id(),1) for e in self.events_future()])
-        vol_events.update(dict([(e.key().id(),1) for e in self.events_coordinating()]))
+        vol_events = dict([(ev.event.key().id(),1) for ev in self.events_future()])
+        vol_events.update(dict([(ev.event.key().id(),1) for ev in self.events_coordinating()]))
     
         neighborhoods = {}
         if(self.work_neighborhood):
@@ -86,10 +86,13 @@ class Volunteer(AbstractUser):
         vol_interest_map = dict([(ic.key().id(),ic) for ic in self.interestcategories()])
         
         from controllers.events import _get_upcoming_events
+        
+        upcoming_events = _get_upcoming_events(date = date)
+        
         recommended_events = []
         reason_recommended = {}
         
-        for e in _get_upcoming_events():
+        for e in upcoming_events:
             reason = []
             # recommend non rsvp'd events
             if e.key().id() in vol_events: continue
@@ -111,7 +114,7 @@ class Volunteer(AbstractUser):
                 recommended_events.append(e)
             
         #########
-        memcache.add('%s_rec_events'%self.key().id(), recommended_events, 120)
+        memcache.add('%s_rec_events'%self.key().id(), recommended_events, 1000)
         return recommended_events
 
 

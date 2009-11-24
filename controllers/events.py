@@ -22,11 +22,12 @@ import logging
 import os, string, random
 from datetime import datetime
 
-def _get_upcoming_events():
+def _get_upcoming_events(date = None):
+    if date is None: date = now()
     region = get_application()
     
     events = region.events.filter(
-        'date >= ', now()).filter(
+        'date >= ', date).filter(
         'hidden = ', False).order(
         'date')
     
@@ -131,19 +132,21 @@ class EventsPage(AbstractHandler):
         else: user = None
         
         if user:
-            recommended_events = list(user.recommended_events())[:EventsPage.LIMIT]
-            my_future_events = user.events_future()[:EventsPage.LIMIT]
-            my_past_events = user.events_past()[-EventsPage.LIMIT:]
+            recommended_events = user.recommended_events()[:EventsPage.LIMIT]
+            my_future_events = [ev.event for ev in user.events_future().fetch(EventsPage.LIMIT)]
+            my_past_events = [ev.event for ev in user.events_past().fetch(EventsPage.LIMIT)]
             my_past_events.reverse()
             event_volunteers = user.eventvolunteers
             neighborhoods = NeighborhoodHelper().selected(user.home_neighborhood)
             interest_categories = InterestCategoryHelper().selected(user)
+            events_coordinating = [ev.event for ev in user.events_coordinating().fetch(EventsPage.LIMIT)]
         else: 
             application = get_application()
             recommended_events = None
             my_future_events = None
             my_past_events = None
             event_volunteers = None
+            events_coordinating = None
             neighborhoods = application.neighborhoods
             #TODO: convert to application-specific data model
             interest_categories = InterestCategory.all()
@@ -156,6 +159,7 @@ class EventsPage(AbstractHandler):
             'eventvolunteer': event_volunteers,
             'neighborhoods': neighborhoods,
             'recommended_events': recommended_events,
+            'events_coordinating': events_coordinating,
             'interestcategories' : interest_categories,
             'upcoming_events': upcoming_events,
             'my_future_events': my_future_events,
@@ -216,7 +220,7 @@ class EventsPage(AbstractHandler):
             user = account.get_user()
             eventvolunteer = event.eventvolunteers.filter('volunteer = ', user).get()
         
-            if eventvolunteer and (eventvolunteer.isowner or event.inpast()): 
+            if eventvolunteer and (eventvolunteer.isowner or event.in_past): 
                 # TODO: randomize this...
                 attendees = list(event.volunteers())[offset:offset+EventsPage.LIMIT]
             else:
@@ -367,10 +371,27 @@ class EventsPage(AbstractHandler):
         if not eventvolunteer:
             return None
         
+        hidden = event.hidden
+        date = event.date
         if not event.validate(params):
             self.edit(event)
             return False
-        
+        if hidden != event.hidden:
+            for ev in event.eventvolunteers:
+                ev.event_is_hidden = event.hidden
+                ev.put()
+            for eic in event.event_categories:
+                eic.event_is_hidden = event.hidden
+                eic.put()
+
+        if date != event.date:
+            for ev in event.eventvolunteers:
+                ev.event_date = event.event_date
+                ev.put()
+            for eic in event.event_categories:
+                eic.event_date = event.event_date
+                eic.put()
+                        
         #TODO: convert interest category helper to application-specific data model
         for interestcategory in InterestCategory.all():
             param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
@@ -433,6 +454,7 @@ class EventsPage(AbstractHandler):
     
     def do_search(self, params):
         SEARCH_LIST = 10
+
         application = get_application()
         session = Session()
         

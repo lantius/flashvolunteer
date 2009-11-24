@@ -55,6 +55,7 @@ SCRIPTS = [
     
     os.path.join(stylesheets, 'javascript', 'jquery.address-1.0.js'),
     os.path.join(stylesheets, 'javascript', 'load_page_info.js'),
+    os.path.join(stylesheets, 'javascript', 'misc_ajax.js'),
 
 #    os.path.join(stylesheets, 'jquery.ezjax.js'),
     

@@ -96,19 +96,10 @@
             $('#dialogs').load(url+'&' + get_params());
         }
     </script>
-    <script>
-        $(document).ready(function(){
-
-          $('#generic_dialog a.fv').each(function(){
-              $(this).click(function() {  
-                $.address.value($(this).attr('href').replace(/^#/, ''));  
-              });
-              
-              $(this).address(function() {  
-                return $(this).attr('href').replace(/^#/, '');  
-              });  
-			  //$(this).click(close_dialog);
-          });
-        });
-    </script>
+	<script>
+	    $(document).ready(function(){
+	      set_page_loader('#generic_dialog');
+	      $('#generic_dialog a.fv').click(close_dialog);
+	    });
+	</script>
 </div>

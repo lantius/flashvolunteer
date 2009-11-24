@@ -75,9 +75,6 @@ class AbstractUser(db.Model):
       else:
         return False
     
-    
-
-    
     def get_quote(self):
       if self.quote:
         return self.quote
@@ -88,29 +85,25 @@ class AbstractUser(db.Model):
       raise Exception("extend url function")
 
     def events(self):
-      events = [ev.event for ev in self.eventvolunteers.filter('isowner =',False) if not ev.event.hidden]
-      events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
-      return events
+      return self.eventvolunteers.filter('isowner =',False).filter('event_is_hidden =', False).order('event_date')
     
     def events_coordinating(self):
-      events = [ev.event for ev in self.eventvolunteers.filter('isowner =',True) if not ev.event.inpast() and not ev.event.hidden]
-      events.sort(cmp = lambda e,e2: cmp(e.date,e2.date))
-      return events
+      return self.eventvolunteers.filter('isowner =',True).filter('event_is_upcoming =',True).filter('event_is_hidden =', False).order('event_date')
     
     def interestcategories(self):
       return (vic.interestcategory for vic in self.user_interests)
     
     def events_past_count(self):
-      return len(self.events_past())
+      return self.events_past().count()
     
     def events_past(self):
-      return [e for e in self.events() if e.inpast() and not e.hidden]
+      return self.eventvolunteers.filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
     
     def events_future_count(self):
-      return len(self.events_future())
+      return self.events_future().count()
     
     def events_future(self):
-      return [e for e in self.events() if not e.inpast() and not e.hidden]
+      return self.events().filter('event_is_upcoming =',True)
     
     def add_application(self, application):
         self.applications.append(application.key().id())

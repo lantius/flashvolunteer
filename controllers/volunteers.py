@@ -61,7 +61,7 @@ class VolunteersPage(AbstractHandler):
                                               
       event_access = page_volunteer.event_access(account = account) 
                         
-      future_events = page_volunteer.events_future()[:VolunteersPage.LIMIT]
+      future_events = page_volunteer.events_future().fetch(VolunteersPage.LIMIT)
       template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                           'volunteerfollower' : volunteerfollower,
                           'volunteerfollowing' : volunteerfollowing,

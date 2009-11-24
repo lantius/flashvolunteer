@@ -20,66 +20,72 @@ function event_search_submit(bookmark){
     build_dialog(100,'?' + search_params);
 }
 
-
-function people_search_submit(){
+function get_people_search_params(){
     var nval = $('#person_search select.neighborhood_select option:selected').val();
     if (nval && nval!='none') 
-	   var nid = $('#person_search select.neighborhood_select option:selected').val();
+       var nid = $('#person_search select.neighborhood_select option:selected').val();
     else 
-	   var nid='';
+       var nid='';
     
-    build_dialog(101,'?neighborhood='+nid);
+    return 'neighborhood='+nid;
+}
+
+
+function people_search_submit(){
+    build_dialog(101,get_people_search_params());
 }
 
 function close_dialog(){
-    $('#generic_dialog').remove();
+	$('#generic_dialog').fadeOut('slow',function(){
+        $('#generic_dialog').remove();		
+	});
 }
 function build_dialog(d_type, id){
 
 	switch(d_type){
 		case 1:
-            var url = '/events/upcoming/1';
+            var url = '/events/upcoming';
 		    break;
 		case 2:
-            var url = '/events/recommended/1';
+            var url = '/events/recommended';
             break;
 		case 3: 
-		    var url = '/events/hosted/volunteer/'+id+'/1';
+		    var url = '/events/hosted/volunteer/'+id;
             break;
         case 4: 
-		    var url = '/events/past/volunteer/'+id+'/1';
+		    var url = '/events/past/volunteer/'+id;
             break;
         case 5: 
-            var url = '/events/upcoming/volunteer/'+id+'/1';
+            var url = '/events/upcoming/volunteer/'+id;
             break;
         case 6:
-            var url = '/events/past/category/'+id + '/1';
+            var url = '/events/past/category/'+id;
             break;
         case 7:
-            var url = '/events/upcoming/neighborhood/'+id + '/1';
+            var url = '/events/upcoming/neighborhood/'+id;
             break;
         case 8:
-            var url = '/events/past/neighborhood/'+id + '/1';
+            var url = '/events/past/neighborhood/'+id;
             break;
 											
 		case 20:
-		    var url = '/events/'+id+'/attendees/1';
+		    var url = '/events/'+id+'/attendees';
 		    break;
 		case 21:
-		    var url = '/team/1';
+		    var url = '/team';
 			break;
 		case 22:
-		    var url = '/category/'+id + '/volunteers/1';
+		    var url = '/category/'+id + '/volunteers';
 			break;
         case 23:
-            var url = '/neighborhoods/'+id + '/volunteers_live/1';
+            var url = '/neighborhoods/'+id + '/volunteers_live';
             break;
         case 24:
-            var url = '/neighborhoods/'+id + '/volunteers_work/1';
+            var url = '/neighborhoods/'+id + '/volunteers_work';
             break;
 
         case 25:
-		    var url = '/volunteers/'+id+'/team/1';
+		    var url = '/volunteers/'+id+'/team';
 			break;
 			
 			
@@ -1012,3 +1018,14 @@ function set_active(active){
 }
 
 
+function set_page_loader(content_selector){	
+	$(content_selector + ' a.fv').each(function(){
+		$(this).click(function(){
+			$.address.value($(this).attr('href').replace(/^#/, ''));
+		});
+		
+		$(this).address(function(){
+			return $(this).attr('href').replace(/^#/, '');
+		});
+	});
+}

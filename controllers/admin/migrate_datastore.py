@@ -10,6 +10,7 @@ from models.event import Event
 from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
+from models.eventinterestcategory import EventInterestCategory
 
 import os, logging
 
@@ -92,12 +93,17 @@ class MigrateDatastore(AbstractHandler):
             
         from models.eventvolunteer import EventVolunteer
         for ev in EventVolunteer.all():
+            ev.event_is_upcoming = not ev.event.inpast()
+            ev.event_is_hidden = ev.event.hidden
+            ev.event_date = ev.event.date
+            ev.application = ev.event.application
+
             if ev.volunteer and not ev.account:
                 ev.account = ev.volunteer.account
-                ev.put()
             elif ev.account and not ev.volunteer:
                 ev.volunteer = ev.account.get_user()
-                ev.put()
+            ev.put()
+            
             
         from models.volunteerfollower import VolunteerFollower
         for vf in VolunteerFollower.all():
@@ -115,7 +121,16 @@ class MigrateDatastore(AbstractHandler):
             if vic.volunteer:
                 i = Interest(account = vic.volunteer.account, interestcategory = vic.interestcategory)
                 i.put()
+                
+        for e in Event.all():
+            if e.inpast():
+                e.in_past = True
+                e.put()
             
+        for eic in EventInterestCategory.all():
+            eic.event_is_upcoming = e.in_past
+            eic.put()
+
         return
     
 ##########################################################################

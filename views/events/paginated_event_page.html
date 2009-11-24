@@ -1,6 +1,10 @@
-<div id="generic_dialog">
-	<h2>{{title}}</h2>
+{% extends "../dialog_layout.html" %}
 
+{% block dialog_title %}
+    {{title}}
+{% endblock dialog_title %}
+
+{% block dialog_content %}
 	<div id="upcomingevents" class="hardmodule">
 	    <ul>            
 	        {% for event in events %}
@@ -8,18 +12,11 @@
 	        {% endfor %}
 	    </ul>
 	</div>
-	
-	<div class="buttons">
-		<div class="pagination">
-		    {% ifnotequal prev_page -1 %} 
-		        <a  class="fv" href="{{url}}{{prev_page}}">&laquo;  </a>
-		    {% endifnotequal %}
-		    {{ start }} - {{end}} of {{ total }}
-		    {% ifnotequal next_page -1 %} 
-		        <a  class="fv" href="{{url}}{{next_page}}">  &raquo;</a>
-		    {% endifnotequal %}
-		</div>
-	<input type="button" onclick=close_dialog() class="closedialog" name="close" value="Close"/>
-    </div>  
+    <script>
+       function get_params(){
+           return '';
+       }
+    </script>	
+{% endblock dialog_content %}
 
 </div>

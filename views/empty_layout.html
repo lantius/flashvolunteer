@@ -15,20 +15,11 @@
             </script>
         {% endif %}
 
-        <script>
-            $(document).ready(function(){
-
-              $('#content a.fv').each(function(){
-	              $(this).click(function() {  
-	                $.address.value($(this).attr('href').replace(/^#/, ''));  
-	              });
-	              
-	              $(this).address(function() {  
-	                return $(this).attr('href').replace(/^#/, '');  
-	              });  
-			  });
-            });
-        </script>
+	    <script>
+	        $(document).ready(function(){
+	          set_page_loader('#content');
+	        });
+	    </script>
 		
         {% block content %}
         {% endblock content %}

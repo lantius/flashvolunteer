@@ -48,10 +48,10 @@ class NeighborhoodsPage(AbstractHandler):
                 stats = {}
                 
                 for n in neighborhoods:                                                     
-                    volunteers_living = len(list(n.volunteers_living_here()))
-                    volunteers_working = len(list(n.volunteers_working_here()))                   
-                    past_events = len(list(n.events_past()))                       
-                    upcoming_events = len(list(n.events_future()))                    
+                    volunteers_living = n.volunteers_living_here().count()
+                    volunteers_working = n.volunteers_working_here().count()             
+                    past_events = n.events_past().count()                       
+                    upcoming_events = n.events_future().count()
                     vhours = 0 
                     for e in n.events:
                         vhours += sum([ev.hours for ev in e.eventvolunteers if ev.hours])
@@ -131,8 +131,8 @@ class NeighborhoodDetailPage(AbstractHandler):
         candidates_living = list(neighborhood.volunteers_living_here())
         candidates_working = list(neighborhood.volunteers_working_here())
         
-        past_events = list(neighborhood.events_past()) 
-        upcoming_events = list(neighborhood.events_future())    
+        past_events = neighborhood.events_past().fetch(LIMIT)
+        upcoming_events = neighborhood.events_future().fetch(LIMIT)
         
         
         #fill forum block
@@ -154,7 +154,7 @@ class NeighborhoodDetailPage(AbstractHandler):
             'volunteers_living_here': random.sample(candidates_living, min(len(candidates_living),LIMIT)), 
             'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 
             'past_events': past_events[-LIMIT:],
-            'upcoming_events':upcoming_events[:LIMIT],
+            'upcoming_events':upcoming_events,
             'forum': forum
           }
         self._add_base_template_values(vals = template_values)
