@@ -114,6 +114,10 @@ class MigrateDatastore(AbstractHandler):
                 except:
                     pass
                 vf.put()
+                
+            mutual = vf.follows.following.filter('follows =', vf.follower).get()
+            vf.mutual = mutual is not None
+            vf.put()
             
         from models.interest import Interest
         from models.volunteerinterestcategory import VolunteerInterestCategory

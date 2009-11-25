@@ -138,7 +138,7 @@ def real_main():
            ('/neighborhoods/(\d+)/messages', Forum),
            
            ('/team', FriendsPage),
-           ('/team/(\d+)', PaginatedTeamPage),
+           ('/team/list', PaginatedTeamPage),
            
            ('/volunteers/(\d+)/follow', FollowVolunteer),
            ('/volunteers/(\d+)/avatar', VolunteerAvatar),

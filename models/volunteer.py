@@ -45,26 +45,27 @@ class Volunteer(AbstractUser):
     def interestcategories(self):
       return (vic.interestcategory for vic in self.account.user_interests)
     
-    # both following and follower
-    def friends(self):
-        following = dict([(vf.follows.key().id(),1) for vf in self.account.following])
-        fr = [vf.follower.get_user() for vf in self.account.followers if vf.follower.key().id() in following]
-        return fr
+    def friends(self):  #returns a generator of Volunteer objects
+        return (fv.follows.get_user() for fv in self.account.following.filter('mutual =', True).order('__key__'))
+
+    def followers_only(self):   #returns a generator of Volunteer objects
+        return (fv.follower.get_user() for fv in self.account.followers.filter('mutual =', False).order('__key__'))
     
-    def followers_only(self):
-        following = dict([(vf.follows.key().id(),1) for vf in self.account.following])
-        fr = [vf.follower.get_user() for vf in self.account.followers if vf.follower.key().id() not in following]
-        return fr
-    
-    def following_only(self):
-        followers = dict([(vf.follower.key().id(),1) for vf in self.account.followers])
-        fr = [vf.follows.get_user() for vf in self.account.following if vf.follows.key().id() not in followers]
-        return fr
-    
+    def following_only(self):   #returns a generator of Volunteer objects
+        return (fv.follows.get_user() for fv in self.account.following.filter('mutual =', False).order('__key__'))
+
+    def following(self, key = None, limit = None):   #returns a generator of account objects
+        qry = self.account.following.order('__key__')
+        if key: 
+            qry = qry.filter('__key__ >', key)
+        if limit:
+            return (fv.follows.get_user() for fv in qry.fetch(limit))
+        else:
+            return (fv.follows.get_user() for fv in qry)
+
     def event_access(self, account):
         if self.privacy__event_attendance == 'everyone': return True
-        friends = [f.account.key().id() for f in self.friends()]
-        return self.privacy__event_attendance == 'friends' and account.key().id() in friends
+        return self.privacy__event_attendance == 'friends' and self.account.following.filter('follows =', account).get()
 
     def recommended_events(self, date = None):
         #TODO make more efficient

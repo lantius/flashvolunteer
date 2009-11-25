@@ -196,13 +196,18 @@ class FollowVolunteer(AbstractHandler):
         
         if to_follow:
             volunteerfollower = to_follow.account.followers.filter('account =', account).get()
-    
+            
+            mutual = to_follow.following.filter('follows =', account).get()
+            
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if volunteerfollower:
                     volunteerfollower.delete()
+                    if mutual:
+                        mutual.mutual = False
+                        mutual.put()
             else:
                 if not volunteerfollower:
-                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower=account)
+                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower=account, mutual = mutual is not None)
                     volunteerfollower.put()
                     params = self.get_message_params(adder = account, account = to_follow.account, volunteer = to_follow)
                     subject = type2.subject%params

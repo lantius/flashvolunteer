@@ -6,7 +6,7 @@
 				<h3>People requesting to be in your team</h3>
 			</div>
 			<ul class="imagenamelinklist">
-				{% for volunteer_in_list in volunteer.followers_only %}
+				{% for volunteer_in_list in followers_only %}
 					{% include "person_lists/_volunteer_list_item.html" %}
 				{% endfor %}
 		    </ul>

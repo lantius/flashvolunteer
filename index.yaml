@@ -42,6 +42,13 @@ indexes:
 
 - kind: Event
   properties:
+  - name: hidden
+  - name: in_past
+  - name: neighborhood
+  - name: date
+
+- kind: Event
+  properties:
   - name: neighborhood
   - name: date
 

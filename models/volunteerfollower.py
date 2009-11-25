@@ -17,3 +17,5 @@ class VolunteerFollower(db.Model):
     
     follows = db.ReferenceProperty(Account,
                                    collection_name = 'followers')
+    
+    mutual = db.BooleanProperty(default = False)

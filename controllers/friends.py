@@ -22,8 +22,8 @@ class FriendsPage(AbstractHandler):
             return       
     
         volunteer = account.get_user()
-        candidates = list(volunteer.friends()) + list(volunteer.following_only())
-             
+        candidates = list(volunteer.following(limit = 250))
+                     
         volunteer_stats = memcache.get('volunteer_stats')
         if not volunteer_stats: 
             volunteers = get_all_volunteers()
@@ -50,6 +50,7 @@ class FriendsPage(AbstractHandler):
             'volunteer': volunteer,
             'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
             'friends': friends,
+            'followers_only': (v for v in volunteer.followers_only()),
             'most_active_volunteers': volunteer_stats[:LIMIT2],
           }
         self._add_base_template_values(vals = template_values)                   

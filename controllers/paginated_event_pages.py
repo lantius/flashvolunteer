@@ -19,7 +19,7 @@ from components.sessions import Session
 from datetime import datetime
 
 class BaseEventListPage(AbstractHandler):
-    LIST_LIMIT = 2
+    LIST_LIMIT = 12
 
     def _returns_event_list(self):
         return True
@@ -38,6 +38,7 @@ class BaseEventListPage(AbstractHandler):
         
         if self.account: self.volunteer = self.account.get_user()
         else: self.volunteer = None
+
 
         first_page = not bookmark_loc or bookmark_loc == '-'
         if not first_page:
