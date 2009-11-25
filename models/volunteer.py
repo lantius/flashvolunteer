@@ -46,22 +46,22 @@ class Volunteer(AbstractUser):
       return (vic.interestcategory for vic in self.account.user_interests)
     
     def friends(self):  #returns a generator of Volunteer objects
-        return (fv.follows.get_user() for fv in self.account.following.filter('mutual =', True).order('__key__'))
+        return (vf.follows.get_user() for vf in self.account.following.filter('mutual =', True).order('__key__'))
 
     def followers_only(self):   #returns a generator of Volunteer objects
-        return (fv.follower.get_user() for fv in self.account.followers.filter('mutual =', False).order('__key__'))
+        return (vf.follower.get_user() for vf in self.account.followers.filter('mutual =', False).order('__key__'))
     
     def following_only(self):   #returns a generator of Volunteer objects
-        return (fv.follows.get_user() for fv in self.account.following.filter('mutual =', False).order('__key__'))
+        return (vf.follows.get_user() for vf in self.account.following.filter('mutual =', False).order('__key__'))
 
     def following(self, key = None, limit = None):   #returns a generator of account objects
         qry = self.account.following.order('__key__')
         if key: 
-            qry = qry.filter('__key__ >', key)
+            qry = qry.filter('__key__ >=', key)
         if limit:
-            return (fv.follows.get_user() for fv in qry.fetch(limit))
+            return (vf.follows.get_user() for vf in qry.fetch(limit))
         else:
-            return (fv.follows.get_user() for fv in qry)
+            return (vf.follows.get_user() for vf in qry)
 
     def event_access(self, account):
         if self.privacy__event_attendance == 'everyone': return True

@@ -27,6 +27,14 @@ indexes:
   properties:
   - name: application
   - name: hidden
+  - name: in_past
+  - name: neighborhood
+  - name: date
+
+- kind: Event
+  properties:
+  - name: application
+  - name: hidden
   - name: neighborhood
   - name: date
 

@@ -15,7 +15,7 @@ from controllers._utils import is_debugging, get_application, get_google_maps_ap
 from components.sessions import Session
 
 class BaseVolunteerListPage(AbstractHandler):
-    LIST_LIMIT = 12
+    LIST_LIMIT = 2
     
     def set_context(self):  
         try:
@@ -65,7 +65,7 @@ class BaseVolunteerListPage(AbstractHandler):
 
         if len(volunteers) == self.LIST_LIMIT+1:
             next = volunteers[-1].key() 
-            events = volunteers[:self.LIST_LIMIT]
+            volunteers = volunteers[:self.LIST_LIMIT]
         else:
             next = None
                      
@@ -95,7 +95,7 @@ class PaginatedTeamPage(BaseVolunteerListPage):
      return 'My FlashTeam'
  
   def _get_url(self):
-     return '/team'
+     return '/team/list'
  
  
 class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
@@ -111,7 +111,7 @@ class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
   def _get_volunteers(self, limit, bookmark = None):
      qry = self.category.user_interests.order('__key__')
      if bookmark: 
-         qry = qry.filter('__key__ >', bookmark)
+         qry = qry.filter('__key__ >=', bookmark)
      return [i.account for i in qry.fetch(limit)]  
          
   def _get_title(self):
@@ -133,7 +133,7 @@ class PaginatedNeighborhoodVolunteerWorkPage(BaseVolunteerListPage):
   def _get_volunteers(self, limit, bookmark = None):
      qry = self.neighborhood.work_neighborhood.order('__key__')
      if bookmark: 
-         qry = qry.filter('__key__ >', bookmark)
+         qry = qry.filter('__key__ >=', bookmark)
      return [v for v in qry.fetch(limit)]
          
   def _get_title(self):
@@ -155,7 +155,7 @@ class PaginatedNeighborhoodVolunteerHomePage(BaseVolunteerListPage):
   def _get_volunteers(self, limit, bookmark = None):
      qry = self.neighborhood.home_neighborhood.order('__key__')
      if bookmark: 
-         qry = qry.filter('__key__ >', bookmark)
+         qry = qry.filter('__key__ >=', bookmark)
      return [v for v in qry.fetch(limit)]
  
   def _get_title(self):
@@ -198,7 +198,7 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
      eventvolunteer = self.event.eventvolunteers.filter('volunteer =', self.volunteer).get() 
 
      qry = self.event.eventvolunteers.order('__key__').limit(limit)
-     if bookmark: qry = qry.filter('__key__ >', bookmark)
+     if bookmark: qry = qry.filter('__key__ >=', bookmark)
                    
      if eventvolunteer and (eventvolunteer.isowner or self.event.in_past): 
          return list(qry.fetch(limit))

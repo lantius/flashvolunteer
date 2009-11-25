@@ -115,7 +115,7 @@ class NeighborhoodDetailPage(AbstractHandler):
     ################################################################################
     # SHOW
     def show(self, neighborhood_id):
-        LIMIT = 12
+        LIMIT = 3
         try:
             account = self.auth()
         except:

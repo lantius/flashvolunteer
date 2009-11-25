@@ -72,7 +72,7 @@ function build_dialog(d_type, id){
 		    var url = '/events/'+id+'/attendees';
 		    break;
 		case 21:
-		    var url = '/team';
+		    var url = '/team/list';
 			break;
 		case 22:
 		    var url = '/category/'+id + '/volunteers';

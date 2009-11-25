@@ -5,8 +5,8 @@
 	{% endfor %}
 </div><!--end profileupcomingevents-->
 
-{% if volunteer.events_coordinating %}
-    {% ifnotequal volunteer.events_coordinating|length 0 %}
+{% if events_coordinating %}
+    {% ifnotequal events_coordinating|length 0 %}
     <div class="pagination_entry">
     	<a onclick="build_dialog(3, {{volunteer.key.id}})">&raquo; View all</a>
     </div>
