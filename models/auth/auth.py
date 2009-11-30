@@ -10,6 +10,7 @@ class Auth(db.Model):
     strategy = db.StringProperty(required = True)
     identifier = db.StringProperty(required = True)
     digest = db.StringProperty()
+    digest2 = db.StringProperty()
     salt = db.StringProperty()
     account = db.ReferenceProperty(Account,
                                    collection_name='auth_methods')

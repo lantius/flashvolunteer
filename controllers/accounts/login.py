@@ -136,11 +136,18 @@ class Login(AbstractHandler):
             return
         
         hash = hashlib.sha224(password + auth.salt).hexdigest()
-        if hash != auth.digest:
+        hash2 = hashlib.sha224(hashlib.sha224(password).hexdigest() + auth.salt).hexdigest() #for mobile clients that hash before sending password on...
+        
+        
+        if not hash and hash not in [auth.digest,auth.digest2] and hash2.digest2 not in [auth.digest,auth.digest2]:
             logging.info('could not log user in, wrong password')
             errors['wrong_password'] = 1
             self.login(errors = errors, email = email)
             return
+        
+        if not auth.digest2: 
+            auth.digest2 = hash2
+            auth.put()
         
         session['auth'] = auth                               
         if 'login_redirect' in session:

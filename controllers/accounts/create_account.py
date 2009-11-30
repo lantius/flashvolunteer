@@ -80,6 +80,7 @@ class CreateAccount(AbstractHandler):
                   'providerName': "fv",
                   'identifier': params['email'],
                   'digest': hashlib.sha224(params['password'] + salt).hexdigest(),
+                  'digest2': hashlib.sha224(hashlib.sha224(params['password']).hexdigest() + salt).hexdigest(),
                   'salt': salt
             }
             
