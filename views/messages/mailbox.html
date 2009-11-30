@@ -6,27 +6,45 @@
 <script>
       set_active('mailbox');
 
+	  function set_content(href){
+		    $('#mailbox_body').load(href);
+		    if(href.search('inbox') == -1){
+                $('#sent_tab').addClass('ui-tabs-selected').addClass('ui-state-active').removeClass('ui-state-default');
+                $('#inbox_tab').removeClass('ui-tabs-selected').removeClass('ui-state-active').addClass('ui-state-default');		      
+		    }
+		    else {
+                $('#inbox_tab').addClass('ui-tabs-selected').addClass('ui-state-active').removeClass('ui-state-default');
+                $('#sent_tab').removeClass('ui-tabs-selected').removeClass('ui-state-active').addClass('ui-state-default');		    
+		    }
+	  }
+    
       $(document).ready(function() {
             load_title('Mailbox');
             load_header('Flash Mailbox');
+            set_content("/messages/inbox");
       });
+</script>
+
+<script>
+
 </script>
 
  
 <div id="middle100">
+
+<div id="mailbox-tab-sections" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <ul id="nav" class="tab-links ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li id='inbox_tab' class="ui-state-default ui-corner-top">
+            <a class="fv" onclick=set_content("/messages/inbox")>Inbox</a>   
+        </li>
+        <li id='sent_tab' class="ui-state-default ui-corner-top">
+            <a class="fv" onclick=set_content("/messages/sent")>Sent</a>  
+        </li>
+    </ul>
+    
+    <div id="mailbox_body" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 	
-	
-	<div id="mailbox-tab-sections">
-	   <ul id="nav" class="tab-links">
-	        <li>
-	            <a class="fv" href="/messages/inbox">Inbox</a>              
-	        </li>
-	        <li>
-	            <a class="fv" href="/messages/sent">Sent</a>              
-	        </li>
-	    </ul>
-		
-	</div>
+    </div>    
 </div><!--end middle100-->
 
 <script>

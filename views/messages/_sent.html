@@ -49,7 +49,12 @@
     
     <div class="pagination">
         {% if sent_next %} 
-            <a class="fv" href="{{domain}}/messages?bookmark={{sent_next}}">  &raquo; next page</a>
+            <a class="fv" onclick=set_content("/messages/sent?bookmark={{sent_next}}")>  &raquo; older</a>
         {% endif %}
+        <script>
+            function next_page(){
+               $('#inbox').load("{{domain}}/messages/sent?bookmark={{sent_next}}");
+            }
+        </script>
     </div>
 </div>  

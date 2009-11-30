@@ -49,7 +49,7 @@
     
     <div class="pagination">
         {% if next %} 
-            <a class="fv" href="/messages?bookmark={{next}}">  &raquo; older</a>
+            <a class="fv" onclick=set_content("/messages/inbox?bookmark={{next}}")>  &raquo; older</a>
         {% endif %}
     </div>
 </div>
