@@ -27,12 +27,7 @@ div#container{
         }
             div#logo {
                 width: 295px;
-                margin-top: 7px;
-            }
-            div#beta { 
-                position: relative;
-                left: 50px;
-                top: 17px;
+                margin-top: 13px;
             }
             div#volunteerwelcome {
                 position: relative;

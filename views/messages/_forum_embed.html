@@ -96,11 +96,13 @@
 				</a>
 			</li>
 			{% endif %}
+			{% if volunteer %}
 			<li>
 				<a class="fv" class="operation" title="Post new message" href="{{forum.path}}/send_message?redirect={{forum.path}}">
 					&raquo;Post new message
 				</a>
 			</li>
+			{% endif %}
 		</ul>
 
 	</div>

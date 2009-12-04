@@ -1011,6 +1011,11 @@ form input.text.error, form input.password.error,
     font-weight: bold;
 }
 
+label.error {
+	border: none;
+}
+
+#neighborhoodstats td,
 #volunteerstats td {
 	padding-right: 10px;
 }

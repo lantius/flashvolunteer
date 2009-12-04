@@ -19,7 +19,7 @@ from components.sessions import Session
 ################################################################################
 # Messages page
 ################################################################################
-PAGELIMIT = 2
+LIST_LIMIT = 10
 class Mailbox(AbstractHandler):
 
     ################################################################################
@@ -95,13 +95,13 @@ class Mailbox(AbstractHandler):
         bookmark = self.request.get("bookmark", None)
         if bookmark:
             bookmark = datetime.strptime(bookmark, '%Y-%m-%d%H:%M:%S')            
-            sent_messages = sent_messages.filter('trigger <=', bookmark).fetch(PAGELIMIT+1)
+            sent_messages = sent_messages.filter('trigger <=', bookmark).fetch(LIST_LIMIT+1)
         else:
-            sent_messages = sent_messages.fetch(PAGELIMIT+1)
+            sent_messages = sent_messages.fetch(LIST_LIMIT+1)
             
-        if len(sent_messages) == PAGELIMIT+1:
+        if len(sent_messages) == LIST_LIMIT+1:
             sent_next = self._get_next(lst = sent_messages)                
-            sent_messages = sent_messages[:PAGELIMIT]
+            sent_messages = sent_messages[:LIST_LIMIT]
         else:
             sent_next = None
 
@@ -127,13 +127,13 @@ class Mailbox(AbstractHandler):
         bookmark = self.request.get("bookmark", None)
         if bookmark:
             bookmark = datetime.strptime(bookmark, '%Y-%m-%d%H:%M:%S')            
-            messages = messages.filter('timestamp <=', bookmark).fetch(PAGELIMIT+1)
+            messages = messages.filter('timestamp <=', bookmark).fetch(LIST_LIMIT+1)
         else:
-            messages = messages.fetch(PAGELIMIT+1)
+            messages = messages.fetch(LIST_LIMIT+1)
             
-        if len(messages) == PAGELIMIT+1:
+        if len(messages) == LIST_LIMIT+1:
             next = self._get_next(lst = messages)                
-            messages = messages[:PAGELIMIT]
+            messages = messages[:LIST_LIMIT]
         else:
             next = None
 

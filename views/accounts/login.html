@@ -9,6 +9,30 @@
       });
 </script>
 
+<script>
+  $(document).ready(function(){
+    $(".validate_form").validate({
+        messages: {
+            email: {
+              required: " ",
+              email: "Please enter a valid email address.<br>If you do not yet have an FV account, please click 'Signup' below.",
+              //remote: jQuery.validator.format("{0} is already taken, please enter a different address.")
+            }
+        },
+        submitHandler: function(form) {
+           if ($('#tosagree:checked').val() == null) {
+                $('.form_error').html('You need to agree to the terms of service!');
+                $(".form_error").show();
+           }else{
+                form.submit();
+           }
+        }
+
+    })
+  });
+</script>
+
+
     <div style="margin-top: 25px;"></div>
     <div id="middle100">
         <table>
@@ -23,7 +47,10 @@
         <ol >
 	        <li class="fv-login-block fl" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:39%;height:100%">
 		        <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Use your Flash Volunteer account</h1>
-		          <form action="/login" id="new_account" method="post">
+		          
+				  
+				  
+				  <form class="validate_form" action="/login" id="new_account" method="post">
 		            <div style="margin:0;padding:0">
 		              <input name="session_id" type="hidden" value="{{session_id}}" />
 		            </div>
@@ -31,12 +58,12 @@
 		              <ol>
 		                <li>
 		                  <label for="email">Email</label>{% if errors.user_not_found %}<strong class="error">No user with that email</strong>{% endif %}  
-		                  <input class="text" id="email" name="email" tabindex="1" type="text" {%if email %}value={{email}}{%endif%} />
+		                  <input class="text required email" id="email" name="email" tabindex="1" type="text" {%if email %}value={{email}}{%endif%} />
        
 		                </li>
 		                <li>
 		                  <label for="password">Password</label>{% if errors.wrong_password %}<strong class="error">Wrong password</strong>{% endif %}              
-		                  <input class="password" id="password" name="password" tabindex="2" type="password" />             
+		                  <input class="password required" id="password" name="password" tabindex="2" type="password" />             
 						</li>
 		              </ol>
 		            </fieldset>

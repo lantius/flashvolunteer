@@ -11,8 +11,38 @@
 
 <script>
   $(document).ready(function(){
+	jQuery.validator.addMethod("password", function( value, element ) {
+		var result = this.optional(element) || value.length >= 6 && /\d/.test(value) && /[a-z]/i.test(value);
+		if (!result) {
+			var validator = this;
+			setTimeout(function() {
+				validator.blockFocusCleanup = true;
+				element.focus();
+				validator.blockFocusCleanup = false;
+			  }, 1);
+		}
+		return result;
+		}, "Your password must be at least 6 characters long and contain at least one number and one character.");
+ 
+
     $(".validate_form").validate({
-        errorPlacement: function(error, element) {},
+        //errorPlacement: function(error, element) {},
+		rules : {
+		    passwordcheck: {
+			    equalTo: '#password'
+			}
+		},
+		messages: {
+		    passwordcheck: {
+		      required: " ",
+		      equalTo: "Please enter the same password as above"
+		      },
+		    email: {
+		      required: " ",
+		      email: "Please enter a valid email address, example: you@yourdomain.com",
+		      //remote: jQuery.validator.format("{0} is already taken, please enter a different address.")
+		    }
+	    }, 
         invalidHandler: function(form, validator) {
           var errors = validator.numberOfInvalids();
           if (errors) {
@@ -88,7 +118,7 @@
                         </li>
                         <li>
                           <label for="password">Confirm Password</label>
-                          <input class="password required" id="password" name="passwordcheck" tabindex="4" type="password" />
+                          <input class="password required" id="passwordcheck" name="passwordcheck" tabindex="4" type="password" />
 	                      {% if account.error.passwords %}
 	                            <br/><strong class="error">{{account.error.passwords.0}}</strong>
 	                      {% endif %}                
@@ -98,8 +128,21 @@
 				    </fieldset>
 					
                     <fieldset>
-			        <ul><li><div class="label">I live nearest to:</div> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
-			        <li><div class="label">I work nearest to:</div> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
+			        <ul><li><div class="label">I live nearest to:</div> 
+						<select class="required" name="home_neighborhood">
+						    <option value="">Neighborhood...</option>
+						    {% for neighborhood in home_neighborhoods %}
+						    <option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected="selected"{% endif %}>{{neighborhood.name}}</option>
+						    {% endfor %}
+						</select></li>			        
+					<li><div class="label">I work nearest to:</div> 
+						<select class="required" name="work_neighborhood">
+						    <option value="">Neighborhood...</option>
+						    {% for neighborhood in work_neighborhoods %}
+						    <option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
+						    {% endfor %}
+						</select>					   
+						</li>
                     </ul>
 					</fieldset>
                     <fieldset>

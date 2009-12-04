@@ -15,7 +15,7 @@ from controllers._utils import is_debugging, get_application, get_google_maps_ap
 from components.sessions import Session
 
 class BaseVolunteerListPage(AbstractHandler):
-    LIST_LIMIT = 2
+    LIST_LIMIT = 12
     
     def set_context(self):  
         try:
