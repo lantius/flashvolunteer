@@ -78,37 +78,8 @@
 		      <fieldset>
 				  <ul>			
 				  
-                        <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"
-                            {% if account.error.name %}
-                                value="{{ account.error.name.1 }}"
-                            {% else %}
-                                {% if account.name %}
-                                    value="{{ account.name|striptags }}"
-                                {% else %}
-                                    value=""
-                                {% endif %}
-                            {% endif %}
-                            />
-                            {% if account.error.name %}
-                                <br/><strong class="error">{{account.error.name.0}}</strong>
-                            {% endif %}
-                        </li>
-						
-					<li><label for="email">Email (required):</label><input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"
-						{% if account.error.email %}
-							value="{{ account.error.email.1 }}"
-						{% else %}
-							{% if account.preferred_email %}
-								value="{{ account.preferred_email|striptags }}"
-							{% else %}
-								value=""
-							{% endif %}
-						{% endif %}
-						/>
-				        {% if account.error.email %}
-			                <br/><strong class="error">{{account.error.email.0}}</strong>
-			            {% endif %}
-					</li>
+                    <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"/></li>						
+					<li><label for="email">Email (required):</label><input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"/></li>
 					
 					{% if fv_account %}
                         <li>
@@ -119,9 +90,6 @@
                         <li>
                           <label for="password">Confirm Password</label>
                           <input class="password required" id="passwordcheck" name="passwordcheck" tabindex="4" type="password" />
-	                      {% if account.error.passwords %}
-	                            <br/><strong class="error">{{account.error.passwords.0}}</strong>
-	                      {% endif %}                
                         </li>					
 					{% endif %}
 					</ul>
@@ -145,13 +113,9 @@
 						</li>
                     </ul>
 					</fieldset>
-                    <fieldset>
-                    <ul>	
+            <fieldset>
+                <ul>	
 					<li><input id='tosagree' type="checkbox" name="tosagree" class="required" value="1" /> I accept the <a class="fv" target="_blank" href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
-					{% if account.error.tosagree %}
-						<br/><strong class="error">{{account.error.tosagree.0}}</strong>
-					{% endif %}
-					</li>
 				</ul>
 			</fieldset>
 			<input class="submit" type="submit" value="Create my account" id="s_create_account"/>

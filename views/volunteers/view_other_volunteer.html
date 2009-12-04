@@ -1,7 +1,7 @@
 {% extends to_extend %}
 
 {% block pagespectitle %}
-    <h1>{{ page_volunteer.account.name }}</h1>
+    <h1>{{ page_volunteer.account.name|striptags }}</h1>
 {% endblock %}
 
 {% block content %}

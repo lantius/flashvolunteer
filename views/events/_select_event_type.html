@@ -1,6 +1,6 @@
 <select class="interest_category_select" name="interestcategory">
 	<option value="default">Any event type...</option>
 	{% for interestcategory in interestcategories %}
-		<option value="{{ interestcategory.key.id }}">{{ interestcategory.name }}</option>
+		<option value="{{ interestcategory.key.id }}">{{ interestcategory.name|striptags }}</option>
 	{% endfor %}
 </select>

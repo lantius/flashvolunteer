@@ -3,7 +3,7 @@
 
 
 {% block pagespectitle %}
-    <h1>{{ account.name }}</h1>
+    <h1>{{ account.name|striptags }}</h1>
 {% endblock %}
 
 {% block content %}

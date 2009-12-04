@@ -291,7 +291,7 @@
 		{% ifequal ep.status ep.PUBLISHED %}
 			{% ifequal ep.type ep.RSS_ALBUM %}
 				<script type="text/javascript">
-					albums[{{ep.key.id}}] = {content: "{{ep.content}}", volunteer_url:"{{ep.volunteer.url}}", volunteer_name: "{{ep.volunteer.name}}"}
+					albums[{{ep.key.id}}] = {content: "{{ep.content}}", volunteer_url:"{{ep.volunteer.url}}", volunteer_name: "{{ep.volunteer.account.name|striptags}}"}
 					load_album("{{ep.key.id}}", showmore_id=={{ep.key.id}});
 				
 					function showmore_{{ep.key.id}}(more) {

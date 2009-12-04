@@ -23,13 +23,13 @@
                                     {% else %}
                                        /stylesheets/media/fv_avatar.png
                                     {% endif %}
-                                    " alt="{{ message.get_recipient.name }}" />
+                                    " alt="{{ message.get_recipient.name|striptags }}" />
                                 </a>
                             </div>
                         </td>
                         <td class="minfo">
                             <div>{% if message.get_recipient %}
-                                     To: <a class="fv" href="{{ message.get_recipient.url }}">{{ message.get_recipient.name }}</a>
+                                     To: <a class="fv" href="{{ message.get_recipient.url }}">{{ message.get_recipient.name|striptags }}</a>
                                  {% else %}
                                     Flash Volunteer
                                  {%endif%}

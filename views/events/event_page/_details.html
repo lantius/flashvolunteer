@@ -21,7 +21,7 @@
 				{% endif %}
 				
 				{% if not event.verified %}
-					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
+					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name|striptags}} is inappropriate!&body={{event.name|striptags}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 				{% endif %}
 			
 			
@@ -29,7 +29,7 @@
 
 		{% else %}{% if volunteer %}
 				{% if not event.verified %}
-					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name}} is inappropriate!&body={{event.name}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
+					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name|striptags}} is inappropriate!&body={{event.name|striptags}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 				{% endif %}
             
 			<li><form action="{{event.url}}/volunteer" method="post">

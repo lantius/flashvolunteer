@@ -7,36 +7,22 @@
 	
 	<ul>
 		<li><span class="label">Your Name:</span><input id="createnameinput" type="text" name="name"
-			{% if volunteer.error.name %}
-				value="{{ volunteer.error.name.1 }}"
+			{% if account.name %}
+				value="{{ account.name|striptags }}"
 			{% else %}
-				{% if account.name %}
-					value="{{ account.name|striptags }}"
-				{% else %}
-					value="{{ default_name|striptags }}"
-				{% endif %}
+				value="{{ default_name|striptags }}"
 			{% endif %}
 			/>
-		    {% if volunteer.error.name %}
-                <br/><strong class="error">{{volunteer.error.name.0}}</strong>
-            {% endif %}
 		</li>
 
 
 		<li><span class="label">Email (required):</span><input id="createnameinput" type="text" name="email"
-			{% if volunteer.error.email %}
-				value="{{ volunteer.error.email.1 }}"
+			{% if account.get_email %}
+				value="{{ account.get_email|striptags }}"
 			{% else %}
-				{% if volunteer.email %}
-					value="{{ volunteer.email|striptags }}"
-				{% else %}
-					value="{{ default_email|striptags }}"
-				{% endif %}
+				value="{{ default_email|striptags }}"
 			{% endif %}
 			/>
-	        {% if volunteer.error.email %}
-                <br/><strong class="error">{{volunteer.error.email.0}}</strong>
-            {% endif %}
 		</li>
 
         <li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}

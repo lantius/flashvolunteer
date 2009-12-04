@@ -6,7 +6,7 @@
       set_active('events');
 
       $(document).ready(function() {
-            load_title('Receipt for {{eventvolunteer.volunteer.account.name}} attending {{eventvolunteer.event.name}}');
+            load_title('Receipt for {{eventvolunteer.volunteer.account.name|striptags}} attending {{eventvolunteer.event.name|striptags}}');
       });
 </script>
 
@@ -16,14 +16,14 @@
 
   <p>{{event.hosts}} certifies that 
 
-  {{volunteer.account.name}}
+  {{volunteer.account.name|striptags}}
 
   attended 
 
-  {{event.name}}, held in {{event.neighborhood.name}} on {{event.get_startdate_long}}.</p>
+  {{event.name|striptags}}, held in {{event.neighborhood.name}} on {{event.get_startdate_long}}.</p>
 
   {% if eventvolunteer.hours %}
-  <p>{{volunteer.account.name}} volunteered for {{eventvolunteer.hours}} hours.</p>
+  <p>{{volunteer.account.name|striptags}} volunteered for {{eventvolunteer.hours}} hours.</p>
   {% endif %}
 
 <hr>

@@ -1,23 +1,19 @@
 from components.geostring import *
-from components.time_zones import Pacific, now
+from components.time_zones import now
 from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from controllers._utils import is_debugging, get_application, get_google_maps_api_key
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import db
-from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from models.event import Event
 from models.eventinterestcategory import EventInterestCategory
 from models.eventphoto import EventPhoto
-from models.messages.message import Message
-from models.messages.message_receipt import MessageReceipt
 from models.eventvolunteer import EventVolunteer
 from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
-import exceptions
 import logging
 import os, string, random
 from datetime import datetime
@@ -253,9 +249,9 @@ class EventsPage(AbstractHandler):
         
         path = None
         if self.request.headers["Accept"] == "application/json":
-          path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.json')
+            path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.json')
         else:
-          path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
+            path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
         self.response.out.write(template.render(path, template_values, debug=is_debugging()))
    
     ################################################################################
@@ -360,8 +356,8 @@ class EventsPage(AbstractHandler):
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
         self.response.out.write(template.render(path, template_values, debug=is_debugging()))
       
-  ################################################################################
-  # UPDATE
+    ################################################################################
+    # UPDATE
     def update(self, params, account):
         event = Event.get_by_id(int(params['id']))
         if account: user = account.get_user()

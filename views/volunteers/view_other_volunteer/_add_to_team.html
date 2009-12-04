@@ -1,6 +1,6 @@
 {% if volunteer %}
 <form action="{{page_volunteer.url}}/follow" method="post">
     <input type=hidden name="session_id" value="{{ session_id }}">
-    <input title="Add {{page_volunteer.account.name}} to your FlashTeam" id="operation_add_to_team[{{ page_volunteer.key.id }}]" class="operation" type=submit value="&raquo; Add to Team"/>
+    <input title="Add {{page_volunteer.account.name|striptags}} to your FlashTeam" id="operation_add_to_team[{{ page_volunteer.key.id }}]" class="operation" type=submit value="&raquo; Add to Team"/>
 </form>
 {% endif %}

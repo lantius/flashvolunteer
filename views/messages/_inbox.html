@@ -22,14 +22,14 @@
                                     {% else %}
                                        /stylesheets/media/fv_avatar.png
                                     {% endif %}
-                                    " alt="{{ mr.message.get_sender.name }}" />
+                                    " alt="{{ mr.message.get_sender.name|striptags }}" />
                                 </a>
                             </div>
                         </td>
                         <td class="minfo">
                             {% if mr.message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{% else %} From: {%endif%}
                             <div>{% if mr.message.get_sender %}
-                                     <a class="fv" href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name }}</a>
+                                     <a class="fv" href="{{ mr.message.get_sender.url }}">{{ mr.message.get_sender.name|striptags }}</a>
                                  {% else %}
                                     Flash Volunteer
                                  {%endif%}

@@ -2,7 +2,7 @@
 <div class="shortevent">
     {% if not event.verified %}<span class="verification_warning_wrapper"><a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a></span>
 	{% endif %}
-	<a class="fv event_name" id="event_upcoming[{{event.key.id}}]" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name }}</a>
+	<a class="fv event_name" id="event_upcoming[{{event.key.id}}]" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name|striptags }}</a>
     <ul>
         <li>{{ event.get_start_time }}, {{ event.get_startdate }}, <a class="fv" href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>
 		<li><span class="label">Organizers:</span> 

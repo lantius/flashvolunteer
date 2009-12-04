@@ -13,7 +13,7 @@
       set_active('category');
 
       $(document).ready(function() {
-            load_title('{{ category.name }}');
+            load_title('{{ category.name  | striptags }}');
       });
 </script>
 

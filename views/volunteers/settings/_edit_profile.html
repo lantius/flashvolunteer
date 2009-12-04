@@ -34,11 +34,7 @@
     <input type="hidden" name="session_id" value="{{ session_id }}">
     <ul>
 	
-        <li><label for="name">Name:</label> 
-<input class="required text" type="text" name="name" value="{% if account.error.name %}{{ account.error.name.1|striptags }}{% else %}{{ account.name|striptags }}{% endif %}" /></li>
-		{% if account.error.name %}
-			<br/><strong class="error" id="error_name" >{{volunteer.error.name.0}}</strong>
-		{% endif %}
+        <li><label for="name">Name:</label> <input class="required text" type="text" name="name" value="{{ account.name|striptags }}" /></li>
         <li><label for="email">Email:</label> <input class="text required email" type="text" name="email" value="{{ account.get_email|striptags }}"  /></li>
         <li><label for="quote">About:</label> <textarea class="textarea" name="quote">{{ volunteer.get_quote|striptags }}</textarea></li>
     </ul>

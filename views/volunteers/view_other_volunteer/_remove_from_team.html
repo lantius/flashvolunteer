@@ -2,6 +2,6 @@
 <form action="{{page_volunteer.url}}/follow" method="post">
     <input type=hidden name="session_id" value="{{ session_id }}">
     <input type=hidden name="delete" value="true">
-    <input title="Remove {{page_volunteer.account.name}} from your FlashTeam" id="operation_remove_from_team[{{ page_volunteer.key.id }}]" class="operation" type=submit value="&raquo; Remove from team">
+    <input title="Remove {{page_volunteer.account.name|striptags}} from your FlashTeam" id="operation_remove_from_team[{{ page_volunteer.key.id }}]" class="operation" type=submit value="&raquo; Remove from team">
 </form>
 {% endif %}

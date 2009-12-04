@@ -62,7 +62,7 @@
                                 </div>
 	                        	{% if message.autogen %}<div class="additionalinfo">Auto-sent on behalf of</div>{%endif%}
 	                        	<div>{% if message.get_sender %}
-								         <a class="fv" href="{{ message.get_sender.url }}">{{ message.get_sender.name }}</a>
+								         <a class="fv" href="{{ message.get_sender.url }}">{{ message.get_sender.name|striptags }}</a>
 									 {% else %}
 									    Flash Volunteer
 									 {%endif%}

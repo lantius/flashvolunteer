@@ -3,7 +3,7 @@
     <!--
     <label class="checkboxlabel" title="Verify this event" for="do_verify__{{event.key.id}">Verify this</label>
     -->
-    <a  class="fv" id="event_upcoming[{{event.key.id}}]" class="event_name" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name }}</a>
+    <a  class="fv" id="event_upcoming[{{event.key.id}}]" class="event_name" href="{{ event.url }}" id="l_event_{{event.key.id}}">{{ event.name | striptags }}</a>
     <ul>
         <!-- TODO: choose important info about each event -->
         <li>{{ event.get_start_time }}, {{ event.get_startdate }}, <a  class="fv" href="{{ event.neighborhood.url }}">{{ event.neighborhood.name }}</a></li>

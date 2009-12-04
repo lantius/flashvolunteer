@@ -34,7 +34,36 @@
 	})
   });
 </script>
-  
+
+<script language="javascript">
+	$(document).ready(function()    {
+	   $('.html_editor').markItUp(myHtmlSettings);
+	});
+</script>
+
+<style type=text/css>
+	.markItUpEditor {
+		width: 100%;
+	}
+	.markItUp {
+		width: 100%;
+	}
+	div#createevent div.markItUpHeader ul li {
+		padding-top: 3px;
+		margin-bottom: 0;
+		
+	}
+	div#createevent div.markItUpHeader ul {
+	   margin-bottom: 0;	
+	   padding-bottom: 0;
+	}
+    .markItUpEditor {
+    	height: 150px;
+    }
+</style>
+
+
+
 
 <div id="createevent" class="softmodule">
 	<div class="moduletitle"><h3>Create An Event</h3></div>
@@ -50,7 +79,7 @@
 		<li>
 			<div class="eventcreatelabel">Name:</div>
 			<div class="eventinput"> 
-				{% include "../events/create_event_page/_name_input.html" %}
+				<input class="required text" id="eventname" name="name" type="text" value="{{event.name|striptags}}" />
 			</div>
 		</li>
 

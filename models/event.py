@@ -1,13 +1,12 @@
 from components.geostring import *
-from components.time_zones import Pacific, now
+from components.time_zones import now
 from controllers._utils import get_google_maps_api_key, get_application
 from google.appengine.api import urlfetch
 from google.appengine.ext import db
 from models.application import Application
-from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
 import datetime, logging, urllib
-
+from utils.html_sanitize import sanitize_html
 
 ################################################################################
 # Event
@@ -91,16 +90,16 @@ class Event(db.Model):
         return self.get_start_repr("%Y-%m-%d %H:%M")
         
     def get_startdate_short(self):
-      return self.get_start_repr("%m/%d")
+        return self.get_start_repr("%m/%d")
     
     def get_startdate(self):
-      return self.get_start_repr("%m/%d/%Y")
+        return self.get_start_repr("%m/%d/%Y")
     
     def get_starthour(self):
-      return self.get_start_repr("%H")
+        return self.get_start_repr("%H")
     
     def get_startminute(self):
-      return self.get_start_repr("%M")
+        return self.get_start_repr("%M")
     
     def get_end_repr(self, strftime):
         if (self.save.has_key('eventend')):
@@ -203,6 +202,7 @@ class Event(db.Model):
                 raise
             if not len(params['name']) > 0:
                 raise
+            params['name'] = sanitize_html(params['name'])
             if self.name != params['name']:
                 self.name = params['name']
                 self.verified = False
@@ -236,13 +236,13 @@ class Event(db.Model):
                 self.enddate = enddatetime
                 
                 if (delta < datetime.timedelta(0)): 
-                  self.error['enddate_early'] = ('Event start (%s) cannot be later than' % self.date.strftime("%m/%d/%Y, %I:%M %p"),
+                    self.error['enddate_early'] = ('Event start (%s) cannot be later than' % self.date.strftime("%m/%d/%Y, %I:%M %p"),
                                                  'event end (%s)' % enddatetime.strftime("%m/%d/%Y, %I:%M %p"))
         else: 
             self.error['eventend'] = eventend_error
         
-        
         try:
+            params['description'] = sanitize_html(params['description'])
             if not 'description' in params or not len(params['description']) > 0:
                 raise
             
@@ -261,6 +261,7 @@ class Event(db.Model):
                                         params['neighborhood'])
         
         try:
+            params['address'] = sanitize_html(params['address'])
             self.address = params['address']
         except:
             self.error['address'] = ('Invalid address', params['address'])
@@ -274,6 +275,7 @@ class Event(db.Model):
             self.geocode()
         
         try:
+            params['special_instructions'] = sanitize_html(params['special_instructions'])
             spi = params['special_instructions'].replace('\n', '\n<br>')
             if self.special_instructions != spi:
                 self.special_instructions = spi

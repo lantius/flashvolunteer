@@ -1,7 +1,7 @@
 {% extends "../../_layout.html" %}
 
 {% block title %}
-Add A Coordinator to {{event.name}}
+Add A Coordinator to {{event.name|striptags}}
 {% endblock title %}
 
 {% block eventsactive %}
@@ -9,7 +9,7 @@ class="current"
 {% endblock %}
 
 {% block pagespectitle %}
-<h1>Add Coordinator to {{event.name}}</h1>
+<h1>Add Coordinator to {{event.name|striptags}}</h1>
 {% endblock pagespectitle %}
 
 {% block content %}
@@ -23,7 +23,7 @@ class="current"
 			<li><input type="submit" id="s_add_coordinator" value="Add as organizer"></li>
 		</ul>				
 	</form>
-	<p>You can only add people who have already signed up for an event. If your co-coordinator is not yet signed up, <a class="operation" href="mailto:?subject=Help me coordinate {{event.name}}!&body=I'd like you to help coordinate this event: http:/{{domain}}{{event.url}}. Please click on the above link and volunteer so I can add you as co-coordinator!">invite them</a>!</p>
+	<p>You can only add people who have already signed up for an event. If your co-coordinator is not yet signed up, <a class="operation" href="mailto:?subject=Help me coordinate {{event.name|striptags}}!&body=I'd like you to help coordinate this event: http:/{{domain}}{{event.url}}. Please click on the above link and volunteer so I can add you as co-coordinator!">invite them</a>!</p>
 </div>
 
 {% endblock content %}

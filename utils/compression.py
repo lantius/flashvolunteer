@@ -44,11 +44,14 @@ def compress(in_files, out_file, in_type='js', verbose=False,
     print 'Reduction: %.1f%%' % (float(org_size - new_size) / org_size * 100)
     print ''
 
+
+
 SCRIPTS = [
     os.path.join(stylesheets, 'javascript', 'dialog_box.js'),
     os.path.join(stylesheets, 'javascript', 'mtaTwitterStatuses.js'),
     os.path.join(stylesheets, 'javascript', 'misc.js'),
 
+    
     os.path.join(stylesheets, 'jquery', 'js', 'jquery-1.3.2.min.js'),
     os.path.join(stylesheets, 'jquery', 'js', 'jquery-ui-1.7.2.custom.min.js'),
     
@@ -58,6 +61,8 @@ SCRIPTS = [
     os.path.join(stylesheets, 'javascript', 'jquery.address-1.0.js'),
     os.path.join(stylesheets, 'javascript', 'load_page_info.js'),
     os.path.join(stylesheets, 'javascript', 'misc_ajax.js'),
+    os.path.join(stylesheets, 'javascript', 'markItUp', 'jquery.markitup.js'),
+    os.path.join(stylesheets, 'javascript', 'markItUp', 'html_set.js'),
 
 #    os.path.join(stylesheets, 'jquery.ezjax.js'),
     
@@ -67,10 +72,11 @@ SCRIPTS_OUT_DEBUG = os.path.join(stylesheets, 'javascript', 'fv.js')
 
 SCRIPTS_OUT = os.path.join(stylesheets, 'javascript', 'fv.min.js')
 
-
 STYLESHEETS = [
     os.path.join(stylesheets, 'css', 'reset-min.css'),
     os.path.join(stylesheets, 'jquery', 'css', 'flashvolunteer', 'jquery-ui-1.7.2.custom.css'),
+    os.path.join(stylesheets, 'javascript', 'markItUp', 'style.css'),
+    os.path.join(stylesheets, 'javascript', 'markItUp', 'html.css'),
     os.path.join(stylesheets, 'css', 'main.css'),
     os.path.join(stylesheets, 'css', 'layout.css'),
     os.path.join(stylesheets, 'css', 'colors_backgrounds_borders.css'),

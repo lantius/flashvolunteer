@@ -20,7 +20,7 @@
             {% endif %}
         {% endif %}
         {% if interestcategory %}
-            related to {{ interestcategory.name}}
+            related to {{ interestcategory.name|striptags}}
         {% else %}
         {% endif %}
         </span>

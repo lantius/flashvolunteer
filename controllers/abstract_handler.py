@@ -8,7 +8,7 @@ from controllers._utils import is_debugging, get_domain, get_application
 from components.sessions import Session
 
 
-import urllib
+import urllib, logging
 
 ################################################################################
 # MainPage
@@ -88,10 +88,14 @@ class AbstractHandler(webapp.RequestHandler):
         from models.messages.message import Message
         from models.messages import MessageReceipt
         from google.appengine.ext.db import put, delete
+        from utils.html_sanitize import sanitize_html
         
+        subject = sanitize_html(subject)
         if subject == '' or subject is None:
             subject = '(No subject)'
-    
+        
+        body = sanitize_html(body)
+        
         message = Message(
           subject = subject,
           body = body,
@@ -125,15 +129,15 @@ class AbstractHandler(webapp.RequestHandler):
         params = {}
     
         for name in self.request.arguments():
-          # TODO: if name = foo[1] then make a sub-hash of foos
-          # accessed as params['foo'][1]
-          
-          params[name] = self.request.get_all(name)
-          if len(params[name]) == 1:
-            if self.request.content_type.startswith('multipart/form-data'):
-              params[name] = params[name][0]
-            else:
-              params[name] = unicode(params[name][0])
+            # TODO: if name = foo[1] then make a sub-hash of foos
+            # accessed as params['foo'][1]
+            
+            params[name] = self.request.get_all(name)
+            if len(params[name]) == 1:
+                if self.request.content_type.startswith('multipart/form-data'):
+                    params[name] = params[name][0]
+                else:
+                    params[name] = unicode(params[name][0])
         return params
     
     
