@@ -1,0 +1,17 @@
+<script>
+    $(function() {
+$('table.zebra tr:even').addClass('even');
+$('table.zebra tr:odd').addClass('odd');
+});
+</script>
+<div id="neighborhoodstats" class="hardmodule">
+    <div class="moduletitle"><h3>Neighborhood Stats</h3></div>
+	
+    <table class="zebra">		 
+	     <tr><td>Volunteers living here</td><td>{{n_stats.0}}</td></tr>
+		 <tr><td>Volunteers working here</td><td>{{n_stats.1}}</td></tr>
+		 <tr><td>Past events</td><td>{{n_stats.2}}</td></tr>
+		 <tr><td>Future events</td><td>{{n_stats.3}}</td></tr>
+		 <tr><td>Total volunteer hours</td><td>{{n_stats.4}}</td></tr>
+    </table>
+</div>
