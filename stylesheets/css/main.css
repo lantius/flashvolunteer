@@ -494,7 +494,8 @@ tr.message {
 }
 
 #active_neighborhoods td,
-#active_volunteers td {   
+#active_volunteers td,
+#neighborhoodstats {   
 
     text-align: right;
     padding:3px 10px;
