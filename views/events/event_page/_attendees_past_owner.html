@@ -1,20 +1,20 @@
 
 
 <div id="eventattendees" class="hardmodule">
-	<div class="moduletitle"><h3>Volunteers</h3></div>
-	<ul>
-		<li class="tallerlistitem" >
+    <div class="moduletitle"><h3>Volunteers</h3></div>
+    <ul>
+        <li class="tallerlistitem" >
     
-		  {% if eventvolunteer %}
-		        You attended! <a  class="fv" href="{{event.url}}/verify">Get a receipt.</a>
+          {% if eventvolunteer %}
+                You attended! <a  class="fv" href="{{event.url}}/verify">Get a receipt.</a>
           {% endif %}
-          <!--<a>&raquo Invite a friend to this event</a>-->		
+          <!--<a>&raquo Invite a friend to this event</a>-->        
         </li>
-		
-		<li>  
+        
+        <li>  
         <form action='{{event.url}}/verify' id='f_verify' method="post">
             <input type=hidden name="session_id" value="{{ session_id }}" />
-			<h3>You coordinated this event. Please verify the event attendees so that they can receive credit for their work. Thank you!</h3>
+            <h3>You coordinated this event. Please verify the event attendees so that they can receive credit for their work. Thank you!</h3>
             <ul class="imagenamelinklist">
             
             {% for ev in event.eventvolunteers %}
@@ -24,6 +24,6 @@
             
             <input type="submit" id="s_verify" value="submit"/>
         </form> 
-		</li>
-	</ul>
+        </li>
+    </ul>
 </div><!--end eventdescription-->

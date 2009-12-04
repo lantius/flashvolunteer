@@ -2,13 +2,9 @@ import os, logging, hashlib
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-from controllers._helpers import NeighborhoodHelper
 from controllers._utils import is_debugging
 
 from models.volunteer import Volunteer
-from models.neighborhood import Neighborhood
-from models.event import Event
-from models.interestcategory import InterestCategory
 from models.auth import Account, Auth
 
 from components.sessions import Session
@@ -18,7 +14,6 @@ import urllib
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import urlfetch
 from django.utils import simplejson
-from google.appengine.api.users import User
 
 
 ################################################################################
@@ -28,7 +23,12 @@ class Login(AbstractHandler):
     def get(self, errors = None):
         
         account = self.auth()
-    
+        
+        params = self.parameterize()
+        if 'redirect' in params:
+            session = Session()
+            session['login_redirect'] = '/#' + params['redirect']
+            
         if self.request.path.find('dev_login') > -1:    
             self.dev_login()    
         elif not account:

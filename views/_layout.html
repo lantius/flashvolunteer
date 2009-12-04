@@ -43,13 +43,14 @@
 		  
 	      $.address.change(function(event) { //every time the address bar is changed...
 	        $('#columns').load(event.value);    
-            console.log("address change:"+event.target.baseURL());
-            console.log($.address.path());
+            //console.log("address change:"+$.address.path());
 	      }); 
 		  $.address.init(function(event){
 		  	var start_of_path_url = event.target.baseURL().indexOf('/', 7);
             if (start_of_path_url > -1){
 				var nest_path = event.target.baseURL().substring(start_of_path_url);
+				//console.log("INIT changing address to:"+nest_path);
+
 		    	$.address.value(nest_path);
             }
 		  });

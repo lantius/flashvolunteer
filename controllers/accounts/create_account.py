@@ -65,7 +65,7 @@ class CreateAccount(AbstractHandler):
             self.redirect('/timeout')
             return        
         
-        #can't combine these two less risk short circuiting...
+        #can't combine these two else risk not validating both...
         valid_entry = volunteer.validate(params) 
         valid_entry = account.validate(params) and valid_entry
         
