@@ -4,7 +4,7 @@ import imghdr
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext.db import Key
-
+from google.appengine.api import memcache
 from controllers._utils import get_application
 
 from models.volunteer import Volunteer
@@ -62,13 +62,27 @@ class VolunteersPage(AbstractHandler):
       event_access = page_volunteer.event_access(account = account) 
                         
       future_events = page_volunteer.events_future().fetch(VolunteersPage.LIMIT)
+      
+      #v_stats = memcache.get('v_stats')
+      #if not v_stats: 
+      v_stats = ()
+                                                          
+      vhours = sum([ev.hours for ev in page_volunteer.eventvolunteers if ev.hours])
+      attended = len([ev for ev in page_volunteer.eventvolunteers if ev.attended])
+      isowner = len([ev for ev in page_volunteer.eventvolunteers if ev.isowner]) 
+    
+      v_stats = (attended, isowner, vhours)                                        
+          
+          #memcache.add('v_stats', v_stats, 10000) 
+            
       template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
                           'volunteerfollower' : volunteerfollower,
                           'volunteerfollowing' : volunteerfollowing,
                           'page_volunteer': page_volunteer,
                           'volunteer' : volunteer,
                           'event_access': event_access,
-                          'future_events': future_events
+                          'future_events': future_events,
+                          'v_stats':v_stats,
                           }
       self._add_base_template_values(vals = template_values)
       
