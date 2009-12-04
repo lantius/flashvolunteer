@@ -1,0 +1,15 @@
+<script>
+    $(function() {
+$('table.zebra tr:even').addClass('even');
+$('table.zebra tr:odd').addClass('odd');
+});
+</script>
+<div id="volunteerstats" class="softmodule">
+    <div class="moduletitle"><h3>Stats</h3></div>
+	
+    <table class="zebra">		 
+	     <tr><td>Events attended</td><td>{{v_stats.0}}</td></tr>
+		 <tr><td>Events coordinated</td><td>{{v_stats.1}}</td></tr>
+		 <tr><td>Hours</td><td>{{v_stats.2}}</td></tr>
+    </table>
+</div>
