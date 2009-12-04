@@ -38,7 +38,7 @@ class Event(db.Model):
     
     verified = db.BooleanProperty(default=False)
     hidden = db.BooleanProperty(default=False)
-    coordinator = db.BooleanProperty(default=False)
+    coordinator = db.BooleanProperty(default=True)
     
     in_past = db.BooleanProperty(default=False)
     

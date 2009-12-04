@@ -211,7 +211,7 @@ class FollowVolunteer(AbstractHandler):
         if to_follow:
             volunteerfollower = to_follow.account.followers.filter('account =', account).get()
             
-            mutual = to_follow.following.filter('follows =', account).get()
+            mutual = to_follow.account.following.filter('follows =', account).get()
             
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if volunteerfollower:

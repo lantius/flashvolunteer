@@ -105,17 +105,17 @@ class EventsPage(AbstractHandler):
             return
         else:
             event_id = self.create(params, account)
-            event = Event.get_by_id(event_id)
-            session = Session()
-            session['notification_message'] = ['Event "%s" has been created!'%event.name]
+            if event_id:
+                event = Event.get_by_id(event_id)
+                session = Session()
+                session['notification_message'] = ['Event "%s" has been created!'%event.name]
         
         if event_id is None:
             self.redirect('/#/events')
             return
-        elif not event_id:
-            return
-          
-        self.redirect("/#/events/" + str(int(event_id)))
+        elif event_id:
+            self.redirect("/#/events/" + str(int(event_id)))
+        
         return
   
     ################################################################################
@@ -311,7 +311,7 @@ class EventsPage(AbstractHandler):
             event.put()
         except:
             self.new(event)
-            return
+            return False
         
         #TODO: convert interest category helper to application-specific data model
         for interestcategory in InterestCategory.all():

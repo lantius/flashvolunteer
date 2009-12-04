@@ -47,6 +47,7 @@ def compress(in_files, out_file, in_type='js', verbose=False,
 SCRIPTS = [
     os.path.join(stylesheets, 'javascript', 'dialog_box.js'),
     os.path.join(stylesheets, 'javascript', 'mtaTwitterStatuses.js'),
+    os.path.join(stylesheets, 'javascript', 'misc.js'),
 
     os.path.join(stylesheets, 'jquery', 'js', 'jquery-1.3.2.min.js'),
     os.path.join(stylesheets, 'jquery', 'js', 'jquery-ui-1.7.2.custom.min.js'),

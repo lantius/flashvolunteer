@@ -22,7 +22,7 @@
     <script type="text/javascript" src="http://www.google.com/uds/?file=feeds&v=1"></script>
     <script type="text/javascript" src="http://www.google.com/uds/api/feeds/1.0/f471ca262fef1bea760861a87b7a2baa/default+en.I.js"></script>
     <script type="text/javascript" src="/stylesheets/javascript/fv.min.js"></script>
-
+    <script type="text/javascript" src="http://dev.jquery.com/view/trunk/plugins/validate/jquery.validate.js"></script>
 
     <!--<script type="text/javascript" src="/stylesheets/jquery/js/jquery-1.3.2.min.js"></script>-->
     <!--<script type="text/javascript" src="/stylesheets/jquery/js/jquery-ui-1.7.2.custom.min.js"></script>-->
@@ -38,14 +38,27 @@
     <!--[if lt IE 7]><link type="text/css" rel="stylesheet" href="/stylesheets/css/ie6.css" /><![endif]-->
     
 	<script>
-      $.address.change(function(event) {
-        $('#columns').load(event.value);    
-	    //console.log("address change:"+event.value);
-      }); 
+      $(document).ready(function(){ //this is for dynamic page loader
+          set_page_loader('#navtabs a.fv, a#l_login, #static_nav');
+		  
+	      $.address.change(function(event) { //every time the address bar is changed...
+	        $('#columns').load(event.value);    
+            console.log("address change:"+event.target.baseURL());
+            console.log($.address.path());
+	      }); 
+		  $.address.init(function(event){
+		  	var start_of_path_url = event.target.baseURL().indexOf('/', 7);
+            if (start_of_path_url > -1){
+				var nest_path = event.target.baseURL().substring(start_of_path_url);
+		    	$.address.value(nest_path);
+            }
+		  });
+          
+      });
 	</script>
 
     <script type="text/javascript">
-        $(document).ready(function(){ 
+        $(document).ready(function(){ //this is for the swirling loading gif
 
           $('#loadingDiv')
 		    .hide()  // hide it initially
@@ -58,7 +71,6 @@
 				$('#content').fadeTo('normal', 1.0);
 		    });
 
-          set_page_loader('#navtabs a.fv, a#l_login, #static_nav');
         });
     </script>
 	

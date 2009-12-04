@@ -1,12 +1,52 @@
 
+<script>
+  $(document).ready(function(){
+    $(".validate_form").validate({
+	    errorPlacement: function(error, element) {},
+	    invalidHandler: function(form, validator) {
+	      var errors = validator.numberOfInvalids();
+	      if (errors) {
+            $('.form_error').html('Errors found! Please check the red-bordered fields.');
+	        $(".form_error").show();
+	      } else {
+	        $(".form_error").hide();
+	      }
+	    },
+ 	    submitHandler: function(form) {
+	       d1 = $('#startdate').val() + $('#starttime').val().substring($('#starttime').val().length - 2)+ $('#starttime').val();
+           d2 = $('#enddate').val() + $('#endtime').val().substring($('#endtime').val().length - 2) + $('#endtime').val(); 
+	       if (d1 >= d2) {
+                $('.form_error').html('Invalid dates: the event must end after it starts!');
+		        $(".form_error").show();
+		   }
+		   else {
+		   	  if (d1 < get_current_datetime()) {
+                $('.form_error').html('Invalid start date: the event must occur in the future!');
+                $(".form_error").show();			  
+			  }
+			  else {
+			  	$(".form_error").hide();
+			  	form.submit();
+			  }
+		   }
+	    }
+
+	})
+  });
+</script>
+  
+
 <div id="createevent" class="softmodule">
 	<div class="moduletitle"><h3>Create An Event</h3></div>
 	
-	<form action="{% if event.is_saved %}
+	<form class="validate_form" action="{% if event.is_saved %}
 						{{event.url}}/edit
 					{% else %}
 						/events/new
 					{% endif %}" method="post"><ul>
+        <div class="form_error">
+        	Errors found! Please check the red-bordered fields. 
+        </div>
 		<li>
 			<div class="eventcreatelabel">Name:</div>
 			<div class="eventinput"> 
@@ -19,7 +59,12 @@
 		<li>
 			<div class="eventcreatelabel">Neighborhood:</div>
 			<div class="eventinput">
-				{% include "../neighborhoods/_select_neighborhood.html" %}
+				<select name="neighborhood" class="required">
+				    <option value="">Neighborhood...</option>
+				    {% for neighborhood in neighborhoods %}
+				        <option value="{{neighborhood.key.id}}" {% if neighborhood.selected %}selected="selected"{% endif %}>{{neighborhood.name}}</option>
+				    {% endfor %}
+				</select>
 			</div>
 		</li>
 		

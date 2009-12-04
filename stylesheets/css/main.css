@@ -999,3 +999,14 @@ form input.textarea {
 	padding: 3px 5px;
 }
 
+
+form input.text.error, form input.password.error,
+.error {
+    padding: 0px;
+    border: 3px solid #CC3333;
+}
+.form_error {
+    color: #992222;
+    display: none;
+    font-weight: bold;
+}
