@@ -134,6 +134,20 @@ class NeighborhoodDetailPage(AbstractHandler):
         past_events = neighborhood.events_past().fetch(LIMIT)
         upcoming_events = neighborhood.events_future().fetch(LIMIT)
         
+        #n_stats = memcache.get('n_stats')
+        #if not n_stats: 
+        n_stats = ()
+                                                   
+        volunteers_living = len(candidates_living)
+        volunteers_working = len(candidates_working)                   
+        p_events = len(past_events)                       
+        u_events = len(upcoming_events)                    
+        vhours = 0 
+        for e in past_events:
+            vhours += sum([ev.hours for ev in e.eventvolunteers if ev.hours])
+
+        n_stats = (volunteers_living, volunteers_working, p_events, u_events, vhours)                                        
+            #memcache.add('n_stats', n_stats, 10000) 
         
         #fill forum block
         forum = {}
@@ -155,6 +169,7 @@ class NeighborhoodDetailPage(AbstractHandler):
             'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 
             'past_events': past_events[-LIMIT:],
             'upcoming_events':upcoming_events,
+            'n_stats':n_stats,
             'forum': forum
           }
         self._add_base_template_values(vals = template_values)

@@ -38,6 +38,18 @@ class ProfilePage(AbstractHandler):
         past_events = memcache.get('past_events')
         searchurl = memcache.get('searchurl')
         
+        
+        #v_stats = memcache.get('v_stats')
+        #if not v_stats: 
+        v_stats = ()
+                                                              
+        vhours = sum([ev.hours for ev in user.eventvolunteers if ev.hours])
+        attended = len([ev for ev in user.eventvolunteers if ev.attended])
+        isowner = len([ev for ev in user.eventvolunteers if ev.isowner]) 
+        
+        v_stats = (attended, isowner, vhours)                                        
+        #memcache.add('v_stats', v_stats, 10000) 
+        
         template_values = {
             'volunteer' : user,
             'neighborhoods': NeighborhoodHelper().selected(user.home_neighborhood),
@@ -46,7 +58,8 @@ class ProfilePage(AbstractHandler):
             #TODO: convert to application-specific data model
             'interest_categories': InterestCategory.all(),
             'past_events': past_events,
-            'searchurl': searchurl
+            'searchurl': searchurl,
+            'v_stats':v_stats,
           }
         self._add_base_template_values(vals = template_values)
         
