@@ -174,6 +174,11 @@ indexes:
   properties:
   - name: recipient
   - name: timestamp
+
+- kind: MessageReceipt
+  properties:
+  - name: recipient
+  - name: timestamp
     direction: desc
 
 - kind: MessageReceipt

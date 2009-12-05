@@ -2,11 +2,6 @@
 {% extends to_extend %}
 
 
-
-{% block pagespectitle %}
-    <h1>{{ category.get_name }}</h1>
-{% endblock %}
-
 {% block content %}
 
 <script>
@@ -14,6 +9,8 @@
 
       $(document).ready(function() {
             load_title('{{ category.name  | striptags }}');
+	        load_header('{{ category.get_name }}');
+
       });
 </script>
 

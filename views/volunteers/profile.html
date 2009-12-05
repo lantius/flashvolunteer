@@ -1,11 +1,5 @@
 {% extends to_extend %}
 
-
-
-{% block pagespectitle %}
-    <h1>{{ account.name|striptags }}</h1>
-{% endblock %}
-
 {% block content %}
 
 <script>
@@ -13,6 +7,7 @@
 
       $(document).ready(function() {
             load_title('Profile');
+			load_header('Your Profile');
       });
 </script>
 
@@ -31,6 +26,7 @@
     {% include "../events/events_page/_volunteer_upcoming.html" %}
 	{% include "../events/events_page/_volunteer_hosting_events.html" %}
 	{% include "../events/events_page/_recommended_events.html" %}
+	{% include "../events/events_page/_volunteer_past.html" %}
     {% include "../volunteers/home/_volunteer_statistics.html" %}
 </div><!--end middlethird-->
 

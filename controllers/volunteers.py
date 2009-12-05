@@ -209,7 +209,7 @@ class FollowVolunteer(AbstractHandler):
         to_follow = Volunteer.get_by_id(int(url_data))
         
         if to_follow:
-            volunteerfollower = to_follow.account.followers.filter('account =', account).get()
+            volunteerfollower = to_follow.account.followers.filter('follower =', account).get()
             
             mutual = to_follow.account.following.filter('follows =', account).get()
             
@@ -233,7 +233,7 @@ class FollowVolunteer(AbstractHandler):
                         type = MessageType.all().filter('name =', 'added_to_team').get())   
         
         #self.redirect('/volunteers/' + url_data)
-        self.redirect(self.request.referrer)
+        #self.redirect(self.request.referrer)
         
         return
     

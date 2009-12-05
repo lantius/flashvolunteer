@@ -97,8 +97,6 @@ class Login(AbstractHandler):
         else:
             template_values['token_url'] = self.request.host_url + '/login'
             
-            
-        session = Session()
         logging.info('login referrer:'+self.request.referrer)
 
         self._add_base_template_values(vals = template_values)
@@ -106,7 +104,6 @@ class Login(AbstractHandler):
         self.response.out.write(template.render(path, template_values))
     
     def post(self):
-        logging.info('handling post .1')
         if self.request.get('token', None):
             self.rpx_auth()
         else:
@@ -115,9 +112,6 @@ class Login(AbstractHandler):
         session['new_login'] = True
             
     def fv_auth(self):
-        from models.auth import Account, Auth
-        errors = {}
-        
         params = self.parameterize() 
         
         session = Session()
@@ -131,18 +125,18 @@ class Login(AbstractHandler):
         auth = Auth.all().filter('identifier =', email).filter('strategy =', 'fv').get()
         if not auth:
             logging.info('could not log user in, no user by that name')
-            errors['user_not_found'] = 1
-            self.login(errors = errors, email = email)
+            session['notification_message'] = ['Sorry, we do not have an account with that email. If you are new to Flash Volunteer, please click the "Signup" button. If you\'ve previously used a third party to login, please select the relevant third party to the right. Thanks!']
+            self.redirect('/#/login')
             return
         
         hash = hashlib.sha224(password + auth.salt).hexdigest()
         hash2 = hashlib.sha224(hashlib.sha224(password).hexdigest() + auth.salt).hexdigest() #for mobile clients that hash before sending password on...
         
         
-        if not hash and hash not in [auth.digest,auth.digest2] and hash2.digest2 not in [auth.digest,auth.digest2]:
+        if not hash or (hash not in [auth.digest,auth.digest2] and hash2 not in [auth.digest,auth.digest2]):
             logging.info('could not log user in, wrong password')
-            errors['wrong_password'] = 1
-            self.login(errors = errors, email = email)
+            session['notification_message'] = ['Sorry, that is not the right password for this account.']
+            self.redirect('/#/login')
             return
         
         if not auth.digest2: 
@@ -187,7 +181,6 @@ class Login(AbstractHandler):
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
 
             if auth:
-                logging.info('got auth')
                 session['auth'] = auth
                 account = self.auth()
                 check_avatar(account = account)

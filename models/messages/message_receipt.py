@@ -2,12 +2,8 @@ import re
 
 from google.appengine.ext import db
 
-from models.volunteer import Volunteer
-from models.auth.account import Account
-
 from models.messages.message import Message
 
-from controllers._utils import is_debugging
 from components.time_zones import Pacific, utc
 
 class MessageReceipt(db.Model):
@@ -22,4 +18,4 @@ class MessageReceipt(db.Model):
     emailed = db.BooleanProperty(default = False)
     
     def get_timestamp(self):
-        return timestamp.replace(tzinfo=utc).astimezone(Pacific)
+        return self.timestamp.replace(tzinfo=utc).astimezone(Pacific)

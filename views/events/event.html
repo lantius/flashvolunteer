@@ -1,17 +1,5 @@
 {% extends to_extend %}
 
-
-{% block pagespectitle %}
-<h1>{{event.name|striptags}} 
-    {% if not event.verified %}
-        <span class="verification_warning_wrapper">
-             <a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a>
-         </span>
-    {% endif %}
-
-</h1>
-{% endblock pagespectitle %}
-
 {% block content %}
 
 <script>
@@ -19,6 +7,7 @@
 
       $(document).ready(function() {
             load_title('Event : {{event.name|striptags}}');
+			load_header('{{event.name|striptags}}{% if not event.verified %}<span class="verification_warning_wrapper"><a class="verification_warning" title="This event has yet to be checked by Flash Volunteer admins">(!)</a></span>{% endif %}');
       });
 </script>
 

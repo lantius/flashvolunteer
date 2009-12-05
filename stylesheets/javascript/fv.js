@@ -32,7 +32,7 @@ function get_people_search_params(){
 
 
 function people_search_submit(){
-    build_dialog(101,get_people_search_params());
+    build_dialog(101,'?' + get_people_search_params());
 }
 
 function close_dialog(){
@@ -209,20 +209,39 @@ function mtaTwitterCallback(obj) {
     
     document.getElementById('mtaTwitterbody').innerHTML = statuses_html;
 }
+// function to calculate local time
+// in a different city
+// given the city's UTC offset
+function calcTime(city, offset) {
+    // create Date object for current location
+    d = new Date();
+    // convert to msec
+    // add local time zone offset
+    // get UTC time in msec
+    utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    // create new Date object for different city
+    // using supplied offset
+    nd = new Date(utc + (3600000*offset));
+    // return time as a string
+    return nd;
+}
+
+
 function get_current_datetime(){
-    var currentTime = new Date()
-    var month = currentTime.getMonth() + 1
-    var day = currentTime.getDate()
-    var year = currentTime.getFullYear()
+    var currentTime = calcTime('seattle', -8);
+	
+    var month = currentTime.getMonth() + 1;
+    var day = currentTime.getDate();
+    var year = currentTime.getFullYear();
 
     if (day < 10){
-       day = "0" + day
+       day = "0" + day;
     }
     
-    var hours = currentTime.getHours()
-    var minutes = currentTime.getMinutes()
+    var hours = currentTime.getHours();
+    var minutes = currentTime.getMinutes();
     if (minutes < 10){
-       minutes = "0" + minutes
+       minutes = "0" + minutes;
     }
     if (hours > 11) {
         var t = 'PM';
@@ -2738,26 +2757,21 @@ myHtmlSettings = {
     onTab:           {keepDefault:false, openWith:'     '},
     previewInWindow: 'width=400, height=400, resizable=yes, scrollbars=yes',
     markupSet:  [
-        {name:'Heading 1', key:'1', openWith:'<h1(!( class="[![Class]!]")!)>', closeWith:'</h1>', placeHolder:'Your title here...' },
-        {name:'Heading 2', key:'2', openWith:'<h2(!( class="[![Class]!]")!)>', closeWith:'</h2>', placeHolder:'Your title here...' },
-        {name:'Heading 3', key:'3', openWith:'<h3(!( class="[![Class]!]")!)>', closeWith:'</h3>', placeHolder:'Your title here...' },
-        {name:'Heading 4', key:'4', openWith:'<h4(!( class="[![Class]!]")!)>', closeWith:'</h4>', placeHolder:'Your title here...' },
-        {name:'Heading 5', key:'5', openWith:'<h5(!( class="[![Class]!]")!)>', closeWith:'</h5>', placeHolder:'Your title here...' },
-        {name:'Heading 6', key:'6', openWith:'<h6(!( class="[![Class]!]")!)>', closeWith:'</h6>', placeHolder:'Your title here...' },
-        {name:'Paragraph', openWith:'<p(!( class="[![Class]!]")!)>', closeWith:'</p>'  },
+        {name:'Preview', call:'preview', className:'preview' },
         {separator:'---------------' },
         {name:'Bold', key:'B', openWith:'<strong>', closeWith:'</strong>' },
         {name:'Italic', key:'I', openWith:'<em>', closeWith:'</em>'  },
         {name:'Stroke through', key:'S', openWith:'<del>', closeWith:'</del>' },
         {separator:'---------------' },
-        {name:'Ul', openWith:'<ul>\n', closeWith:'</ul>\n' },
-        {name:'Ol', openWith:'<ol>\n', closeWith:'</ol>\n' },
-        {name:'Li', openWith:'<li>', closeWith:'</li>' },
-        {separator:'---------------' },
-        {name:'Picture', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
         {name:'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
         {separator:'---------------' },
-        {name:'Clean', replaceWith:function(h) { return h.selection.replace(/<(.*?)>/g, "") } },
-        {name:'Preview', call:'preview', className:'preview' }
+        {name:'Paragraph', openWith:'<p(!( class="[![Class]!]")!)>', closeWith:'</p>'  },
+        {name:'Heading 1', key:'1', openWith:'<h1(!( class="[![Class]!]")!)>', closeWith:'</h1>', placeHolder:'Your title here...' },
+        {name:'Heading 2', key:'2', openWith:'<h2(!( class="[![Class]!]")!)>', closeWith:'</h2>', placeHolder:'Your title here...' },
+        {name:'Heading 3', key:'3', openWith:'<h3(!( class="[![Class]!]")!)>', closeWith:'</h3>', placeHolder:'Your title here...' },
+        {separator:'---------------' },
+        {name:'Ul', openWith:'<ul>\n', closeWith:'</ul>\n' },
+        {name:'Ol', openWith:'<ol>\n', closeWith:'</ol>\n' },
+        {name:'Li', openWith:'<li>', closeWith:'</li>' }
     ]
 }

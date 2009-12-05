@@ -216,13 +216,13 @@ class PaginatedNeighborhoodUpcomingPage(BaseEventListPage):
         self.set_context()
           
     def _get_event_generator(self): #returns list of EventVolunteer objects
-       return self.neighborhood.events_future()
+        return self.neighborhood.events_future()
     
     def _get_title(self):
-       return '%s\'s Upcoming Events'%self.neighborhood.name
+        return '%s\'s Upcoming Events'%self.neighborhood.name
     
     def _get_url(self):
-       return '/events/upcoming/neighborhood/%i'%self.neighborhoodid
+        return '/events/upcoming/neighborhood/%i'%self.neighborhoodid
 
     def _returns_event_list(self):
         return False
@@ -234,24 +234,24 @@ class PaginatedCategoryUpcomingPage(BaseEventListPage):
         self.set_context()
           
     def _get_event_generator(self):
-       return self.category.upcoming_events()
+        return self.category.upcoming_events()
     
     def _get_title(self):
-       return '%s\'s Upcoming Events'%self.category.name
+        return '%s\'s Upcoming Events'%self.category.name
     
     def _get_url(self):
-       return '/events/upcoming/category/%i'%self.categoryid
+        return '/events/upcoming/category/%i'%self.categoryid
 
 class PaginatedRecommendedPage(BaseEventListPage):
     def get(self):
         self.set_context()
           
     def _get_event_generator(self, bookmark = None):
-       return [e for e in self.volunteer.recommended_events()
+        return [e for e in self.volunteer.recommended_events()
                 if (bookmark is None or e.date > bookmark) and e.application.key().id() == self.application.key().id()][:self.LIST_LIMIT + 1]
     
     def _get_title(self):
-       return 'Recommended Events'
+        return 'Recommended Events'
     
     def _get_url(self):
-       return '/events/recommended'
+        return '/events/recommended'

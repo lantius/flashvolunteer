@@ -1,15 +1,12 @@
 {% extends to_extend %}
 
-{% block pagespectitle %}
-    <h1>{{ page_volunteer.account.name|striptags }}</h1>
-{% endblock %}
-
 {% block content %}
 
 <script>
       set_active('profile');
       $(document).ready(function() {
             load_title('{{ page_volunteer.account.get_name }}\'s public page');
+			load_header('{{ page_volunteer.account.name|striptags }}');
       });
 </script>
 

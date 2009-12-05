@@ -32,7 +32,7 @@ function get_people_search_params(){
 
 
 function people_search_submit(){
-    build_dialog(101,get_people_search_params());
+    build_dialog(101,'?' + get_people_search_params());
 }
 
 function close_dialog(){

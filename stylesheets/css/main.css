@@ -412,15 +412,18 @@ input#avataruploadinput {
     width: 150px;
 }
 
-input.volunteer_button {
+a.volunteer_button {
     font-weight: normal;
     text-decoration: none;
-    margin-top: 15px;
     padding: 5px 5px;
     display:inline;
     cursor: pointer;
     font-size: 110%;
     font-weight: bold;
+}
+
+.event_operation_block li {
+	height: 25px;
 }
 
 

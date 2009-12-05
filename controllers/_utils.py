@@ -35,10 +35,16 @@ def get_domain():
         if domain.startswith('www.'):
             domain = domain[4:]
         
-        if domain.endswith('flashvolunteer.appspot.com') > -1:
+        if domain.endswith('flashvolunteer.appspot.com'):
             domain = domain.replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
-        elif domain.endswith('flashvolunteer-dev.appspot.com') > -1: 
+        elif domain.endswith('flashvolunteer-dev.appspot.com'): 
             domain = 'development.flashvolunteer.org'
+
+#        logging.info('************')
+#        logging.info('DOMAIN: '+ domain)
+#        logging.info('HTTP_HOST: '+ os.environ['HTTP_HOST'])
+#        logging.info('endswith: ' + str(domain.endswith('flashvolunteer-dev.appspot.com')))
+
 
         session['this_domain'] = domain
     return session['this_domain']

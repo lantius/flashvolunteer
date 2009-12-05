@@ -85,17 +85,17 @@ class BaseVolunteerListPage(AbstractHandler):
     
 class PaginatedTeamPage(BaseVolunteerListPage):
   
-  def get(self):
-      self.set_context()
-        
-  def _get_volunteers(self, limit, bookmark = None):
-     return list(self.volunteer.following(key = bookmark, limit = limit))
- 
-  def _get_title(self):
-     return 'My FlashTeam'
- 
-  def _get_url(self):
-     return '/team/list'
+    def get(self):
+        self.set_context()
+          
+    def _get_volunteers(self, limit, bookmark = None):
+        return list(self.volunteer.following(key = bookmark, limit = limit))
+    
+    def _get_title(self):
+        return 'My FlashTeam'
+    
+    def _get_url(self):
+        return '/team/list'
  
  
 class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
@@ -197,14 +197,14 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
   def _get_volunteers(self, limit, bookmark = None):
      eventvolunteer = self.event.eventvolunteers.filter('volunteer =', self.volunteer).get() 
 
-     qry = self.event.eventvolunteers.order('__key__').limit(limit)
+     qry = self.event.eventvolunteers.order('__key__')
      if bookmark: qry = qry.filter('__key__ >=', bookmark)
                    
      if eventvolunteer and (eventvolunteer.isowner or self.event.in_past): 
          return list(qry.fetch(limit))
      else:
          results = []
-         for v in qry:
+         for v in qry.fetch(limit):
              if v.event_access(account=self.account):
                  results.append(v)
                  if len(results) >= limit:

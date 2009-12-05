@@ -1,5 +1,14 @@
 
 
+<script>
+    function add(url, id){
+        $.post(url + '/follow', {session_id: "{{ session_id }}"}, 
+        function(data){
+            $('#'+id).remove();
+        });
+    }
+</script>
+
 <li class="imagenameli" >
 
     {% team_status account volunteer_in_list.account %}    
@@ -31,11 +40,8 @@
 	                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
 	                  {% if is_teammate %}
 					  {% else %} 
-					    <div class="fl">
-			                <form title="Add to your Team" action="{{volunteer_in_list.url}}/follow" method="post">
-			                    <input type=hidden name="session_id" value="{{ session_id }}">
-			                    <input id="operation_add_to_team[{{ volunteer_in_list.key.id }}]" class="operation_minimal" type=image src="/stylesheets/media/add.png" value=""/>
-			                </form>
+					    <div id="add{{ volunteer_in_list.key.id }}" class="fl">
+			                <a class="operation_minimal" title="Add to your Flash Team" onclick=add("{{volunteer_in_list.url}}","add{{ volunteer_in_list.key.id }}")><img src="/stylesheets/media/add.png" /></a>
 						</div>
                       {% endif %}
                         <div class="fl">

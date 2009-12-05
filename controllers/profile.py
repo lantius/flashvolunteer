@@ -1,11 +1,7 @@
 import os
-from google.appengine.ext import db
 from google.appengine.ext.webapp import template
-from google.appengine.api import users
-from google.appengine.api import memcache
 from controllers._helpers import NeighborhoodHelper
 
-from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
 
 from controllers.abstract_handler import AbstractHandler
@@ -33,22 +29,15 @@ class ProfilePage(AbstractHandler):
                 byinterest.append(ic)
         
         recommended_events = user.recommended_events()[:ProfilePage.LIMIT]
-        my_future_events = user.events_future().fetch(ProfilePage.LIMIT)
+        my_future_events = (ev.event for ev in user.events_future().fetch(ProfilePage.LIMIT))
         
-        past_events = memcache.get('past_events')
-        searchurl = memcache.get('searchurl')
+        past_events = (ev.event for ev in user.events_past().fetch(ProfilePage.LIMIT))     
         
-        
-        #v_stats = memcache.get('v_stats')
-        #if not v_stats: 
-        v_stats = ()
-                                                              
         vhours = sum([ev.hours for ev in user.eventvolunteers if ev.hours])
         attended = len([ev for ev in user.eventvolunteers if ev.attended])
         isowner = len([ev for ev in user.eventvolunteers if ev.isowner]) 
         
         v_stats = (attended, isowner, vhours)                                        
-        #memcache.add('v_stats', v_stats, 10000) 
         
         template_values = {
             'volunteer' : user,
@@ -58,7 +47,6 @@ class ProfilePage(AbstractHandler):
             #TODO: convert to application-specific data model
             'interest_categories': InterestCategory.all(),
             'past_events': past_events,
-            'searchurl': searchurl,
             'v_stats':v_stats,
           }
         self._add_base_template_values(vals = template_values)

@@ -6,6 +6,7 @@ from models.abstractuser import AbstractUser
 from controllers._twitter import Twitter 
 from google.appengine.api import memcache
 from models.auth.account import Account
+from components.sessions import Session
 
 ################################################################################
 # Volunteer
@@ -19,31 +20,31 @@ class Volunteer(AbstractUser):
 
     def validate(self, params):
       
-      # Not verifying these updates
-      if 'home_neighborhood' in params:
-        if params['home_neighborhood'] == 'None':
-          self.home_neighborhood = None;
-        else:
-          self.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
-    
-      if 'work_neighborhood' in params:
-        if params['work_neighborhood'] == 'None':
-          self.work_neighborhood = None;
-        else:
-          self.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
-     
-        #Interest Categories updates happen in the controller
-    
-      if 'privacy__event_attendance' in params and self.privacy__event_attendance != params['privacy__event_attendance']:
-          self.privacy__event_attendance = params['privacy__event_attendance']
-    
-      return AbstractUser.validate(self, params)
+        # Not verifying these updates
+        if 'home_neighborhood' in params:
+          if params['home_neighborhood'] == 'None':
+            self.home_neighborhood = None;
+          else:
+            self.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+        
+        if 'work_neighborhood' in params:
+          if params['work_neighborhood'] == 'None':
+            self.work_neighborhood = None;
+          else:
+            self.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
+        
+          #Interest Categories updates happen in the controller
+        
+        if 'privacy__event_attendance' in params and self.privacy__event_attendance != params['privacy__event_attendance']:
+            self.privacy__event_attendance = params['privacy__event_attendance']
+        
+        return AbstractUser.validate(self, params)
     
     def url(self):
-      return '/volunteers/' + str(self.key().id())
+        return '/volunteers/' + str(self.key().id())
     
     def interestcategories(self):
-      return (vic.interestcategory for vic in self.account.user_interests)
+        return (vic.interestcategory for vic in self.account.user_interests)
     
     def friends(self):  #returns a generator of Volunteer objects
         return (vf.follows.get_user() for vf in self.account.following.filter('mutual =', True).order('__key__'))
@@ -69,8 +70,8 @@ class Volunteer(AbstractUser):
 
     def recommended_events(self, date = None):
         #TODO make more efficient
-    
-        recommended_events = memcache.get('%s_rec_events'%self.key().id())
+        s = Session()
+        recommended_events = s.get('rec_events', None)
         if recommended_events:
             return recommended_events
     
@@ -115,7 +116,7 @@ class Volunteer(AbstractUser):
                 recommended_events.append(e)
             
         #########
-        memcache.add('%s_rec_events'%self.key().id(), recommended_events, 1000)
+        s['rec_events'] = recommended_events
         return recommended_events
 
 

@@ -1,7 +1,12 @@
 {% if volunteer %}
-<form action="{{page_volunteer.url}}/follow" method="post">
-    <input type=hidden name="session_id" value="{{ session_id }}">
-    <input type=hidden name="delete" value="true">
-    <input title="Remove {{page_volunteer.account.name|striptags}} from your FlashTeam" id="operation_remove_from_team[{{ page_volunteer.key.id }}]" class="operation" type=submit value="&raquo; Remove from team">
-</form>
+
+<script>
+    function remove(){
+        $.post("{{page_volunteer.url}}/follow", {session_id: "{{ session_id }}", "delete": "true"}, 
+        function(data){
+            $('#columns').load("{{page_volunteer.url}}");
+        });
+    }
+</script>
+<li><a onclick=remove() title="Remove {{page_volunteer.account.name|striptags}} from your FlashTeam" id="operation_remove_from_team[{{ page_volunteer.key.id }}]" class="operation">&raquo; Remove from team</a></li>
 {% endif %}

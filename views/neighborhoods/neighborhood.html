@@ -1,11 +1,5 @@
 {% extends to_extend %}
 
-
-
-{% block pagespectitle %}
-    <h1>{{ neighborhood.name }}</h1>
-{% endblock %}
-
 {% block content %}
 
 <script>
@@ -13,6 +7,7 @@
 
       $(document).ready(function() {
             load_title('{{ neighborhood.name }}');
+			load_header('{{ neighborhood.name }}');
       });
 </script>
 

@@ -5,13 +5,9 @@
             {% if eventvolunteer and eventvolunteer.isowner %}
                 {% if not event.inpast %}
 
-	                <li><form action="/events/{{event.key.id}}/edit">
-	                        <input type="submit" title="Edit this event" class="operation" value="&raquo; Edit this event" id="s_edit_event"/>
-	                </form></li>
-                    <li><form action="/events/{{event.key.id}}/add_coordinator">
-                        <input type="submit" title="Add another event organizer" class="operation" value="&raquo; Add another event coordinator" id="s_add_coordinator"/>
-                    </form></li>
-                        
+	                <li><a href="/events/{{event.key.id}}/edit" class="fv operation" title="Edit this event" id="s_edit_event">&raquo; Edit this event</a></li>
+                    <li><a href="/events/{{event.key.id}}/add_coordinator" class="fv operation" title="Edit this event" id="s_add_coordinator">&raquo; Add another event coordinator</a></li>
+		                        
                     <li><form action="/events/{{event.key.id}}" method="post">
                         <input type="submit" title="Cancel this event" class="operation" value="&raquo; Cancel this event" id="s_cancel_event"/>
                         <input type=hidden name="session_id" value="{{ session_id }}" />
@@ -19,7 +15,7 @@
                     </form></li>
                 {% endif %}				
 			{% else %}
-			     <li><a href="mailto:{{ event.contact_email }}" class="operation">&raquo; Contact organizers</a></li>     
+			     <li><a target="_blank" href="mailto:{{ event.contact_email }}" class="operation">&raquo; Contact organizers</a></li>     
             {% endif %}
         {% endif %}
         <li>  

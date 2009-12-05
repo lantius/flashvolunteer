@@ -20,12 +20,7 @@
             }
         },
         submitHandler: function(form) {
-           if ($('#tosagree:checked').val() == null) {
-                $('.form_error').html('You need to agree to the terms of service!');
-                $(".form_error").show();
-           }else{
-                form.submit();
-           }
+           form.submit();
         }
 
     })

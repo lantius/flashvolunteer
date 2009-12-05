@@ -67,12 +67,32 @@ class MigrateDatastore(AbstractHandler):
                 v.account = account
                 v.put()
         
-        
+        from models.volunteerfollower import VolunteerFollower
+        for vf in VolunteerFollower.all():
+            changed = False
+            if vf.volunteer:
+                if vf.follows != vf.volunteer.account:
+                    vf.follows = vf.volunteer.account
+                    changed = True
+                    
+                if isinstance(vf.follower, Volunteer):                    
+                    vf.follower = vf.follower.account
+                    changed = True
+                
+            mutual = vf.follows.following.filter('follows =', vf.follower).get()
+            if vf.mutual != mutual is not None:
+                vf.mutual = mutual is not None
+                changed = True
+            
+            if changed:
+                vf.put()
+                
         from models.messages import MessageReceipt, MessagePreference, Message
         for mp in MessagePreference.all():
             if mp.volunteer:
-                mp.account = mp.volunteer.account
-                mp.put()
+                if mp.account != mp.volunteer.account:
+                    mp.account = mp.volunteer.account
+                    mp.put()
         for m in Message.all():
             if m.sent_by:
                 try:
@@ -86,11 +106,34 @@ class MigrateDatastore(AbstractHandler):
                 mr.put()
             except:
                 pass
+            
         from models.eventphoto import EventPhoto
         for ep in EventPhoto.all():
-            ep.account = ep.volunteer.account
-            ep.put()
+            if ep.account != ep.volunteer.account:
+                ep.account = ep.volunteer.account
+                ep.put()
             
+            
+
+            
+        from models.interest import Interest
+        from models.volunteerinterestcategory import VolunteerInterestCategory
+        for vic in VolunteerInterestCategory.all():
+            if vic.volunteer:
+                if not vic.volunteer.account.user_interests.filter('interestcategory =', vic.interestcategory).get():
+                    i = Interest(account = vic.volunteer.account, interestcategory = vic.interestcategory)
+                    i.put()
+                
+        for e in Event.all():
+            if e.inpast():
+                e.in_past = True
+                e.put()
+            
+        for eic in EventInterestCategory.all():
+            if eic.event_is_upcoming != e.in_past:
+                eic.event_is_upcoming = e.in_past
+                eic.put()
+
         from models.eventvolunteer import EventVolunteer
         for ev in EventVolunteer.all():
             ev.event_is_upcoming = not ev.event.inpast()
@@ -104,37 +147,6 @@ class MigrateDatastore(AbstractHandler):
                 ev.volunteer = ev.account.get_user()
             ev.put()
             
-            
-        from models.volunteerfollower import VolunteerFollower
-        for vf in VolunteerFollower.all():
-            if vf.volunteer:
-                vf.follows = vf.volunteer.account
-                try:
-                    vf.follower = vf.follower.account
-                except:
-                    pass
-                vf.put()
-                
-            mutual = vf.follows.following.filter('follows =', vf.follower).get()
-            vf.mutual = mutual is not None
-            vf.put()
-            
-        from models.interest import Interest
-        from models.volunteerinterestcategory import VolunteerInterestCategory
-        for vic in VolunteerInterestCategory.all():
-            if vic.volunteer:
-                i = Interest(account = vic.volunteer.account, interestcategory = vic.interestcategory)
-                i.put()
-                
-        for e in Event.all():
-            if e.inpast():
-                e.in_past = True
-                e.put()
-            
-        for eic in EventInterestCategory.all():
-            eic.event_is_upcoming = e.in_past
-            eic.put()
-
         return
     
 ##########################################################################

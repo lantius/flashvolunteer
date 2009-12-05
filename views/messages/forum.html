@@ -1,16 +1,24 @@
 {% extends to_extend %}
 
 
+<script>
+	  {% ifequal forum.recipient_type "event" %} 
+	       set_active('events');
+	  {% else %} 
+	       set_active('neighborhoods');
+      {% endifequal %}
+      set_active('events');
 
-{% block pagespectitle %}
-<h1>Forum for 
-{% ifequal forum.recipient_type "event" %}
-Event: 
-{% else %}
-Neighborhood: 
-{% endifequal %}
-<a class="fv" href="{{ forum.path }}" >{{forum.name}}</a></h1>
-{% endblock %}
+      $(document).ready(function() {
+            load_title('Add A Coordinator to {{event.name|striptags}}');
+            load_header('Forum for {% ifequal forum.recipient_type "event" %} Event: {% else %} Neighborhood: {% endifequal %}<a class="fv" href="{{ forum.path }}" >{{forum.name}}</a>');
+      });
+</script>
+
+
+
+
+
 
 {% block content %}
 

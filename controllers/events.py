@@ -147,9 +147,6 @@ class EventsPage(AbstractHandler):
             #TODO: convert to application-specific data model
             interest_categories = InterestCategory.all()
             
-        past_events = memcache.get('past_events')
-        searchurl = memcache.get('searchurl')
-            
         template_values = {
             'volunteer': user,
             'eventvolunteer': event_volunteers,
@@ -160,8 +157,6 @@ class EventsPage(AbstractHandler):
             'upcoming_events': upcoming_events,
             'my_future_events': my_future_events,
             'my_past_events': my_past_events,
-            'past_events': past_events,
-            'searchurl': searchurl
           }
         self._add_base_template_values(vals = template_values)
         
@@ -201,7 +196,7 @@ class EventsPage(AbstractHandler):
 
         #fill forum block
         forum = {}
-        message_receipts = event.incoming_messages.order('-timestamp').fetch(limit=6)
+        message_receipts = event.incoming_messages.order('timestamp').fetch(limit=6)
         messages = [mr.message for mr in message_receipts]
         
         if (len(messages) > 5): 
@@ -298,15 +293,18 @@ class EventsPage(AbstractHandler):
     def create(self, params, account):
         application = get_application()
         event = Event(application = application)
+        session = Session()
         
         if not event.validate(params):
-            self.new(event)
+            session['notification_message'].append('Sorry, your event could not be created')
+            self.redirect('/#/events')
             return False
         
         try:
             event.put()
         except:
-            self.new(event)
+            session['notification_message'].append('Sorry, your event could not be created')
+            self.redirect('/#/events')
             return False
         
         #TODO: convert interest category helper to application-specific data model
@@ -369,9 +367,12 @@ class EventsPage(AbstractHandler):
         
         hidden = event.hidden
         date = event.date
+        session = Session()
         if not event.validate(params):
-            self.edit(event)
+            session['notification_message'].append('Sorry, your changes could not be saved.')
+            self.redirect('/#' + event.url())
             return False
+        
         if hidden != event.hidden:
             for ev in event.eventvolunteers:
                 ev.event_is_hidden = event.hidden
@@ -608,67 +609,67 @@ class EventsPage(AbstractHandler):
 # EventAddCoordinatorPage page
 ################################################################################
 class EventAddCoordinatorPage(AbstractHandler):
-  LIMIT = 12
-  ################################################################################
-  # GET
-  def get(self, event_id):   
-    try:
-      account = self.auth(require_login=True)
-    except:
-      return
-    
-    event = Event.get_by_id(int(event_id))
-    if account: user = account.get_user()
-    
-    eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
-
-    if not eventvolunteer:
-        self.redirect("/#/events") #TODO REDIRECT to error page
-        return
-
-    template_values = {
-        'event' : event,
-        'volunteer': account.get_user(),
-      }
-    self._add_base_template_values(vals = template_values)
-    
-    path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_page', '_add_event_coordinator.html')
-    self.response.out.write(template.render(path, template_values, debug=is_debugging()))
-    
-  def post(self, event_id):   
-    try:
-      account = self.auth(require_login=True)
-    except:
-      return
-
-    params = self.parameterize() 
-    
-    event = Event.get_by_id(int(event_id))
-    if account: user = account.get_user()
-    
-    eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
-
-    if not eventvolunteer:
-        self.redirect("/#/events") #TODO REDIRECT to error page
-        return
-  
-    try:
-        new_coord_id = int(params['coordinator'])
-        new_coord_account = Volunteer.get_by_id(new_coord_id)
-        if not new_coord_account: 
-            raise
-
-        new_coord = None
-        for ev in new_coord_account.eventvolunteers:
-            if ev.event.key().id() == event.key().id():
-                new_coord = ev
-                break
+    LIMIT = 12
+    ################################################################################
+    # GET
+    def get(self, event_id):   
+        try:
+            account = self.auth(require_login=True)
+        except:
+            return
         
-        if new_coord:
-            new_coord.isowner = True
-            new_coord.put()
-    except:
-        pass
-
-    self.redirect('/#/events/'+ event_id)
-    
+        event = Event.get_by_id(int(event_id))
+        if account: user = account.get_user()
+        
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
+        
+        if not eventvolunteer:
+            self.redirect("/#/events") #TODO REDIRECT to error page
+            return
+        
+        template_values = {
+            'event' : event,
+            'volunteer': account.get_user(),
+          }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'add_event_coordinator.html')
+        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+      
+    def post(self, event_id):   
+        try:
+            account = self.auth(require_login=True)
+        except:
+            return
+        
+        params = self.parameterize() 
+        
+        event = Event.get_by_id(int(event_id))
+        if account: user = account.get_user()
+        
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
+        
+        if not eventvolunteer:
+            self.redirect("/#/events") #TODO REDIRECT to error page
+            return
+        
+        try:
+            new_coord_id = int(params['coordinator'])
+            new_coord_account = Volunteer.get_by_id(new_coord_id)
+            if not new_coord_account: 
+                raise
+        
+            new_coord = None
+            for ev in new_coord_account.eventvolunteers:
+                if ev.event.key().id() == event.key().id():
+                    new_coord = ev
+                    break
+            
+            if new_coord:
+                new_coord.isowner = True
+                new_coord.put()
+        except:
+            pass
+        
+        self.redirect('/#/events/'+ event_id)
+      

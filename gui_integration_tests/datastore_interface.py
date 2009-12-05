@@ -33,7 +33,6 @@ def create_environment(name, session_id):
     from models.volunteer import Volunteer
     from models.event import Event
     from models.eventvolunteer import EventVolunteer
-    from models.eventphoto import EventPhoto
     from models.volunteerfollower import VolunteerFollower
     from models.interest import Interest
     from models.interestcategory import InterestCategory

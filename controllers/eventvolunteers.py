@@ -53,8 +53,9 @@ class VolunteerForEvent(AbstractHandler):
                             body = body, 
                             type = MessageType.all().filter('name =', 'event_coord').get())
               
-        session = Session()
-        session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
+                    session = Session()
+                    session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
+                    
         self.redirect('/#/events/' + url_data)
         return
 

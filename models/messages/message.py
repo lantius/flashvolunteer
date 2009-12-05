@@ -3,7 +3,6 @@ import re, logging, time
 from google.appengine.ext import db
 from google.appengine.api import mail
 
-from models.volunteer import Volunteer
 from models.auth.account import Account
 
 from controllers._utils import get_domain
@@ -27,7 +26,7 @@ class Message(db.Model):
     
     trigger = db.DateTimeProperty(auto_now_add = True)
     
-    ##### DEPRECATED; user sender
+    ##### DEPRECATED; use sender
     sent_by = db.ReferenceProperty(reference_class = None, collection_name = 'sent_messages')
     ###############
         
@@ -61,9 +60,9 @@ class Message(db.Model):
             
     def get_mailbox_friendly_body(self):
         reg = r"(http://(www\.)?([-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]))"
-        msg = re.sub(reg,r'<a rel="nofollow" target="_blank" href="\1">\1</a>', remove_html_tags(self.body).replace('\n','<br>'))
+        msg = re.sub(reg,r'<a rel="nofollow" target="_blank" href="\1">\1</a>', self.body.replace('\n','<br>'))
         if self.autogen:
-            msg += "<br><br>Thanks!\nThe Flash Volunteer team"
+            msg += "<br><br>Thanks!<br>The Flash Volunteer team"
         return msg
 
     def url(self):

@@ -1,14 +1,14 @@
 <div id="personpastevents" class="softmodule">
 	<div class="moduletitle"><h3>My Completed Events</h3> <a style="cursor:pointer" title="These are the events that you have volunteered at and/or coordinated.">(?)</a></div>
 	<ul>
-		{% for event in my_past_events %}
+		{% for event in volunteer.events_past %}
 			{% include "../events/_event_list_item.html" %}
 		{% endfor %}
 	</ul>
 </div><!--end personpastevents-->
 
-{% if my_past_events %}
-	{% ifnotequal my_past_events|length 0 %}
+{% if volunteer.events_past %}
+	{% ifnotequal volunteer.events_past|length 0 %}
 	<div class="pagination_entry">
         <a onclick="build_dialog(4,{{volunteer.key.id }})">&raquo; View all</a>
 	</div>

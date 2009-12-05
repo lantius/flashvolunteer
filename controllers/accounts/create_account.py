@@ -29,7 +29,6 @@ class CreateAccount(AbstractHandler):
             else:
                 email = None
             
-            
             account = Account(
                 preferred_email = email,
                 name = name
@@ -70,7 +69,8 @@ class CreateAccount(AbstractHandler):
         valid_entry = account.validate(params) and valid_entry
         
         if not valid_entry:
-            self.get(account = account, volunteer = volunteer)
+            session['notification_message'] = ['<br>'.join(account.error.values())]
+            self.redirect('/#/login')
             return False
 
         login_info = session.get('login_info', None)
@@ -120,7 +120,8 @@ class CreateAccount(AbstractHandler):
                 auth.put()
 
         except:
-            self.get(account = account, volunteer = volunteer)
+            session['notification_message'].append('We\'re sorry, your account could not be created. Please try again.')
+            self.redirect('/#/login')
             return False
         
         session['auth'] = auth

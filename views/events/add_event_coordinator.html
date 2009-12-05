@@ -1,25 +1,22 @@
-{% extends "../../_layout.html" %}
-
-{% block title %}
-Add A Coordinator to {{event.name|striptags}}
-{% endblock title %}
-
-{% block eventsactive %}
-class="current"
-{% endblock %}
-
-{% block pagespectitle %}
-<h1>Add Coordinator to {{event.name|striptags}}</h1>
-{% endblock pagespectitle %}
+{% extends to_extend %}
 
 {% block content %}
+
+<script>
+      set_active('events');
+
+      $(document).ready(function() {
+            load_title('Add A Coordinator to {{event.name|striptags}}');
+			load_header('Add Coordinator to {{event.name|striptags}}');
+      });
+</script>
 
 <div id="full100">
 	<form action="/events/{{event.key.id}}/add_coordinator" method="post">
 	
 	    <input type="hidden" name="session_id" value="{{ session_id }}">
 	    <ul>	
-	        <li><span class="label">Volunteer:</span> {% include "_select_volunteer_event_coordinator.html"%}</li>
+	        <li><span class="label">Volunteer:</span> {% include "event_page/_select_volunteer_event_coordinator.html"%}</li>
 			<li><input type="submit" id="s_add_coordinator" value="Add as organizer"></li>
 		</ul>				
 	</form>
