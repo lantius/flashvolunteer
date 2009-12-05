@@ -55,6 +55,7 @@ function build_dialog(d_type, id){
         case 4: 
 		    var url = '/events/past/volunteer/'+id;
             break;
+			
         case 5: 
             var url = '/events/upcoming/volunteer/'+id;
             break;
@@ -67,7 +68,11 @@ function build_dialog(d_type, id){
         case 8:
             var url = '/events/past/neighborhood/'+id;
             break;
-											
+        case 9: 
+            var url = '/events/past/coordinated/'+id;
+            break;
+			
+														
 		case 20:
 		    var url = '/events/'+id+'/attendees';
 		    break;

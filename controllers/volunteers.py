@@ -36,64 +36,63 @@ class VolunteersPage(AbstractHandler):
     ################################################################################
     # SHOW
     def show(self, volunteer_id):
-      try:
-          account = self.auth(require_login=True)
-      except:
+        try:
+            account = self.auth(require_login=True)
+        except:
+            return
+        
+        volunteer = account.get_user()
+        session = Session()
+        if volunteer and volunteer.key().id() == int(volunteer_id):
+            session['redirected'] = True
+            self.redirect("/profile");
+            return
+        
+        #TODO: if application instances are closed, do not allow people to view
+        
+        page_volunteer = Volunteer.get_by_id(int(volunteer_id))
+        
+        if not page_volunteer:
+          self.error(404)
           return
-    
-      volunteer = account.get_user()
-      session = Session()
-      if volunteer and volunteer.key().id() == int(volunteer_id):
-          session['redirected'] = True
-          self.redirect("/profile");
-          return
-    
-      #TODO: if application instances are closed, do not allow people to view
-    
-      page_volunteer = Volunteer.get_by_id(int(volunteer_id))
-    
-      if not page_volunteer:
-        self.error(404)
-        return
-    
-      volunteerfollower = account.following.filter('follows =', page_volunteer.account).get()                  
-      volunteerfollowing = account.followers.filter('follower =', page_volunteer.account).get()
-                                              
-      event_access = page_volunteer.event_access(account = account) 
-                        
-      future_events = page_volunteer.events_future().fetch(VolunteersPage.LIMIT)
-      
-      #v_stats = memcache.get('v_stats')
-      #if not v_stats: 
-      v_stats = ()
-                                                          
-      vhours = sum([ev.hours for ev in page_volunteer.eventvolunteers if ev.hours])
-      attended = len([ev for ev in page_volunteer.eventvolunteers if ev.attended])
-      isowner = len([ev for ev in page_volunteer.eventvolunteers if ev.isowner]) 
-    
-      v_stats = (attended, isowner, vhours)                                        
-          
-          #memcache.add('v_stats', v_stats, 10000) 
+        
+        volunteerfollower = account.following.filter('follows =', page_volunteer.account).get()                  
+        volunteerfollowing = account.followers.filter('follower =', page_volunteer.account).get()
+                                                
+        event_access = page_volunteer.event_access(account = account) 
+                          
+        #vhours = sum([ev.hours for ev in page_volunteer.eventvolunteers if ev.hours])
+        
+        (future_events, past_events, 
+         events_coordinating, past_events_coordinated) = page_volunteer.get_activities(VolunteersPage.LIMIT)
+        
+        (future_events_cnt, past_events_cnt, 
+         events_coordinating_cnt, past_events_coordinated_cnt) = page_volunteer.get_activities()
+        
+        template_values = { 
+              'eventvolunteer': page_volunteer.eventvolunteers, 
+              'volunteerfollower' : volunteerfollower,
+              'volunteerfollowing' : volunteerfollowing,
+              'page_volunteer': page_volunteer,
+              'volunteer' : volunteer,
+              'event_access': event_access,
+        
+              'past_events': past_events,
+              'future_events': future_events,
+              'past_events_coordinated': past_events_coordinated,
+              'events_coordinating': events_coordinating,
+        
+              'past_events_cnt': past_events_cnt,
+              'future_events_cnt': future_events_cnt,
+              'past_events_coordinated_cnt': past_events_coordinated_cnt,
+              'events_coordinating_cnt': events_coordinating_cnt,
             
-      template_values = { 'eventvolunteer': page_volunteer.eventvolunteers, 
-                          'volunteerfollower' : volunteerfollower,
-                          'volunteerfollowing' : volunteerfollowing,
-                          'page_volunteer': page_volunteer,
-                          'volunteer' : volunteer,
-                          'event_access': event_access,
-                          'future_events': future_events,
-                          'v_stats':v_stats,
-                          }
-      self._add_base_template_values(vals = template_values)
-      
-      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
-      self.response.out.write(template.render(path, template_values))
-    
-    
-    ################################################################################
-    # LIST
-    def list(self):
-      return
+              'user_of_interest': page_volunteer
+        }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'view_other_volunteer.html')
+        self.response.out.write(template.render(path, template_values))
     
     ################################################################################
     # SEARCH

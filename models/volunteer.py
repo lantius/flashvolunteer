@@ -47,7 +47,7 @@ class Volunteer(AbstractUser):
         return (vic.interestcategory for vic in self.account.user_interests)
     
     def friends(self):  #returns a generator of Volunteer objects
-        return (vf.follows.get_user() for vf in self.account.following.filter('mutual =', True).order('__key__'))
+        return [vf.follows.get_user() for vf in self.account.following.filter('mutual =', True).order('__key__')]
 
     def followers_only(self):   #returns a generator of Volunteer objects
         return (vf.follower.get_user() for vf in self.account.followers.filter('mutual =', False).order('__key__'))

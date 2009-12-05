@@ -1,4 +1,6 @@
-
+{% if page_volunteer.friends %}
+    {% ifnotequal page_volunteer.friends|length 0 %}
+	
 <div id="personfriends" class="softmodule">
 	<div class="moduletitle">
         <h3>Team</h3>
@@ -10,11 +12,9 @@
 	</ul>
 </div><!--end friends-->
 
-{% if page_volunteer.friends %}
-    {% ifnotequal page_volunteer.friends|length 0 %}
-    <div class="pagination_entry">
-	      <a onclick="build_dialog(25,{{page_volunteer.key.id}})">&raquo; View all</a>
 
-    </div>
+	    <div class="pagination_entry">
+		      <a onclick="build_dialog(25,{{page_volunteer.key.id}})">&raquo; View all</a>
+	    </div>
     {% endifnotequal %}
 {% endif %}

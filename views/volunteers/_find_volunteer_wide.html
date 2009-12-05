@@ -1,14 +1,14 @@
 
 <div id="findavolunteerwide" class="hardmodule">
-	<div class="moduletitle"><h3>Find A Volunteer</h3></div>
-	Leave blank to search for anyone.
+	<div class="moduletitle"><h3>Browse Volunteers</h3></div>
+	<!--Leave blank to search for anyone.-->
 	   <div id="person_search">
 			<ul>
-				<li>
+				<!--<li>
 					<span class="label">Name:</span>
 					<input name="name" type="text" value="" />
 				</li>
-				<!--<li>
+				<li>
 					<span class="label">Email:</span>
 					<input name="email" type="text" value="" />
 				</li>-->
@@ -16,7 +16,7 @@
 					{% include "../neighborhoods/_select_neighborhood__event_search.html" %}
 				</li>
 				<li style="text-align:right; padding-right: 10px;">
-	                <button id="s_volunteer_wide_search" onclick="people_search_submit()" id="s_events_wide_search">Search</button>                       
+	                <button class="submit" id="s_volunteer_wide_search" onclick="people_search_submit()" id="s_events_wide_search">Search</button>                       
 				</li>
 			</ul>
 		</div>

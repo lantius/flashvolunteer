@@ -6,6 +6,8 @@ from models.interestcategory import InterestCategory
 
 from controllers.abstract_handler import AbstractHandler
 
+
+
 ################################################################################
 # ProfilePage
 class ProfilePage(AbstractHandler):
@@ -29,25 +31,36 @@ class ProfilePage(AbstractHandler):
                 byinterest.append(ic)
         
         recommended_events = user.recommended_events()[:ProfilePage.LIMIT]
-        my_future_events = (ev.event for ev in user.events_future().fetch(ProfilePage.LIMIT))
+
+        (future_events, past_events, 
+         events_coordinating, past_events_coordinated) = user.get_activities(ProfilePage.LIMIT)
         
-        past_events = (ev.event for ev in user.events_past().fetch(ProfilePage.LIMIT))     
+        (future_events_cnt, past_events_cnt, 
+         events_coordinating_cnt, past_events_coordinated_cnt) = user.get_activities()
         
         vhours = sum([ev.hours for ev in user.eventvolunteers if ev.hours])
-        attended = len([ev for ev in user.eventvolunteers if ev.attended])
-        isowner = len([ev for ev in user.eventvolunteers if ev.isowner]) 
         
-        v_stats = (attended, isowner, vhours)                                        
-        
+                
         template_values = {
             'volunteer' : user,
             'neighborhoods': NeighborhoodHelper().selected(user.home_neighborhood),
             'recommended_events': recommended_events,
-            'my_future_events': my_future_events,
             #TODO: convert to application-specific data model
             'interest_categories': InterestCategory.all(),
+            
             'past_events': past_events,
-            'v_stats':v_stats,
+            'future_events': future_events,
+            'past_events_coordinated': past_events_coordinated,
+            'events_coordinating': events_coordinating,
+
+            'past_events_cnt': past_events_cnt,
+            'future_events_cnt': future_events_cnt,
+            'past_events_coordinated_cnt': past_events_coordinated_cnt,
+            'events_coordinating_cnt': events_coordinating_cnt,
+            
+            'user_of_interest': user,
+            'event_access': True
+            
           }
         self._add_base_template_values(vals = template_values)
         

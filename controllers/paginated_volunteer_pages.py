@@ -57,6 +57,10 @@ class BaseVolunteerListPage(AbstractHandler):
             prev = ''
             if 'vol_pagination' in session:
                 del session['vol_pagination']
+            bookmark = None
+      
+      
+      
       
         if bookmark:
             volunteers = self._get_volunteers(self.LIST_LIMIT + 1, Key(bookmark))
@@ -89,7 +93,12 @@ class PaginatedTeamPage(BaseVolunteerListPage):
         self.set_context()
           
     def _get_volunteers(self, limit, bookmark = None):
-        return list(self.volunteer.following(key = bookmark, limit = limit))
+        vols = [vf.follows.get_user() for vf in self.account.following.fetch(limit=1000)]
+        if bookmark:
+            vols = [v for v in vols if v.key() >= bookmark]                      
+        vols.sort(lambda a,b: cmp(a.key(),b.key()))
+
+        return vols[:limit]
     
     def _get_title(self):
         return 'My FlashTeam'
@@ -175,8 +184,11 @@ class PaginatedVolunteerTeam(BaseVolunteerListPage):
       self.set_context()
 
   def _get_volunteers(self, limit, bookmark = None):
-     return list(self.page_volunteer.following(key = bookmark, limit = limit))
-
+        vols = [vf.follows.get_user() for vf in self.account.following.fetch(limit=1000)]
+        if bookmark:
+            vols = [v for v in vols if v.key() >= bookmark]                      
+        vols.sort(lambda a,b: cmp(a.key(),b.key()))
+        
   def _get_title(self):
      return '%s\'s FlashTeam'%self.page_volunteer.name
  
@@ -186,33 +198,33 @@ class PaginatedVolunteerTeam(BaseVolunteerListPage):
     
 class PaginatedEventAttendeesPage(BaseVolunteerListPage):
   
-  def get(self, event_id):
-      self.event = Event.get_by_id(int(event_id))
-      if not self.event:
-          self.error(404)
-          self.response.out.write('404 page! boo!')
-
-      self.set_context()
-
-  def _get_volunteers(self, limit, bookmark = None):
-     eventvolunteer = self.event.eventvolunteers.filter('volunteer =', self.volunteer).get() 
-
-     qry = self.event.eventvolunteers.order('__key__')
-     if bookmark: qry = qry.filter('__key__ >=', bookmark)
-                   
-     if eventvolunteer and (eventvolunteer.isowner or self.event.in_past): 
-         return list(qry.fetch(limit))
-     else:
-         results = []
-         for v in qry.fetch(limit):
-             if v.event_access(account=self.account):
-                 results.append(v)
-                 if len(results) >= limit:
-                     break
-         return results
+    def get(self, event_id):
+        self.event = Event.get_by_id(int(event_id))
+        if not self.event:
+            self.error(404)
+            self.response.out.write('404 page! boo!')
+    
+        self.set_context()
+    
+    def _get_volunteers(self, limit, bookmark = None):
+        eventvolunteer = self.event.eventvolunteers.filter('volunteer =', self.volunteer).get() 
+    
+        qry = self.event.eventvolunteers.order('__key__')
+        if bookmark: qry = qry.filter('__key__ >=', bookmark)
+                     
+        if eventvolunteer and (eventvolunteer.isowner or self.event.in_past): 
+            return list(qry.fetch(limit))
+        else:
+            results = []
+            for v in qry.fetch(limit):
+                if v.event_access(account=self.account):
+                    results.append(v)
+                    if len(results) >= limit:
+                        break
+            return results
  
-  def _get_title(self):
-     return '%s\'s Attendees'%self.event.name
- 
-  def _get_url(self):
-     return '/events/%i/attendees'%self.event.key().id()
+    def _get_title(self):
+        return '%s\'s Attendees'%self.event.name
+    
+    def _get_url(self):
+        return '/events/%i/attendees'%self.event.key().id()

@@ -5,12 +5,10 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users, images, memcache
 from google.appengine.ext import webapp, db
 
-from google.appengine.api.urlfetch import fetch
-
-from models.volunteer import Volunteer
 from models.interestcategory import InterestCategory
 from models.interest import Interest
 from models.messages import MessageType, MessagePropagationType
+
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
 from components.sessions import Session
@@ -21,7 +19,7 @@ from controllers.abstract_handler import AbstractHandler
 # Settings page
 ################################################################################
 class SettingsPage(AbstractHandler):
-
+    LIMIT = 2
     ################################################################################
     # GET
     ################################################################################
@@ -33,13 +31,33 @@ class SettingsPage(AbstractHandler):
                 return
 
         volunteer = account.get_user()
+        (future_events, past_events, 
+         events_coordinating, past_events_coordinated) = volunteer.get_activities(SettingsPage.LIMIT)
+        
+        (future_events_cnt, past_events_cnt, 
+         events_coordinating_cnt, past_events_coordinated_cnt) = volunteer.get_activities()
+
         template_values = {
             'volunteer' : volunteer, 
             'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
             'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
             'interestcategories' : InterestCategoryHelper().selected(volunteer),
             'message_propagation_types' : MessagePropagationType.all(),
-            'message_types': MessageType.all().filter('in_settings =', True).order('order')
+            'message_types': MessageType.all().filter('in_settings =', True).order('order'),
+
+            'past_events': past_events,
+            'future_events': future_events,
+            'past_events_coordinated': past_events_coordinated,
+            'events_coordinating': events_coordinating,
+
+            'past_events_cnt': past_events_cnt,
+            'future_events_cnt': future_events_cnt,
+            'past_events_coordinated_cnt': past_events_coordinated_cnt,
+            'events_coordinating_cnt': events_coordinating_cnt,
+            
+            'user_of_interest': user,
+            'event_access': True
+            
           }
         self._add_base_template_values(vals = template_values)
         

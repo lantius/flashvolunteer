@@ -129,7 +129,7 @@ class EventsPage(AbstractHandler):
         
         if user:
             recommended_events = user.recommended_events()[:EventsPage.LIMIT]
-            my_future_events = [ev.event for ev in user.events_future().fetch(EventsPage.LIMIT)]
+            future_events = [ev.event for ev in user.events_future().fetch(EventsPage.LIMIT)]
             my_past_events = [ev.event for ev in user.events_past().fetch(EventsPage.LIMIT)]
             my_past_events.reverse()
             event_volunteers = user.eventvolunteers
@@ -139,7 +139,7 @@ class EventsPage(AbstractHandler):
         else: 
             application = get_application()
             recommended_events = None
-            my_future_events = None
+            future_events = None
             my_past_events = None
             event_volunteers = None
             events_coordinating = None
@@ -155,8 +155,8 @@ class EventsPage(AbstractHandler):
             'events_coordinating': events_coordinating,
             'interestcategories' : interest_categories,
             'upcoming_events': upcoming_events,
-            'my_future_events': my_future_events,
-            'my_past_events': my_past_events,
+            'future_events': future_events,
+            'past_events': my_past_events,
           }
         self._add_base_template_values(vals = template_values)
         

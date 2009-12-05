@@ -1,0 +1,92 @@
+<style>
+    .stat_viz {
+    }
+    .stat_viz table {
+        width: 100%;
+        border-collapse:separate;
+        border-spacing:3px;
+    }
+    .stat_viz td {
+        width: 25px;
+        height: 25px;
+        font-size: 18px;
+        padding: 0px;
+        text-align: center;
+        margin: 0px;
+    }
+    
+    .stat_viz td a {
+      text-decoration:  none;
+      font-weight:      normal;
+      background-color: inherit;
+      color:            inherit;
+      display:block;
+    }
+    
+    .stat_viz td.ur {
+        background-color: #CDA4EB;
+    }
+    .stat_viz td.ul {
+        background-color: #A3E5EB;
+    }
+    .stat_viz td.lr {
+        background-color: #EBA9A3;
+    }
+    .stat_viz td.ll {
+        background-color: #C2EBA3;
+    }
+    
+</style>
+
+<div class="stat_viz">
+    <table>
+        <tr>
+            <td class="ul">
+                {% if past_events %}
+                    {% ifnotequal past_events_cnt 0 %}
+                        <a title="Past volunteer events. Click to see." onclick="build_dialog(4,{{user_of_interest.key.id }})">{{past_events_cnt}}</a>
+                    {% else %}
+                        <a title="Past volunteer events.">0</a>                   
+                    {% endifnotequal %}
+                {% else %}
+                        <a title="Past volunteer events.">0</a>                   
+                {% endif %}
+            </td>
+            <td class="ur">
+                {% if past_events_coordinated %}
+                    {% ifnotequal past_events_coordinated_cnt 0 %}
+                        <a title="Past events coordinated. Click to see." onclick="build_dialog(9,{{user_of_interest.key.id }})">{{past_events_coordinated_cnt}}</a>
+                    {% else %}
+                        <a title="Past events coordinated.">0</a>                   
+                    {% endifnotequal %}
+                {% else %}
+                        <a title="Past events coordinated.">0</a>                   
+                {% endif %}
+                
+            </td>
+            <td class="ll">
+                {% if future_events %}
+                    {% ifnotequal future_events_cnt 0 %}
+                        <a {% if event_access %}title="Upcoming events. Click to see." onclick="build_dialog(5,{{user_of_interest.key.id }})"{% else %}title="Upcoming events. This user\'s privacy settings do not let you see them."{% endif %}>{{future_events_cnt}}</a>
+                    {% else %}
+                        <a title="Upcoming events.">0</a>                   
+                    {% endifnotequal %}
+                {% else %}
+                        <a title="Upcoming events.">0</a>                   
+                {% endif %}
+            </td>
+            <td class="lr">
+                {% if events_coordinating %}
+                    {% ifnotequal events_coordinating_cnt 0 %}
+                        <a title="Upcoming events coordinating. Click to see." onclick="build_dialog(3,{{user_of_interest.key.id }})">{{events_coordinating_cnt}}</a>
+                    {% else %}
+                        <a title="Upcoming events coordinating.">0</a>                   
+                    {% endifnotequal %}
+                {% else %}
+                        <a title="Upcoming events coordinating.">0</a>                   
+                {% endif %}
+                
+            </td>
+        </tr>
+    </table>
+</div>

@@ -321,8 +321,8 @@ img#beta {
 }
 
 img#nameavatar {
-    margin: 0 0 0 -10px;
-    width: 185px;
+    margin: 0 0 0 0px;
+    width: 100%;
 }
 
 img.smallavatar {

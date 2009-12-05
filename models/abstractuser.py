@@ -85,6 +85,9 @@ class AbstractUser(db.Model):
     def events_coordinating(self):
         return self.eventvolunteers.filter('isowner =',True).filter('event_is_upcoming =',True).filter('event_is_hidden =', False).order('event_date')
     
+    def past_events_coordinated(self):
+        return self.eventvolunteers.filter('isowner =',True).filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
+
     def interestcategories(self):
         return (vic.interestcategory for vic in self.user_interests)
     
@@ -92,15 +95,29 @@ class AbstractUser(db.Model):
         return self.events_past().count()
     
     def events_past(self):
-        return self.eventvolunteers.filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
+        return self.eventvolunteers.filter('isowner =',False).filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
     
     def events_future_count(self):
         return self.events_future().count()
     
     def events_future(self):
-        return self.eventvolunteers.filter('event_is_upcoming =',True).filter('event_is_hidden =', False).order('event_date')
+        return self.eventvolunteers.filter('isowner =',False).filter('event_is_upcoming =',True).filter('event_is_hidden =', False).order('event_date')
     
     def add_application(self, application):
         self.applications.append(application.key().id())
         self.put()
       
+    def get_activities(self, limit = None):
+        if limit:     
+            future_events = [ev.event for ev in self.events_future().fetch(limit)]
+            past_events = [ev.event for ev in self.events_past().fetch(limit)]     
+            events_coordinating = [ev.event for ev in self.events_coordinating().fetch(limit)]
+            past_events_coordinated = [ev.event for ev in self.past_events_coordinated().fetch(limit)]
+        else:
+            future_events = self.events_future().count()
+            past_events = self.events_past().count()     
+            events_coordinating = self.events_coordinating().count()
+            past_events_coordinated = self.past_events_coordinated().count()
+            
+        
+        return (future_events, past_events, events_coordinating, past_events_coordinated)

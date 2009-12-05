@@ -12,7 +12,8 @@ from controllers.paginated_event_pages import \
     PaginatedVolunteerCompletedPage, PaginatedNeighborhoodCompletedPage, \
     PaginatedCategoryCompletedPage, PaginatedVolunteerUpcomingPage, \
     PaginatedNeighborhoodUpcomingPage, PaginatedCategoryUpcomingPage, \
-    PaginatedUpcomingPage, PaginatedRecommendedPage, PaginatedVolunteerHostedPage         
+    PaginatedUpcomingPage, PaginatedRecommendedPage, PaginatedVolunteerHostedPage, \
+    PaginatedVolunteerCoordinatedCompletedPage        
 
 from controllers.home import MainPage
 from controllers.profile import ProfilePage
@@ -118,7 +119,9 @@ def real_main():
            ('/events/(\d+)/verify', VerifyEventAttendance),
            ('/events(|/\d+|/new|/search|/\d+/edit)', EventsPage),
            ('/events/(\d+)/attendees', PaginatedEventAttendeesPage),
-           ('/events/past/volunteer/(\d+)', PaginatedVolunteerCompletedPage),    
+           ('/events/past/volunteer/(\d+)', PaginatedVolunteerCompletedPage),  
+           ('/events/past/coordinated/(\d+)', PaginatedVolunteerCoordinatedCompletedPage),    
+  
            ('/events/past/neighborhood/(\d+)', PaginatedNeighborhoodCompletedPage),
            ('/events/past/category/(\d+)', PaginatedCategoryCompletedPage),
            ('/events/hosted/volunteer/(\d+)', PaginatedVolunteerHostedPage),

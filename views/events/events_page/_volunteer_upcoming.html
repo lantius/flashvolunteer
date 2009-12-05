@@ -1,12 +1,12 @@
 <div id="personupcomingevents" class="softmodule">
 	<div class="moduletitle"><h3>My Upcoming Events</h3> <a title="You can find events to volunteer for through the event search, browsing through neighborhoods, and looking at your recommended events." href="/static/help#events">(?)</a></div>
-	{% for event in my_future_events %}
+	{% for event in future_events %}
 		{% include "../events/_event_list_item.html" %}
 	{% endfor %}
 </div><!--end profileupcomingevents-->
 
-{% if my_future_events %}
-    {% ifnotequal my_future_events|length 0 %}
+{% if future_events %}
+    {% ifnotequal future_events|length 0 %}
     <div class="pagination_entry">
         <a onclick="build_dialog(5,{{volunteer.key.id }})">&raquo; View all</a>
     </div>
