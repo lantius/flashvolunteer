@@ -1,30 +1,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
   <head>
-  	<style type=text/css>
-  		div#map_canvas{height:169px;}
-  	</style>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="/stylesheets/jquery/js/jquery-1.3.2.min.js"></script>
 	
   </head>
 
   <body>
-  <script type="text/javascript" src="http://www.google.com/jsapi?key={{GOOGLE_MAPS_API_KEY}}"></script>
-  <script type="text/javascript">
-    google.load("maps", "2", {"other_params":"sensor=false"});
 
+  <script type="text/javascript">
       // Call this function when the page has been loaded
     function initialize(){
-          var map = new google.maps.Map2(document.getElementById("map_canvas"));
-          map.setUIToDefault();       
-          var point = new GLatLng({{lat}},{{lon}});
-          map.setCenter(point, 13);
-          var marker = new GMarker(point);
-          map.addOverlay(marker);
+          var point = new google.maps.LatLng({{lat}}, {{lon}});
+          var myOptions = {
+		  	zoom: 13,
+			center: point,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		  };
+          var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+          var marker = new google.maps.Marker({
+		  	position: point,
+		  	map: map,
+		  });
     };
    
 
-    google.setOnLoadCallback(initialize);
     </script>
-
-	<div id="map_canvas"></div>
+    <script>
+    	$(document).ready(function(){
+			$('<div id="map_canvas">').appendTo('body');
+			$('#map_canvas').css('height', '169px');
+			initialize();
+		});
+    </script>
+	<div id="map_canvas" onload=initialize()></div>
 </body>

@@ -9,7 +9,7 @@ from controllers.events import _get_upcoming_events
 
 from controllers.abstract_handler import AbstractHandler
 
-from controllers._utils import is_debugging, get_application, get_google_maps_api_key
+from controllers._utils import is_debugging, get_application
 from components.sessions import Session
 from datetime import datetime
 
@@ -99,8 +99,8 @@ class PaginatedCategoryCompletedPage(BaseEventListPage):
     def get(self, categoryid):
         self.categoryid = int(categoryid)
         self.category = InterestCategory.get_by_id(self.categoryid)
-        self.set_context()
         self.volunteerid = None
+        self.set_context()
 
     def _get_events(self, limit, bookmark = None):
         qry = self.category.past_events()
@@ -121,8 +121,8 @@ class PaginatedNeighborhoodCompletedPage(BaseEventListPage):
     def get(self, neighborhoodid):
         self.neighborhoodid = int(neighborhoodid)
         self.neighborhood = Neighborhood.get_by_id(self.neighborhoodid)
-        self.set_context()
         self.volunteerid = None
+        self.set_context()
 
     def _get_events(self, limit, bookmark = None):
         qry = self.neighborhood.events_past()
@@ -184,8 +184,8 @@ class PaginatedVolunteerCoordinatedCompletedPage(BaseEventListPage):
 
 class PaginatedUpcomingPage(BaseEventListPage):
     def get(self):
-        self.set_context()
         self.volunteerid = None
+        self.set_context()
 
     def _get_events(self, limit, bookmark = None):
         qry = _get_upcoming_events()
@@ -244,8 +244,8 @@ class PaginatedNeighborhoodUpcomingPage(BaseEventListPage):
     def get(self, neighborhoodid):
         self.neighborhoodid = int(neighborhoodid)
         self.neighborhood = Neighborhood.get_by_id(self.neighborhoodid)
-        self.set_context()
         self.volunteerid = None
+        self.set_context()
         
     def _get_events(self, limit, bookmark = None):
         qry = self.neighborhood.events_future().filter('application =', self.application)
@@ -265,8 +265,8 @@ class PaginatedCategoryUpcomingPage(BaseEventListPage):
     def get(self, categoryid):
         self.categoryid = int(categoryid)
         self.category = InterestCategory.get_by_id(self.categoryid)
-        self.set_context()
         self.volunteerid = None
+        self.set_context()
 
     def _get_events(self, limit, bookmark = None):
         qry = self.category.upcoming_events().filter('application =', self.application)
@@ -284,8 +284,8 @@ class PaginatedCategoryUpcomingPage(BaseEventListPage):
 
 class PaginatedRecommendedPage(BaseEventListPage):
     def get(self):
-        self.set_context()
         self.volunteerid = None
+        self.set_context()
 
     def _get_events(self, bookmark = None):
         return [e for e in self.volunteer.recommended_events()

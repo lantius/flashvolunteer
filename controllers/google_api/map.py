@@ -3,7 +3,6 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
-from controllers._utils import is_debugging, get_application, get_google_maps_api_key
 
 from controllers.abstract_handler import AbstractHandler
 

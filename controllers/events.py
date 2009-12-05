@@ -2,7 +2,7 @@ from components.geostring import *
 from components.time_zones import now
 from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
-from controllers._utils import is_debugging, get_application, get_google_maps_api_key
+from controllers._utils import is_debugging, get_application
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -237,7 +237,6 @@ class EventsPage(AbstractHandler):
                             'attendees': attendees,
                             'attendees_anonymous': attendees_anonymous,
                             'num_anon': len(attendees_anonymous),
-                            'GOOGLE_MAPS_API_KEY' : get_google_maps_api_key(),
                             'forum': forum,
                             }
         self._add_base_template_values(vals = template_values)

@@ -1,4 +1,3 @@
-from controllers._utils import get_google_maps_api_key, get_application
 from google.appengine.api import urlfetch
 from google.appengine.ext import db
 import datetime, logging, urllib
