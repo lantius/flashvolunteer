@@ -42,7 +42,14 @@ class VolunteerForEvent(AbstractHandler):
                                 type = MessageType.all().filter('name =', 'event_coord').get())
             else:
                 if not eventvolunteer:
-                    eventvolunteer = EventVolunteer(volunteer=user, event=event, isowner=False)
+                    eventvolunteer = EventVolunteer(
+                                        volunteer=user, 
+                                        event=event, 
+                                        isowner=False,
+                                        event_is_upcoming = not event.in_past,
+                                        event_is_hidden = event.hidden,
+                                        event_date = event.date,
+                                        application = event.application)
                     eventvolunteer.put()
                     (to, subject, body) = self.get_message_text(event = event, 
                                                                   account = account,
@@ -54,7 +61,10 @@ class VolunteerForEvent(AbstractHandler):
                             type = MessageType.all().filter('name =', 'event_coord').get())
               
                     session = Session()
-                    session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
+                    if event.in_past:
+                        session['notification_message'] = ['Thanks for attending!']
+                    else:
+                        session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
                     
         self.redirect('/#/events/' + url_data)
         return

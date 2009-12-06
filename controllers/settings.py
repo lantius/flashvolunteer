@@ -55,7 +55,7 @@ class SettingsPage(AbstractHandler):
             'past_events_coordinated_cnt': past_events_coordinated_cnt,
             'events_coordinating_cnt': events_coordinating_cnt,
             
-            'user_of_interest': user,
+            'user_of_interest': volunteer,
             'event_access': True
             
           }

@@ -11,7 +11,7 @@ from models.event import Event
 
 from controllers.abstract_handler import AbstractHandler
 
-from controllers._utils import is_debugging, get_application, get_google_maps_api_key
+from controllers._utils import is_debugging, get_application
 from components.sessions import Session
 
 class BaseVolunteerListPage(AbstractHandler):

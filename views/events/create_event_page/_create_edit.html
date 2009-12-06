@@ -13,14 +13,43 @@
 	      }
 	    },
  	    submitHandler: function(form) {
-	       d1 = $('#startdate').val() + $('#starttime').val().substring($('#starttime').val().length - 2)+ $('#starttime').val();
-           d2 = $('#enddate').val() + $('#endtime').val().substring($('#endtime').val().length - 2) + $('#endtime').val(); 
-	       if (d1 >= d2) {
+			
+		   var start_date = new Date($('#startdate').val()).getTime();
+		   var end_date = new Date($('#enddate').val()).getTime(); 
+		   var re = /(\d{1,2})\:(\d{1,2})\s(AM|PM)/;
+		   
+		   res = re.exec($('#starttime').val());
+           
+		   if (res[1].charAt(0)=='0') res[1] = res[1].substring(1);
+		   if (res[2].charAt(0)=='0') res[2] = res[2].substring(1);
+		   if (res[3] == 'AM'){
+		      res[1] = parseInt(res[1]);
+		   }
+           else{
+		   	  res[1] = parseInt(res[1]) + 12;
+		   }
+           res[2] = parseInt(res[2]);
+            
+		   start_date += res[1] * 3600000 + res[2] * 60000;
+		   		   
+           res = re.exec($('#endtime').val());
+		   if (res[1].charAt(0)=='0') res[1] = res[1].substring(1);
+           if (res[2].charAt(0)=='0') res[2] = res[2].substring(1);
+           if (res[3] == 'AM'){
+              res[1] = parseInt(res[1]);
+           }
+           else{
+              res[1] = parseInt(res[1]) + 12;
+           }
+           res[2] = parseInt(res[2]);
+            
+           end_date += res[1] * 3600000 + res[2] * 60000;          
+		   if (start_date >= end_date) {
                 $('.form_error').html('Invalid dates: the event must end after it starts!');
 		        $(".form_error").show();
 		   }
 		   else {
-		   	  if (d1 < get_current_datetime()) {
+		   	  if (end_date < get_current_date()) {
                 $('.form_error').html('Invalid start date: the event must occur in the future!');
                 $(".form_error").show();
 			  }

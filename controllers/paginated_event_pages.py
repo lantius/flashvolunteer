@@ -1,4 +1,4 @@
-import os
+import os, logging
 
 from google.appengine.ext.webapp import template
 
@@ -43,6 +43,7 @@ class BaseEventListPage(AbstractHandler):
 
         first_page = not bookmark_loc or bookmark_loc == '-'
         if not first_page:
+            logging.info('got bookmarkloc: ' + bookmark_loc)
             bookmark = datetime.strptime(bookmark_loc, '%Y-%m-%d%H:%M:%S')              
             trace = session.get('events_pagination', None)
             if not trace or trace == []:
@@ -69,9 +70,9 @@ class BaseEventListPage(AbstractHandler):
                 del session['events_pagination']
         
         if first_page:
-            events = self._get_events(self.LIST_LIMIT + 1)
+            events = self._get_events(self.LIST_LIMIT + 1, None)
         else: 
-            events = self._get_events(self.LIST_LIMIT, bookmark)
+            events = self._get_events(self.LIST_LIMIT + 1, bookmark)
 
         if len(events) == self.LIST_LIMIT+1:
             next = events[-1].date.strftime('%Y-%m-%d%H:%M:%S')  
@@ -287,9 +288,9 @@ class PaginatedRecommendedPage(BaseEventListPage):
         self.volunteerid = None
         self.set_context()
 
-    def _get_events(self, bookmark = None):
+    def _get_events(self, limit, bookmark=None):
         return [e for e in self.volunteer.recommended_events()
-                if (bookmark is None or e.date > bookmark) and e.application.key().id() == self.application.key().id()][:self.LIST_LIMIT + 1]
+                if (bookmark is None or e.date > bookmark) and e.application.key().id() == self.application.key().id()][:limit]
     
     def _get_title(self):
         return 'Recommended Events'

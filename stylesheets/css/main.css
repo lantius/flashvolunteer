@@ -479,7 +479,7 @@ th {
 }
 
 .messages table {
-	width: 100%;
+	width: 97%;
 }
 
 tr.message {
@@ -496,11 +496,10 @@ tr.message {
     text-align: center;
 }
 
+#volunteerstats td,
 #active_neighborhoods td,
 #active_volunteers td,
-#neighborhoodstats {   
-
-    text-align: right;
+#neighborhoodstats td {   
     padding:3px 10px;
     font-weight: normal;
 }
@@ -978,7 +977,6 @@ form input.password {
 	letter-spacing:-1px;
 	line-height:normal;
 	padding:2px 5px;
-	margin-bottom: 10px;
 }
 
 .submit {
@@ -1018,7 +1016,7 @@ label.error {
 	border: none;
 }
 
-#neighborhoodstats td,
-#volunteerstats td {
-	padding-right: 10px;
+
+form input {
+	margin: 5px 0px;
 }

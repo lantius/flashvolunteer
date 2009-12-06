@@ -1,4 +1,6 @@
 
+{% if volunteer %}
+
 <script>
 	function add(){
 		$.post("{{page_volunteer.url}}/follow", {session_id: "{{ session_id }}"}, 
@@ -8,9 +10,5 @@
 	}
 </script>
 
-{% if volunteer %}
-<form onclick=add() method="post">
-    <input type=hidden name="session_id" value="{{ session_id }}">
-    <input title="Add {{page_volunteer.account.name|striptags}} to your FlashTeam" id="operation_add_to_team[{{ page_volunteer.key.id }}]" class="operation" value="&raquo; Add to Team"/>
-</form>
+    <li><a title="Add {{page_volunteer.account.name|striptags}} to your FlashTeam" id="operation_add_to_team[{{ page_volunteer.key.id }}]" class="operation" onclick=add() method="post">&raquo; Add to Team</a></li>
 {% endif %}

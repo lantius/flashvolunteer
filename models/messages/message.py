@@ -69,7 +69,7 @@ class Message(db.Model):
         return '/messages/' + str(self.key().id())
             
     def time_sent(self):
-        return self.trigger.replace(tzinfo=utc).astimezone(Pacific).strftime("%m/%d/%Y %H:%M")
+        return self.trigger.replace(tzinfo=utc).astimezone(Pacific).strftime("%m/%d/%Y %I:%M %p")
     
     def get_sender(self):
         return self.sent_by

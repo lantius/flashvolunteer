@@ -1,11 +1,15 @@
 <div id="volunteer_operations" class="actionlist">
+	
+	
 	{% if volunteer %} 
+	   <ul>
 	   {% if volunteerfollower %}
     	   {% include "../volunteers/view_other_volunteer/_remove_from_team.html" %}
        {% else %}     
             {% include "../volunteers/view_other_volunteer/_add_to_team.html" %}
 	   {% endif %}
-	   <a class="fv" class="operation" href="{{page_volunteer.url}}/send_message?redirect={{path}}" title="send this volunteer a message">&raquo; Send message</a>
+	   <li><a class="fv" class="operation" href="{{page_volunteer.url}}/send_message?redirect={{path}}" title="send this volunteer a message">&raquo; Send message</a>
+	   </ul>
 	{% endif %}
 	
 </div>

@@ -257,47 +257,50 @@ class VolunteerAvatar(AbstractHandler):
     ################################################################################
     # GET
     def get(self, url_data):
-      volunteer = Volunteer.get_by_id(int(url_data))
-      if volunteer.avatar:
-        self.response.headers['Content-Type'] = str(volunteer.avatar_type)
-        self.response.out.write(volunteer.avatar)
-      else:
-        self.error(404)
+        volunteer = Volunteer.get_by_id(int(url_data))
+        if volunteer.avatar:
+            self.response.headers['Content-Type'] = str(volunteer.avatar_type)
+            self.response.out.write(volunteer.avatar)
+        else:
+            self.error(404)
     
     ################################################################################
     # POST
     def post(self):
-      try:
-        account = self.auth(require_login=True)
-      except:
-        return
+        try:
+            account = self.auth(require_login=True)
+        except:
+            return
+          
+        params = self.parameterize() 
         
-      params = self.parameterize() 
-      
-      if 'delete_avatar' in params and params['delete_avatar'] == 'true':
-        self.delete(account)
-      else:
-        self.update(params, account)
-    
-      self.redirect('/#/settings')
+        if 'delete_avatar' in params and params['delete_avatar'] == 'true':
+            self.delete(account)
+        else:
+            self.update(params, account)
+        
+        self.redirect('/#/settings')
     
     ################################################################################
     # DELETE
     def delete(self, account):
-      user = account.get_user()
-      user.avatar = None
-      user.put()
+        user = account.get_user()
+        user.avatar = None
+        user.put()
       
     ################################################################################
     # UPDATE
     def update(self, params, account):
-      if 'avatar' in params and params['avatar']:
-        if len(params['avatar']) > 50 * 2**10:
-          return
+        session = Session()
+        if 'avatar' in params and params['avatar']:
+            if len(params['avatar']) > 50 * 2**10:
+                session['notification_message'] = ['Sorry! That file is too big. Please choose one under 50kb.']
+                return
           
         content_type = imghdr.what(None, params['avatar'])
         if not content_type:
-          return
+            session['notification_message'] = ['Sorry! We cannot read that type of file.']
+            return
     
         user = account.get_user()
         user.avatar_type = 'image/' + content_type

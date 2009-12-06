@@ -10,24 +10,24 @@ function calcTime(city, offset) {
     utc = d.getTime() + (d.getTimezoneOffset() * 60000);
     // create new Date object for different city
     // using supplied offset
-    nd = new Date(utc + (3600000*offset));
+    return utc + 3600000*offset;
+	//nd = new Date(utc + (3600000*offset));
     // return time as a string
-    return nd;
+    //return nd;
 }
 
-
-function get_current_datetime(){
-    var currentTime = calcTime('seattle', -8);
-	
-    var month = currentTime.getMonth() + 1;
-    var day = currentTime.getDate();
-    var year = currentTime.getFullYear();
-
-    if (day < 10){
-       day = "0" + day;
-    }
+function get_current_date(){
+    return calcTime('seattle', -8);
     
-    var hours = currentTime.getHours();
+    
+//    var month = currentTime.getMonth() + 1;
+//   var day = currentTime.getDate();
+//    var year = currentTime.getFullYear();
+
+//    if (day < 10){
+//       day = "0" + day;
+//    }
+/*    var hours = currentTime.getHours();
     var minutes = currentTime.getMinutes();
     if (minutes < 10){
        minutes = "0" + minutes;
@@ -41,7 +41,7 @@ function get_current_datetime(){
     else 
         var t = 'AM';
     
-    return month + "/" + day + "/" + year + t+ hours + ':' + minutes + ' ' + t;
-    
-    
+    return hours + ': + minutes + ' ' + t; */
+	//	return month + "/" + day + "/" + year;  	
 }
+

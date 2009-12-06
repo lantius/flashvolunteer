@@ -12,7 +12,7 @@ from utils.html_sanitize import sanitize_html
 # Event
 class Event(db.Model):
     name = db.StringProperty()
-  
+    
     neighborhood = db.ReferenceProperty(Neighborhood,
                                       collection_name='events')
   

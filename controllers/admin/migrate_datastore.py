@@ -125,10 +125,13 @@ class MigrateDatastore(AbstractHandler):
                     i.put()
                 
         for e in Event.all():
-            if e.inpast():
-                e.in_past = True
-                e.put()
-            
+            try:
+                if e.in_past or e.inpast():
+                    e.in_past = True
+                    e.put()
+            except:
+                print e.key().id(), e.name
+                
         for eic in EventInterestCategory.all():
             if eic.event_is_upcoming != e.in_past:
                 eic.event_is_upcoming = e.in_past
@@ -136,18 +139,20 @@ class MigrateDatastore(AbstractHandler):
 
         from models.eventvolunteer import EventVolunteer
         for ev in EventVolunteer.all():
-            ev.event_is_upcoming = not ev.event.inpast()
-            ev.event_is_hidden = ev.event.hidden
-            ev.event_date = ev.event.date
-            ev.application = ev.event.application
-
-            if ev.volunteer and not ev.account:
-                ev.account = ev.volunteer.account
-            elif ev.account and not ev.volunteer:
-                ev.volunteer = ev.account.get_user()
-            ev.put()
-            
-        return
+            try:
+                ev.event_is_upcoming = not ev.event.inpast()
+                ev.event_is_hidden = ev.event.hidden
+                ev.event_date = ev.event.date
+                ev.application = ev.event.application
+    
+                if ev.volunteer and not ev.account:
+                    ev.account = ev.volunteer.account
+                elif ev.account and not ev.volunteer:
+                    ev.volunteer = ev.account.get_user()
+                ev.put()
+            except:
+                logging.info('could not update eventv: '+ev.event.name)
+        return 'successful'
     
 ##########################################################################
 ## Various migration methods that may or may not be useful in the future.

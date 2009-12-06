@@ -64,6 +64,8 @@ SCRIPTS = [
     os.path.join(stylesheets, 'javascript', 'misc_ajax.js'),
     os.path.join(stylesheets, 'javascript', 'markItUp', 'jquery.markitup.js'),
     os.path.join(stylesheets, 'javascript', 'markItUp', 'html_set.js'),
+    os.path.join(stylesheets, 'javascript', 'jquery.tooltip.min.js'),
+    os.path.join(stylesheets, 'javascript', 'jquery.timepicker.js'),
 
 #    os.path.join(stylesheets, 'jquery.ezjax.js'),
     
@@ -76,6 +78,7 @@ SCRIPTS_OUT = os.path.join(stylesheets, 'javascript', 'fv.min.js')
 STYLESHEETS = [
     os.path.join(stylesheets, 'css', 'reset-min.css'),
     os.path.join(stylesheets, 'jquery', 'css', 'flashvolunteer', 'jquery-ui-1.7.2.custom.css'),
+    os.path.join(stylesheets, 'css', 'jquery.tooltip.css'),
     os.path.join(stylesheets, 'javascript', 'markItUp', 'style.css'),
     os.path.join(stylesheets, 'javascript', 'markItUp', 'html.css'),
     os.path.join(stylesheets, 'css', 'main.css'),
