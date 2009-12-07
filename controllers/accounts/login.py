@@ -82,7 +82,6 @@ class Login(AbstractHandler):
         session['new_login'] = True
       
     def login(self, errors = None, email = None):
-        logging.info('handling get')
         dev_server = is_debugging() 
         
         template_values = { 
@@ -102,7 +101,7 @@ class Login(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'accounts', 'login.html')
         self.response.out.write(template.render(path, template_values))
-    
+            
     def post(self):
         if self.request.get('token', None):
             self.rpx_auth()

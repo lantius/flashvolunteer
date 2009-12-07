@@ -65,72 +65,97 @@
   });
 </script>
 
-<div id="lefthalf">
-	<div id="createvolunteer" class="softmodule" >
-		<div class="moduletitle">
-			<h3>Welcome to Flash Volunteer!</h3>
-		</div>
-		<form class="validate_form" action="/new" method="post">
-		  <div class="form_error">
-              Errors found! Please check the red-bordered fields. 
-          </div>
-		  <input type="hidden" name="session_id" value="{{ session_id }}" />
-		      <fieldset>
-				  <ul>			
-				  
-                    <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"/></li>						
-					<li><label for="email">Email (required):</label><input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"/></li>
-					
-					{% if fv_account %}
-                        <li>
-                          <label for="password">Password</label>
-                          <input class="password required" id="password" name="password" tabindex="3" type="password" />
-                
-                        </li>
-                        <li>
-                          <label for="password">Confirm Password</label>
-                          <input class="password required" id="passwordcheck" name="passwordcheck" tabindex="4" type="password" />
-                        </li>					
-					{% endif %}
-					</ul>
-				    </fieldset>
-					
+    <div style="margin-top: 25px;"></div>
+        
+    <div id="middle100">
+        <div style="padding: 25px;background-color:#C0E7B3;font-size:125%">
+            Returning user? If you already have a Flash Volunteer account, please <a href="/login" class="fv">login here.</a></div>
+        <div style="padding: 25px;background-color:#E6F4F4;font-size:125%; ">
+            New to Flash Volunteer? Choose either of the two options below to create an account. Make sure to write down your choice!
+        </div>      
+    </div>
+
+    <div class="cl"></div>
+    <div style="height:15px"></div>
+    <div id="middle100">
+        <ol >
+            <li class="fv-login-block fl" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:39%;height:100%">
+                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Create a Flash Volunteer account</h1>
+                  
+                <form class="validate_form" action="/new" method="post">
+                  <div class="form_error">
+                      Errors found! Please check the red-bordered fields. 
+                  </div>
+                  <input type="hidden" name="session_id" value="{{ session_id }}" />
+                      <fieldset>
+                          <ul>          
+                          
+                            <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"/></li>                       
+                            <li><label for="email">Email (required):</label><input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"/></li>
+                            
+                            {% if fv_account %}
+                                <li>
+                                  <label for="password">Password</label>
+                                  <input class="password required" id="password" name="password" tabindex="3" type="password" />
+                        
+                                </li>
+                                <li>
+                                  <label for="password">Confirm Password</label>
+                                  <input class="password required" id="passwordcheck" name="passwordcheck" tabindex="4" type="password" />
+                                </li>                   
+                            {% endif %}
+                            </ul>
+                            </fieldset>
+                            
+                            <fieldset>
+                            <ul><li><div class="label">I live nearest to:</div> 
+                                <select class="required" name="home_neighborhood">
+                                    <option value="">Neighborhood...</option>
+                                    {% for neighborhood in home_neighborhoods %}
+                                    <option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected="selected"{% endif %}>{{neighborhood.name}}</option>
+                                    {% endfor %}
+                                </select></li>                  
+                            <li><div class="label">I work nearest to:</div> 
+                                <select class="required" name="work_neighborhood">
+                                    <option value="">Neighborhood...</option>
+                                    {% for neighborhood in work_neighborhoods %}
+                                    <option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
+                                    {% endfor %}
+                                </select>                      
+                                </li>
+                            </ul>
+                            </fieldset>
                     <fieldset>
-			        <ul><li><div class="label">I live nearest to:</div> 
-						<select class="required" name="home_neighborhood">
-						    <option value="">Neighborhood...</option>
-						    {% for neighborhood in home_neighborhoods %}
-						    <option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected="selected"{% endif %}>{{neighborhood.name}}</option>
-						    {% endfor %}
-						</select></li>			        
-					<li><div class="label">I work nearest to:</div> 
-						<select class="required" name="work_neighborhood">
-						    <option value="">Neighborhood...</option>
-						    {% for neighborhood in work_neighborhoods %}
-						    <option value="{{neighborhood.key.id}}"{% if neighborhood.selected %} selected{% endif %}>{{neighborhood.name}}</option>
-						    {% endfor %}
-						</select>					   
-						</li>
-                    </ul>
-					</fieldset>
-            <fieldset>
-                <ul>	
-					<li><input id='tosagree' type="checkbox" name="tosagree" class="required" value="1" /> I accept the <a class="fv" target="_blank" href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
-				</ul>
-			</fieldset>
-			<ul><li><input class="submit" type="submit" value="Create my account" id="s_create_account"/></li></ul>
-		</form>
-	</div>
-</div>
-<div id="righthalf">
-	<div class="hardmodule" id="createinfo">
-	    <div class="moduletitle">
-	        <h3>Account Creation Information</h3>
-	    </div>
-	    <ul>
-	        <li>Make sure to write down your username and password for next time!</li>
-            <li>Please only create one Flash Volunteer account.</li>
-	    </ul>
-	</div>
-</div>
+                        <ul>    
+                            <li><input id='tosagree' type="checkbox" name="tosagree" class="required" value="1" /> I accept the <a class="fv" target="_blank" href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
+                        </ul>
+                    </fieldset>
+                    <ul><li><input class="submit" type="submit" value="Create my account" id="s_create_account"/></li></ul>
+                </form>
+        
+        
+            </li>  
+            <li class="fl" style="padding: 95px 22px;"><span style="width:100%;font-size:125%">OR</span></li>
+            <li class="fv-login-block fr" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:39%;height:100%">
+                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Sign in through a third party</h1>
+
+                <div class="emph" style="font-size:80%; font-color:#777777">When you login through a third party provider, you will first be taken to their site. After logging in there, you will be redirected back to Flash Volunteer.</div>
+        
+                {% if not dev_server %}
+                    <iframe src="https://flash-volunteer.rpxnow.com/openid/embed?token_url={{token_url}}" scrolling="no" frameBorder="no" style="width:100%;height:240px;">
+                        You do not have JavaScript enabled in your browser. Please enable JavaScript, or download a web browser that supports it.                   
+                    </iframe>
+                {% else %}
+                        <a class="fv" class="button" href="{{login_url}}">
+                            <span class="buttonleft"> </span>
+                            <span class="buttoncenter" id="l_login">Enter dev site</span>
+                            <span class="buttonright"> </span>
+                        </a>                        
+                {% endif %}
+            </li>
+			<div class="cl"></div>
+       </ol>
+	   <div class="cl"></div>
+    </div>
+
 {% endblock content %}

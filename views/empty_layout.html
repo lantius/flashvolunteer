@@ -15,11 +15,28 @@
             </script>
         {% endif %}
 
+        {% if not account %}
+        <script>
+        	/* This is for detecting a session timeout and refreshing 
+        	 * all the content. 
+        	 */
+            $(document).ready(function(){
+              if ($('#l_logout').length > 0){
+                console.log('trying to reload');
+				location.reload(true); 
+				
+              }             				
+			});
+		</script>
+        {% endif %}
+
 	    <script>
-	        $(document).ready(function(){
+	        $(document).ready(function(){	
 	          set_page_loader('#content');
 	        });
 	    </script>
+		
+		
 		
         {% block content %}
         {% endblock content %}

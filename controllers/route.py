@@ -99,7 +99,6 @@ def real_main():
     application = webapp.WSGIApplication(
           [('/', MainPage),
            ('/rpx_auth', Login),
-           ('/create', Login),
            ('/login', Login),
            ('/dev_login', Login),
            ('/logout', Login),

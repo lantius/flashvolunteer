@@ -15,10 +15,11 @@ import os, logging, hashlib
 import urllib
 
 class CreateAccount(AbstractHandler):
-    
+
+
     def get(self, account = None, volunteer = None):
         session = Session()
-
+        dev_server = is_debugging() 
         login_info = session.get('login_info', None)
         
         if account is None:
@@ -42,6 +43,7 @@ class CreateAccount(AbstractHandler):
         
             
         template_values = {
+            'dev_server': dev_server,
             'volunteer': volunteer,
             'account': account,
             'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
@@ -49,6 +51,13 @@ class CreateAccount(AbstractHandler):
             'fv_account': login_info is None,
           }
         self._add_base_template_values(vals = template_values)
+
+        if dev_server:
+            from google.appengine.api import users
+            template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
+        else:
+            template_values['token_url'] = self.request.host_url + '/login'
+
         
         path = os.path.join(os.path.dirname(__file__),'..', '..', 'views', 'accounts', 'new_account.html')
         self.response.out.write(template.render(path, template_values))    

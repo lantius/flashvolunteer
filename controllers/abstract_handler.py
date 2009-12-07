@@ -6,8 +6,9 @@ from google.appengine.api import users
 from controllers._utils import is_debugging, get_domain, get_application
 
 from components.sessions import Session
+from components.time_zones import now
 
-
+from datetime import timedelta
 import urllib, logging
 
 ################################################################################
@@ -34,7 +35,7 @@ class AbstractHandler(webapp.RequestHandler):
             'account': account,
             'to_extend': to_extend
         })
-        
+
         if new_login:
             del session['new_login']
         if redirected:
@@ -47,6 +48,7 @@ class AbstractHandler(webapp.RequestHandler):
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])
                 
             session['notification_message'] = []
+
             
     def auth(self, require_login = False, redirect_to = '/#/login', require_admin = False):
         s = Session()
@@ -71,6 +73,7 @@ class AbstractHandler(webapp.RequestHandler):
         if require_login:
             if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id')):
                 self.redirect('/#/timeout')
+                session['notification_message'] = ['Your session has timed out. Please log back in when you are ready.']
                 raise TimeoutError("Session has timed out.")
                 #return (None)       # shouldn't get here except in tests    
             elif require_admin and not users.is_current_user_admin():
@@ -81,7 +84,6 @@ class AbstractHandler(webapp.RequestHandler):
             return None
         
         return auth.account
-        #return session.get('user_object')
 
 
     def send_message(self, to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
