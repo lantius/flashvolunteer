@@ -2,18 +2,31 @@
         
 	    <!--page title--><div id="pagespectitle"></div><!--end pagespectitle-->
 
-        {% if notification_message %} 
-            <script type="text/javascript">
+        
+        <script type="text/javascript">
 
-                $(document).ready(function() {
-                    $('#container').append('<div id="dialog" title="Notifications"><p>{{ notification_message }}</p></div>');
-                    $.ui.dialog.defaults.bgiframe = true;
-                    $(function() {
-                        $("#dialog").dialog();
-                    });
-                });
-            </script>
-        {% endif %}
+            $(document).ready(function() {
+				{% if notification_message %}
+	                $('#container').append('<div id="dialog" title="Notifications"><p>{{ notification_message }}</p></div>');
+	                $.ui.dialog.defaults.bgiframe = true;
+	                $(function() {
+	                    $("#dialog").dialog({
+	                        buttons: { "Ok": function() { $(this).dialog("close"); } },
+	                        modal: true,
+	                        draggable: false,
+	                        resizable: false,
+	                    });
+	                });
+                {% endif %}		
+						
+				{% if header_message %} 
+					$('#message_banner').html('<p>{{header_message}}</p>');
+					$('#message_banner').show();
+                {% else %}
+				   $('#message_banner').hide();
+				{% endif %}
+            });
+        </script>
 
         {% if not account %}
         <script>
@@ -22,9 +35,7 @@
         	 */
             $(document).ready(function(){
               if ($('#l_logout').length > 0){
-                console.log('trying to reload');
 				location.reload(true); 
-				
               }             				
 			});
 		</script>
@@ -33,6 +44,7 @@
 	    <script>
 	        $(document).ready(function(){	
 	          set_page_loader('#content');
+			  set_page_loader('#message_banner');
 	        });
 	    </script>
 		

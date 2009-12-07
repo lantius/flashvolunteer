@@ -36,10 +36,11 @@ class VolunteerForEvent(AbstractHandler):
                     (to, subject, body) = self.get_message_text(event = event, 
                                                                   account = account, 
                                                                   sign_up = False)
-                    self.send_message( to = to, 
-                                subject = subject, 
-                                body = body, 
-                                type = MessageType.all().filter('name =', 'event_coord').get())
+                    if not event.inpast():
+                        self.send_message( to = to, 
+                                    subject = subject, 
+                                    body = body, 
+                                    type = MessageType.all().filter('name =', 'event_coord').get())
             else:
                 if not eventvolunteer:
                     eventvolunteer = EventVolunteer(
@@ -51,20 +52,20 @@ class VolunteerForEvent(AbstractHandler):
                                         event_date = event.date,
                                         application = event.application)
                     eventvolunteer.put()
-                    (to, subject, body) = self.get_message_text(event = event, 
-                                                                  account = account,
-                                                                  sign_up = True)
-        
-                    self.send_message( to = to, 
-                            subject = subject, 
-                            body = body, 
-                            type = MessageType.all().filter('name =', 'event_coord').get())
               
                     session = Session()
                     if event.in_past:
                         session['notification_message'] = ['Thanks for attending!']
                     else:
                         session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
+                        (to, subject, body) = self.get_message_text(event = event, 
+                                                                      account = account,
+                                                                      sign_up = True)
+                        
+                        self.send_message( to = to, 
+                                subject = subject, 
+                                body = body, 
+                                type = MessageType.all().filter('name =', 'event_coord').get())
                     
         self.redirect('/#/events/' + url_data)
         return

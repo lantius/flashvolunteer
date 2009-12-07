@@ -43,7 +43,12 @@ class AbstractHandler(webapp.RequestHandler):
                 
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
-        
+            from models.eventvolunteer import EventVolunteer
+            user = account.get_user()
+            ev = user.eventvolunteers.filter('event_is_upcoming =', False).filter('attended =', None).filter('event_is_hidden =', False).get()
+            if ev:
+                session['header_message'] = ['Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(account.get_first_name(), ev.event.url(), ev.event.name)]
+            
         if 'notification_message' in session and len(session['notification_message']) > 0:
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])
                 

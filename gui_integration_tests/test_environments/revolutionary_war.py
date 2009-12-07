@@ -507,11 +507,14 @@ events = {
     'Boston Tea Party': {
         'neighborhood': 'Massachusetts',
         'date_created': '',
-        'date': '12/16/1973',
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'date': '12/16/1973',
+        'time': '08:00',
+        'enddate': '12/17/1973',
+        'endtime': '08:00'
+
         },
 
     'Boston Tea Party Reunion': {
@@ -521,7 +524,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/2073',
+        'endtime': '08:00'
         },
 
     'Boston Tea Party Reunion AFTERPARTY!!!': {
@@ -531,7 +536,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/2073',
+        'endtime': '08:00'
         },
     
     'Gaspee Affair': {
@@ -541,7 +548,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/1972',
+        'endtime': '08:00'
         },
     'Battle of Lexington and Concord': {
         'neighborhood': 'Massachusetts',
@@ -550,7 +559,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/1976',
+        'endtime': '08:00'
         }, 
         
     'Battle of Lexington and Concord Reunion': {
@@ -560,7 +571,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/2025',
+        'endtime': '08:00'
         }, 
         
     'Battle of Bunker Hill': {
@@ -570,7 +583,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/1976',
+        'endtime': '08:00'
         },
         
     'Battle of Bunker Hill Reunion': {
@@ -580,7 +595,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/1975',
+        'endtime': '08:00'
         },
         
     'Sign the Declaration of Independence': {
@@ -590,7 +607,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/1976',
+        'endtime': '08:00'
         },
 
     'Four-hundred year Signing reunion': {
@@ -600,7 +619,9 @@ events = {
         'description': '',
         'special_instructions': '',
         'address': '',
-        'time': '08:00'
+        'time': '08:00',
+        'enddate': '12/17/2026',
+        'endtime': '08:00'
         },
         
                 
@@ -612,7 +633,9 @@ events = {
         'special_instructions': '',
         'address': 'Penobscot Bay, Maine',
         'time': '08:00',
-        'duration': '456'
+        'duration': '456',
+        'enddate': '12/17/1979',
+        'endtime': '08:00'
         },
 
     'Penobscot Expedition Reunion': {
@@ -623,7 +646,9 @@ events = {
         'special_instructions': '',
         'address': 'Penobscot Bay, Maine',
         'time': '08:00',
-        'duration': '456'
+        'duration': '456',
+        'enddate': '12/17/2029',
+        'endtime': '08:00'
         },
 }
 

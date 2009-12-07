@@ -1,0 +1,50 @@
+
+<script>
+    function report_hours(){
+        $.post("{{event.url}}/verify", {session_id: "{{ session_id }}", 
+		                                hours_{{eventvolunteer.key.id}}: $('#i_verify_{{eventvolunteer.key.id}}_text').val(),
+										event_volunteer_{{eventvolunteer.key.id}}: $('#f_verify input[name=event_volunteer_{{eventvolunteer.key.id}}]:checked').val(),
+										}, 
+        function(data){
+            $('#columns').load("{{event.url}}");
+        });
+    }
+</script>
+
+
+<div style="border: 3px solid #B2DCE0; background-color:#E6F4F4; padding: 5px;" id="report_hours">
+	<h3>{% ifequal eventvolunteer.hours None %}Please report your volunteer hours to get credit!{%else%}According to our records, you volunteered {{eventvolunteer.hours}} hours. Please revise if incorrect.{%endifequal%}</h3>
+
+	<form id='f_verify' action="{{event.url}}/verify" onsubmit="report_hours();return false;">
+        <ul style="margin-left:15px">
+			<li><input type='radio' name='event_volunteer_{{eventvolunteer.key.id}}' value='True' id='i_verify_{{eventvolunteer.key.id}}_true' 
+                onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'
+                {% if eventvolunteer.attended %} 
+                 checked 
+                {% endif %}
+            />
+            <label for='event_volunteer_{{eventvolunteer.key.id}}'>Attended for </label>
+            
+            <input type="text" name="hours_{{eventvolunteer.key.id}}" size="3" maxlength="3" id='i_verify_{{eventvolunteer.key.id}}_text'
+                {% if not eventvolunteer.attended %} 
+                    disabled="true"
+                {% endif %}
+                {% ifequal eventvolunteer.hours None %}
+                    value=""
+                {% else %}  
+                    value="{{eventvolunteer.hours}}"
+                {% endifequal %}
+            /> hours </li>
+            
+            <li><input type='radio' name='event_volunteer_{{eventvolunteer.key.id}}' value='False' id='i_verify_{{eventvolunteer.key.id}}_false'
+                onclick='var text_id = this.id.replace(/false/, "text"); document.getElementById(text_id).disabled = true;'
+                {% if not eventvolunteer.attended %} 
+                 checked 
+                {% endif %}
+            />
+            <label for='event_volunteer{{eventvolunteer.key.id}}'>Did not Attend</label>
+            </li>
+            <li><button onclick=report_hours() class="submit" id="s_verify">Report</button></li>
+		</ul>
+	</form> 
+</div>

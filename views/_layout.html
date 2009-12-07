@@ -128,31 +128,34 @@
 			</li>
 		</ul>
 	</div><!--end navtabs-->
-	
+
+    <style>
+    	#message_banner{
+    		width: 100%;
+			background-color: #B2DCE0;
+			font-weight: bold;
+			font-size: 100%;
+			margin-top: 15px;
+			color: #111;
+			display:none;
+    	}
+		#message_banner p {
+			margin-left:auto;
+			margin-right:auto;
+			width:840px;
+			padding: 10px;
+		}
+    </style>
+    <div id="message_banner">
+        <ul>
+            <li></li>
+        </ul>
+    </div><!--end navtabs-->
+		
 
 <div id="content"> 
 
 	<div id="bottom">
-
-        {% if notification_message %} 
-            <script type="text/javascript">
-
-                $(document).ready(function() {
-                    $('#container').append('<div id="dialog" title="Notifications"><p>{{ notification_message }}</p></div>');
-                    $.ui.dialog.defaults.bgiframe = true;
-                    $(function() {
-                        $("#dialog").dialog({
-							buttons: { "Ok": function() { $(this).dialog("close"); } },
-							modal: true,
-							draggable: false,
-							resizable: false,
-							
-							 
-						});
-                    });
-                });
-            </script>
-		{% endif %}
 
 		<div id="columns">
 

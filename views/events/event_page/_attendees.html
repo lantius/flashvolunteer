@@ -7,7 +7,7 @@
 	    
 			  {% if eventvolunteer and not eventvolunteer.isowner %}
 			      {% if event.inpast %}
-			        You attended! <a  class="fv" href="{{event.url}}/verify">Get a receipt.</a>
+				      {% include "../events/event_page/report_hours.html" %}
 			      {% else %}
 			        {% ifequal event.volunteer_count 1 %}
 			          You are signed up for this event!

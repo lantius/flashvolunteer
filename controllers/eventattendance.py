@@ -80,21 +80,22 @@ class VerifyEventAttendance(AbstractHandler):
             return
         
         if account: user = account.get_user()
-        owner = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
-        
-        
-        if not owner:
-            return
-          
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
+        owner = eventvolunteer.isowner
+
+        i = len('event_volunteer_')  
         for key in params.keys():
             if key.startswith('event_volunteer_'):
-                i = len('event_volunteer_')
                 event_volunteer_id = key[i:]
-                attended = params[key]
-                hours = None
-                if 'hours_' + event_volunteer_id in params.keys():
-                    hours = params['hours_' + event_volunteer_id]
-                self.update_volunteer_attendance(event_volunteer_id, attended, hours)
+                if owner or int(event_volunteer_id) == eventvolunteer.key().id():
+                    attended = params[key]
+                    if params['event_volunteer_%s'%event_volunteer_id] == 'True':
+                        hours = params['hours_' + event_volunteer_id]
+                        self.update_volunteer_attendance(event_volunteer_id, attended, hours)
+                    elif params['event_volunteer_%s'%event_volunteer_id] == 'False':
+                        ev = EventVolunteer.get_by_id(int(event_volunteer_id))
+                        if not ev.isowner:
+                            ev.delete()
     
     ################################################################################
     # UPDATE VOLUNTEER ATTENDANCE
@@ -112,8 +113,8 @@ class VerifyEventAttendance(AbstractHandler):
           
         if hours:
             try:
-                eventvolunteer.hours = int(hours)
-            except exceptions.ValueError:
-                eventvolunteer.hours = None
-          
-        eventvolunteer.put()
+                eventvolunteer.hours = int(float(hours))
+                eventvolunteer.put()
+            except:
+                eventvolunteer.hours = None          
+        

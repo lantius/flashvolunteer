@@ -114,6 +114,7 @@ def create_environment(name, session_id):
         
     for k,v in events.items():
         date = datetime.datetime.strptime(v['time'] + " " + v['date'], "%H:%M %m/%d/%Y")
+        enddate = datetime.datetime.strptime(v['endtime'] + " " + v['enddate'], "%H:%M %m/%d/%Y")
         try:
             date_created = datetime.datetime.strptime(v['time'] + " " + v['date_created'], "%H:%M %m/%d/%Y").date()
         except:
@@ -128,6 +129,7 @@ def create_environment(name, session_id):
           neighborhood = neighborhoods[v['neighborhood']],
           date_created = date_created,
           date = date,
+          enddate = enddate,
           duration_minutes = duration,
           description = v['description'],
           special_instructions = v['special_instructions'],
