@@ -6,8 +6,8 @@
         <script type="text/javascript">
 
             $(document).ready(function() {
-				{% if notification_message %}
-	                $('#container').append('<div id="dialog" title="Notifications"><p>{{ notification_message }}</p></div>');
+            	{% if notification_message %}
+	                $('#container').append('<div id="dialog" title="Notifications"><p>{{notification_message}}</p></div>');
 	                $.ui.dialog.defaults.bgiframe = true;
 	                $(function() {
 	                    $("#dialog").dialog({
@@ -17,8 +17,8 @@
 	                        resizable: false,
 	                    });
 	                });
-                {% endif %}		
-						
+				{% endif %}
+				
 				{% if header_message %} 
 					$('#message_banner').html('<p>{{header_message}}</p>');
 					$('#message_banner').show();
