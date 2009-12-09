@@ -92,7 +92,12 @@
                     });
                 });
             {% endif %}
-           
+            {% if header_message %} 
+                $('#message_banner').html('<p>{{header_message}}</p>');
+                $('#message_banner').show();
+            {% else %}
+               $('#message_banner').hide();
+            {% endif %}           
         });
     </script>
 	
@@ -165,12 +170,7 @@
 			padding: 10px;
 		}
     </style>
-    <div id="message_banner">
-        <ul>
-            <li></li>
-        </ul>
-    </div><!--end navtabs-->
-		
+    <div id="message_banner"><!--empty--></div>
 
 <div id="content"> 
 

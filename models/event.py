@@ -287,7 +287,7 @@ class Event(db.Model):
         return not self.error
     
     def inpast(self):
-        return self.enddate < now()
+        return self.in_past or self.enddate < now()
     
     #########################################
     ## DEPRECATED

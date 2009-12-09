@@ -10,9 +10,9 @@ function load_header(header){
 }
 
 function set_active(active){
-	$("#navtabs li a").each( 
+	$("#navtabs li").each( 
 	   function(){
-	   	  if ($(this).attr('id') == 'l_'+active){
+	   	  if ($(this).attr('id') == active+'link'){
 		  	$(this).addClass('current');
 		  }
           else

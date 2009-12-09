@@ -96,8 +96,10 @@ class Account(db.Model):
         if self.get_name().find('@') > -1:
             return '@'.join(self.get_name().split('@')[:-1])
         else:
-            return ' '.join(self.get_name().split(' ')[:-1])
-    
+            if self.get_name().find(' ') > -1:
+                return ' '.join(self.get_name().split(' ')[:-1])
+            else: return self.get_name()
+            
     def get_last_name(self):
         if self.get_name().find('@') > -1:
             return '@' + self.get_name().split('@')[-1]

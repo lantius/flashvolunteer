@@ -75,13 +75,18 @@ Contains navigation list items for header and footer
     width: 840px;
     margin-left: auto;
     margin-right: auto;
-	padding-top: 8px;
+	padding: 8px 10px 7px 10px; 
 }
 
 #navtabs li{
     display: inline;
+/*
     padding: 0;
 	margin-right:5px;
+*/
+	padding: 8px 10px 7px 10px; 
+	cursor: pointer;    
+
 }
 
 #navtabs li a{
@@ -89,7 +94,6 @@ Contains navigation list items for header and footer
     text-decoration: none;
     font-size: 12px;
     font-weight: bold;
-    padding: 8px 10px 7px 10px;     
 }
 
 #footer ul {
