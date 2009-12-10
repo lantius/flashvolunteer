@@ -13,6 +13,12 @@ from controllers.abstract_handler import AbstractHandler
 class MainPage(AbstractHandler):
   LIMIT = 3 
   def get(self):
+      if self.request.path.find('incentives') > -1:
+          self.incentives()
+      else:
+          self.homepage()
+      
+  def homepage(self):
     try:
       account = self.auth()
     except:
@@ -29,4 +35,20 @@ class MainPage(AbstractHandler):
     self._add_base_template_values(vals = template_values)
     
     path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'index.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def incentives(self):
+    try:
+      account = self.auth()
+    except:
+      return    
+    if account: user = account.get_user()
+    else: user = None
+      
+    template_values = {
+        'volunteer' : user,
+      }
+    self._add_base_template_values(vals = template_values)
+    
+    path = os.path.join(os.path.dirname(__file__), '..', 'views', 'home', 'incentives.html')
     self.response.out.write(template.render(path, template_values))

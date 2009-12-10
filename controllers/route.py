@@ -98,6 +98,7 @@ def real_main():
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(
           [('/', MainPage),
+           ('/incentives', MainPage),
            ('/rpx_auth', Login),
            ('/login', Login),
            ('/dev_login', Login),

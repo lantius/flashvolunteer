@@ -3,7 +3,7 @@
     function report_hours(){
         $.post("{{event.url}}/verify", {session_id: "{{ session_id }}", 
 		                                hours_{{eventvolunteer.key.id}}: $('#i_verify_{{eventvolunteer.key.id}}_text').val(),
-										event_volunteer_{{eventvolunteer.key.id}}: $('#f_verify input[name=event_volunteer_{{eventvolunteer.key.id}}]:checked').val(),
+										event_volunteer_{{eventvolunteer.key.id}}: $('#f_verify input[name=event_volunteer_{{eventvolunteer.key.id}}]:checked').val()
 										}, 
         function(data){
             $('#columns').load("{{event.url}}");
