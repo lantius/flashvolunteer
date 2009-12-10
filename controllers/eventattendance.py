@@ -8,6 +8,7 @@ from models.event import Event
 from models.eventvolunteer import EventVolunteer
 
 from components.time_zones import now
+from components.sessions import Session
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -83,20 +84,41 @@ class VerifyEventAttendance(AbstractHandler):
         eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
         owner = eventvolunteer.isowner
 
-        i = len('event_volunteer_')  
+        i = len('event_volunteer_')
+        deleted = 0
+        hours_logged = 0
+        verified_for = len(params.keys())
+        session = Session()
+        
         for key in params.keys():
             if key.startswith('event_volunteer_'):
                 event_volunteer_id = key[i:]
+                eventvolunteer = EventVolunteer.get_by_id(int(event_volunteer_id))
                 if owner or int(event_volunteer_id) == eventvolunteer.key().id():
                     attended = params[key]
                     if params['event_volunteer_%s'%event_volunteer_id] == 'True':
                         hours = params['hours_' + event_volunteer_id]
                         self.update_volunteer_attendance(event_volunteer_id, attended, hours)
+                        if verified_for == 1 and int(event_volunteer_id) == user.key().id():
+                            session['notification_message'] = ['Thanks for volunteering for %i hours!']
+                        else: 
+                            hours_logged += 1
                     elif params['event_volunteer_%s'%event_volunteer_id] == 'False':
-                        ev = EventVolunteer.get_by_id(int(event_volunteer_id))
-                        if not ev.isowner:
-                            ev.delete()
-    
+                        if not eventvolunteer.isowner:
+                            eventvolunteer.delete()
+                            if verified_for == 1 and int(event_volunteer_id) == user.key().id():
+                                session['notification_message'] = ['Thanks for removing yourself from the attendees!']
+                            else:
+                                deleted += 1
+        if deleted + hours_logged > 0: 
+            if deleted > 0 and hours_logged > 0:
+                session['notification_message'] = ['You have logged hours for %i volunteers, and removed %i people from the attendees list.'%(hours_logged, deleted)]
+            elif deleted > 0: 
+                session['notification_message'] = ['You have removed %i people from the attendees list.'%(deleted)]
+            else:
+                session['notification_message'] = ['You have logged hours for %i volunteers.'%(hours_logged)]
+
+                
     ################################################################################
     # UPDATE VOLUNTEER ATTENDANCE
     def update_volunteer_attendance(self, event_volunteer_id, attended, hours):

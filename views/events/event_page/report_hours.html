@@ -13,7 +13,7 @@
 
 
 <div style="border: 3px solid #B2DCE0; background-color:#E6F4F4; padding: 5px;" id="report_hours">
-	<h3>{% ifequal eventvolunteer.hours None %}Please report your volunteer hours to get credit!{%else%}According to our records, you volunteered {{eventvolunteer.hours}} hours. Please revise if incorrect.{%endifequal%}</h3>
+	<h3>{% ifequal eventvolunteer.hours None %}Please report your volunteer hours, rounded to the nearest hour, to get credit! {%else%}According to our records, you volunteered {{eventvolunteer.hours}} hours. Please revise if incorrect.{%endifequal%}</h3>
 
 	<form id='f_verify' action="{{event.url}}/verify" onsubmit="report_hours();return false;">
         <ul style="margin-left:15px">

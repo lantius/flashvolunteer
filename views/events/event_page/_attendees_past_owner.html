@@ -14,7 +14,7 @@
         <li>  
         <form action='{{event.url}}/verify' id='f_verify' method="post">
             <input type=hidden name="session_id" value="{{ session_id }}" />
-            <h3>You coordinated this event. Please verify the event attendees so that they can receive credit for their work. Thank you!</h3>
+            <h3>You coordinated this event. If you can, please report the hours that each volunteer spent (rounded to nearest hour), so that they can receive credit for their work. Thank you!</h3>
             <ul class="imagenamelinklist">
             
             {% for ev in event.eventvolunteers %}

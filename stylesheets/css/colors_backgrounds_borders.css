@@ -46,7 +46,9 @@ div#footer #copyright{
 }
 
 #navtabs li.current,
-#navtabs li:hover {
+#navtabs li:hover,
+#navtabs li a.current,
+#navtabs li a:hover {
     background-color: #000;
 }
 

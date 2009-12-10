@@ -19,5 +19,14 @@ function set_active(active){
 		      $(this).removeClass('current');
 	   }
 	)
+    $("#navtabs li a").each( 
+       function(){
+          if ($(this).attr('id') == 'l_' + active){
+            $(this).addClass('current');
+          }
+          else
+              $(this).removeClass('current');
+       }
+    )
 }
 

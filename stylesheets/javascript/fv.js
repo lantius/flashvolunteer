@@ -2161,7 +2161,7 @@ $.extend($.validator, {
     
 }(jQuery));
 function load_title(title){
-	$('title').html('FV - ' + title);
+	document.title = 'FV - ' + title;
 }
 
 function load_header(header){
@@ -2181,17 +2181,38 @@ function set_active(active){
 		      $(this).removeClass('current');
 	   }
 	)
+    $("#navtabs li a").each( 
+       function(){
+          if ($(this).attr('id') == 'l_' + active){
+            $(this).addClass('current');
+          }
+          else
+              $(this).removeClass('current');
+       }
+    )
 }
 
 
 function set_page_loader(content_selector){	
 	$(content_selector + ' a.fv').each(function(){
 		$(this).click(function(){
-			$.address.value($(this).attr('href').replace(/^#/, ''));
+			if ($(this).attr('href').search('http://') > -1){
+				var href = $(this).attr('href').substring($(this).attr('href').indexOf('/', 7));
+			}
+			else{
+				var href = $(this).attr('href');
+			}
+			$.address.value(href.replace(/^#/, ''));
 		});
 		
 		$(this).address(function(){
-			return $(this).attr('href').replace(/^#/, '');
+			if ($(this).attr('href').search('http://') > -1){
+				var href = $(this).attr('href').substring($(this).attr('href').indexOf('/', 7));
+			}
+			else{
+				var href = $(this).attr('href');
+			}
+			return href.replace(/^#/, '');
 		});
 	});
 }
