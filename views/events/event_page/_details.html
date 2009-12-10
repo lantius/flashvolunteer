@@ -10,12 +10,13 @@
 
 <div id="eventdetails" class="hardmodule">
 	
-    <ul>
-        <li>{{ event.get_startdate_long }}</li>
-        <li>{{ event.get_start_time }} - {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
-		<li>{{ event.address }} ( <a  class="fv" href={{event.neighborhood.url}}>{{ event.neighborhood.name }}</a> )</li>
-	</ul>
-
+    <div>
+    	<ul>
+	        <li>{{ event.get_startdate_long }}</li>
+	        <li>{{ event.get_start_time }} - {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
+			<li>{{ event.address }} ( <a  class="fv" href={{event.neighborhood.url}}>{{ event.neighborhood.name }}</a> )</li>
+		</ul>
+	</div>
     <div class="event_operation_block">
     	<ul>
 		{% if eventvolunteer %}
@@ -37,7 +38,7 @@
 					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name|striptags}} is inappropriate!&body={{event.name|striptags}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 				{% endif %}
             
-            <li><a onclick=volunteer("false") title="Volunteer for this event" class="volunteer_button" id="s_volunteer">{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}</a></li>
+            <li><button onclick=volunteer("false") title="Volunteer for this event" class="volunteer_button" id="s_volunteer">{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}</button></li>
 
 			{% else %}
 			    <li>You must <a  class="fv" href='/login?redirect={{event.url}}'>login</a> to signup for this event</li>

@@ -15,10 +15,10 @@
     }
     
     .stat_viz td a {
-      text-decoration:  none;
-      font-weight:      normal;
+      text-decoration: none;
+      font-weight: normal;
       background-color: inherit;
-      color:            inherit;
+      color: inherit;
       display:block;
     }
     
@@ -40,21 +40,21 @@
 <script>
 	$(document).ready(function(){
 		$('.stat_viz td').animate({
-                              opacity: .75,
-                              fontWeight: 'normal',
-                              fontSize: '125%'});
+                              opacity:.75,
+                              color:'#555',
+                              fontSize:'125%'});
 
 		$('.stat_viz td').hover(
 			     function(){$(this).animate({
-				 	          opacity: 1.0,
-							  fontWeight: 'bold',
-							  fontSize: '150%'})},
+				 	          opacity:1.0,
+							  color:'#000',
+							  fontSize:'150%'})},
 				 function(){$(this).animate({
-                              opacity: .75,
-                              fontWeight: 'normal',
-                              fontSize: '125%'})});
+                              opacity:.75,
+                              color:'#555',
+                              fontSize:'125%'})});
 							  
-		$('.stat_viz td a').tooltip({opacity: 1});
+		$('.stat_viz td a').tooltip();
 	});
 	
 	
