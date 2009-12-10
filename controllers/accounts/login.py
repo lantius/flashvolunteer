@@ -27,7 +27,7 @@ class Login(AbstractHandler):
         params = self.parameterize()
         if 'redirect' in params:
             session = Session()
-            session['login_redirect'] = '/#' + params['redirect']
+            session['login_redirect'] = params['redirect']
             
         if self.request.path.find('dev_login') > -1:    
             self.dev_login()    

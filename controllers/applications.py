@@ -43,7 +43,7 @@ class AllApplications(AbstractHandler):
     
 class ThisApplication(AbstractHandler):
   def get(self):    
-    account = self.auth(redirect_to='/#/settings')
+    account = self.auth(redirect_to='/settings')
     if account: user = account.get_user()
     else: user = None
     

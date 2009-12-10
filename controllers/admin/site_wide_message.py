@@ -36,7 +36,7 @@ class SiteWideMessage(AbstractSendMessage):
             self.redirect(session['message_redirect'])
             del session['message_redirect']
         else:
-            self.redirect('/messages#sent')
+            self.redirect('/#/messages')
 
     def _get_recipients(self, id, sender):
         recipients = []

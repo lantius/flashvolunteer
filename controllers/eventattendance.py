@@ -44,21 +44,21 @@ class VerifyEventAttendance(AbstractHandler):
         event = Event.get_by_id(int(params['id']))
         self.update(params, account)
         
-        self.redirect("/#" + event.url())
+        #self.redirect(event.url())
     
     ################################################################################
     # SHOW
     def show(self, params, account):
         event = Event.get_by_id(int(params['id']))    
         if not event:
-            self.redirect("/#" + event.url())
+            self.redirect('/#' + event.url())
             return
         
         if account: user = account.get_user()
         ev = event.eventvolunteers.filter('volunteer =', user).get()
                             
         if not ev:
-            self.redirect("/#" + event.url())
+            self.redirect('/#' + event.url())
             return
         
         template_values = {
@@ -87,7 +87,6 @@ class VerifyEventAttendance(AbstractHandler):
         i = len('event_volunteer_')
         deleted = 0
         hours_logged = 0
-        verified_for = len(params.keys())
         session = Session()
         
         for key in params.keys():
@@ -99,14 +98,14 @@ class VerifyEventAttendance(AbstractHandler):
                     if params['event_volunteer_%s'%event_volunteer_id] == 'True':
                         hours = params['hours_' + event_volunteer_id]
                         self.update_volunteer_attendance(event_volunteer_id, attended, hours)
-                        if verified_for == 1 and int(event_volunteer_id) == user.key().id():
-                            session['notification_message'] = ['Thanks for volunteering for %i hours!']
+                        if not owner:
+                            session['notification_message'] = ['Thanks for volunteering for %s hours!'%hours]
                         else: 
                             hours_logged += 1
                     elif params['event_volunteer_%s'%event_volunteer_id] == 'False':
                         if not eventvolunteer.isowner:
                             eventvolunteer.delete()
-                            if verified_for == 1 and int(event_volunteer_id) == user.key().id():
+                            if not owner:
                                 session['notification_message'] = ['Thanks for removing yourself from the attendees!']
                             else:
                                 deleted += 1

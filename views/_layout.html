@@ -94,7 +94,9 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+			console.log('checking notifications');
             {% if notification_message %}
+			     console.log('found notification');
                 $('#container').append('<div id="dialog" title="Notifications"><p>{{notification_message}}</p></div>');
                 $.ui.dialog.defaults.bgiframe = true;
                 $(function() {

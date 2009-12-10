@@ -55,7 +55,7 @@ class AbstractHandler(webapp.RequestHandler):
             session['notification_message'] = []
 
             
-    def auth(self, require_login = False, redirect_to = '/#/login', require_admin = False):
+    def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
         s = Session()
         account = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
         
@@ -66,8 +66,8 @@ class AbstractHandler(webapp.RequestHandler):
         auth = session.get('auth', None)
         if require_login and (not auth or not auth.account):
             self.redirect(redirect_to)        
-            if redirect_to == '/#/login': 
-                session['login_redirect'] = '/#' + self.request.path        
+            if redirect_to == '/login': 
+                session['login_redirect'] = self.request.path        
             raise AuthError("You must be signed in to perform this action.")
 
         if auth:
@@ -77,7 +77,7 @@ class AbstractHandler(webapp.RequestHandler):
 
         if require_login:
             if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id')):
-                self.redirect('/#/timeout')
+                self.redirect('/timeout')
                 session['notification_message'] = ['Your session has timed out. Please log back in when you are ready.']
                 raise TimeoutError("Session has timed out.")
                 #return (None)       # shouldn't get here except in tests    

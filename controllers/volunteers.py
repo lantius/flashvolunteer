@@ -45,7 +45,7 @@ class VolunteersPage(AbstractHandler):
         session = Session()
         if volunteer and volunteer.key().id() == int(volunteer_id):
             session['redirected'] = True
-            self.redirect("/profile");
+            self.redirect("/#/profile");
             return
         
         #TODO: if application instances are closed, do not allow people to view
