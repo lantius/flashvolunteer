@@ -84,7 +84,6 @@ Contains navigation list items for header and footer
     padding: 0;
 	margin-right:5px;
 */
-	padding: 8px 10px 7px 10px; 
 	cursor: pointer;    
 
 }
@@ -94,6 +93,7 @@ Contains navigation list items for header and footer
     text-decoration: none;
     font-size: 12px;
     font-weight: bold;
+	padding: 8px 10px 7px 10px; 
 }
 
 #footer ul {
@@ -367,11 +367,6 @@ img.smallavatar {
 	width: 90px;
 }
 
-
-.volunteer_summary_pic {
-    height: 80px;
-}
-
 .volunteer_summary_name img,
 .volunteer_summary_name input,
 .volunteer_summary_name form {
@@ -409,7 +404,7 @@ input#avataruploadinput {
     width: 150px;
 }
 
-a.volunteer_button {
+button.volunteer_button {
     font-weight: normal;
     text-decoration: none;
     padding: 5px 5px;
@@ -417,6 +412,7 @@ a.volunteer_button {
     cursor: pointer;
     font-size: 110%;
 }
+
 
 .event_operation_block li {
 	height: 25px;

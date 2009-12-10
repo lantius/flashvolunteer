@@ -1,5 +1,5 @@
 function load_title(title){
-	$('title').html('FV - ' + title);
+	document.title = 'FV - ' + title;
 }
 
 function load_header(header){

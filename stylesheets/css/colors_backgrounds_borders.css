@@ -100,7 +100,7 @@ div.moduletitle a{
     color: #DDD;
 }
 
-a.volunteer_button {
+button.volunteer_button {
     color: #FFFFFF;
     background-color: #4eA0A7;
     border: 1px solid #444;

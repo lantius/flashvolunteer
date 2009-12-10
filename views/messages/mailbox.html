@@ -30,10 +30,10 @@
 	<div id="mailbox-tab-sections" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 	    <ul id="nav" class="tab-links ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 	        <li id='inbox_tab' class="ui-state-default ui-corner-top">
-	            <a class="fv" onclick=set_content("/messages/inbox")>Inbox</a>   
+	            <a onclick=set_content("/messages/inbox")>Inbox</a>   
 	        </li>
 	        <li id='sent_tab' class="ui-state-default ui-corner-top">
-	            <a class="fv" onclick=set_content("/messages/sent")>Sent</a>  
+	            <a onclick=set_content("/messages/sent")>Sent</a>  
 	        </li>
 	    </ul>
 	    
@@ -44,6 +44,6 @@
 </div><!--end middle100-->
 
 <script>
-	$("#mailbox-tab-sections").tabs();
+	//$("#mailbox-tab-sections").tabs();
 </script>
 {% endblock content %}
