@@ -41,6 +41,7 @@ class VerifyEventAttendance(AbstractHandler):
         params = self.parameterize() 
         params['id'] = url_data
         
+        event = Event.get_by_id(int(params['id']))
         self.update(params, account)
         
         if not self.ajax_request():
