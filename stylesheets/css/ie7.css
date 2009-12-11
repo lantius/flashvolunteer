@@ -7,3 +7,7 @@
 	max-width: 80px;
 }
 
+#eventphotos_addalbum {
+    position: relative;
+    top: -18px;
+}
