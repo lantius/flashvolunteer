@@ -19,7 +19,7 @@ div#container{
     }
         
         div#logo-strip {
-            height: 87px;
+            height: 77px;
             width: 840px;
             display: block;
             margin-left: auto;
@@ -30,10 +30,9 @@ div#container{
                 margin-top: 13px;
             }
             div#volunteerwelcome {
-                position: relative;
                 float:right;
 				text-align: right;
-                top: 20px;
+                margin-top: 20px;
             }
 			div#volavatar {
 				float:right;

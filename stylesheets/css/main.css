@@ -720,6 +720,10 @@ li#verify_attendence #left_verify {
     height: 80px;
 }
 
+#volavatar .volunteer_summary_pic {
+    height: 60px;	
+}
+
 a.event_name {
     font-weight:bold;
 }
@@ -757,32 +761,6 @@ a.event_name {
 span#l_login {
     color: #222;
 }
-
-.buttonleft {
-    display: block;
-    float: left;
-    width: 10px;
-    height: 100%;
-    background: url(/stylesheets/buttons/green/FV_Button_Green_Left.gif) left;
-}
-
-.buttoncenter {
-    display: block;
-    float: left;
-    height: 100%;
-    width: 75%;
-    padding-top: 2px;
-    background: url(/stylesheets/buttons/green/FV_Button_Green_Center.gif) repeat-x;
-}
-
-.buttonright {
-    display: block;
-    float: left;
-    width: 10px;
-    height: 100%;
-    background: url(/stylesheets/buttons/green/FV_Button_Green_Right.gif) left;
-}
-
 
 .emph {
     font-weight: bold;

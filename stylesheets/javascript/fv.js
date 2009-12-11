@@ -8,11 +8,11 @@ function get_search_params(){
     else 
        var nid='';
     
-    var cval = $('#event_search select.interest_category_select option:selected').text()
-    if (cval && cval!='none') var cid = cval;
-    else var cid='';
+    //var cval = $('#event_search select.interest_category_select option:selected').text()
+    //if (cval && cval!='none') var cid = cval;
+    //else var cid='';
 	
-	return 'past_events='+past;//+'&neighborhood='+nid+'&interestcategory='+cid;
+	return 'past_events='+past+'&neighborhood='+nid;//+'&interestcategory='+cid;
 }
 
 function event_search_submit(bookmark){

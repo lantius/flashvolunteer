@@ -1,6 +1,53 @@
+#left66, #lefthalf, #leftthird, #middlethird, 
+#left75, #leftthirdequi,#middlethirdequi,#left25 {
+    margin-right: 5px;
+    
+}
+
+#lefthalf, #righthalf {
+	width: 375px;
+}
+
+#left75, #right75 {
+	width: 575px;
+}
+#pagespectitle h1 {
+    margin-bottom: 3px;
+}
+
+#pagespectitle {
+    margin-bottom: 3px;
+}
+
+#volavatar .volunteer_summary_pic {
+	width: 55px;
+}
+
+#volavatar {
+	width: 60px;
+}
+
+#submiteventsearch {
+	padding-bottom: 5px;	
+}
+
+.submit {
+	padding: 2px;
+	margin-bottom: 2px;
+}
+
 #footer {
 	position: relative;
 	left: 0px;
+}
+
+#dialogs {
+	z-index: 3000;
+}
+
+select {
+	position:relative;
+	z-index: -1;
 }
 
 #navtabs {
@@ -22,6 +69,9 @@
 	height: 140px;
 }
 
+div#top {
+    background-color: #333333;
+	}
 
 #columns {
 	width: 100%;
@@ -30,5 +80,11 @@
 
 img.smallavatar {
     height: 80px;
-    width: 85px;
+    width: 80px;
+}
+
+
+#volavatar img.smallavatar {
+    height: 50px;
+    width: 50px;
 }
