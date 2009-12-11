@@ -1,3 +1,15 @@
+<script>
+  $(document).ready(function(){
+    $(".validate_form").validate({
+        errorPlacement: function(error, element) {},
+        invalidHandler: function(form, validator) {},
+        submitHandler: function(form) {
+            form.submit();
+            $('#columns').load("{{event.url}}");
+        }
+    })
+  });
+</script>
 
 
 <div id="eventattendees" class="hardmodule">
@@ -12,7 +24,7 @@
         </li>
         
         <li>  
-        <form action='{{event.url}}/verify' id='f_verify' method="post">
+        <form class=".validate_form" action='{{event.url}}/verify' id='f_verify' method="post">
             <input type=hidden name="session_id" value="{{ session_id }}" />
             <h3>You coordinated this event. If you can, please report the hours that each volunteer spent (rounded to nearest hour), so that they can receive credit for their work. Thank you!</h3>
             <ul class="imagenamelinklist">

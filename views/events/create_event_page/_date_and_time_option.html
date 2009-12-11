@@ -36,18 +36,18 @@
 	
 	   
         //custom time-picker from http://haineault.com/media/jquery/ui-timepickr/page/
-		//$.getScript("/stylesheets/timepicker/jquery.timepickr.js", function(){
-		//        $('.time-pick').timepickr({
-		//            trigger: 'click',
-		//            convention: 12,
-		//			resetOnBlur: false,
-		//			rangeHour12: [12,1,2,3,4,5,6,7,8,9,10,11] });
-		//	});
+		$.getScript("/stylesheets/timepicker/jquery.timepickr.js", function(){
+		        $('.time-pick').timepickr({
+		            trigger: 'click',
+		            convention: 12,
+					resetOnBlur: false,
+					rangeHour12: [12,1,2,3,4,5,6,7,8,9,10,11] });
+			});
 
         
-		$(".time-pick").timePicker({
-			  show24Hours: false,
-			  step: 15});
+		//$(".time-pick").timePicker({
+		//	  show24Hours: false,
+		//	  step: 15});
 		
         //jquery ui date-picker
 		$("#startdate").datepicker({
