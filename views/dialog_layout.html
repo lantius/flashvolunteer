@@ -34,8 +34,7 @@
         #dialog_content button, input {
             border: none;
             background-color: inherit;
-        }
-	
+        }	
 		
 		#generic_dialog .dialog_header {
 			border-top: 3px solid #ddd;
@@ -76,7 +75,8 @@
     <div id="centerwhole">
                 
 		<div id="dialog_content">
-		{% block dialog_content %}{% endblock dialog_content %}
+		  {% block dialog_content %}{% endblock dialog_content %}
+		  <div class="cl"><!----></div>
         </div>	
 
         <div class="dialog_header">

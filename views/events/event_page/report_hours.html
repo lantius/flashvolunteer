@@ -4,7 +4,7 @@
         errorPlacement: function(error, element) {},
         invalidHandler: function(form, validator) {},
         submitHandler: function(form) {
-			form.submit();
+			$(form).ajaxSubmit();
 			$('#columns').load("{{event.url}}");
 		}
     })

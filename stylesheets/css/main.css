@@ -972,8 +972,9 @@ form input.password {
 }
 
 .submit {
-	font-size:145%;
+	font-size:17px;
 	letter-spacing:-1px;
+	padding: 5px;
 }
 
 .error{padding: 15px}

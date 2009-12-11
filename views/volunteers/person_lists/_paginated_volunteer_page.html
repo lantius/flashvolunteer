@@ -5,13 +5,13 @@
 {% endblock dialog_title %}
 
 {% block dialog_content %}
-	<div id="personinformation" class="softmodule">
+    <div class="dialog_container"</div>
 	    <ul id="imagenamelinklist">
 	        {% for volunteer_in_list in team %}
 	            {% include "../person_lists/_volunteer_list_item.html" %}
 	        {% endfor %}
 	    </ul>
-	</div>
+    </div>
     <script>
        function get_params(){
            return '';

@@ -5,8 +5,7 @@
 {% endblock dialog_title %}
 
 {% block dialog_content %}
-<div id="eventssearchresult" class="hardmodule" >
-    <div id="eventyousearchedfor"  style="padding-bottom:6px">
+    <div style="padding-bottom:6px">
         <span class="label">You have searched for events
         {% if neighborhood %}
             in {{neighborhood.name}}.
@@ -26,13 +25,11 @@
         </span>
     </div>
     
-    <div class="search_results">
+    <div class="dialog_container search_results">
         {% if events %}
-        <ol>
             {% for event in events %}
                 {% include "../events/_event_list_item.html" %}
             {% endfor %}
-        </ol>
         {% else %}
         <p>No search results found.</p>
         {% endif %}
@@ -42,7 +39,5 @@
 	   	   return get_search_params();
 	   }
 	</script>
-
-</div>
 
 {% endblock dialog_content %}

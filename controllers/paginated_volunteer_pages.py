@@ -67,7 +67,7 @@ class BaseVolunteerListPage(AbstractHandler):
         else:
             volunteers = self._get_volunteers(self.LIST_LIMIT + 1)
 
-        if len(volunteers) == self.LIST_LIMIT+1:
+        if len(volunteers) == self.LIST_LIMIT + 1:
             next = volunteers[-1].key() 
             volunteers = volunteers[:self.LIST_LIMIT]
         else:

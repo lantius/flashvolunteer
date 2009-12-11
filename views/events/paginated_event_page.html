@@ -5,12 +5,10 @@
 {% endblock dialog_title %}
 
 {% block dialog_content %}
-	<div id="upcomingevents" class="hardmodule">
-	    <ul>            
+	<div id="upcomingevents" class="dialog_container">
 	        {% for event in events %}
 	            {% include "../events/_event_list_item.html" %}
 	        {% endfor %}
-	    </ul>
 	</div>
     <script>
        function get_params(){
@@ -18,5 +16,3 @@
        }
     </script>	
 {% endblock dialog_content %}
-
-</div>

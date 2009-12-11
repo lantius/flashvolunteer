@@ -5,7 +5,9 @@
         <ul class="formlist">
             <li>
                 {% include "../neighborhoods/_select_neighborhood__event_search.html" %}
-                {% include "../events/_select_event_type.html" %}
+                {% comment %}
+    				{% include "../events/_select_event_type.html" %}
+				{% endcomment %}
             </li>
             <li>
                 <input type="checkbox" id="search_past_events" name="past_events" />

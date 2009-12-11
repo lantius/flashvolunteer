@@ -5,32 +5,32 @@
 {% endblock dialog_title %}
 
 {% block dialog_content %}
-	<div id="eventssearchresult" class="hardmodule" >
-	    <div id="eventyousearchedfor" >
-	        <ul>
-	        	<li><span class="label">You have searched for volunteers 
-			        {% if name %}
-			         with a name matching '{{name}}'
-			        {% endif %}
-			        {% if email %}
-			            and the email address {{email}}
-			        {% endif %}
-			        {% if neighborhood %}
-			            in {{neighborhood.name}}
-			        {% endif %}
-			    </span></li>
-			</ul>
-		    {% if volunteers %}
-			    <ol>
-			        {% for volunteer_in_list in volunteers %}
-			            {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
-			        {% endfor %}
-			    </ol>
-		    {% else %}
-		      <ul><li>No search results found.</li></ul>
-		    {% endif %}
-	    </div>
+    <div>
+        <ul>
+        	<li><span class="label">You have searched for volunteers 
+		        {% if name %}
+		         with a name matching '{{name}}'
+		        {% endif %}
+		        {% if email %}
+		            and the email address {{email}}
+		        {% endif %}
+		        {% if neighborhood %}
+		            in {{neighborhood.name}}
+		        {% endif %}
+		    </span></li>
+		</ul>
 	</div>
+	<div class="dialog_container">
+    {% if volunteers %}
+	    <ol>
+	        {% for volunteer_in_list in volunteers %}
+	            {% include "../volunteers/person_lists/_volunteer_list_item.html" %}
+	        {% endfor %}
+	    </ol>
+    {% else %}
+      <ul><li>No search results found.</li></ul>
+    {% endif %}
+    </div>
     <script>
        function get_params(){
            return get_people_search_params();
