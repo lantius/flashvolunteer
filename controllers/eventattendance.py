@@ -41,10 +41,10 @@ class VerifyEventAttendance(AbstractHandler):
         params = self.parameterize() 
         params['id'] = url_data
         
-        event = Event.get_by_id(int(params['id']))
         self.update(params, account)
         
-        #self.redirect(event.url())
+        if not self.ajax_request():
+            self.redirect(event.url())
     
     ################################################################################
     # SHOW

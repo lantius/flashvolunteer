@@ -20,7 +20,7 @@ class AbstractHandler(webapp.RequestHandler):
     def _add_base_template_values(self, vals):
         session = Session()
         account = self.auth()
-        is_ajax_request = 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+        is_ajax_request = self.ajax_request()
         new_login = 'new_login' in session and session['new_login']
         redirected = 'redirected' in session and session['redirected']
         if (redirected or is_ajax_request) and not new_login:
@@ -90,7 +90,9 @@ class AbstractHandler(webapp.RequestHandler):
         
         return auth.account
 
-
+    def ajax_request(self):
+        return 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+    
     def send_message(self, to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
         from models.messages.message import Message
         from models.messages import MessageReceipt

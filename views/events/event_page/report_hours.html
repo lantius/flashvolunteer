@@ -1,3 +1,16 @@
+<script>
+  $(document).ready(function(){
+    $(".validate_form").validate({
+        errorPlacement: function(error, element) {},
+        invalidHandler: function(form, validator) {},
+        submitHandler: function(form) {
+			form.submit();
+			$('#columns').load("{{event.url}}");
+		}
+    })
+  });
+</script>
+
 
 <script>
     function report_hours(){
@@ -15,8 +28,9 @@
 <div style="border: 3px solid #B2DCE0; background-color:#E6F4F4; padding: 5px;" id="report_hours">
 	<h3>{% ifequal eventvolunteer.hours None %}Please report your volunteer hours, rounded to the nearest hour, to get credit! {%else%}According to our records, you volunteered {{eventvolunteer.hours}} hours. Please revise if incorrect.{%endifequal%}</h3>
 
-	<form id='f_verify' action="{{event.url}}/verify" onsubmit="report_hours();return false;">
+	<form id='f_verify' method="post" class="validate_form" action="{{event.url}}/verify">
         <ul style="margin-left:15px">
+        	
 			<li><input type='radio' name='event_volunteer_{{eventvolunteer.key.id}}' value='True' id='i_verify_{{eventvolunteer.key.id}}_true' 
                 onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'
                 {% if eventvolunteer.attended %} 
@@ -25,7 +39,7 @@
             />
             <label for='event_volunteer_{{eventvolunteer.key.id}}'>Attended for </label>
             
-            <input type="text" name="hours_{{eventvolunteer.key.id}}" size="3" maxlength="3" id='i_verify_{{eventvolunteer.key.id}}_text'
+            <input class="digits" type="text" name="hours_{{eventvolunteer.key.id}}" size="3" maxlength="3" id='i_verify_{{eventvolunteer.key.id}}_text'
                 {% if not eventvolunteer.attended %} 
                     disabled="true"
                 {% endif %}
@@ -44,7 +58,12 @@
             />
             <label for='event_volunteer{{eventvolunteer.key.id}}'>Did not Attend</label>
             </li>
-            <li><button class="submit" id="s_verify">Report</button></li>
+			
+
+            <li>
+                <input type=hidden name="session_id" value="{{ session_id }}">
+			    <input type="submit" class="submit" id="s_verify" value="Report" />
+			</li>
 		</ul>
 	</form> 
 </div>
