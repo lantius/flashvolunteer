@@ -46,9 +46,6 @@
 				
 	            <li><input type='radio' name='event_volunteer_{{ev.key.id}}' value='False' id='i_verify_{{ev.key.id}}_false'
 	               	onclick='var text_id = this.id.replace(/false/, "text"); document.getElementById(text_id).disabled = true;'
-	                {% ifequal ev.attended False%} 
-	                 checked 
-	                {% endifequal %}
 	            />
 	            <label for='i_verify_{{ev.key.id}}_false'>Did not Attend</label>
 	            </li>
