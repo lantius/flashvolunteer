@@ -55,7 +55,7 @@ SCRIPTS = [
     os.path.join(stylesheets, 'jquery', 'js', 'jquery-1.3.2.min.js'),
     os.path.join(stylesheets, 'jquery', 'js', 'jquery-ui-1.7.2.custom.min.js'),
     
-    os.path.join(stylesheets, 'json', 'json2.min.js'),
+    os.path.join(stylesheets, 'javascript', 'json2.min.js'),
     
     os.path.join(stylesheets, 'javascript', 'jquery.validate.js'),
     os.path.join(stylesheets, 'javascript', 'jquery.address-1.0.js'),

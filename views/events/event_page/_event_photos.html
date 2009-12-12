@@ -1,10 +1,10 @@
 <script language="JavaScript" type="text/javascript">
 <!-- 
 	function addalbum_onchange() {
-	el_error = document.getElementById("content_error");
-	el_error.style.visibility = 'hidden';
-	el_checking = document.getElementById("content_checking");
-	el_checking.style.visibility = 'hidden';
+		el_error = document.getElementById("content_error");
+		el_error.style.visibility = 'hidden';
+		el_checking = document.getElementById("content_checking");
+		el_checking.style.visibility = 'hidden';
 		sel = document.getElementById('eventphotos_addalbum')
 		if (sel.selectedIndex==1) {
 			$("#addexternalbum_dialog").dialog( 'open' );
@@ -86,7 +86,7 @@
 			}
 		} else {
 			if (document.feed_status == 1) {//success
-				document.form_addexternalalbumphoto_name.submit();
+				$('#form_addexternalalbumphoto').submit();
 			}
 		}
 	}
@@ -114,7 +114,7 @@
 			//scale images to width
 			var img_width = img_dim;
 			var img_height = naturalHeight * img_width / naturalWidth;
-			var padding = parseInt((img_dim - img_height)/2)
+			var padding = parseInt((img_dim - img_height)/2);
 			this.style.marginBottom = padding + "px";
 			this.style.marginTop = padding + "px";
 			this.style.marginLeft = "0px";
@@ -217,8 +217,9 @@
 
 	} 
 
+
 	var showmore_id = -1;
-	function showmore(album_id, more) {
+	function show_more_photos(album_id, more) {
 		if (showmore_id >= 0) {
 			//show more, hide less in old id
 			el = document.getElementById("more_" + showmore_id);
@@ -242,7 +243,8 @@
 	}
 
 	var albums = [];
---></script>
+//-->
+</script>
 
 {% if volunteer %}
 <div id="addexternalbum_dialog" title="Add External Album">
@@ -291,12 +293,11 @@
 		{% ifequal ep.status ep.PUBLISHED %}
 			{% ifequal ep.type ep.RSS_ALBUM %}
 				<script type="text/javascript">
-					albums[{{ep.key.id}}] = {content: "{{ep.content}}", volunteer_url:"{{ep.volunteer.url}}", volunteer_name: "{{ep.volunteer.account.name|striptags}}"}
+					albums[{{ep.key.id}}] = {
+					   content: "{{ep.content}}", 
+					   volunteer_url:"{{ep.volunteer.url}}", 
+					   volunteer_name: "{{ep.volunteer.account.name|striptags}}"};
 					load_album("{{ep.key.id}}", showmore_id=={{ep.key.id}});
-				
-					function showmore_{{ep.key.id}}(more) {
-						showmore("{{ep.key.id}}", more);
-					}
 				</script>
 				<div id="rss_album_{{ep.key.id}}" class="rss_album">
 					<h2 id="rss_album_{{ep.key.id}}_title" class="rss_album_title" >
@@ -307,20 +308,17 @@
 							    <input type="hidden" name="session_id" value="{{ session_id }}" />
 							    <input type="hidden" name="event_id" value="{{ event.key.id }}" />
 							    <input type="hidden" name="album_id" value="{{ ep.key.id }}" />
-								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_up" value="Up" />
-								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_down" value="Down" />
+								<!--<input type="submit" name="action" id="rss_album_{{ep.key.id}}_up" value="Up" />
+								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_down" value="Down" />-->
 								<input type="submit" name="action" id="rss_album_{{ep.key.id}}_remove" value="Remove" />
 							</form>
 						</div>
 						{% endif %}
 					</h2>
-					<div id="rss_album_{{ep.key.id}}_photos" >
-						{% comment %}
-						{% endcomment %}	
-					</div>
+					<div id="rss_album_{{ep.key.id}}_photos" ><!----></div>
 					<div class="more_or_less">
-						<a id="more_{{ep.key.id}}" href="javascript: showmore_{{ep.key.id}}(true);">&raquo; View more photos</a>
-						<a id="less_{{ep.key.id}}" class="more_hidden" href="javascript: showmore_{{ep.key.id}}(false);">&raquo; View less photos</a>
+						<a id="more_{{ep.key.id}}" onclick=show_more_photos({{ep.key.id}},true)>&raquo; View more photos</a>
+						<a id="less_{{ep.key.id}}" class="more_hidden" onclick=show_more_photos({{ep.key.id}},false)>&raquo; View less photos</a>
 					</div>
 				</div>
 				
