@@ -68,7 +68,7 @@ class NeighborhoodsPage(AbstractHandler):
                 for n, total, scores in all_scores:
                     #scores.append(total)  #dont show total score at this time...
                     neighborhood_stats.append((n, scores))
-                memcache.add('neighborhood_stats', neighborhood_stats, 10000)
+                memcache.add('neighborhood_stats', neighborhood_stats, 1000)
             
             cnt = application.neighborhoods.count()                           
             col1 = neighborhoods[:cnt/3]
@@ -103,19 +103,8 @@ class NeighborhoodsPage(AbstractHandler):
 class NeighborhoodDetailPage(AbstractHandler):
     ################################################################################
     # GET
-    def get(self, url_data):
-        if url_data:
-            self.show(url_data)
-        else:
-            self.list() 
-    
-    ################################################################################
-    # POST
-    
-    ################################################################################
-    # SHOW
-    def show(self, neighborhood_id):
-        LIMIT = 3
+    def get(self, neighborhood_id):
+        LIMIT = 4
         try:
             account = self.auth()
         except:
@@ -123,6 +112,7 @@ class NeighborhoodDetailPage(AbstractHandler):
         
         if account: user = account.get_user()
         else: user = None
+        
         neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
         if not neighborhood:
             self.error(404)
@@ -131,19 +121,12 @@ class NeighborhoodDetailPage(AbstractHandler):
         candidates_living = list(neighborhood.volunteers_living_here())
         candidates_working = list(neighborhood.volunteers_working_here())
         
-        past_events = neighborhood.events_past().fetch(LIMIT)
-        upcoming_events = neighborhood.events_future().fetch(LIMIT)
-        
-        #n_stats = memcache.get('n_stats')
-        #if not n_stats: 
-        n_stats = ()
-                                                   
-        volunteers_living = len(candidates_living)
-        volunteers_working = len(candidates_working)                   
-        p_events = len(past_events)                       
-        u_events = len(upcoming_events)                    
+        volunteers_living = neighborhood.volunteers_living_here().count()
+        volunteers_working = neighborhood.volunteers_working_here().count()                
+        p_events = neighborhood.events_past().count()                 
+        u_events = neighborhood.events_future().count()                    
         vhours = 0 
-        for e in past_events:
+        for e in neighborhood.events_past():
             vhours += sum([ev.hours for ev in e.eventvolunteers if ev.hours])
 
         n_stats = (volunteers_living, volunteers_working, p_events, u_events, vhours)                                        
@@ -167,8 +150,8 @@ class NeighborhoodDetailPage(AbstractHandler):
             'neighborhood': neighborhood,
             'volunteers_living_here': random.sample(candidates_living, min(len(candidates_living),LIMIT)), 
             'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 
-            'past_events': past_events[-LIMIT:],
-            'upcoming_events':upcoming_events,
+            'past_events': neighborhood.events_past().fetch(LIMIT),
+            'upcoming_events':neighborhood.events_future().fetch(LIMIT),
             'n_stats':n_stats,
             'forum': forum
           }

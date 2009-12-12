@@ -1,4 +1,5 @@
-import os
+import os, random
+
 from google.appengine.ext.webapp import template
 from controllers._helpers import NeighborhoodHelper
 
@@ -40,7 +41,10 @@ class ProfilePage(AbstractHandler):
         
         vhours = sum([ev.hours for ev in user.eventvolunteers if ev.hours])
         
-                
+        friends = user.friends()
+        if len(friends) > 5:
+            friends = random.sample(friends, 5)
+            
         template_values = {
             'volunteer' : user,
             'neighborhoods': NeighborhoodHelper().selected(user.home_neighborhood),
@@ -59,7 +63,8 @@ class ProfilePage(AbstractHandler):
             'events_coordinating_cnt': events_coordinating_cnt,
             
             'user_of_interest': user,
-            'event_access': True
+            'event_access': True,
+            'friends': friends
             
           }
         self._add_base_template_values(vals = template_values)

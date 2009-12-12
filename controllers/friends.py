@@ -24,26 +24,26 @@ class FriendsPage(AbstractHandler):
         volunteer = account.get_user()
         candidates = list(volunteer.following(limit = 250))
                      
-        volunteer_stats = memcache.get('volunteer_stats')
-        if not volunteer_stats: 
-            volunteers = get_all_volunteers()
-            all_scores = []
-                                      
-            for v in volunteers:
-                vhours = sum([ev.hours for ev in v.eventvolunteers if ev.hours])
-                attended = len([ev for ev in v.eventvolunteers if ev.attended])
-                isowner = len([ev for ev in v.eventvolunteers if ev.isowner]) 
-
-                total = attended + isowner
-                all_scores.append((v, total, [attended, isowner]))
-    
-            all_scores.sort(lambda (ev, total, scores), (ev2, total2, scores2): int(total-total2), reverse=True)                                                                    
-            
-            volunteer_stats = []
-            for v, total, scores in all_scores:
-                #scores.append(total)  #dont show total score at this time...
-                volunteer_stats.append((v, scores))
-            memcache.add('volunteer_stats', volunteer_stats, 10000)
+#        volunteer_stats = memcache.get('volunteer_stats')
+#        if not volunteer_stats: 
+#            volunteers = get_all_volunteers()
+#            all_scores = []
+#                                      
+#            for v in volunteers:
+#                vhours = sum([ev.hours for ev in v.eventvolunteers if ev.hours])
+#                attended = len([ev for ev in v.eventvolunteers if ev.attended])
+#                isowner = len([ev for ev in v.eventvolunteers if ev.isowner]) 
+#
+#                total = attended + isowner
+#                all_scores.append((v, total, [attended, isowner]))
+#    
+#            all_scores.sort(lambda (ev, total, scores), (ev2, total2, scores2): int(total-total2), reverse=True)                                                                    
+#            
+#            volunteer_stats = []
+#            for v, total, scores in all_scores:
+#                #scores.append(total)  #dont show total score at this time...
+#                volunteer_stats.append((v, scores))
+#            memcache.add('volunteer_stats', volunteer_stats, 10000)
         
         friends = random.sample(candidates,min(len(candidates),LIMIT))
         template_values = {
@@ -51,7 +51,7 @@ class FriendsPage(AbstractHandler):
             'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
             'friends': friends,
             'followers_only': (v for v in volunteer.followers_only()),
-            'most_active_volunteers': volunteer_stats[:LIMIT2],
+            #'most_active_volunteers': volunteer_stats[:LIMIT2],
           }
         self._add_base_template_values(vals = template_values)                   
         

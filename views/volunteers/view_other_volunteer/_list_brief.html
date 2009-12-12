@@ -1,12 +1,12 @@
-{% if page_volunteer.friends %}
-    {% ifnotequal page_volunteer.friends|length 0 %}
+{% if friends %}
+    {% ifnotequal friends|length 0 %}
 	
 <div id="personfriends" class="softmodule">
 	<div class="moduletitle">
         <h3>Team</h3>
 	</div>
 	<ul>
-		{% for volunteer_in_list in page_volunteer.friends %}
+		{% for volunteer_in_list in friends %}
 			<li><a class="fv" href="{{volunteer_in_list.get_user.url}}">{{ volunteer_in_list.get_name }}</a></li>
 		{% endfor %}
 	</ul>

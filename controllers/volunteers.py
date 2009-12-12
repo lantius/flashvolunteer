@@ -1,4 +1,4 @@
-import os, string
+import os, string, random
 import imghdr
 
 from google.appengine.ext.webapp import template
@@ -14,6 +14,7 @@ from models.neighborhood import Neighborhood
 from controllers.abstract_handler import AbstractHandler
 
 from components.sessions import Session
+from controllers._helpers import NeighborhoodHelper
 
 
 ################################################################################
@@ -69,6 +70,9 @@ class VolunteersPage(AbstractHandler):
         (future_events_cnt, past_events_cnt, 
          events_coordinating_cnt, past_events_coordinated_cnt) = page_volunteer.get_activities()
         
+        friends = page_volunteer.friends()
+        if len(friends) > 5:
+            friends = random.sample(friends, 5)
         template_values = { 
               'eventvolunteer': page_volunteer.eventvolunteers, 
               'volunteerfollower' : volunteerfollower,
@@ -87,7 +91,10 @@ class VolunteersPage(AbstractHandler):
               'past_events_coordinated_cnt': past_events_coordinated_cnt,
               'events_coordinating_cnt': events_coordinating_cnt,
             
-              'user_of_interest': page_volunteer
+              'user_of_interest': page_volunteer,
+              'friends': friends,
+              'neighborhoods': NeighborhoodHelper().selected(page_volunteer.home_neighborhood),
+
         }
         self._add_base_template_values(vals = template_values)
         

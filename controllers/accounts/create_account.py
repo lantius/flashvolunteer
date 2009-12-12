@@ -79,7 +79,7 @@ class CreateAccount(AbstractHandler):
         
         if not valid_entry:
             session['notification_message'] = ['<br>'.join(account.error.values())]
-            self.redirect('/#/login')
+            self.redirect('/#/new')
             return False
 
         login_info = session.get('login_info', None)
@@ -130,7 +130,7 @@ class CreateAccount(AbstractHandler):
 
         except:
             session['notification_message'].append('We\'re sorry, your account could not be created. Please try again.')
-            self.redirect('/#/login')
+            self.redirect('/#/new')
             return False
         
         session['auth'] = auth
@@ -149,6 +149,7 @@ class CreateAccount(AbstractHandler):
                      type= MessageType.all().filter('name =', 'welcome').get(), 
                      immediate = True)
         
+        del session['login_info']
         if 'login_redirect' in session:
             self.redirect(session['login_redirect'])
             del session['login_redirect']

@@ -102,8 +102,7 @@ def real_main():
            ('/rpx_auth', Login),
            ('/login', Login),
            ('/dev_login', Login),
-           ('/logout', Login),
-           
+           ('/logout', Login),           
            ('/new', CreateAccount),
            
             ('/delete', SettingsPage),

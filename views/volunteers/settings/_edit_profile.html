@@ -87,7 +87,7 @@ $('table.zebra tr:odd').addClass('odd');
 
     <ul>
         <li>
-            <span class="label">Who can see the events in which you are participating:</span>
+            <span class="label">Who can see your upcoming events?</span>
             <select name="privacy__event_attendance">
                 <option value="friends" {% ifequal volunteer.privacy__event_attendance "friends" %} selected="selected"{% endifequal %}>FlashTeam</option>
                 <option value="noone" {% ifequal volunteer.privacy__event_attendance "noone" %} selected="selected"{% endifequal %}>No one</option>

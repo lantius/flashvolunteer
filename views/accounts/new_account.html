@@ -67,6 +67,7 @@
 
     <div style="margin-top: 25px;"></div>
         
+	{% if fv_account %}	
     <div id="middle100">
         <div style="width:50%;padding: 25px;font-size:125%; " class='fl'>
             New to Flash Volunteer? Choose either of the two options below to create an account. Make sure to write down your choice!
@@ -75,6 +76,7 @@
             Returning user? If you already have a Flash Volunteer account, please <a href="/login" class="fv">login here.</a></div>
         <div class='cl'><!--empty--></div>
     </div>
+    {% endif %} 
 
     <div class="cl"></div>
     <div style="height:15px"></div>
@@ -91,8 +93,22 @@
                       <fieldset>
                           <ul>          
                           
-                            <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"/></li>                       
-                            <li><label for="email">Email (required):</label><input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"/></li>
+                            <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"
+    							{% if account.name %}
+                                    value="{{ account.name|striptags }}"
+                                {% else %}
+                                    value=""
+                                {% endif %}
+							/></li>                       
+                            <li>
+                            	 <label for="email">Email (required):</label>
+							     <input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"
+	                                {% if account.preferred_email %}
+		                                value="{{ account.preferred_email|striptags }}"
+		                            {% else %}
+		                                value=""
+		                            {% endif %}
+							/></li>
                             
                             {% if fv_account %}
                                 <li>
@@ -136,22 +152,24 @@
         
         
             </li>  
-            <li class="fl" style="padding: 95px 22px;"><span style="width:100%;font-size:125%">OR</span></li>
-            <li class="fv-login-block fr" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:42%;height:100%">
-                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Sign in through a third party</h1>
-
-                <div class="emph" style="font-size:80%; font-color:#777777">When you login through a third party provider, you will first be taken to their site. After logging in there, you will be redirected back to Flash Volunteer.</div>
-        
-                {% if not dev_server %}
-                    <iframe src="https://flash-volunteer.rpxnow.com/openid/embed?token_url={{token_url}}" scrolling="no" frameBorder="no" style="width:100%;height:240px;">
-                        You do not have JavaScript enabled in your browser. Please enable JavaScript, or download a web browser that supports it.                   
-                    </iframe>
-                {% else %}
-                        <a class="fv" href="{{login_url}}">
-                            <button class="submit" id="l_login">Enter dev site</button>
-                        </a>          
-                {% endif %}
-            </li>
+			{% if fv_account %}
+	            <li class="fl" style="padding: 95px 22px;"><span style="width:100%;font-size:125%">OR</span></li>
+	            <li class="fv-login-block fr" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:42%;height:100%">
+	                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Sign in through a third party</h1>
+	
+	                <div class="emph" style="font-size:80%; font-color:#777777">When you login through a third party provider, you will first be taken to their site. After logging in there, you will be redirected back to Flash Volunteer.</div>
+	        
+	                {% if not dev_server %}
+	                    <iframe src="https://flash-volunteer.rpxnow.com/openid/embed?token_url={{token_url}}" scrolling="no" frameBorder="no" style="width:100%;height:240px;">
+	                        You do not have JavaScript enabled in your browser. Please enable JavaScript, or download a web browser that supports it.                   
+	                    </iframe>
+	                {% else %}
+	                        <a class="fv" href="{{login_url}}">
+	                            <button class="submit" id="l_login">Enter dev site</button>
+	                        </a>          
+	                {% endif %}
+	            </li>
+			{% endif %}
 			<div class="cl"></div>
        </ol>
 	   <div class="cl"></div>

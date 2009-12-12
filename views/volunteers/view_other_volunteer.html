@@ -23,6 +23,8 @@
 
 <div id="middlethird">
     {% include "../volunteers/view_other_volunteer/_volunteer_upcoming_events.html" %}
+    {% include "../events/events_page/_volunteer_hosting_events.html" %}
+
 	<!--{% include "../volunteers/home/_volunteer_statistics.html" %}-->
 </div><!--end middlethird-->
 
@@ -35,6 +37,8 @@
 
 <div id="rightthird">
     {% include "../events/_find_event.html" %}
+    {% include "../events/events_page/_create_event.html" %}        
+    {% include "../volunteers/_find_volunteer_wide.html" %}     
 </div><!--end rightthird-->
 
 {% endblock content %}

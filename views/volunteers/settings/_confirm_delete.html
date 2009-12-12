@@ -1,4 +1,17 @@
 
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('profile');
+      $(document).ready(function() {
+            load_title('Delete Account');
+            load_header('Delete Account');
+      });
+</script>
+
+
 <p>Are you sure you want to permanently delete your account?</p>
 <p>This action cannot be undone.</p>
 <br/>
@@ -10,3 +23,6 @@
     <br/>
     <a class="fv" class="operation" id="l_cancel_delete" href="/settings">No, I've changed my mind!</a>
 </form>
+
+
+{% endblock content %}

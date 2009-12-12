@@ -35,7 +35,7 @@ class Account(db.Model):
         else:
             existing_account = Account.all().filter('preferred_email =', params['email']).get()
             if existing_account and existing_account.is_saved():
-                self.error['email'] = 'An account using that email already exists'
+                self.error['email'] = 'An account with that email already exists. If it is your account, please login in the same way that you created the account.'
             else:
                 self.preferred_email  = params['email']
         
@@ -101,6 +101,7 @@ class Account(db.Model):
             else: return self.get_name()
             
     def get_last_name(self):
+        if self.get_name().find(' ') == -1: return ''
         if self.get_name().find('@') > -1:
             return '@' + self.get_name().split('@')[-1]
         else:

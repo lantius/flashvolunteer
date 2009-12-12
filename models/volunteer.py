@@ -130,6 +130,9 @@ class Volunteer(AbstractUser):
             return ' '.join(self.get_name().split(' ')[:-1])
     
     def get_last_name(self):
+        if self.get_name().find(' ') < 0: 
+            return ''
+        
         if self.get_name().find('@') > -1:
             return '@' + self.get_name().split('@')[-1]
         else:

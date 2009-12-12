@@ -96,18 +96,22 @@ class Login(AbstractHandler):
         else:
             template_values['token_url'] = self.request.host_url + '/login'
             
-        logging.info('login referrer:'+self.request.referrer)
+        #logging.info('login referrer:'+self.request.referrer)
 
         self._add_base_template_values(vals = template_values)
         path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'accounts', 'login.html')
         self.response.out.write(template.render(path, template_values))
             
     def post(self):
+        session = Session()
+        session.delete()
+        
+        session = Session()
         if self.request.get('token', None):
             self.rpx_auth()
         else:
             self.fv_auth()
-        session = Session()
+        
         session['new_login'] = True
             
     def fv_auth(self):
@@ -142,7 +146,8 @@ class Login(AbstractHandler):
             auth.digest2 = hash2
             auth.put()
         
-        session['auth'] = auth                               
+        session['auth'] = auth     
+                                  
         if 'login_redirect' in session:
             self.redirect(session['login_redirect'])
             del session['login_redirect']
@@ -150,7 +155,6 @@ class Login(AbstractHandler):
             self.redirect('/#/profile')
                 
     def rpx_auth(self):
-        logging.info('handling post1')
         token = self.request.get('token')
         url = 'https://rpxnow.com/api/v2/auth_info'
         args = {
@@ -164,7 +168,6 @@ class Login(AbstractHandler):
                            headers={'Content-Type':'application/x-www-form-urlencoded'}
                            )
         json = simplejson.loads(r.content)
-        logging.info('handling post')
         if json['stat'] == 'ok':  
             login_info = json['profile']  
 
@@ -172,19 +175,27 @@ class Login(AbstractHandler):
                 login_info['identifier'] = login_info['email']
             elif 'preferredUsername' in login_info:
                 login_info['identifier'] = login_info['preferredUsername'] + '@' + login_info['providerName']
-
+                
+            if 'email' not in login_info: 
+                login_info['email'] = ''    
+            
             session = Session()
             session['login_info'] = login_info
 
             from models.auth import Auth
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
-
+            
+            for k,v in login_info.items():
+                logging.info(k+str(v))
+            
             if auth:
                 session['auth'] = auth
                 account = self.auth()
                 check_avatar(account = account)
+                del session['login_info']
+
                 if 'login_redirect' in session:
-                    logging.info('redirecting to %s'%session['login_redirect'])
+                    #logging.info('redirecting to %s'%session['login_redirect'])
                     self.redirect(session['login_redirect'])
                     del session['login_redirect']
                 else:

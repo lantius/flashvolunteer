@@ -52,6 +52,10 @@ div#footer #copyright{
     background-color: #000;
 }
 
+#navtabs li#loadingContainer:hover {
+	background-color: inherit;
+}
+
 
 #navtabs li a{
     color: #FFF;

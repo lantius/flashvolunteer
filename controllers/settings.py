@@ -23,7 +23,13 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     # GET
     ################################################################################
-    def get(self, volunteer = None):      
+    def get(self, volunteer = None):  
+        if self.request.path.find('delete') > -1:
+            self.confirm_delete()
+        else:
+            self.show(volunteer = volunteer)
+        
+    def show(self, volunteer):    
         if not volunteer:
             try:
                 account = self.auth(require_login=True)
@@ -68,26 +74,24 @@ class SettingsPage(AbstractHandler):
     # POST
     ################################################################################
     def post(self):
-      try:
-          account = self.auth(require_login = True)
-      except:
-          return
+        try:
+            account = self.auth(require_login = True)
+        except:
+            return
+          
+        params = self.parameterize() 
+        session = Session()      
         
-      params = self.parameterize() 
-      session = Session()      
-
-      if 'is_delete' in params and params['is_delete'] == 'true':     
-          if 'confirm_delete' in params and params['confirm_delete'] == 'true':
-              self.delete(account)
-              self.redirect('/')
-          else:
-              self.confirm_delete(account)
-      else:  
-          if self.update(params, account):
-              session['notification_message'] = ['Your settings have been updated.']
-              self.redirect('/#/profile')
-          else:
-              session['notification_message'] = ['Oops! Your messages could not be saved.']
+        if 'is_delete' in params and params['is_delete'] == 'true':     
+            if 'confirm_delete' in params and params['confirm_delete'] == 'true':
+                self.delete(account)
+                self.redirect('/#/logout')
+        else:  
+            if self.update(params, account):
+                session['notification_message'] = ['Your settings have been updated.']
+                self.redirect('/#/profile')
+            else:
+                session['notification_message'] = ['Oops! Your messages could not be saved.']
 
     ################################################################################
     # UPDATE
@@ -117,45 +121,52 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     # DELETE
     def delete(self, account):
-      # Remove followers relationship
-      followers = account.followers
-      for f in followers:
-        f.delete()
-    
-      # Remove following relationship
-      following = account.following
-      for f in following:
-        f.delete()
-    
-      # Remove volunteer interest categories
-      interests = account.user_interests
-      for interest in interests:
-        interest.delete()
-
-      # Remove your message preferences
-      prefs = account.message_preferences
-      for pref in prefs:
-        pref.delete()
+        # Remove followers relationship
+        followers = account.followers
+        for f in followers:
+            f.delete()
+        
+        # Remove following relationship
+        following = account.following
+        for f in following:
+            f.delete()
+        
+        # Remove volunteer interest categories
+        interests = account.user_interests
+        for interest in interests:
+            interest.delete()
+        
+        # Remove your message preferences
+        prefs = account.message_preferences
+        for pref in prefs:
+            pref.delete()
+              
+        user = account.get_user()
+        # Remove events you've volunteered for
+        evs = user.eventvolunteers
+        for ev in evs:
+            ev.delete()
+        
+        # Finally remove the volunteer
+        for auth in account.auth_methods:
+            auth.delete()
             
-      user = account.get_user()
-      # Remove events you've volunteered for
-      evs = user.eventvolunteers
-      for ev in evs:
-        ev.delete()
-    
-      # Finally remove the volunteer
-      user.delete()
-      account.delete()
-      
-      self.redirect('/')
+        user.delete()
+        account.delete()
+        
+        Session().delete()
     
     ################################################################################
     # CONFIRM_DELETE
-    def confirm_delete(self, account):
-      #requires a POST from the settings page, so volunteer can be assumed.
-      template_values = {
-          'volunteer' : account.get_user(), 
-        }
-      self._add_base_template_values(vals = template_values)
-      path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'confirm_delete.html')
-      self.response.out.write(template.render(path, template_values))
+    def confirm_delete(self):
+        try:
+            account = self.auth(require_login = True)
+        except:
+            return
+
+        template_values = {
+            'volunteer' : account.get_user(), 
+          }
+        self._add_base_template_values(vals = template_values)
+        path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'confirm_delete.html')
+        self.response.out.write(template.render(path, template_values))

@@ -27,13 +27,21 @@ div#container{
         }
             div#logo {
                 width: 295px;
-                margin-top: 13px;
+                margin-top: 15px;
             }
-            div#volunteerwelcome {
+            div#volunteerwelcome,
+			div#volunteerwelcome {
                 float:right;
 				text-align: right;
-                margin-top: 20px;
             }
+            div.loggedout {
+                margin-top: 25px;
+				font-size: 125%;
+            }
+            div.loggedin {
+                margin-top: 13px;
+            }			
+
 			div#volavatar {
 				float:right;
 			}
