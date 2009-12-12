@@ -553,20 +553,25 @@ class EventsPage(AbstractHandler):
     # all posts that deal with photo albums from the events page
     def _handle_photos(self, params, account):
         event_id = params['event_id']
+        event = Event.get_by_id(int(event_id))
         if params['action'] == 's_addexternalalbum':
-            event = Event.get_by_id(int(event_id))
+            
             if not event:
                 raise
-            last_eventphotos = event.eventphotos.order('-display_weight').get()
-            display_weight = 0
-            for last_eventphoto in last_eventphotos: 
+            
+            last_eventphoto = event.eventphotos.order('-display_weight').get()
+            if last_eventphoto:
                 display_weight = last_eventphoto.display_weight + 1
+            else:
+                display_weight = 0
+            
             eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
                                              account=account,
                                              content=params['content'], 
                                              display_weight = display_weight,
                                              type=EventPhoto.RSS_ALBUM, 
-                                             status=EventPhoto.PUBLISHED
+                                             status=EventPhoto.PUBLISHED,
+                                             volunteer=account.get_user()
                                              )
             eventphoto.put()
         elif params['action'] == 'Remove':
@@ -577,7 +582,7 @@ class EventsPage(AbstractHandler):
             album_id = params['album_id']
             eventphoto = EventPhoto.get_by_id(int(album_id))
             #look for photo with display_weight lower than curent, start with highest
-            lowers = event.eventphotos.filter('display_weight <', eventphoto.display_weight).order('-display_weight').get()
+            lowers = event.eventphotos.filter('display_weight <', eventphoto.display_weight).order('-display_weight')
         
             #swap weights
             for lower in lowers:
@@ -590,7 +595,7 @@ class EventsPage(AbstractHandler):
             album_id = params['album_id']
             eventphoto = EventPhoto.get_by_id(int(album_id))
             #look for photo with display_weight higher than curent, start with lowest
-            highers = event.eventphotos.filter('display_weight >', eventphoto.display_weight).order('display_weight').get()
+            highers = event.eventphotos.filter('display_weight >', eventphoto.display_weight).order('display_weight')
         
             #swap weights
             for higher in highers:
