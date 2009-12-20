@@ -1,4 +1,4 @@
-import os, random
+import os, random, logging
 
 from google.appengine.ext.webapp import template
 from controllers._helpers import NeighborhoodHelper
@@ -7,6 +7,7 @@ from models.interestcategory import InterestCategory
 
 from controllers.abstract_handler import AbstractHandler
 
+from components.sessions import Session
 
 
 ################################################################################

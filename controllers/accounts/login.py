@@ -40,7 +40,7 @@ class Login(AbstractHandler):
 
     def logout(self):
         session = Session()
-        session.delete()
+        session.flush()
         self.redirect('/')
         
     def dev_login(self):
@@ -83,6 +83,7 @@ class Login(AbstractHandler):
       
     def login(self, errors = None, email = None):
         dev_server = is_debugging() 
+        Session().flush()
         
         template_values = { 
           'dev_server': dev_server,
@@ -104,14 +105,13 @@ class Login(AbstractHandler):
             
     def post(self):
         session = Session()
-        session.delete()
         
-        session = Session()
         if self.request.get('token', None):
             self.rpx_auth()
         else:
             self.fv_auth()
-        
+
+        session = Session()
         session['new_login'] = True
             
     def fv_auth(self):
@@ -185,17 +185,12 @@ class Login(AbstractHandler):
             from models.auth import Auth
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
             
-            for k,v in login_info.items():
-                logging.info(k+str(v))
-            
             if auth:
                 session['auth'] = auth
                 account = self.auth()
                 check_avatar(account = account)
-                del session['login_info']
 
                 if 'login_redirect' in session:
-                    #logging.info('redirecting to %s'%session['login_redirect'])
                     self.redirect(session['login_redirect'])
                     del session['login_redirect']
                 else:

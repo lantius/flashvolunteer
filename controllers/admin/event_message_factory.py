@@ -60,7 +60,6 @@ class EventMessageFactory(AbstractHandler):
                          type = type6_msg, 
                          autogen = True)
             
-            print 'put RSVP for ',e.name
             e.reminder_message_sent = True
             e.put()
     
@@ -101,7 +100,6 @@ class EventMessageFactory(AbstractHandler):
                              body = type8.body%params, 
                              type = type8_msg, 
                              autogen = True)
-                print 'put post even message for ',e.name
                 e.post_event_message_sent = True
             e.in_past = True
             e.put()
@@ -141,7 +139,6 @@ class RecommendedEventMessageFactory(AbstractHandler):
                 desc.append(d)
             
             if len(rec_events) > 0:
-                print 'sending message'
                 params = {
                     'vol_name': v.name,
                     'recommendation_text': '\n\n'.join(desc)

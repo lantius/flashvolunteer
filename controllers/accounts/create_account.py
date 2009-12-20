@@ -17,27 +17,30 @@ import urllib
 class CreateAccount(AbstractHandler):
 
 
-    def get(self, account = None, volunteer = None):
+    def get(self):
         session = Session()
         dev_server = is_debugging() 
         login_info = session.get('login_info', None)
         
-        if account is None:
-            name = None
-            if login_info:
-                email = login_info['email']
-                name = login_info.get('displayName', None)
-            else:
-                email = None
-            
-            account = Account(
-                preferred_email = email,
-                name = name
-            )
-            
-        if volunteer is None:
-            volunteer = Volunteer()
-            
+        account = self.auth()
+        if account: 
+            self.redirect('/')
+            return
+        
+        name = None
+        if login_info:
+            email = login_info['email']
+            name = login_info.get('displayName', None)
+        else:
+            email = None
+        
+        account = Account(
+            preferred_email = email,
+            name = name
+        )
+        
+        volunteer = Volunteer()
+                        
         session['account'] = account
         session['volunteer'] = volunteer
         

@@ -154,7 +154,7 @@ class SettingsPage(AbstractHandler):
         user.delete()
         account.delete()
         
-        Session().delete()
+        Session().flush()
     
     ################################################################################
     # CONFIRM_DELETE

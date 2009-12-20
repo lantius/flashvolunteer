@@ -64,7 +64,9 @@ class AbstractHandler(webapp.RequestHandler):
     def _auth(self, require_login, redirect_to, require_admin):
         
         session = Session()
+        
         auth = session.get('auth', None)
+            
         if require_login and (not auth or not auth.account):
             self.redirect(redirect_to)        
             if redirect_to == '/login': 
