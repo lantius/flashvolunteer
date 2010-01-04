@@ -1,4 +1,4 @@
-from components.geostring import *
+from components.geostring import Geostring
 from components.time_zones import now
 from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper

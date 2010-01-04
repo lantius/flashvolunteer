@@ -1,0 +1,82 @@
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('admin');
+
+      $(document).ready(function() {
+            load_title('Publish All for Good opportunities');
+            load_header('');
+      });
+</script>
+
+<style>
+	#afg_opportunity_list td {
+		vertical-align: top;
+		border-bottom: 3px dotted #aaa;
+		padding: 10px 10px;
+	}
+	#afg_opportunity_list tr.published {
+		background-color: green;
+	}
+    #afg_opportunity_list tr.dismissed {
+    	background-color: red;
+    }
+
+</style>
+
+<script>
+	function publish(id){
+		$('#opp[' + id + ']').addClass('published');  
+		publish(id, 1);
+        
+	}
+
+    function dismiss(id){
+        publish(id, 2);
+		$('#opp[' + id + ']').addClass('dismissed');
+    }
+
+	
+    function publish(id, action){
+        $.post("/admin/publish_from_all_for_good", {session_id: "{{ session_id }}", id:id, action: action}, 
+        function(data){
+            //$('#columns').load("{{page_volunteer.url}}");
+        });
+    }
+</script>
+
+
+
+
+
+<table id="afg_opportunity_list">
+	<tbody>
+		<tr>
+			<th></th>
+			<th>Score</th>
+			<th>Start date</th>
+			<th>End date</th>
+			<th>Location</th>
+			<th>Description</th>
+			<th>Special Instructions</th>
+		</tr>
+		{% for o in opportunities %}
+		  <tr id="opp[{{o.afg_id}}]">
+		  	<td><a href="{{o.url}}" target="_blank">{{o.title}}</a><br>{{o.provider}}<br>{{o.contact_email}}<br><br><a class="operation" onclick=publish('{{o.afg_id}}') method="post">&raquo; Publish to FV</a><br>
+<a class="operation" onclick=dismiss('{{o.afg_id}}') method="post">&raquo; Dismiss</a></td>
+            <td>{{o.score}}</td>
+			<td>{{o.startdate}}</td>
+            <td>{{o.enddate}}</td>
+			<td>{{o.location}}</td>
+            <td>{{o.description}}</td>
+            <td>{{o.skills}}</td>
+		  </tr>
+		{% endfor %}
+		
+	</tbody>
+	
+</table>
+
+{% endblock content %}

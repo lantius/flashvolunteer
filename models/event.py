@@ -1,7 +1,5 @@
-from components.geostring import *
 from components.time_zones import now
-from controllers._utils import get_google_maps_api_key
-from google.appengine.api import urlfetch
+from controllers._utils import geocode
 from google.appengine.ext import db
 from models.application import Application
 from models.neighborhood import Neighborhood
@@ -165,15 +163,7 @@ class Event(db.Model):
     
     def interestcategories(self):
         return (eic.interestcategory for eic in self.event_categories)
-    
-    def geocode(self):
-        response = urlfetch.fetch('http://maps.google.com/maps/geo?q=' + urllib.quote_plus(self.address) + '&output=csv&oe=utf8&sensor=false&key=' + get_google_maps_api_key())
-        (httpcode) = response.content.split(',')[0]
-        if '200' == httpcode:
-            (httpcode, accuracy, lat, lon) = response.content.split(',')
-            self.location = db.GeoPt(lat, lon)
-            self.geostring = str(Geostring((self.location.lat, self.location.lon)))
-      
+          
     def validate_time(self, date, time):
         save = {
             'date' : date,
@@ -272,7 +262,7 @@ class Event(db.Model):
           
         # try our geocoding here
         if self.address:
-            self.geocode()
+            (self.location, self.geostring) = geocode(self.address)
         
         try:
             params['special_instructions'] = sanitize_html(params['special_instructions'])

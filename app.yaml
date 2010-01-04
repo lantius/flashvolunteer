@@ -1,5 +1,5 @@
-application: flashvolunteer
-version: v01-12
+application: flashvolunteer-dev
+version: development
 runtime: python
 api_version: 1
 
