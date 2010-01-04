@@ -3,6 +3,7 @@ from google.appengine.api import memcache
 from components.sessions import Session
 from google.appengine.api import urlfetch
 from components.geostring import Geostring
+from google.appengine.ext import db
 
 from models.applicationdomain import ApplicationDomain
 
@@ -93,6 +94,11 @@ def geocode(address):
         raise Exception('Could not geocode that location')
 
 def get_neighborhood(address):
+    
+    if len(address.split(' ')) < 5:
+        #just a hack to cull out those that definitely aren't complete addresses    
+        return None  
+    
     application = get_application()
     
     (location, geostring) = geocode(address)

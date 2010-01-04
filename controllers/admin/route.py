@@ -12,7 +12,7 @@ from controllers.admin.message_dispatcher import MessageDispatcher
 from controllers.admin.event_message_factory import EventMessageFactory, RecommendedEventMessageFactory
 from controllers.admin.site_wide_message import SiteWideMessage
 
-from controllers.admin.afg_interface import AccessAllForGood, PublishFromAllForGood
+from controllers.admin.afg_interface import AllForGoodInterface
 
 from controllers.settings import SettingsPage
 from controllers.admin.home import AdminPage
@@ -30,8 +30,7 @@ def main():
         ('/admin/recommended_events_message_factory', RecommendedEventMessageFactory),
         ('/admin/send_message', SiteWideMessage),
         
-        ('/admin/access_all_for_good', AccessAllForGood),
-        ('/admin/publish_from_all_for_good', PublishFromAllForGood),
+        ('/admin/afg_interface(|/rebuild|/publish|/dismiss)', AllForGoodInterface),
         #TODO: route here? admin tools
           
     ], debug=True)

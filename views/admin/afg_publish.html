@@ -1,3 +1,4 @@
+
 {% extends to_extend %}
 
 {% block content %}
@@ -18,38 +19,33 @@
 		padding: 10px 10px;
 	}
 	#afg_opportunity_list tr.published {
-		background-color: green;
+		background-color: #00ff00;
 	}
     #afg_opportunity_list tr.dismissed {
-    	background-color: red;
+    	background-color: #f99;
     }
 
 </style>
 
 <script>
-	function publish(id){
-		$('#opp[' + id + ']').addClass('published');  
-		publish(id, 1);
-        
-	}
 
     function dismiss(id){
-        publish(id, 2);
-		$('#opp[' + id + ']').addClass('dismissed');
-    }
-
-	
-    function publish(id, action){
-        $.post("/admin/publish_from_all_for_good", {session_id: "{{ session_id }}", id:id, action: action}, 
+        $.post("/admin/afg_interface/dismiss", {session_id: "{{ session_id }}", id:id}, 
         function(data){
             //$('#columns').load("{{page_volunteer.url}}");
         });
+		
+		$('#opp' + id).addClass('dismissed');
+        $('#opp'+id+'_ops').html('<strong>Dismissed</strong>'); 
     }
+
 </script>
 
 
 
-
+<div style="font-size:150%; padding: 25px;" id="pull_down_afg_events">
+	<a href="/admin/afg_interface/rebuild" class="operation fv">Check for new opportunities from All for Good</a>
+</div> 
 
 <table id="afg_opportunity_list">
 	<tbody>
@@ -63,9 +59,16 @@
 			<th>Special Instructions</th>
 		</tr>
 		{% for o in opportunities %}
-		  <tr id="opp[{{o.afg_id}}]">
-		  	<td><a href="{{o.url}}" target="_blank">{{o.title}}</a><br>{{o.provider}}<br>{{o.contact_email}}<br><br><a class="operation" onclick=publish('{{o.afg_id}}') method="post">&raquo; Publish to FV</a><br>
-<a class="operation" onclick=dismiss('{{o.afg_id}}') method="post">&raquo; Dismiss</a></td>
+		  <tr id="opp{{o.afg_id}}">
+		  	<td>
+		  		<a href="{{o.url}}" target="_blank">{{o.title}}</a><br>
+				{{o.provider}}<br>
+				{{o.contact_email}}<br><br>
+				<div id="opp{{o.afg_id}}_ops">
+					   <a class="operation fv" href="/admin/afg_interface/publish?id={{o.afg_id}}">&raquo; Publish to FV</a><br>
+					   <a class="operation" onclick=dismiss('{{o.afg_id}}') method="post">&raquo; Dismiss</a>
+			    </div>
+			</td>
             <td>{{o.score}}</td>
 			<td>{{o.startdate}}</td>
             <td>{{o.enddate}}</td>
