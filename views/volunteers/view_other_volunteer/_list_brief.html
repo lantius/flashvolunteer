@@ -7,7 +7,7 @@
 	</div>
 	<ul>
 		{% for volunteer_in_list in friends %}
-			<li><a class="fv" href="{{volunteer_in_list.get_user.url}}">{{ volunteer_in_list.get_name }}</a></li>
+			<li><a class="fv" href="{{volunteer_in_list.url}}">{{ volunteer_in_list.get_name }}</a></li>
 		{% endfor %}
 	</ul>
 </div><!--end friends-->
