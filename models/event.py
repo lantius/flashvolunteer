@@ -13,7 +13,7 @@ class Event(db.Model):
     
     neighborhood = db.ReferenceProperty(Neighborhood,
                                       collection_name='events')
-  
+
     application = db.ReferenceProperty(Application,
                                      collection_name='events',
                                      default=None)

@@ -25,14 +25,14 @@ class VolunteersPage(AbstractHandler):
     # GET
     def get(self, url_data):
     
-      if url_data:
-        if '/search' == url_data:
-          params = self.parameterize() 
-          self.search(params)
+        if url_data:
+            if '/search' == url_data:
+                params = self.parameterize() 
+                self.search(params)
+            else:
+                self.show(url_data[1:])        
         else:
-          self.show(url_data[1:])        
-      else:
-        self.list() 
+            self.list() 
     
     ################################################################################
     # SHOW
