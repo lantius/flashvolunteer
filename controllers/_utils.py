@@ -6,6 +6,7 @@ from components.geostring import Geostring
 from google.appengine.ext import db
 
 from models.applicationdomain import ApplicationDomain
+from models.application import Application
 
 def is_debugging():
     """Detects if app is running in production or not.
@@ -60,6 +61,8 @@ def get_application(just_id = False):
         app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
         if app_domain is None:
             logging.error('got bad domain name: %s'%domain)
+            #TODO: is it a good policy to return seattle app by default?
+            return Application.all().filter('name = ', 'seattle').get()
         memcache.add(key, app_domain, 100000)
 
     if just_id: return app_domain.application.key().id()
