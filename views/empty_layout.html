@@ -24,6 +24,10 @@
 		        {% else %}
 		           $('#message_banner').hide();
 		        {% endif %}           
+				
+				if (window.location.href.search('incentives') == -1 && $('#incentive_banner').css('display') == 'none'){
+					$('#incentive_banner').fadeIn();
+				}
 		    });
 		</script>
 
