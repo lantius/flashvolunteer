@@ -19,7 +19,6 @@ webapp.template.register_template_library('templatetags.filters')
 
 
 def main():
-    session = self._session()
     application = webapp.WSGIApplication([
         ('/admin', AdminPage),
         ('/admin/migrate', MigrateDatastore),

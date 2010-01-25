@@ -115,8 +115,12 @@ Returns a validated session object.
         if session_obj.sid == None:
             return None
         session_key = session_obj.sid.split(u'_')[0]
-        session = memcache.get(u"_AppEngineUtilities_Session_%s" % \
+        try: 
+            session = memcache.get(u"_AppEngineUtilities_Session_%s" % \
             (unicode(session_key)))
+        except:
+            session = None
+            
         if session:
             if session.deleted == True:
                 session.delete()

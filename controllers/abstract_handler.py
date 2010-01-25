@@ -83,7 +83,7 @@ class AbstractHandler(webapp.RequestHandler):
         session = self._session()
         
         auth = session.get('auth', None)
-            
+        
         if require_login and (not auth or not auth.account):
             self.redirect(redirect_to)        
             if redirect_to == '/login': 
@@ -104,7 +104,7 @@ class AbstractHandler(webapp.RequestHandler):
             elif require_admin and not users.is_current_user_admin():
                 self.redirect(redirect_to)
                 raise AuthError('You do not have permission to view this page.')
-            
+        
         if not auth:
             return None
         
@@ -190,6 +190,7 @@ class AbstractHandler(webapp.RequestHandler):
     def get_application(self, just_id = False):
         domain = self.get_domain()
         key = "app-%s"%domain
+        
         app_domain = memcache.get(key)
         if app_domain is None:
             app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
