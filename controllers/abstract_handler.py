@@ -14,11 +14,18 @@ import urllib, logging
 ################################################################################
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
+    __session = None
+    
+    def _session(self):
+        if AbstractHandler.__session is None:
+            AbstractHandler.__session = Session()
+        return AbstractHandler.__session
+    
     def _get_base_url(self):
         return 'http://www.' + get_domain()
     
     def _add_base_template_values(self, vals):
-        session = Session()
+        session = self._session()
         account = self.auth()
         application = get_application()
         is_ajax_request = self.ajax_request()
@@ -62,14 +69,14 @@ class AbstractHandler(webapp.RequestHandler):
 
             
     def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
-        s = Session()
+        session = self._session()
         account = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
         
         return account
     
     def _auth(self, require_login, redirect_to, require_admin):
         
-        session = Session()
+        session = self._session()
         
         auth = session.get('auth', None)
             

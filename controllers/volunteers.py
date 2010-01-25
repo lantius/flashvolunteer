@@ -114,9 +114,14 @@ class VolunteersPage(AbstractHandler):
     # SEARCH
     def search(self, params):
         try:
-          account = self.auth(require_login=True)
+            account = self.auth(require_login=False)
         except:
-          return
+            return
+        
+        if account:
+            volunteer = account.get_user()
+        else:
+            volunteer = None
         
         (name, email, neighborhood, volunteers, next, prev)  = self.do_search(params)
         template_values = { 
@@ -124,7 +129,7 @@ class VolunteersPage(AbstractHandler):
           'email' : email,
           'name' : name,
           'volunteers' : volunteers,
-          'volunteer' : account.get_user(),
+          'volunteer' : volunteer,
           'next': next,
           'prev': prev,
           'url': '/volunteers/search'

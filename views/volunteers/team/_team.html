@@ -2,11 +2,16 @@
 	<div class="moduletitle">
 		<h3>My Team</h3>
 	</div>
-	<ul class="imagenamelinklist">
-		{% for volunteer_in_list in friends %}
-			{% include "person_lists/_volunteer_list_item.html" %}
-		{% endfor %}
-	</ul>
+
+	{% if volunteer %}
+		<ul class="imagenamelinklist">
+			{% for volunteer_in_list in friends %}
+				{% include "person_lists/_volunteer_list_item.html" %}
+			{% endfor %}
+		</ul>
+    {% else %}
+	       <a  class="fv" href="/login?redirect=/team">Login</a> to start building a team of volunteers
+	{% endif %}
 </div>
 
 {% if friends %}
@@ -17,7 +22,9 @@
 		 
     {% endifnotequal %}
 {% else %}
+    {% if volunteer %}
 	<div class="faq-link-wrapper">
 		<a class="faq-link" href="/static/help#volunteers">Why is no one listed here?</a>
 	</div>
+    {% endif %}
 {% endif %}

@@ -7,6 +7,7 @@ from models.event import Event
 from controllers.abstract_handler import AbstractHandler
 from controllers._utils import get_application
 from models.volunteer import Volunteer
+from models.neighborhood import Neighborhood
 from google.appengine.api import memcache
 
 ################################################################################
@@ -17,13 +18,23 @@ class FriendsPage(AbstractHandler):
         LIMIT = 12
         LIMIT2 = 15
         try:
-            account = self.auth(require_login=True)
+            account = self.auth(require_login=False)
         except:
             return       
     
-        volunteer = account.get_user()
-        candidates = list(volunteer.following(limit = 250))
-                     
+        if account:
+            volunteer = account.get_user()
+            candidates = list(volunteer.following(limit = 250))
+            friends = random.sample(candidates,min(len(candidates),LIMIT))
+            followers = (v for v in volunteer.followers_only())
+            neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
+        else:
+            volunteer = None
+            friends = None
+            followers = None
+            neighborhoods = Neighborhood.all()
+
+
 #        volunteer_stats = memcache.get('volunteer_stats')
 #        if not volunteer_stats: 
 #            volunteers = get_all_volunteers()
@@ -45,12 +56,11 @@ class FriendsPage(AbstractHandler):
 #                volunteer_stats.append((v, scores))
 #            memcache.add('volunteer_stats', volunteer_stats, 10000)
         
-        friends = random.sample(candidates,min(len(candidates),LIMIT))
         template_values = {
             'volunteer': volunteer,
-            'neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
+            'neighborhoods': neighborhoods,
             'friends': friends,
-            'followers_only': (v for v in volunteer.followers_only()),
+            'followers_only': followers,
             #'most_active_volunteers': volunteer_stats[:LIMIT2],
           }
         self._add_base_template_values(vals = template_values)                   

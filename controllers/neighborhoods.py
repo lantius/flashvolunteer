@@ -1,7 +1,7 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
-import os, random
+import os, random, logging
 
 from models.neighborhood import Neighborhood
 from models.messages.message import Message
@@ -17,9 +17,9 @@ from google.appengine.api import memcache
 class NeighborhoodsPage(AbstractHandler):
     def get(self, url_data):    
         try:
-          account = self.auth()
+            account = self.auth()
         except:
-          return
+            return
         
         if account: user = account.get_user()
         else: user = None
@@ -28,6 +28,7 @@ class NeighborhoodsPage(AbstractHandler):
         
         application = get_application()
         neighborhoods = application.neighborhoods.order('name').fetch(limit=500) 
+
         is_json = self.is_json(params)
         
         col1 = None
@@ -43,7 +44,7 @@ class NeighborhoodsPage(AbstractHandler):
         LIMIT = 15
         if not is_json:
             
-            neighborhood_stats = memcache.get('neighborhood_stats')
+            neighborhood_stats = memcache.get('%s-neighborhood_stats'%application.name)
             if not neighborhood_stats: 
                 stats = {}
                 
@@ -68,7 +69,7 @@ class NeighborhoodsPage(AbstractHandler):
                 for n, total, scores in all_scores:
                     #scores.append(total)  #dont show total score at this time...
                     neighborhood_stats.append((n, scores))
-                memcache.add('neighborhood_stats', neighborhood_stats, 1000)
+                memcache.add('%s-neighborhood_stats'%application.name, neighborhood_stats, 1000)
             
             cnt = application.neighborhoods.count()                           
             col1 = neighborhoods[:cnt/3]

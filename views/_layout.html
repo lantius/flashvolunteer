@@ -176,9 +176,7 @@
             {% endif %}                
 			<li id="eventslink"><a class="fv" href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>
 			<li id="neighborhoodslink"><a class="fv" href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
-			{%if volunteer and volunteer.is_saved%}
-				<li id="teamlink"><a class="fv" href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
-			{% endif %}
+			<li id="teamlink"><a class="fv" href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
 			<li id="helplink"><a class="fv" href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
 			{%if account and account.is_admin %}
 				<li id="adminlink"><a class="fv" href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>

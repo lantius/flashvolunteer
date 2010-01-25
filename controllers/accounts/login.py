@@ -7,8 +7,6 @@ from controllers._utils import is_debugging
 from models.volunteer import Volunteer
 from models.auth import Account, Auth
 
-from components.sessions import Session
-
 import urllib
 
 from controllers.abstract_handler import AbstractHandler
@@ -25,27 +23,28 @@ class Login(AbstractHandler):
         account = self.auth()
         
         params = self.parameterize()
-        if 'redirect' in params:
-            session = Session()
-            session['login_redirect'] = params['redirect']
             
         if self.request.path.find('dev_login') > -1:    
             self.dev_login()    
         elif not account:
-            self.login()
+            redirect = None
+            if 'redirect' in params:
+                redirect = params['redirect']
+            self.login(redirect = redirect)
         elif self.request.path.find('logout') > -1:    
             self.logout()
         else:
             self.redirect('/')
 
     def logout(self):
-        session = Session()
+        session = self._session()
         session.flush()
         self.redirect('/')
         
     def dev_login(self):
         from google.appengine.api import users
-        session = Session()
+        session = self._session()
+        
         user = users.get_current_user()   
         v = None
         
@@ -78,13 +77,19 @@ class Login(AbstractHandler):
             self.redirect(session['login_redirect'])
             del session['login_redirect']
         else:
+            
             self.redirect('/#/settings')
         session['new_login'] = True
       
-    def login(self, errors = None, email = None):
+    def login(self, errors = None, email = None, redirect = None):
         dev_server = is_debugging() 
-        Session().flush()
-        
+        session = self._session()
+        session.flush()
+
+        if redirect:
+            session['login_redirect'] = redirect
+            logging.info('got redirect: %s'%redirect)
+            
         template_values = { 
           'dev_server': dev_server,
           'errors': errors,
@@ -104,20 +109,19 @@ class Login(AbstractHandler):
         self.response.out.write(template.render(path, template_values))
             
     def post(self):
-        session = Session()
+        session = self._session()
         
         if self.request.get('token', None):
             self.rpx_auth()
         else:
             self.fv_auth()
 
-        session = Session()
         session['new_login'] = True
             
     def fv_auth(self):
         params = self.parameterize() 
         
-        session = Session()
+        session = self._session()
         
         if params['session_id'] != session.sid:
             self.redirect('/timeout')            
@@ -179,7 +183,7 @@ class Login(AbstractHandler):
             if 'email' not in login_info: 
                 login_info['email'] = ''    
                 
-            session = Session()
+            session = self._session()
             session['login_info'] = login_info
 
             from models.auth import Auth
@@ -209,7 +213,7 @@ def check_avatar(account):
     if not account: return
     volunteer = account.get_user()
     
-    session = Session()
+    session = self._session()
     if volunteer and \
       volunteer.avatar is None and \
       'photo' in session['login_info']:
