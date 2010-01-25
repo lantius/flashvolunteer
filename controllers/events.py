@@ -176,13 +176,20 @@ class EventsPage(AbstractHandler):
         application = get_application()
         
         event = Event.get_by_id(int(event_id))
+        
+        logging.info(event.application.name)
+        
         if not event or event.application.key().id() != application.key().id():
+            logging.info('didnt match' + str(application.name))
             self.error(404)
             return
             
+        logging.info("1")
         owners = event.hosts()
+        logging.info("2")
         eventphotos = event.eventphotos.order('display_weight').fetch(limit=100)
         
+        logging.info(owners)
         for ep in eventphotos:
             if (ep.can_edit(account)):
                 ep.can_edit_now = True
@@ -314,7 +321,14 @@ class EventsPage(AbstractHandler):
                 eic.put()
         
         user = account.get_user()
-        eventVolunteer = EventVolunteer(volunteer=user, event=event, isowner=True)
+        eventVolunteer = EventVolunteer(
+                                volunteer=user, 
+                                event=event, 
+                                isowner=True,
+                                event_is_upcoming = not event.in_past,
+                                event_is_hidden = event.hidden,
+                                event_date = event.date,
+                                application = event.application)
         eventVolunteer.put()
         
         return event.key().id()

@@ -12,10 +12,35 @@ from models.neighborhood import Neighborhood
 from models.volunteer import Volunteer
 from models.eventinterestcategory import EventInterestCategory
 from models.auth.account import Account
+from models.eventvolunteer import EventVolunteer
 
 import os, logging
 
 from google.appengine.ext import deferred
+
+
+
+class MigrateDatastore(AbstractHandler):
+
+    def get(self):
+        
+        ## do migration here
+        #synchronize_apps()
+
+        deferred.defer(set_account_in_event_volunteers)
+
+        return 'successful'
+
+def set_account_in_event_volunteers():
+    for ev in EventVolunteer.all():
+        if ev.application is None: 
+            ev.application = ev.event.application
+            
+            ev.event_is_upcoming = not ev.event.in_past
+            ev.event_is_hidden = ev.event.hidden
+            ev.event_date = ev.event.date
+
+            ev.put()
 
 
 def clean_accounts():
@@ -190,45 +215,7 @@ def migrate_event_vols():
             ev.volunteer = ev.account.get_user()
         ev.put()
 
-class MigrateDatastore(AbstractHandler):
-
-    def get(self):
-        
-        ## do migration here
-        synchronize_apps()
-#        from models.messages import MessageReceipt
-#        from components.time_zones import utc, Pacific
-#        
-#        for mr in MessageReceipt.all():
-#            mr.emailed = True
-#            logging.info('converting time from: \n%s to\n'%mr.timestamp)
-#            mr.timestamp = mr.timestamp.replace(tzinfo=Pacific).astimezone(utc)
-#            logging.info(mr.timestamp)
-#            mr.put()
-#        
-#        from models.messages import Message
-#        for m in Message.all():
-#            m.trigger = m.trigger.replace(tzinfo=Pacific).astimezone(utc)
-#            m.put()
-#        deferred.defer(clean_null_users)
-#        deferred.defer(clean_accounts)
-#        deferred.defer(migrate_accounts)
-
-        #deferred.defer(migrate_vfs)
-        deferred.defer(migrate_events)
-        #deferred.defer(migrate_event_vols)
-        #deferred.defer(migrate_messages)
-        #deferred.defer(migrate_messages_receipt)
-        #deferred.defer(migrate_messages_prefs)
-        #deferred.defer(migrate_interests)
-        deferred.defer(migrate_event_interests)
-
-        
-        
-
-
-        return 'successful'
-        
+       
 ##########################################################################
 ## Various migration methods that may or may not be useful in the future.
 ##########################################################################

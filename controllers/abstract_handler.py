@@ -20,6 +20,7 @@ class AbstractHandler(webapp.RequestHandler):
     def _add_base_template_values(self, vals):
         session = Session()
         account = self.auth()
+        application = get_application()
         is_ajax_request = self.ajax_request()
         new_login = 'new_login' in session and session['new_login']
         redirected = 'redirected' in session and session['redirected']
@@ -30,7 +31,7 @@ class AbstractHandler(webapp.RequestHandler):
         vals.update( {
             'domain': self._get_base_url(),
             'path': self.request.path,
-            'application_alias': get_application().get_alias(),
+            'application_alias': application.get_alias(),
             'session_id':  session.sid,
             'account': account,
             'to_extend': to_extend
@@ -44,10 +45,15 @@ class AbstractHandler(webapp.RequestHandler):
         if account:
             vals['unread_message_count'] = account.get_unread_message_count()
             user = account.get_user()
-            ev = user.eventvolunteers.filter('event_is_upcoming =', False).filter('attended =', None).filter('event_is_hidden =', False).get()
-            
-            if ev:
-                vals['header_message'] = 'Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(account.get_first_name(), ev.event.url(), ev.event.name)
+            evs = user.eventvolunteers.filter('event_is_upcoming =', False).filter('attended =', None).filter('event_is_hidden =', False).fetch(20)
+            log_ev = None
+            for ev in evs:
+                if ev.application.key().id() == application.key().id():
+                    log_ev = ev
+                    break
+                
+            if log_ev:
+                vals['header_message'] = 'Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(account.get_first_name(), log_ev.event.url(), log_ev.event.name)
 
         if 'notification_message' in session and len(session['notification_message']) > 0:
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])

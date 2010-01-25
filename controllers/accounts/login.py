@@ -171,7 +171,6 @@ class Login(AbstractHandler):
         if json['stat'] == 'ok':  
             login_info = json['profile']  
             
-            logging.info(login_info)
             if 'email' in login_info and login_info['providerName'] != 'Facebook':
                 login_info['identifier'] = login_info['email']
             elif 'preferredUsername' in login_info:
@@ -179,15 +178,16 @@ class Login(AbstractHandler):
                 
             if 'email' not in login_info: 
                 login_info['email'] = ''    
-            
+                
             session = Session()
             session['login_info'] = login_info
 
             from models.auth import Auth
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
-            
-            logging.info(auth)
-            logging.info(login_info['identifier'])
+
+            #logging.info(login_info)
+            #logging.info(auth)
+            #logging.info(login_info['identifier'])
             
             if auth:
                 session['auth'] = auth
