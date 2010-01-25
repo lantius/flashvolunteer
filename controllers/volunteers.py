@@ -5,7 +5,6 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext.db import Key
 from google.appengine.api import memcache
-from controllers._utils import get_application
 
 from models.volunteer import Volunteer
 from models.volunteerfollower import VolunteerFollower
@@ -13,7 +12,6 @@ from models.neighborhood import Neighborhood
 
 from controllers.abstract_handler import AbstractHandler
 
-from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper
 
 
@@ -47,7 +45,7 @@ class VolunteersPage(AbstractHandler):
         else:
             volunteer = None
             
-        session = Session()
+        session = self._session()
         if volunteer and volunteer.key().id() == int(volunteer_id):
             session['redirected'] = True
             self.redirect("/#/profile");
@@ -102,7 +100,7 @@ class VolunteersPage(AbstractHandler):
             
               'user_of_interest': page_volunteer,
               'friends': friends,
-              'neighborhoods': NeighborhoodHelper().selected(page_volunteer.home_neighborhood),
+              'neighborhoods': NeighborhoodHelper().selected(self.get_application(),page_volunteer.home_neighborhood),
 
         }
         self._add_base_template_values(vals = template_values)
@@ -141,8 +139,8 @@ class VolunteersPage(AbstractHandler):
 
     def do_search(self, params):
         SEARCH_LIST = 12
-        session = Session()
-        application = get_application()
+        session = self._session()
+        application = self.get_application()
         volunteers_query = Volunteer.all().filter('applications =', application.key().id()).order('__key__')
         
         bookmark = self.request.get("bookmark", None)
@@ -312,7 +310,7 @@ class VolunteerAvatar(AbstractHandler):
     ################################################################################
     # UPDATE
     def update(self, params, account):
-        session = Session()
+        session = self._session()
         if 'avatar' in params and params['avatar']:
             if len(params['avatar']) > 50 * 2**10:
                 session['notification_message'] = ['Sorry! That file is too big. Please choose one under 50kb.']

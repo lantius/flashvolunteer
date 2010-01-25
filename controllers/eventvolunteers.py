@@ -11,7 +11,6 @@ from models.messages import MessageType
 from controllers.abstract_handler import AbstractHandler
 
 from components.message_text import type1_vol, type1_unvol
-from components.sessions import Session
 ################################################################################
 # VolunteerForEvent
 ################################################################################
@@ -53,7 +52,7 @@ class VolunteerForEvent(AbstractHandler):
                                         application = event.application)
                     eventvolunteer.put()
               
-                    session = Session()
+                    session = self._session()
                     if event.in_past:
                         session['notification_message'] = ['Thanks for attending!']
                     else:

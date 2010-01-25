@@ -11,9 +11,6 @@ from models.event import Event
 
 from controllers.abstract_handler import AbstractHandler
 
-from controllers._utils import is_debugging, get_application
-from components.sessions import Session
-
 class BaseVolunteerListPage(AbstractHandler):
     LIST_LIMIT = 12
     
@@ -23,8 +20,8 @@ class BaseVolunteerListPage(AbstractHandler):
         except:
             return
         
-        self.application = get_application()
-        session = Session()
+        self.application = self.get_application()
+        session = self._session()
         
         bookmark = self.request.get("bookmark", None)
         params = self.parameterize()
@@ -219,9 +216,9 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
             return list(qry.fetch(limit))
         else:
             results = []
-            for v in qry.fetch(limit):
-                if v.event_access(account=self.account):
-                    results.append(v)
+            for ev in qry.fetch(limit):
+                if ev.volunteer.event_access(account=self.account):
+                    results.append(ev.volunteer)
                     if len(results) >= limit:
                         break
             return results

@@ -5,11 +5,7 @@ from google.appengine.api import mail
 
 from models.auth.account import Account
 
-from controllers._utils import get_domain
-
 from models.messages.message_type import MessageType, MessagePropagationType
-
-from controllers._utils import is_debugging
 
 from components.time_zones import Pacific, utc
 
@@ -44,15 +40,15 @@ class Message(db.Model):
     in_task_queue = db.BooleanProperty(default = False)
     ##############
     
-    def send(self):
+    def send(self, domain, is_debugging = False):
         if self.flagged and not self.verified: return
 
         self.sent = True
         self.put()
 
-        if not is_debugging():                 
+        if not is_debugging:                 
             try:
-                self.email()
+                self.email(domain = domain)
             except Exception, e:
                 logging.error('could not send message %i %s: %s'%(self.key().id(), self.subject, str(e)))
                 self.sent = False            
@@ -86,8 +82,8 @@ class Message(db.Model):
         
         return prop.key().id() in prefs        
         
-    def email(self):
-        domain = 'http://www.' + get_domain()
+    def email(self, domain):
+        domain = 'http://www.' + domain
 
         if self.forum_msg:
             footer = """\n

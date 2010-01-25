@@ -8,9 +8,6 @@ from models.messages import MessageType
 from models.auth.account import Account
 
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging
-
-from components.sessions import Session
 
 from controllers.message_writer import AbstractSendMessage
 
@@ -30,7 +27,7 @@ class SiteWideMessage(AbstractSendMessage):
         recipients = self._get_recipients(id = None, sender = account)
         
         self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)
-        session = Session()
+        session = self._session()
 
         if 'message_redirect' in session:
             self.redirect(session['message_redirect'])

@@ -1,6 +1,4 @@
-from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper
-from controllers._utils import is_debugging 
 from controllers.abstract_handler import AbstractHandler
 from controllers.accounts.login import check_avatar
 
@@ -18,8 +16,8 @@ class CreateAccount(AbstractHandler):
 
 
     def get(self):
-        session = Session()
-        dev_server = is_debugging() 
+        session = self._session()
+        dev_server = self.is_debugging() 
         login_info = session.get('login_info', None)
         
         account = self.auth()
@@ -49,8 +47,8 @@ class CreateAccount(AbstractHandler):
             'dev_server': dev_server,
             'volunteer': volunteer,
             'account': account,
-            'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-            'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
+            'home_neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood),
+            'work_neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.work_neighborhood),
             'fv_account': login_info is None,
           }
         self._add_base_template_values(vals = template_values)
@@ -68,7 +66,7 @@ class CreateAccount(AbstractHandler):
     def post(self):
         
         params = self.parameterize()    
-        session = Session()
+        session = self._session()
         account = session.get('account')
         volunteer = session.get('volunteer')
         
@@ -139,7 +137,7 @@ class CreateAccount(AbstractHandler):
         session['auth'] = auth
         session['login_info'] = login_info
         
-        check_avatar(account = account)
+        check_avatar(account = account, session = session)
                 
         msg_params = {'name': volunteer.name} 
                 

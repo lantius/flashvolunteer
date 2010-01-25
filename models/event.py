@@ -1,5 +1,5 @@
 from components.time_zones import now
-from controllers._utils import geocode
+from utils.misc_methods import geocode
 from google.appengine.ext import db
 from models.application import Application
 from models.neighborhood import Neighborhood

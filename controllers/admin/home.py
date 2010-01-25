@@ -3,9 +3,6 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
-#from controllers.events import _get_upcoming_events 
-from controllers._utils import is_debugging, get_application
-
 from controllers.abstract_handler import AbstractHandler
 
 ################################################################################
@@ -24,7 +21,7 @@ class AdminPage(AbstractHandler):
     if account: user = account.get_user()
     else: user = None
       
-    region = get_application()
+    region = self.get_application()
     unverified_events = region.events.filter('verified = ',False)
 
     template_values = {

@@ -11,7 +11,6 @@ from models.messages import MessageType, MessagePropagationType
 
 
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
-from components.sessions import Session
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -45,8 +44,8 @@ class SettingsPage(AbstractHandler):
 
         template_values = {
             'volunteer' : volunteer, 
-            'home_neighborhoods': NeighborhoodHelper().selected(volunteer.home_neighborhood),
-            'work_neighborhoods': NeighborhoodHelper().selected(volunteer.work_neighborhood),
+            'home_neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood),
+            'work_neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.work_neighborhood),
             'interestcategories' : InterestCategoryHelper().selected(volunteer),
             'message_propagation_types' : MessagePropagationType.all(),
             'message_types': MessageType.all().filter('in_settings =', True).order('order'),
@@ -80,7 +79,7 @@ class SettingsPage(AbstractHandler):
             return
           
         params = self.parameterize() 
-        session = Session()      
+        session = self._session()      
         
         if 'is_delete' in params and params['is_delete'] == 'true':     
             if 'confirm_delete' in params and params['confirm_delete'] == 'true':
@@ -154,7 +153,6 @@ class SettingsPage(AbstractHandler):
         user.delete()
         account.delete()
         
-        Session().flush()
     
     ################################################################################
     # CONFIRM_DELETE

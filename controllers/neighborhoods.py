@@ -6,7 +6,6 @@ import os, random, logging
 from models.neighborhood import Neighborhood
 from models.messages.message import Message
 from models.messages.message_receipt import MessageReceipt
-from controllers._utils import get_application
 
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
@@ -26,7 +25,7 @@ class NeighborhoodsPage(AbstractHandler):
                 
         params = self.parameterize() 
         
-        application = get_application()
+        application = self.get_application()
         neighborhoods = application.neighborhoods.order('name').fetch(limit=500) 
 
         is_json = self.is_json(params)

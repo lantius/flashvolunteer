@@ -1,7 +1,6 @@
 import os
 import wsgiref.handlers
 import cgi, logging
-from components.sessions import Session
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -39,8 +38,6 @@ from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
 
 from controllers.abstract_handler import AbstractHandler
-
-from controllers._utils import get_server, is_debugging
 
 from controllers.admin.home import AdminPage
 
@@ -88,7 +85,8 @@ def profile_main():
  
  
 def real_main():
-    debug = is_debugging()
+    debug = 'SERVER_SOFTWARE' not in os.environ or os.environ['SERVER_SOFTWARE'].startswith('Development')
+    
     if debug:
         from components.applications.operations import synchronize_apps
         from models.application import Application

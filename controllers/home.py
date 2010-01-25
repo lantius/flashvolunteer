@@ -4,7 +4,6 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
 
-from controllers.events import _get_upcoming_events 
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -26,7 +25,7 @@ class MainPage(AbstractHandler):
     if account: user = account.get_user()
     else: user = None
       
-    upcoming_events = _get_upcoming_events().fetch(MainPage.LIMIT)
+    upcoming_events = self.get_application().upcoming_events().fetch(MainPage.LIMIT)
 
     template_values = {
         'volunteer' : user,

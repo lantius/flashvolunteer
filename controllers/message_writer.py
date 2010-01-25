@@ -13,9 +13,6 @@ from models.neighborhood import Neighborhood
 from components.message_text import event_forum_txt, neighborhood_forum_txt
 
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging
-
-from components.sessions import Session
 
 class AbstractSendMessage(AbstractHandler):
     ################################################################################
@@ -72,7 +69,7 @@ class AbstractSendMessage(AbstractHandler):
         self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = self._is_forum_post())
         self._do_additional_post_processing(id = id, sender = account, params = params)
 
-        session = Session()
+        session = self._session()
         
         session['notification_message'] = ['Message delivered.']
         
@@ -89,7 +86,7 @@ class AbstractSendMessage(AbstractHandler):
         except:
             return
         params = self.parameterize() 
-        session = Session()
+        session = self._session()
         if 'redirect' in params:
             session['message_redirect'] = params['redirect']
         id = url_data

@@ -1,8 +1,6 @@
 from google.appengine.ext import db
 from controllers._twitter import Twitter 
 
-from components.sessions import Session
-
 ################################################################################
 # AbstractUser
 class AbstractUser(db.Model):
@@ -63,12 +61,7 @@ class AbstractUser(db.Model):
             Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
         
         
-        if not self.error:
-            from controllers._helpers import SessionID
-            self.session_id = SessionID().generate()
-            return True
-        else:
-            return False
+        return not self.error
     
     def get_quote(self):
         if self.quote:

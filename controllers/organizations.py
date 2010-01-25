@@ -4,7 +4,6 @@ import imghdr
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._utils import get_application
 
 from models.organization import Organization
 from models.organizationfollower import OrganizationFollower
@@ -41,7 +40,7 @@ class OrganizationsPage(AbstractHandler):
       self.redirect("/#/settings")
       return
     
-    session = Session()
+    session = self._session()
     if not user or not session.sid:
       self.redirect("/#/setting")
       return
@@ -97,7 +96,7 @@ class OrganizationsPage(AbstractHandler):
     self.response.out.write(template.render(path, template_values))
 
   def do_search(self, params):
-    application = get_application()
+    application = self.get_application()
     volunteers_query = Organization.all().filter('applications =', application)
     neighborhood = None
     name = None

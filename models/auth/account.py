@@ -1,6 +1,5 @@
 from google.appengine.ext import db
 import datetime, logging, urllib
-from components.sessions import Session
 
 ################################################################################
 # Event
@@ -123,8 +122,7 @@ class Account(db.Model):
         prefs = self.message_preferences.filter('type =', type).get()
         return prefs
 
-    def check_session_id(self, form_session_id):
-        session = Session()
+    def check_session_id(self, form_session_id, session):
         return form_session_id == session.sid
  
  

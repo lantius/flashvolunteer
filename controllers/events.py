@@ -1,8 +1,6 @@
 from components.geostring import Geostring
 from components.time_zones import now
-from components.sessions import Session
 from controllers._helpers import NeighborhoodHelper, InterestCategoryHelper
-from controllers._utils import is_debugging, get_application
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -17,17 +15,6 @@ from models.volunteer import Volunteer
 import logging
 import os, string, random
 from datetime import datetime
-
-def _get_upcoming_events(date = None):
-    if date is None: date = now()
-    region = get_application()
-    
-    events = region.events.filter(
-        'date >= ', date).filter(
-        'hidden = ', False).order(
-        'date')
-    
-    return events
                   
 #this is a hack: google django does not have escapejs yet - this is from there
 _base_js_escapes = (
@@ -103,7 +90,7 @@ class EventsPage(AbstractHandler):
             event_id = self.create(params, account)
             if event_id:
                 event = Event.get_by_id(event_id)
-                session = Session()
+                session = self._session()
                 session['notification_message'] = ['Event "%s" has been created!'%event.name]
         
         if event_id is None:
@@ -122,22 +109,23 @@ class EventsPage(AbstractHandler):
         except:
             return
         
-        upcoming_events = _get_upcoming_events().fetch(EventsPage.LIMIT)
+        upcoming_events = self.get_application().upcoming_events().fetch(EventsPage.LIMIT)
         
         if account: user = account.get_user()
         else: user = None
         
         if user:
-            recommended_events = user.recommended_events()[:EventsPage.LIMIT]
+            recommended_events = user.recommended_events(application = self.get_application(),
+                                                         session = self._session())[:EventsPage.LIMIT]
             future_events = [ev.event for ev in user.events_future().fetch(EventsPage.LIMIT)]
             my_past_events = [ev.event for ev in user.events_past().fetch(EventsPage.LIMIT)]
             my_past_events.reverse()
             event_volunteers = user.eventvolunteers
-            neighborhoods = NeighborhoodHelper().selected(user.home_neighborhood)
+            neighborhoods = NeighborhoodHelper().selected(self.get_application(),user.home_neighborhood)
             interest_categories = InterestCategoryHelper().selected(user)
             events_coordinating = [ev.event for ev in user.events_coordinating().fetch(EventsPage.LIMIT)]
         else: 
-            application = get_application()
+            application = self.get_application()
             recommended_events = None
             future_events = None
             my_past_events = None
@@ -161,7 +149,7 @@ class EventsPage(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
 
   
     ################################################################################
@@ -173,20 +161,16 @@ class EventsPage(AbstractHandler):
         offset = 0
         
         account = self.auth()
-        application = get_application()
+        application = self.get_application()
         
         event = Event.get_by_id(int(event_id))
-        
-        logging.info(event.application.name)
-        
+                
         if not event or event.application.key().id() != application.key().id():
             logging.info('didnt match' + str(application.name))
             self.error(404)
             return
             
-        logging.info("1")
         owners = event.hosts()
-        logging.info("2")
         eventphotos = event.eventphotos.order('display_weight').fetch(limit=100)
         
         logging.info(owners)
@@ -253,7 +237,7 @@ class EventsPage(AbstractHandler):
             path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.json')
         else:
             path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
    
     ################################################################################
     # DELETE
@@ -279,9 +263,9 @@ class EventsPage(AbstractHandler):
             return
         
         volunteer = account.get_user()
-        neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
+        neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)
         if event:
-            neighborhoods = NeighborhoodHelper().selected(event.neighborhood)
+            neighborhoods = NeighborhoodHelper().selected(self.get_application(),event.neighborhood)
         
         template_values = {
             'event' : event,
@@ -292,14 +276,14 @@ class EventsPage(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'create_event.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
 
     ################################################################################
     # CREATE
     def create(self, params, account):
-        application = get_application()
+        application = self.get_application()
         event = Event(application = application)
-        session = Session()
+        session = self._session()
         
         if not event.validate(params):
             session['notification_message'].append('Sorry, your event could not be created')
@@ -359,13 +343,13 @@ class EventsPage(AbstractHandler):
             'eventvolunteer': eventvolunteer, 
             'owners': owners, 
             'volunteer': account.get_user(), 
-            'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
+            'neighborhoods': NeighborhoodHelper().selected(self.get_application(),event.neighborhood),
             'interestcategories' : InterestCategoryHelper().selected(event),
         }
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'event_edit.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
       
     ################################################################################
     # UPDATE
@@ -380,7 +364,7 @@ class EventsPage(AbstractHandler):
         
         hidden = event.hidden
         date = event.date
-        session = Session()
+        session = self._session()
         if not event.validate(params):
             session['notification_message'].append('Sorry, your changes could not be saved.')
             self.redirect('/#' + event.url())
@@ -445,12 +429,12 @@ class EventsPage(AbstractHandler):
                     event.special_instructions = escapejs(event.special_instructions)
             
             path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.json')
-            render_out = template.render(path, template_values, debug=is_debugging())
+            render_out = template.render(path, template_values, debug=self.is_debugging())
             if (('jsoncallback' in params)):
                 render_out = params['jsoncallback'] + '(' + render_out + ');'
         else:
             path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'events_search.html')
-            render_out = template.render(path, template_values, debug=is_debugging())
+            render_out = template.render(path, template_values, debug=self.is_debugging())
         
         self.response.out.write(render_out)
 
@@ -465,8 +449,8 @@ class EventsPage(AbstractHandler):
     def do_search(self, params):
         SEARCH_LIST = 10
 
-        application = get_application()
-        session = Session()
+        application = self.get_application()
+        session = self._session()
         
         events_query = application.events.filter('hidden = ', False)
         bookmark_loc = self.request.get("bookmark", None)
@@ -652,7 +636,7 @@ class EventAddCoordinatorPage(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'events', 'add_event_coordinator.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
       
     def post(self, event_id):   
         try:

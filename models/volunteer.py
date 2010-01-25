@@ -2,12 +2,9 @@ from google.appengine.ext import db
 from models.neighborhood import Neighborhood
 from models.abstractuser import AbstractUser
 
-#For verifying volunteer creation
-from controllers._twitter import Twitter 
 from google.appengine.api import memcache
 from models.auth.account import Account
-from components.sessions import Session
-
+    
 ################################################################################
 # Volunteer
 class Volunteer(AbstractUser):
@@ -22,18 +19,18 @@ class Volunteer(AbstractUser):
       
         # Not verifying these updates
         if 'home_neighborhood' in params:
-          if params['home_neighborhood'] == 'None':
-            self.home_neighborhood = None;
-          else:
-            self.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
+            if params['home_neighborhood'] == 'None':
+                self.home_neighborhood = None;
+            else:
+                self.home_neighborhood = Neighborhood.get_by_id(int(params['home_neighborhood']))
         
         if 'work_neighborhood' in params:
-          if params['work_neighborhood'] == 'None':
-            self.work_neighborhood = None;
-          else:
-            self.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
-        
-          #Interest Categories updates happen in the controller
+            if params['work_neighborhood'] == 'None':
+                self.work_neighborhood = None;
+            else:
+                self.work_neighborhood = Neighborhood.get_by_id(int(params['work_neighborhood']))
+            
+            #Interest Categories updates happen in the controller
         
         if 'privacy__event_attendance' in params and self.privacy__event_attendance != params['privacy__event_attendance']:
             self.privacy__event_attendance = params['privacy__event_attendance']
@@ -69,10 +66,9 @@ class Volunteer(AbstractUser):
         if self.privacy__event_attendance == 'everyone': return True
         return self.privacy__event_attendance == 'friends' and self.account.following.filter('follows =', account).get()
 
-    def recommended_events(self, date = None):
+    def recommended_events(self, application, session, date = None):
         #TODO make more efficient
-        s = Session()
-        recommended_events = s.get('rec_events', None)
+        recommended_events = session.get('%s_rec_events'%self.key().id(), None)
         if recommended_events:
             return recommended_events
     
@@ -87,10 +83,8 @@ class Volunteer(AbstractUser):
         
         vol_interests = set([ic.key().id() for ic in self.interestcategories()])
         vol_interest_map = dict([(ic.key().id(),ic) for ic in self.interestcategories()])
-        
-        from controllers.events import _get_upcoming_events
-        
-        upcoming_events = _get_upcoming_events(date = date)
+                
+        upcoming_events = application.upcoming_events(date = date)
         
         recommended_events = []
         reason_recommended = {}
@@ -117,7 +111,7 @@ class Volunteer(AbstractUser):
                 recommended_events.append(e)
             
         #########
-        s['rec_events'] = recommended_events
+        session['%s_rec_events'%self.key().id()] = recommended_events
         return recommended_events
 
 

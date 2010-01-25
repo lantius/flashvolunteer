@@ -4,16 +4,10 @@ from datetime import datetime
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
-from controllers._utils import get_application
-
 from models.messages import MessageType, Message
 from models.event import Event
 from models.neighborhood import Neighborhood
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import is_debugging
-
-from components.sessions import Session
-
 
 
 ################################################################################
@@ -64,7 +58,7 @@ class Mailbox(AbstractHandler):
             mr.put()
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'message.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))        
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))        
           
           
     def _get_next(self, lst):
@@ -113,7 +107,7 @@ class Mailbox(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', '_sent.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))    
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))    
                 
 
     def inbox(self):
@@ -145,7 +139,7 @@ class Mailbox(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', '_inbox.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))   
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))   
     ################################################################################
     # LIST
     def list(self):
@@ -160,7 +154,7 @@ class Mailbox(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'mailbox.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))    
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))    
     
 ################################################################################
 # Forum page
@@ -175,7 +169,7 @@ class Forum(Mailbox):
         except:
             return
 
-        application = get_application()
+        application = self.get_application()
 
         forum = {}
         if self.request.path.find('events') == 1:
@@ -207,7 +201,7 @@ class Forum(Mailbox):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'forum.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))         
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))         
        
             
    

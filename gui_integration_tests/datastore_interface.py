@@ -13,7 +13,7 @@ from google.appengine.ext import db
 from google.appengine.api.users import User
 from google.appengine.ext.db import put, delete
 
-from controllers._utils import get_application
+from models.application import Application
 
 import datetime, copy
 
@@ -43,7 +43,7 @@ def create_environment(name, session_id):
     synchronize_apps()
     
     os.environ['HTTP_HOST'] = host
-    application = get_application()
+    application = Application.all().filter('name = ', 'seattle').get()
 
     (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
     

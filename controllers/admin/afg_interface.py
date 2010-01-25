@@ -2,8 +2,7 @@ from google.appengine.api import urlfetch
 from django.utils import simplejson
 import urllib, os
 
-from components.sessions import Session
-from controllers._utils import get_server, get_application, is_debugging, get_neighborhood
+from utils.misc_methods import get_neighborhood
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -43,7 +42,7 @@ class AllForGoodInterface(AbstractHandler):
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', '..', 'views', 'admin', 'afg_publish.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
 
     
     def post(self, urldata = None):
@@ -73,13 +72,14 @@ class AllForGoodInterface(AbstractHandler):
         opp = opportunity 
         
         event = Event(
-            application = get_application(),
+            application = self.get_application(),
             name = opp.title,
             description = opp.description, #TODO: make sure to pull down full desc
             enddate = opp.enddate,
             date = opp.startdate,
             special_instructions = opp.skills,
-            neighborhood = get_neighborhood(opp.location), 
+            neighborhood = get_neighborhood(application = self.get_application, 
+                                            address = opp.location), 
             address = opp.location
             #TODO: need to add event host
         )
@@ -88,13 +88,13 @@ class AllForGoodInterface(AbstractHandler):
         template_values = { 
             'event' : event, 
             'volunteer': account.get_user(), 
-            'neighborhoods': NeighborhoodHelper().selected(event.neighborhood),
+            'neighborhoods': NeighborhoodHelper().selected(self.get_application(),event.neighborhood),
             'interestcategories' : InterestCategory.all().order('name').fetch(limit=500),
         }
         self._add_base_template_values(vals = template_values)
         
         path = os.path.join(os.path.dirname(__file__),'..', '..', 'views', 'events', 'event_edit.html')
-        self.response.out.write(template.render(path, template_values, debug=is_debugging()))
+        self.response.out.write(template.render(path, template_values, debug=self.is_debugging()))
 
         
     def rebuild(self):

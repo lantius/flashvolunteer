@@ -1,6 +1,5 @@
 from google.appengine.ext import db
 
-from components.sessions import Session
 from models.event import Event
 
 ################################################################################

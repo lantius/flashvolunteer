@@ -2,8 +2,6 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os, random
 
-from controllers._utils import get_application
-
 from controllers.abstract_handler import AbstractHandler
 
 from models.application import Application
@@ -49,7 +47,7 @@ class ThisApplication(AbstractHandler):
     
     params = self.parameterize() 
     
-    application = get_application()
+    application = self.get_application()
     
     template_values = {
         'volunteer': user,

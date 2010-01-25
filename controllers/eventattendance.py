@@ -8,7 +8,6 @@ from models.event import Event
 from models.eventvolunteer import EventVolunteer
 
 from components.time_zones import now
-from components.sessions import Session
 
 from controllers.abstract_handler import AbstractHandler
 
@@ -88,7 +87,7 @@ class VerifyEventAttendance(AbstractHandler):
         i = len('event_volunteer_')
         deleted = 0
         hours_logged = 0
-        session = Session()
+        session = self._session()
         
         for key in params.keys():
             if key.startswith('event_volunteer_'):

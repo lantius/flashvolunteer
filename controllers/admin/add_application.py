@@ -8,7 +8,6 @@ from models.event import Event
 from models.interestcategory import InterestCategory
 from models.application import Application
 
-from components.sessions import Session
 
 from controllers.abstract_handler import AbstractHandler
 

@@ -6,7 +6,6 @@ from models.neighborhood import Neighborhood
 from models.messages.message_type import MessageType
 from models.messages.message_propagation_type import MessagePropagationType
 
-from controllers._utils import get_server, get_application
 from components.applications.defs import regions
 from google.appengine.ext import db
 

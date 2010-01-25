@@ -1,5 +1,3 @@
-from components.sessions import Session
-from controllers._utils import get_server, get_application
 from components.applications.operations import add_applications, add_messaging, synchronize_apps
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache

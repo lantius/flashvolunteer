@@ -3,8 +3,6 @@ import os, logging
 from google.appengine.ext import webapp, db
 
 
-from components.sessions import Session
-
 import wsgiref.handlers
 
 from controllers.admin.migrate_datastore import MigrateDatastore
@@ -21,7 +19,7 @@ webapp.template.register_template_library('templatetags.filters')
 
 
 def main():
-    session = Session()
+    session = self._session()
     application = webapp.WSGIApplication([
         ('/admin', AdminPage),
         ('/admin/migrate', MigrateDatastore),

@@ -7,9 +7,6 @@ from models.interestcategory import InterestCategory
 
 from controllers.abstract_handler import AbstractHandler
 
-from components.sessions import Session
-
-
 ################################################################################
 # ProfilePage
 class ProfilePage(AbstractHandler):
@@ -32,7 +29,8 @@ class ProfilePage(AbstractHandler):
             if ic.events():
                 byinterest.append(ic)
         
-        recommended_events = user.recommended_events()[:ProfilePage.LIMIT]
+        recommended_events = user.recommended_events(application = self.get_application(),
+                                                     session = self._session())[:ProfilePage.LIMIT]
 
         (future_events, past_events, 
          events_coordinating, past_events_coordinated) = user.get_activities(ProfilePage.LIMIT)
@@ -48,7 +46,7 @@ class ProfilePage(AbstractHandler):
             
         template_values = {
             'volunteer' : user,
-            'neighborhoods': NeighborhoodHelper().selected(user.home_neighborhood),
+            'neighborhoods': NeighborhoodHelper().selected(self.get_application(),user.home_neighborhood),
             'recommended_events': recommended_events,
             #TODO: convert to application-specific data model
             'interest_categories': InterestCategory.all(),

@@ -1,4 +1,3 @@
-from components.sessions import Session
 from controllers.abstract_handler import AbstractHandler
 
 import os, logging
@@ -11,8 +10,6 @@ from components.time_zones import now
 
 from components.message_text import type5, type6, type7, type8, type9
 
-from components.sessions import Session
-
 from models.volunteer import Volunteer
 
 
@@ -20,7 +17,7 @@ from models.volunteer import Volunteer
 class EventMessageFactory(AbstractHandler):
 
     def get(self):
-        s = Session()
+        s = self._session()
         
         type5_msg = MessageType.all().filter('name =', 'rsvp_vol').get()
         type6_msg = MessageType.all().filter('name =', 'rsvp_host').get()
@@ -110,14 +107,15 @@ class EventMessageFactory(AbstractHandler):
 class RecommendedEventMessageFactory(AbstractHandler):
 
     def get(self):
-        s = Session()
+        s = self._session()
 
         type9_msg = MessageType.all().filter('name =', 'rec_event').get()
         right_now = now()
         cached_descs = {}
         
         for v in Volunteer.all():
-            rec_events = [e for e in v.recommended_events() 
+            rec_events = [e for e in v.recommended_events(application = self.get_application(),
+                                                          session = s) 
                             if e.enddate and (e.enddate - right_now).days < 7][:10]
             
             desc = []

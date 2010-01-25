@@ -5,12 +5,8 @@ from google.appengine.ext.webapp import template
 from models.neighborhood import Neighborhood
 from models.interestcategory import InterestCategory
 
-from controllers.events import _get_upcoming_events 
-
 from controllers.abstract_handler import AbstractHandler
 
-from controllers._utils import is_debugging, get_application
-from components.sessions import Session
 from datetime import datetime
 
 from models.volunteer import Volunteer
@@ -24,8 +20,8 @@ class BaseEventListPage(AbstractHandler):
         except:
             return
         
-        self.application = get_application()
-        session = Session()
+        self.application = self.get_application()
+        session = self._session()
 
         bookmark_loc = self.request.get("bookmark", None)
         params = self.parameterize()
@@ -189,7 +185,7 @@ class PaginatedUpcomingPage(BaseEventListPage):
         self.set_context()
 
     def _get_events(self, limit, bookmark = None):
-        qry = _get_upcoming_events()
+        qry = self.get_application().upcoming_events()
         if bookmark:
             qry = qry.filter('date >=', bookmark)
         
@@ -289,7 +285,8 @@ class PaginatedRecommendedPage(BaseEventListPage):
         self.set_context()
 
     def _get_events(self, limit, bookmark=None):
-        return [e for e in self.volunteer.recommended_events()
+        return [e for e in self.volunteer.recommended_events(application = self.get_application(),
+                                                             session = self._session())
                 if (bookmark is None or e.date > bookmark) and e.application.key().id() == self.application.key().id()][:limit]
     
     def _get_title(self):

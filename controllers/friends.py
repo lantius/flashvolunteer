@@ -5,7 +5,6 @@ import random
 from controllers._helpers import NeighborhoodHelper
 from models.event import Event
 from controllers.abstract_handler import AbstractHandler
-from controllers._utils import get_application
 from models.volunteer import Volunteer
 from models.neighborhood import Neighborhood
 from google.appengine.api import memcache
@@ -27,7 +26,7 @@ class FriendsPage(AbstractHandler):
             candidates = list(volunteer.following(limit = 250))
             friends = random.sample(candidates,min(len(candidates),LIMIT))
             followers = (v for v in volunteer.followers_only())
-            neighborhoods = NeighborhoodHelper().selected(volunteer.home_neighborhood)
+            neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)
         else:
             volunteer = None
             friends = None

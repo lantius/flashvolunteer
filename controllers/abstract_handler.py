@@ -3,13 +3,17 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
-from controllers._utils import is_debugging, get_domain, get_application
-
-from components.sessions import Session
+from components.gaeutilities.sessions import Session
 from components.time_zones import now
 
 from datetime import timedelta
 import urllib, logging
+
+from models.application import Application
+from models.applicationdomain import ApplicationDomain
+
+from google.appengine.api import memcache
+
 
 ################################################################################
 # MainPage
@@ -22,12 +26,12 @@ class AbstractHandler(webapp.RequestHandler):
         return AbstractHandler.__session
     
     def _get_base_url(self):
-        return 'http://www.' + get_domain()
+        return 'http://www.' + self.get_domain()
     
     def _add_base_template_values(self, vals):
         session = self._session()
         account = self.auth()
-        application = get_application()
+        application = self.get_application()
         is_ajax_request = self.ajax_request()
         new_login = 'new_login' in session and session['new_login']
         redirected = 'redirected' in session and session['redirected']
@@ -87,12 +91,12 @@ class AbstractHandler(webapp.RequestHandler):
             raise AuthError("You must be signed in to perform this action.")
 
         if auth:
-            application = get_application()
+            application = self.get_application()
             if not application.key().id() in auth.account.active_applications:
                 auth.account.add_application(application)                      
 
         if require_login:
-            if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id')):
+            if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id'), session = session):
                 self.redirect('/timeout')
                 session['notification_message'] = ['Your session has timed out. Please log back in when you are ready.']
                 raise TimeoutError("Session has timed out.")
@@ -148,7 +152,7 @@ class AbstractHandler(webapp.RequestHandler):
                         logging.error('Could not add message receipt of message %i for recipient %i'%(message.key().id(), mr.recipient.key().id()))
     
         if immediate:
-            message.send()
+            message.send(domain = self.get_domain())
 
     def parameterize(self):
         params = {}
@@ -165,10 +169,69 @@ class AbstractHandler(webapp.RequestHandler):
                     params[name] = unicode(params[name][0])
         return params
     
+
+    def get_server(self):
+        """Determines which host requests are being served from. 
+        
+        0 == development server
+        1 == flashvolunteer-dev.appspot.com or development.flashvolunteer.org
+        2 == flashvolunteer.org etc.    
+        """
+        
+        if 'SERVER_SOFTWARE' not in os.environ or os.environ['SERVER_SOFTWARE'].startswith('Development'): 
+            return 0
+        else:
+            domain = self.get_domain()
+            if domain.find('flashvolunteer-dev.appspot.com') > -1 or domain.find('development.flashvolunteer.org') > -1:
+                return 1
+            else:
+                return 2
     
+    def get_application(self, just_id = False):
+        domain = self.get_domain()
+        key = "app-%s"%domain
+        app_domain = memcache.get(key)
+        if app_domain is None:
+            app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
+            if app_domain is None:
+                logging.error('got bad domain name: %s'%domain)
+                #TODO: is it a good policy to return seattle app by default?
+                return Application.all().filter('name = ', 'seattle').get()
+            memcache.add(key, app_domain, 100000)
+    
+        if just_id: return app_domain.application.key().id()
+        else: return app_domain.application
+        
+    def get_domain(self):
+        session = self._session()
+        if 'this_domain' not in session:
+            domain = os.environ['HTTP_HOST']
+            if domain.startswith('www.'):
+                domain = domain[4:]
+            
+            if domain.endswith('flashvolunteer.appspot.com'):
+                domain = domain.replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
+            elif domain.endswith('flashvolunteer-dev.appspot.com'): 
+                domain = 'development.flashvolunteer.org'
+    
+    #        logging.info('************')
+    #        logging.info('DOMAIN: '+ domain)
+    #        logging.info('HTTP_HOST: '+ os.environ['HTTP_HOST'])
+    #        logging.info('endswith: ' + str(domain.endswith('flashvolunteer-dev.appspot.com')))
+    
+    
+            session['this_domain'] = domain
+        return session['this_domain']
+   
 #    def redirect(self, *args, **kwargs):
 #        webapp.RequestHandler.redirect(self, *args, **kwargs)
         
+    def is_debugging(self):
+        """Detects if app is running in production or not.
+    
+        Returns a boolean.
+        """
+        return self.get_server() == 0
         
 class AuthError(Exception):
     """Exception raised for authorization errors.

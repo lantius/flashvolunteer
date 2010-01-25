@@ -2,7 +2,6 @@ import os, logging, hashlib
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-from controllers._utils import is_debugging
 
 from models.volunteer import Volunteer
 from models.auth import Account, Auth
@@ -82,7 +81,7 @@ class Login(AbstractHandler):
         session['new_login'] = True
       
     def login(self, errors = None, email = None, redirect = None):
-        dev_server = is_debugging() 
+        dev_server = self.is_debugging() 
         session = self._session()
         session.flush()
 
@@ -196,7 +195,7 @@ class Login(AbstractHandler):
             if auth:
                 session['auth'] = auth
                 account = self.auth()
-                check_avatar(account = account)
+                check_avatar(account = account, session = session)
 
                 if 'login_redirect' in session:
                     self.redirect(session['login_redirect'])
@@ -209,11 +208,10 @@ class Login(AbstractHandler):
         else:
             self.redirect('/#/login')      
 
-def check_avatar(account):
+def check_avatar(account, session):
     if not account: return
     volunteer = account.get_user()
     
-    session = self._session()
     if volunteer and \
       volunteer.avatar is None and \
       'photo' in session['login_info']:
