@@ -124,7 +124,7 @@ class RecommendedEventMessageFactory(AbstractHandler):
             for i,e in enumerate(rec_events):
                 id = e.key().id()
                 if id in cached_descs:
-                    d = cached_descs[id]
+                    d = '%i. %s'%(i,cached_descs[id])
                 else:
                     if e.get_startdate() == e.get_enddate():
                         dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time())
@@ -133,8 +133,9 @@ class RecommendedEventMessageFactory(AbstractHandler):
                         
                     url = '%s%s'%(self._get_base_url(), e.url())
                     
-                    d = '%i. "%s" - %s \nWhen: %s\nWhere: %s\n"%s..."'%(i+1, e.name, url, dt, e.neighborhood.name, e.description[:100])
+                    d = '"%s" - %s \nWhen: %s\nWhere: %s\n"%s..."'%(i+1, e.name, url, dt, e.neighborhood.name, e.description[:100])
                     cached_descs[id] = d
+                    d = '%i. %s'%(i,d)
                     
                 desc.append(d)
             
