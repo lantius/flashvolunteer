@@ -45,6 +45,7 @@ class EventPhoto(db.Model):
   
   def can_edit(self, requester):
     #want to know if requester can edit; 
+    if not self.account or not requester: return False
     
     #can edit if the original poster
     if (requester.key() == self.account.key()):

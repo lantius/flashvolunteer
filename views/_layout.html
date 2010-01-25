@@ -169,9 +169,9 @@
 
 	<div id="navtabs">
 		<ul>
-			<li id="homelink"><a class="fv" href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>
+			<!--<li id="homelink"><a class="fv" href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>-->
             {%if volunteer and volunteer.is_saved%}
-                <li id="profilelink"><a class="fv" href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">PROFILE</a></li>
+                <li id="profilelink"><a class="fv" href="/profile" {% block profileactive %}{% endblock profileactive %} id="l_profile">HOME</a></li>
 				<li id="mailboxlink"><a class="fv" href="/messages" {% block mailboxactive %}{% endblock mailboxactive %} id="l_mailbox">MAILBOX {% if volunteer and volunteer.is_saved %} {% ifequal unread_message_count 0 %}{%else%} ({{unread_message_count}}){%endifequal%}{%endif%}</a></li>        
             {% endif %}                
 			<li id="eventslink"><a class="fv" href="/events" {% block eventsactive %}{% endblock eventsactive %} id="l_events">EVENTS</a></li>

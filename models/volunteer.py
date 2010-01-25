@@ -65,6 +65,7 @@ class Volunteer(AbstractUser):
             return (vf.follows.get_user() for vf in qry)
 
     def event_access(self, account):
+        if not account: return False
         if self.privacy__event_attendance == 'everyone': return True
         return self.privacy__event_attendance == 'friends' and self.account.following.filter('follows =', account).get()
 

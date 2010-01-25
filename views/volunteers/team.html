@@ -12,12 +12,13 @@
 </script>
 
 <div id="lefthalf">
-    {% include "../volunteers/_find_volunteer_wide.html" %} 
-    {% comment %}{% include "../volunteers/_most_active_volunteers.html" %}	{% endcomment %}
-</div>
-<div id="righthalf">
     {% include "../volunteers/team/_neighbors.html" %}
     {% include "../volunteers/team/_team.html" %}
+</div>
+<div id="righthalf">
+    {% include "../volunteers/_find_volunteer_wide.html" %} 
+    {% comment %}{% include "../volunteers/_most_active_volunteers.html" %} {% endcomment %}
+
 </div>
 
 {% endblock content %}

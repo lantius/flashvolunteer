@@ -170,8 +170,9 @@ class Login(AbstractHandler):
         json = simplejson.loads(r.content)
         if json['stat'] == 'ok':  
             login_info = json['profile']  
-
-            if 'email' in login_info:
+            
+            logging.info(login_info)
+            if 'email' in login_info and login_info['providerName'] != 'Facebook':
                 login_info['identifier'] = login_info['email']
             elif 'preferredUsername' in login_info:
                 login_info['identifier'] = login_info['preferredUsername'] + '@' + login_info['providerName']
@@ -184,6 +185,9 @@ class Login(AbstractHandler):
 
             from models.auth import Auth
             auth = Auth.all().filter('identifier =', login_info['identifier']).filter('strategy =', login_info['providerName']).get()
+            
+            logging.info(auth)
+            logging.info(login_info['identifier'])
             
             if auth:
                 session['auth'] = auth

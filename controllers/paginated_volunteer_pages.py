@@ -19,7 +19,7 @@ class BaseVolunteerListPage(AbstractHandler):
     
     def set_context(self):  
         try:
-            self.account = self.auth(require_login=True)
+            self.account = self.auth(require_login=False)
         except:
             return
         
@@ -93,6 +93,8 @@ class PaginatedTeamPage(BaseVolunteerListPage):
         self.set_context()
           
     def _get_volunteers(self, limit, bookmark = None):
+        if not self.account: return []
+        
         vols = [vf.follows.get_user() for vf in self.account.following.fetch(limit=1000)]
         if bookmark:
             vols = [v for v in vols if v.key() >= bookmark]                      
@@ -175,25 +177,26 @@ class PaginatedNeighborhoodVolunteerHomePage(BaseVolunteerListPage):
 
 class PaginatedVolunteerTeam(BaseVolunteerListPage):
   
-  def get(self, volunteer_id):
-      self.page_volunteer = Volunteer.get_by_id(int(volunteer_id))
-      if not self.page_volunteer:
-          self.error(404)
-          self.response.out.write('404 page! boo!')
-
-      self.set_context()
-
-  def _get_volunteers(self, limit, bookmark = None):
+    def get(self, volunteer_id):
+        self.page_volunteer = Volunteer.get_by_id(int(volunteer_id))
+        if not self.page_volunteer:
+            self.error(404)
+            self.response.out.write('404 page! boo!')
+        
+        self.set_context()
+    
+    def _get_volunteers(self, limit, bookmark = None):
+        if not self.account: return []
         vols = [vf.follows.get_user() for vf in self.account.following.fetch(limit=1000)]
         if bookmark:
             vols = [v for v in vols if v.key() >= bookmark]                      
         vols.sort(lambda a,b: cmp(a.key(),b.key()))
-        
-  def _get_title(self):
-     return '%s\'s FlashTeam'%self.page_volunteer.name
- 
-  def _get_url(self):
-     return '/volunteers/%i/team'%self.page_volunteer.key().id()
+              
+    def _get_title(self):
+        return '%s\'s FlashTeam'%self.page_volunteer.name
+    
+    def _get_url(self):
+        return '/volunteers/%i/team'%self.page_volunteer.key().id()
 
     
 class PaginatedEventAttendeesPage(BaseVolunteerListPage):

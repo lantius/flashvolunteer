@@ -102,6 +102,8 @@
 					&raquo;Post new message
 				</a>
 			</li>
+			{% else %}
+			     You need to <a  class="fv" href="/login?redirect={{forum.path}}">login</a> to see post a message. 
 			{% endif %}
 		</ul>
 

@@ -38,11 +38,15 @@ class VolunteersPage(AbstractHandler):
     # SHOW
     def show(self, volunteer_id):
         try:
-            account = self.auth(require_login=True)
+            account = self.auth(require_login=False)
         except:
             return
         
-        volunteer = account.get_user()
+        if account:
+            volunteer = account.get_user()
+        else:
+            volunteer = None
+            
         session = Session()
         if volunteer and volunteer.key().id() == int(volunteer_id):
             session['redirected'] = True
@@ -54,13 +58,18 @@ class VolunteersPage(AbstractHandler):
         page_volunteer = Volunteer.get_by_id(int(volunteer_id))
         
         if not page_volunteer:
-          self.error(404)
-          return
+            self.error(404)
+            return
         
-        volunteerfollower = account.following.filter('follows =', page_volunteer.account).get()                  
-        volunteerfollowing = account.followers.filter('follower =', page_volunteer.account).get()
-                                                
-        event_access = page_volunteer.event_access(account = account) 
+        if account:
+            volunteerfollower = account.following.filter('follows =', page_volunteer.account).get()                  
+            volunteerfollowing = account.followers.filter('follower =', page_volunteer.account).get()
+                                                    
+            event_access = page_volunteer.event_access(account = account) 
+        else:
+            event_access = False
+            volunteerfollower = None
+            volunteerfollowing = None
                           
         #vhours = sum([ev.hours for ev in page_volunteer.eventvolunteers if ev.hours])
         
