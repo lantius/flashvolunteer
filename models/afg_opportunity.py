@@ -1,7 +1,5 @@
 from google.appengine.ext import db
 
-from models.event import Event
-
 ################################################################################
 # AbstractUser
 class AFGOpportunity(db.Model):
@@ -12,9 +10,6 @@ class AFGOpportunity(db.Model):
     #set to True or False when someone/something determines if the opportunity should be published on FV
     status = db.BooleanProperty(default=None)
 
-    #if this opportunity is published through FV, set this field to the Event
-    fv_event = db.ReferenceProperty(Event, default=None)
-    
     #metric for evaluating how suitable this opportunity is
     score = db.IntegerProperty(default=-1)
     

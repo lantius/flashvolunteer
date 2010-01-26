@@ -16,6 +16,28 @@ from components.message_text import type1_vol, type1_unvol
 ################################################################################
 class VolunteerForEvent(AbstractHandler):
 
+    def get(self, id):
+        try:
+            account = self.auth(require_login=True)
+        except:
+            return
+        
+        event = Event.get_by_id(int(id))
+        user = account.get_user()
+
+        ev = event.eventvolunteers.filter('volunteer = ', user).get()
+        
+        template_values = {
+            'volunteer' : user,
+            'event' : event,
+            'eventvolunteer': ev
+          }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__), '..', 'views', 'events', 'event_page', 'volunteer_interest.html')
+        self.response.out.write(template.render(path, template_values))
+                
+        
   ################################################################################
   # POST
     def post(self, url_data):
@@ -29,7 +51,9 @@ class VolunteerForEvent(AbstractHandler):
         
         if event:
             eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
-            if self.request.get('delete') and self.request.get('delete') == "true":
+            interest_level = int(self.request.get('interested'))
+            
+            if interest_level == 0:
                 if eventvolunteer:
                     eventvolunteer.delete()
                     (to, subject, body) = self.get_message_text(event = event, 
@@ -49,7 +73,8 @@ class VolunteerForEvent(AbstractHandler):
                                         event_is_upcoming = not event.in_past,
                                         event_is_hidden = event.hidden,
                                         event_date = event.date,
-                                        application = event.application)
+                                        application = event.application,
+                                        interest_level = interest_level)
                     eventvolunteer.put()
               
                     session = self._session()
@@ -65,7 +90,11 @@ class VolunteerForEvent(AbstractHandler):
                                 subject = subject, 
                                 body = body, 
                                 type = MessageType.all().filter('name =', 'event_coord').get())
-                    
+                else:
+                    if interest_level != eventvolunteer.interest_level:
+                        eventvolunteer.interest_level = interest_level
+                        eventvolunteer.put()
+                        
         self.redirect('/#/events/' + url_data)
         return
 

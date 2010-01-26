@@ -15,7 +15,7 @@
                     </form></li>
                 {% endif %}				
 			{% else %}
-			     <li><a target="_blank" href="mailto:{{ event.contact_email }}" class="operation">&raquo; Contact organizers</a></li>     
+			     <li><a target="_blank" href="mailto:{{ event.get_contact_email }}" class="operation">&raquo; Contact organizers</a></li>     
             {% endif %}
         {% endif %}
         <li>  

@@ -50,7 +50,9 @@
     {% include "../events/event_page/_description.html" %}
     {% include "../events/event_page/_special_instructions.html" %}
     
-    {% include "../messages/_forum_embed.html" %}
+	{% if not event.source %}
+        {% include "../messages/_forum_embed.html" %}
+	{% endif %}
 	
 </div>
 

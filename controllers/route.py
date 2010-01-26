@@ -91,7 +91,10 @@ def real_main():
         from components.applications.operations import synchronize_apps
         from models.application import Application
         if Application.all().count() == 0:
-            synchronize_apps()
+            class hack(AbstractHandler):
+                def sync(self):
+                    synchronize_apps(server = self.get_server())
+            hack().sync()
         
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(

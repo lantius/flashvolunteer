@@ -12,8 +12,8 @@ from google.appengine.ext import db
 import os
 
 
-def synchronize_apps():
-    add_applications(applications=regions)
+def synchronize_apps(server):
+    add_applications(server = server, applications=regions)
     add_categories()
     add_messaging()
 
@@ -95,9 +95,8 @@ def add_messaging():
             )
             mt.put()
 
-def add_applications(applications):
+def add_applications(server, applications):
         
-    server = get_server()
     if server == 0:
         from gui_integration_tests.test_settings import host
         domains = [host]

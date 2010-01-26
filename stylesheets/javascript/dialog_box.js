@@ -99,7 +99,12 @@ function build_dialog(d_type, id){
 			break;
         case 101:
             var url = '/volunteers/search' + id;
-            break;			
+            break;		
+			
+			
+		case 200: 
+		    var url = '/events/'+id + '/volunteer';
+			break; 	
 	}
 
     $.get(url, function(data){

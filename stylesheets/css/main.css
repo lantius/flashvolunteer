@@ -70,7 +70,9 @@ Contains navigation list items for header and footer
 ======================================================
 */
 
-			
+div#navtabs {
+	overflow:hidden;
+}
 #navtabs ul{ 
     width: 840px;
     margin-left: auto;

@@ -1,6 +1,6 @@
 from google.appengine.api import urlfetch
 from django.utils import simplejson
-import urllib, os
+import urllib, os, logging
 
 from utils.misc_methods import get_neighborhood
 from controllers.abstract_handler import AbstractHandler
@@ -33,8 +33,10 @@ class AllForGoodInterface(AbstractHandler):
         except:
             return
         
-        opportunities = sorted(AFGOpportunity.all().filter('status =', None).fetch(limit=500),lambda a,b:int(a.score-b.score),reverse=True)
-            
+        opportunities = [ o for o in sorted(AFGOpportunity.all().filter('status =', None).fetch(limit=500),
+                               lambda a,b:int(a.score-b.score),reverse=True)
+                               if o.source.get() is None ] 
+                    
         template_values = {
             'volunteer': account.get_user(),
             'opportunities': opportunities,
@@ -55,7 +57,6 @@ class AllForGoodInterface(AbstractHandler):
         elif urldata == '/publish':
             ##TODO
             opp.status = True
-            #opp.fv_event = event
             opp.put()
         
     #much of this code is derived from controllers.events.edit
@@ -78,18 +79,19 @@ class AllForGoodInterface(AbstractHandler):
             enddate = opp.enddate,
             date = opp.startdate,
             special_instructions = opp.skills,
-            neighborhood = get_neighborhood(application = self.get_application, 
-                                            address = opp.location), 
-            address = opp.location
-            #TODO: need to add event host
+            neighborhood = get_neighborhood(application = self.get_application(), 
+                                            address = opp.location)[1], 
+            address = opp.location,
+            event_url = opp.url,
+            contact_email = opp.contact_email
         )
-
-    
+        
         template_values = { 
             'event' : event, 
             'volunteer': account.get_user(), 
             'neighborhoods': NeighborhoodHelper().selected(self.get_application(),event.neighborhood),
             'interestcategories' : InterestCategory.all().order('name').fetch(limit=500),
+            'afg_opp': opp
         }
         self._add_base_template_values(vals = template_values)
         
@@ -151,7 +153,7 @@ class AllForGoodInterface(AbstractHandler):
         #+1 for coming from a high-quality provider (i.e United Way (Volunteer Solutions portal), Seattle Works (Hands On Network)
         if opp.provider in ['unitedway', 'handsonnetwork']:
             score += 2
-        if get_neighborhood(opp.location) is not None:
+        if get_neighborhood(self.get_application(), opp.location) is not None:
             score += 2
         
         try:

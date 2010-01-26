@@ -1,12 +1,19 @@
-<script>
-    function volunteer(is_delete){
-        $.post("{{event.url}}/volunteer", {session_id: "{{ session_id }}", "delete": is_delete}, 
-        function(data){
-            $('#columns').load("{{event.url}}");
-        });
-    }
-</script>
 
+
+<style>
+	.yellow,
+	.green {
+    	font-size:135%;
+		font-weight:bold;
+	}
+	.green{
+		color:#127818;
+    }
+    .yellow{
+        color:#9f9c0b;
+    }   
+		
+</style>
 
 <div id="eventdetails" class="hardmodule">
 	
@@ -15,6 +22,10 @@
 	        <li>{{ event.get_startdate_long }}</li>
 	        <li>{{ event.get_start_time }} - {{ event.get_end_time}} {% ifnotequal event.get_enddate event.get_startdate %}({{event.get_enddate}}){% endifnotequal %}</li>
 			<li>{{ event.address }} ( <a  class="fv" href={{event.neighborhood.url}}>{{ event.neighborhood.name }}</a> )</li>
+            {% if event.event_url %}
+			     <li><a href="{{ event.event_url }}" target="_blank">Visit the event website</a></li>
+            {% endif %}
+
 		</ul>
 	</div>
     <div class="event_operation_block">
@@ -23,12 +34,16 @@
 			{% if not eventvolunteer.isowner %}
 				
 				{% if not event.inpast %}
-				    <li><a onclick=volunteer("true") title="Unvolunteer for this event" class="operation" id="s_unvolunteer">&raquo; Unvolunteer</a></li>
+				    <li>
+					    You are {%ifequal eventvolunteer.interest_level 2%}<span class="green">Attending</span>{%else%}{%ifequal eventvolunteer.interest_level 1%}<span class="yellow">Interested</span>{%endifequal%}{%endifequal%} 
+						...change your mind? 
+						<a onclick=build_dialog(200,{{event.key.id}}) title="Change your participation level" class="operation" id="s_unvolunteer">Click here.</a>
+					</li>
 				{% endif %}
 				
-				{% if not event.verified %}
+				<!--{% if not event.verified %}
 					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name|striptags}} is inappropriate!&body={{event.name|striptags}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
-				{% endif %}
+				{% endif %}-->
 			
 			
 			{% endif %}
@@ -38,7 +53,7 @@
 					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name|striptags}} is inappropriate!&body={{event.name|striptags}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 				{% endif %}
             
-            <li><button onclick=volunteer("false") title="Volunteer for this event" class="volunteer_button" id="s_volunteer">{% if event.inpast %}I attended this event.{%else %}Sign me up!{%endif%}</button></li>
+            <li><button onclick=build_dialog(200,{{event.key.id}}) title="Volunteer for this event" class="volunteer_button" id="s_volunteer">{% if event.inpast %}I attended this event.{%else %}I'm thinking about volunteering...{%endif%}</button></li>
 
 			{% else %}
 			    <li>You must <a  class="fv" href='/login?redirect={{event.url}}'>login</a> to signup for this event</li>

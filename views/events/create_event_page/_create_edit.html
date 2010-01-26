@@ -129,19 +129,42 @@
 		<li>
 			<div class="eventcreatelabel">Address:</div>
 			<div class="eventinput">
-				{% include "../events/create_event_page/_enter_address.html" %}
+				<input class="required text" id="address1" name="address" type="text" value="{{event.address}}" />
+				<br />
+				<span class="format_help">Street, City, State, Zip</span>
 			</div>
 		</li>
+
+        <li>
+            <div class="eventcreatelabel">Website URL (optional):</div>
+            <div class="eventinput">
+                <input class="text" name="event_url" type="text" value="{{event.event_url}}" />
+            </div>
+        </li>
+
+        <li>
+            <div class="eventcreatelabel">Contact email:</div>
+            <div class="eventinput">
+                <input class="text" name="contact_email" type="text" value="{% if event.contact_email %}{{event.contact_email}}{% else %}{{account.preferred_email}}{% endif %}" />
+            </div>
+        </li>
+				
 		<li>
 			<div class="eventcreatelabel">Description:</div>
 			<div class="eventinput">
-				{% include "../events/create_event_page/_description_input.html" %}
+				<textarea class="html_editor required textarea" name="description" >{% if event.error.description %}{{event.error.description.1}}{% else %}{{ event.description }}{% endif %}</textarea>    
+				
+				{% if event.error.description %}
+				<br/><strong class="error">{{event.error.description.0}}</strong>
+				{% endif %}
 			</div>
 		</li>
 		<li>
 			<div class="eventcreatelabel">Special Instructions:</div>
 			<div class="eventinput">
-				{% include "../events/create_event_page/_special_instructions_input.html" %}
+				<textarea class="html_editor textarea" name="special_instructions" >
+					{% if event.special_instructions %}{{ event.special_instructions }}{% endif %}
+				</textarea>   
 			</div>
 		</li>
 		<li>
@@ -162,6 +185,9 @@
 	</div>
 	<div>		
 		<input type=hidden name="session_id" value="{{ session_id }}">
+		{% if afg_opp %}
+            <input type=hidden name="afg_opp" value="{{ afg_opp.key.id }}">	
+		{% endif %}
 		<input class="submit" id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
 	</div>
 	</form>

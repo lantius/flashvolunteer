@@ -5,6 +5,7 @@ from models.application import Application
 from models.neighborhood import Neighborhood
 import datetime, logging, urllib
 from utils.html_sanitize import sanitize_html
+from models.afg_opportunity import AFGOpportunity
 
 ################################################################################
 # Event
@@ -42,6 +43,12 @@ class Event(db.Model):
     ###message state
     reminder_message_sent = db.BooleanProperty(default=False)
     post_event_message_sent = db.BooleanProperty(default=False)
+    
+    event_url = db.LinkProperty()
+    contact_email = db.EmailProperty()
+    
+    #if this opportunity is published through FV, set this field to the Event
+    source = db.ReferenceProperty(AFGOpportunity, default=None, collection_name='source')
     
     def __init__(self,
                parent=None,
@@ -154,7 +161,9 @@ class Event(db.Model):
     def hosts(self):
         return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', True))
     
-    def contact_email(self):
+    def get_contact_email(self):
+        if self.contact_email:
+            return self.contact_email
         return ','.join([ev.volunteer.account.get_email() for ev in self.eventvolunteers.filter('isowner = ', True)])
     
     def get_numphotoalbums(self):
@@ -274,6 +283,19 @@ class Event(db.Model):
             self.error['special_instructions'] = ('Invalid special instructions',
                                                 params['special_instructions'])
         
+        if 'event_url' in params:
+            self.event_url = params['event_url']
+        
+        if 'contact_email' in params:
+            self.contact_email = params['contact_email']
+            
+        if 'afg_opp' in params:
+            afg_opp = AFGOpportunity.get_by_id(int(params['afg_opp']))
+            self.source = afg_opp
+    
+            
+        if self.error:
+            raise Exception(self.error)
         return not self.error
     
     def inpast(self):

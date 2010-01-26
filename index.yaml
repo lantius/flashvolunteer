@@ -75,6 +75,13 @@ indexes:
   - name: reminder_message_sent
   - name: startdate
 
+- kind: EventInterestCategory
+  properties:
+  - name: event_is_hidden
+  - name: event_is_upcoming
+  - name: interestcategory
+  - name: event_date
+
 - kind: EventPhoto
   properties:
   - name: event

@@ -26,6 +26,7 @@ class EventVolunteer(db.Model):
     isowner = db.BooleanProperty(required = True)
     attended = db.BooleanProperty(default = None)
     hours = db.IntegerProperty()
+    interest_level = db.IntegerProperty(default=2)
     
     ### These are shadow properties of Event, that would ideally be accessed there,
     ### but which cannot be during datastore queries, as that would use an implicit

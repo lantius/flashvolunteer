@@ -286,14 +286,14 @@ class EventsPage(AbstractHandler):
         session = self._session()
         
         if not event.validate(params):
-            session['notification_message'].append('Sorry, your event could not be created')
+            session['notification_message'] = ['Sorry, your event could not be created']
             self.redirect('/#/events')
             return False
         
         try:
             event.put()
         except:
-            session['notification_message'].append('Sorry, your event could not be created')
+            session['notification_message'] = ['Sorry, your event could not be created']
             self.redirect('/#/events')
             return False
         
