@@ -23,7 +23,9 @@ class Login(AbstractHandler):
         
         params = self.parameterize()
             
-        if self.request.path.find('dev_login') > -1:    
+        if self.request.get('token', None):
+            self.rpx_auth()
+        elif self.request.path.find('dev_login') > -1:    
             self.dev_login()    
         elif not account:
             redirect = None
@@ -110,7 +112,9 @@ class Login(AbstractHandler):
     def post(self):
         session = self._session()
         
+        
         if self.request.get('token', None):
+            logging.info('posting from rpx')
             self.rpx_auth()
         else:
             self.fv_auth()

@@ -18,12 +18,18 @@ from google.appengine.api import memcache
 ################################################################################
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
-    __session = None
+    #__session = None
     
     def _session(self):
-        if AbstractHandler.__session is None:
-            AbstractHandler.__session = Session()
-        return AbstractHandler.__session
+        #if AbstractHandler.__session is None:
+        #    AbstractHandler.__session = Session()
+        #return AbstractHandler.__session
+        try:
+            return self.__session
+        except:
+            self.__session = Session()
+            return self.__session
+        
     
     def _get_base_url(self):
         return 'http://www.' + self.get_domain()
