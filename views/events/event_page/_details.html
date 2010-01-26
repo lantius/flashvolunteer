@@ -12,7 +12,9 @@
     .yellow{
         color:#9f9c0b;
     }   
-		
+	#mindchange{
+		font-size:90%;
+	}
 </style>
 
 <div id="eventdetails" class="hardmodule">
@@ -35,9 +37,8 @@
 				
 				{% if not event.inpast %}
 				    <li>
-					    You are {%ifequal eventvolunteer.interest_level 2%}<span class="green">Attending</span>{%else%}{%ifequal eventvolunteer.interest_level 1%}<span class="yellow">Interested</span>{%endifequal%}{%endifequal%} 
-						...change your mind? 
-						<a onclick=build_dialog(200,{{event.key.id}}) title="Change your participation level" class="operation" id="s_unvolunteer">Click here.</a>
+					    You are {%ifequal eventvolunteer.interest_level 2%}<span class="green">attending</span>{%else%}{%ifequal eventvolunteer.interest_level 1%}<span class="yellow">interested</span>{%endifequal%}{%endifequal%} <span id="mindchange">(change your mind? 
+						<a onclick=build_dialog(200,{{event.key.id}}) title="Change your participation level" class="operation" id="s_unvolunteer">Click here.</a>)</span>
 					</li>
 				{% endif %}
 				

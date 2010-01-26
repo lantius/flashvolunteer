@@ -43,12 +43,16 @@
 		.yellow {
 			color:#9f9c0b;;
 		}
+		#boldy {
+			font-weight:bold;
+		}
     </style>
     <div class="dialog_container"</div>
        
 	   <div id="vol_interest_text">
 		   {% if event.source %}
-		       <p>This event has been reposted from another site. <strong>Please see the <a href="{{event.event_url}}" target="_blank">event web page</a> and let the event coordinator know you're interested</strong> in volunteering for the event.</p>
+		       <p>This event has been reposted from another site.</p>
+			   <p><span id="boldy">Please <a href="{{event.event_url}}" target="_blank">go here</a> and let the coordinator know you're interested.</span></p>
 			   <p>We will still send you an automatic reminder the day before the event.
 		   {% else %}
 	    	   <p>We will send an automatic reminder the day before the event. The event coordinators will also be notified that you've expressed interest. </p>
@@ -59,8 +63,8 @@
        </div>
 
        <div id="vol_interest_choices">
-            <input type="radio" name="vol_choice" value="2" {%ifequal eventvolunteer.interest_level 2%}checked="1"{%endifequal%}><label class="green">Go ahead and mark me down as attending</label></input><br>
-            <input type="radio" name="vol_choice" value="1" {%ifequal eventvolunteer.interest_level 1%}checked="1"{%endifequal%}><label class="yellow">I'm just interested -- remind me later</label></input><br>
+            <input type="radio" name="vol_choice" value="2" {%ifequal eventvolunteer.interest_level 2%}checked="1"{%endifequal%}><label class="green">Go ahead and sign me up!</label></input><br>
+            <input type="radio" name="vol_choice" value="1" {%ifequal eventvolunteer.interest_level 1%}checked="1"{%endifequal%}><label class="yellow">I'm just interested &minus; remind me later.</label></input><br>
             <input type="radio" name="vol_choice" value="0" ><label class="red">Errrr, actually I'm not interested...</label></input>
 	   </div>
 	    

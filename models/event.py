@@ -44,8 +44,8 @@ class Event(db.Model):
     reminder_message_sent = db.BooleanProperty(default=False)
     post_event_message_sent = db.BooleanProperty(default=False)
     
-    event_url = db.LinkProperty()
-    contact_email = db.EmailProperty()
+    event_url = db.LinkProperty(default = None)
+    contact_email = db.EmailProperty(default = None)
     
     #if this opportunity is published through FV, set this field to the Event
     source = db.ReferenceProperty(AFGOpportunity, default=None, collection_name='source')
@@ -284,10 +284,16 @@ class Event(db.Model):
                                                 params['special_instructions'])
         
         if 'event_url' in params:
-            self.event_url = params['event_url']
+            try:
+                self.event_url = params['event_url']
+            except:
+                pass
         
         if 'contact_email' in params:
-            self.contact_email = params['contact_email']
+            try:
+                self.contact_email = params['contact_email']
+            except:
+                pass
             
         if 'afg_opp' in params:
             afg_opp = AFGOpportunity.get_by_id(int(params['afg_opp']))
