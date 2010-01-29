@@ -20,7 +20,7 @@ class AFGOpportunity(db.Model):
     title = db.StringProperty()
     provider = db.StringProperty()
     description = db.TextProperty()
-    contact_email = db.StringProperty()
+    contact_email = db.StringProperty(default = None)
     skills = db.TextProperty()
     url = db.StringProperty()
     location = db.StringProperty()

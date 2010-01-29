@@ -45,7 +45,7 @@ class Event(db.Model):
     post_event_message_sent = db.BooleanProperty(default=False)
     
     event_url = db.LinkProperty(default = None)
-    contact_email = db.EmailProperty(default = None)
+    contact_email = db.StringProperty(default = None)
     
     #if this opportunity is published through FV, set this field to the Event
     source = db.ReferenceProperty(AFGOpportunity, default=None, collection_name='source')
