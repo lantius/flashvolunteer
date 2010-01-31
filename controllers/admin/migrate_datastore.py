@@ -12,6 +12,9 @@ from models.eventinterestcategory import EventInterestCategory
 from models.auth.account import Account
 from models.eventvolunteer import EventVolunteer
 
+from google.appengine.ext import webapp, db
+from google.appengine.ext.webapp import template
+
 import os, logging
 
 from google.appengine.ext import deferred
@@ -21,13 +24,56 @@ from google.appengine.ext import deferred
 class MigrateDatastore(AbstractHandler):
 
     def get(self):
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return   
+                
+        template_values = {
+            'volunteer' : account.get_user()
+          }
+        self._add_base_template_values(vals = template_values)
         
+        path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'admin', 'migrate.html')
+        self.response.out.write(template.render(path, template_values))
+        
+
+    def post(self):
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return   
+
         ## do migration here
         #synchronize_apps()
+        deferred.defer(set_admin_status)
 
-        deferred.defer(set_account_in_event_volunteers)
-
-        return 'successful'
+        session = self._session()
+        session['notification_message'] = ['added %i opportunities'%added, 
+                                           '%i already existed'%existed, 
+                                           'skipped %i opportunities from errors'%skipped]
+        self.redirect('/admin/migrate')
+    
+def set_admin_status():
+    admins = [
+              'aaron.hayden@gmail.com',
+              'acwanka@gmail.com',
+              'brad@flashvolunteer.org',
+              'eva.ringstrom@gmail.com',
+               'info@flashvolunteer.org',
+                'jbwilke@gmail.com',
+                'mellicia@gmail.com',
+                'noreply@flashvolunteer.org',
+                'saracoledaum@gmail.com',
+                'tkriplean@gmail.com',
+                'justinmarxdesign@gmail.com',     
+                'koos42@gmail.com',     
+                'travis@flashvolunteer.org'
+                ]
+    for admin in admins:
+        for ac in Account.all().filter('preferred_email =', admin):
+            ac.group_wheel = True
+            ac.put()
 
 def set_account_in_event_volunteers():
     for ev in EventVolunteer.all():

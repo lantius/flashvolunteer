@@ -10,12 +10,13 @@ from google.appengine.ext.webapp import template
 
 from models.afg_opportunity import AFGOpportunity
 
+from django.utils import simplejson
 import datetime
 
 class AllForGoodInterface(AbstractHandler):
 
     def get(self, urldata = None):
-        
+        logging.info('in afg')
         if not urldata:
             self.list()
         elif urldata == '/publish':
@@ -23,13 +24,11 @@ class AllForGoodInterface(AbstractHandler):
             afg_id = params['id']
             opp = AFGOpportunity.all().filter('afg_id =', afg_id).get()            
             self.publish(opportunity = opp)
-        elif urldata == '/rebuild':
-            self.rebuild()
-            self.redirect('/admin/afg_interface')
+            
 
     def list(self): 
         try:
-            account = self.auth(require_login = True)
+            account = self.auth(require_login = True, require_admin = True)
         except:
             return
         
@@ -48,16 +47,25 @@ class AllForGoodInterface(AbstractHandler):
 
     
     def post(self, urldata = None):
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return   
+        
         params = self.parameterize() 
-        afg_id = params['id']
+        
         if urldata == '/dismiss':
+            afg_id = params['id']
             opp = AFGOpportunity.all().filter('afg_id =', afg_id).get()
             opp.status = False
             opp.put()
         elif urldata == '/publish':
-            ##TODO
+            afg_id = params['id']
             opp.status = True
             opp.put()
+        elif urldata == '/rebuild':
+            self.rebuild()
+            #self.redirect('/#/admin/afg_interface')
         
     #much of this code is derived from controllers.events.edit
     def publish(self, opportunity):
@@ -66,7 +74,7 @@ class AllForGoodInterface(AbstractHandler):
         from controllers._helpers import NeighborhoodHelper
         
         try:
-            account = self.auth(require_login=True)
+            account = self.auth(require_login=True, require_admin = True)
         except:
             return   
 
@@ -100,7 +108,12 @@ class AllForGoodInterface(AbstractHandler):
 
         
     def rebuild(self):
-        
+
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return   
+                
         SEARCH_RESULTS = 50
         
         url = 'http://www.allforgood.org/api/volopps?vol_loc=Seattle,WA&output=json&key=flashvolunteer&num=%i'%SEARCH_RESULTS
@@ -138,15 +151,11 @@ class AllForGoodInterface(AbstractHandler):
                 new_op.score = self._score_opportunity(new_op)
                 new_op.put()  
                 added += 1              
-            except Exception, e:
+            except:
                 skipped += 1
-                print 'title: ', o['title']
-                print 'location: ', o['location_name']
-                print 'contact: ', o['contactEmail']
-            
 
-        print 'added %i\nexisted already %i\nskipped %i'%(added, existed, skipped)
-
+        self.response.out.write(simplejson.dumps({'added':added, 'existed':existed, 'skipped':skipped}))
+    
     def _score_opportunity(self, opp):
         score = 0
         

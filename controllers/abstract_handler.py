@@ -18,25 +18,17 @@ from google.appengine.api import memcache
 ################################################################################
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
-    #__session = None
     
     def _session(self):
-        #if AbstractHandler.__session is None:
-        #    AbstractHandler.__session = Session()
-        #return AbstractHandler.__session
-        try:
-            return self.__session
-        except:
-            self.__session = Session()
-            return self.__session
-        
+        return Session()
     
     def _get_base_url(self):
         return 'http://www.' + self.get_domain()
     
     def _add_base_template_values(self, vals):
         session = self._session()
-        account = self.auth()
+        #logging.info('_add_base_template_values: %s'%session.sid)
+        account = self.get_account()
         application = self.get_application()
         is_ajax_request = self.ajax_request()
         new_login = 'new_login' in session and session['new_login']
@@ -78,43 +70,66 @@ class AbstractHandler(webapp.RequestHandler):
             session['notification_message'] = []
 
             
-    def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
+    def get_account(self):
         session = self._session()
+        auth = session.get('auth', None)   
+        if auth is None: return None
+        else:
+            return auth.account
+        
+    def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
+        import inspect
+
+        def whoami():
+            return inspect.stack()[3][3]
+        def whosdaddy():
+            return inspect.stack()[2][3]
+
+        session = self._session()
+        #logging.info('auth: %s'%session.sid)
+
+
+        #logging.error(whosdaddy() + '   ' + whoami() + 'login_redirect' in session)
+        
+        if require_admin: require_login = True
+        
         account = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
         
         return account
     
+    #def redirect(self, uri):
+    #    logging.info('redirecting to %s'%uri)
+    #    webapp.RequestHandler.redirect(self,uri)
+        
     def _auth(self, require_login, redirect_to, require_admin):
         
         session = self._session()
         
         auth = session.get('auth', None)
+        account = self.get_account()
         
-        if require_login and (not auth or not auth.account):
-            self.redirect(redirect_to)        
-            if redirect_to == '/login': 
-                session['login_redirect'] = self.request.path        
-            raise AuthError("You must be signed in to perform this action.")
-
-        if auth:
+        if account:
             application = self.get_application()
-            if not application.key().id() in auth.account.active_applications:
-                auth.account.add_application(application)                      
+            if not application.key().id() in account.active_applications:
+                account.add_application(application)                      
 
         if require_login:
-            if self.request.method == 'POST' and not auth.account.check_session_id(self.request.get('session_id'), session = session):
+            if not account:
+                self.redirect(redirect_to)        
+                if redirect_to == '/login': 
+                    session['login_redirect'] = self.request.path        
+                raise AuthError("You must be signed in to perform this action.")
+                        
+            elif self.request.method == 'POST' and not account.check_session_id(self.request.get('session_id'), session = session):
                 self.redirect('/timeout')
                 session['notification_message'] = ['Your session has timed out. Please log back in when you are ready.']
                 raise TimeoutError("Session has timed out.")
                 #return (None)       # shouldn't get here except in tests    
-            elif require_admin and not users.is_current_user_admin():
+            elif require_admin and not account.is_admin():
                 self.redirect(redirect_to)
                 raise AuthError('You do not have permission to view this page.')
         
-        if not auth:
-            return None
-        
-        return auth.account
+        return account
 
     def ajax_request(self):
         return 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'

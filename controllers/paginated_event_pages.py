@@ -39,7 +39,7 @@ class BaseEventListPage(AbstractHandler):
 
         first_page = not bookmark_loc or bookmark_loc == '-'
         if not first_page:
-            logging.info('got bookmarkloc: ' + bookmark_loc)
+            #logging.info('got bookmarkloc: ' + bookmark_loc)
             bookmark = datetime.strptime(bookmark_loc, '%Y-%m-%d%H:%M:%S')              
             trace = session.get('events_pagination', None)
             if not trace or trace == []:

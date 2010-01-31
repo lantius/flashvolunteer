@@ -122,13 +122,14 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
                 #rate limiting for email sending. quota is 8 per minute free
                 deferred.defer(send_email, 
                                subject = self.subject,
-                               to = mr.recipient.name + "<" + mr.recipient.get_email() + ">", 
+                               to = mr.recipient.get_name() + "<" + mr.recipient.get_email() + ">", 
                                body = body,
                                _queue="email")
                 
             except Exception, e:
                 mr.emailed = False
                 mr.put()
+                logging.info('could not send to %s'%mr.recipient.key().id())
                 raise
                 
 def send_email(subject, to, body):

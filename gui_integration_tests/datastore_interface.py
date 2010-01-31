@@ -40,7 +40,7 @@ def create_environment(name, session_id):
     from models.auth.auth import Auth
     
     from components.applications.operations import synchronize_apps
-    synchronize_apps()
+    synchronize_apps(server=0)
     
     os.environ['HTTP_HOST'] = host
     application = Application.all().filter('name = ', 'seattle').get()

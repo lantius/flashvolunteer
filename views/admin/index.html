@@ -11,27 +11,44 @@
       });
 </script>
 
-{% if not account.is_admin %}{% endif %}
-{% if 0 %}
-<div id="home-top">
-
-    <div id="home-error">
-        This section is for Flash Volunteer {{application_alias}} administrators!  Volunteer through the <a  class="fv" href='../'>mainpage</a> or change your admin status
-    </div>
-    
-{% else %}
-
-<div id="home-top">
+{% if not account.is_admin %}
+	<div id="home-top">
 	
-	<div id="home-about" class="fl">
-		 
-	    <div id="about">
-	        <p>FV Admin task page (doesn't do anything yet!)</p>
+	    <div id="home-error">
+	        This section is for Flash Volunteer {{application_alias}} administrators only!
 	    </div>
-	</div>				
+	</div>
+{% else %}
+    <style>
+    	h2 {
+            margin: 15px 0 5px 0;
+			}
+    </style>
+	<div id="home-top">
+      
+        <h2>Site administration</h2>
+		<ul>		
+		<li><a class="fv" href="/admin/afg_interface">Manage All for Good opportunities</a></li>
+		<li><a class="fv" href="/admin/send_message">Send site-wide message</a>  </li> 
+		</ul>
+		
+		<h2>Technical administration</h2>
+		<ul>
+		
+		<li><a class="fv" href="/admin/migrate">Migrate datastore</a></li>
+
+        </ul>
+	    
+		<h2>Wishlist</h2>
+		<ul>
+		  <li><a class="fv" href="/admin/event_verify">Verify events</a></li>
+		<li><a class="fv" href="/admin/add_neighborhood">Add neighborhood</a></li>
+		<li><a class="fv" href="/admin/add_application">Add application</a>	</li>
+		<li><a class="fv" href="/admin/modify_user">Modify user</a>   </li>
+		</ul>
+	</div>
 	
-	<div style="clear: both;"></div>
-</div>
+<!--
 <div id="admintask">
 
 	{% include "_unverified_event_list.html" %}
@@ -43,6 +60,7 @@
 	<div style="clear: both;"></div>
 
 </div>
+-->
 
 {%endif%}
 

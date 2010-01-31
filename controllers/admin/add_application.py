@@ -14,4 +14,7 @@ from controllers.abstract_handler import AbstractHandler
 class AddApplications(AbstractHandler):
 
     def get(self):
-        pass
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return   

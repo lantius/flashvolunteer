@@ -20,7 +20,7 @@ class AbstractSendMessage(AbstractHandler):
     def _send_message(self, sender, recipients, type, params, autogen = False, forum = True):            
         if len(recipients) == 0: return
         
-        logging.info('recipient list size is %i'%len(recipients))
+        #logging.info('recipient list size is %i'%len(recipients))
         
         self.send_message(to = recipients, 
                      subject = params['subject'], 

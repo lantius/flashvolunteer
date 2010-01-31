@@ -64,19 +64,25 @@
 	</script>
 	
 	<script>
+	  
       $(document).ready(function(){ //this is for dynamic page loader
           set_page_loader('#navtabs a.fv, #incentive_banner a.fv, #static_nav a.fv, a#l_create, a#l_login, a#l_settings');
 		  
+		  var cur_loaded = null;
 	      $.address.change(function(event) { //every time the address bar is changed...
-	        $('#columns').load(event.value);    
-            //console.log("address change:"+$.address.path());
+	        if (event.value != cur_loaded) {
+				$('#columns').load(event.value);
+				//console.log("address change:" + $.address.path());
+				cur_loaded = event.value;
+			}
 	      }); 
 		  $.address.init(function(event){
 		  	var start_of_path_url = event.target.baseURL().indexOf('/', 7);
             if (start_of_path_url > -1){
 				var nest_path = event.target.baseURL().substring(start_of_path_url);
-				//console.log("INIT changing address to:"+nest_path);
-
+				//console.log("INIT changing address from " + event.target.baseURL() + " to:"+nest_path);
+                
+				cur_loaded = $.address.value();
 		    	$.address.value(nest_path);
             }
 		  });
@@ -213,7 +219,7 @@
 	
 	<div id="incentive_banner"> 
     	<a class="fv" href="/incentives">
-    		<!--<img src="/stylesheets/media/FV_Incentive_Banner.png" />-->
+    		<img src="/stylesheets/media/FV_Incentive_Banner.png" />
 		</a>
     </div>
 		

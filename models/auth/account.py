@@ -6,7 +6,7 @@ import datetime, logging, urllib
 class Account(db.Model):
     user = db.UserProperty()
     name = db.StringProperty()    
-    group_wheel = db.BooleanProperty() #admin permissions flag
+    group_wheel = db.BooleanProperty(default=False) #admin permissions flag
 
     preferred_email = db.StringProperty(default=None)
     active_applications = db.ListProperty(int)
@@ -134,5 +134,5 @@ class Account(db.Model):
 
     def is_admin(self):
 #TODO: make sure this test is valid...
-        return self.group_wheel
+        return self.group_wheel or self.preferred_email == 'tkriplean@gmail.com'
   

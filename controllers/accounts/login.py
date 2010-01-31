@@ -85,11 +85,11 @@ class Login(AbstractHandler):
     def login(self, errors = None, email = None, redirect = None):
         dev_server = self.is_debugging() 
         session = self._session()
-        session.flush()
+        #session.flush()
 
         if redirect:
             session['login_redirect'] = redirect
-            logging.info('got redirect: %s'%redirect)
+            #logging.info('got redirect: %s'%redirect)
             
         template_values = { 
           'dev_server': dev_server,
@@ -114,7 +114,7 @@ class Login(AbstractHandler):
         
         
         if self.request.get('token', None):
-            logging.info('posting from rpx')
+            #logging.info('posting from rpx')
             self.rpx_auth()
         else:
             self.fv_auth()

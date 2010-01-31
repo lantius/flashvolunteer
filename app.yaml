@@ -16,13 +16,15 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin    
 
+- url: /admin/cron_jobs/.*
+  script: controllers/admin/route.py
+  login: admin
+
 - url: /admin
   script: controllers/admin/route.py
-  login: admin
-    
+  
 - url: /admin/.*
   script: controllers/admin/route.py
-  login: admin
     
 - url: /_ah/queue/deferred
   script: $PYTHON_LIB/google/appengine/ext/deferred/deferred.py

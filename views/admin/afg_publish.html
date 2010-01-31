@@ -25,6 +25,18 @@
     	background-color: #f99;
     }
 
+    .my_button {
+    	margin-top: 10px;
+		font-weight: bold;
+		font-family: arial;
+		text-decoration: none;
+		background-color: #EEEEEE;
+		color: #333333;
+		border-top: 1px solid #CCCCCC;
+		border-right: 1px solid #333333;
+		border-bottom: 1px solid #333333;
+		border-left: 1px solid #CCCCCC;
+    }
 </style>
 
 <script>
@@ -39,13 +51,29 @@
         $('#opp'+id+'_ops').html('<strong>Dismissed</strong>'); 
     }
 
+    function rebuild(){
+        $.post("/admin/afg_interface/rebuild", {session_id: "{{ session_id }}"}, 
+        function(data){
+            $('#rebuilt').show();
+            var rebuilt_text = "Added " + data.added + " opportunities<br>" + data.existed + " already existed<br>Skipped " + data.skipped + " opportunities from errors";
+            $('#rebuilt').html(rebuilt_text);
+        }, "json");
+       }
+    
+	
 </script>
 
 
+<ul>
+	<li><a href="/admin" class="fv">&laquo; back to admin home</a></li>
 
-<div style="font-size:150%; padding: 25px;" id="pull_down_afg_events">
-	<a href="/admin/afg_interface/rebuild" class="operation fv">Check for new opportunities from All for Good</a>
-</div> 
+    <li><button class="submit" onclick=rebuild()>Check for new opportunities</button></li>
+<li>
+	<div id="rebuilt">
+	
+    </div>
+</li>
+</ul>
 
 <table id="afg_opportunity_list">
 	<tbody>

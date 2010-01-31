@@ -39,8 +39,6 @@ from controllers.interest_categories import CategoryPage
 
 from controllers.abstract_handler import AbstractHandler
 
-from controllers.admin.home import AdminPage
-
 webapp.template.register_template_library('templatetags.filters')
 
 ################################################################################
@@ -81,7 +79,7 @@ def profile_main():
     # The rest is optional.
     # stats.print_callees()
     # stats.print_callers()
-    logging.info("Profile data:\n%s", stream.getvalue())
+    #logging.info("Profile data:\n%s", stream.getvalue())
  
  
 def real_main():
@@ -159,8 +157,6 @@ def real_main():
            ('/api/applications/all', AllApplications), 
            ('/api/applications/this', ThisApplication),
 
-           #TODO: route here? admin tools
-           #('/admin', AdminPage)
           ],
           debug=debug)
     wsgiref.handlers.CGIHandler().run(application)

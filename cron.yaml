@@ -1,14 +1,14 @@
 cron:
 - description: the FV message dispatcher
-  url: /admin/message_dispatch
+  url: /admin/cron_jobs/message_dispatch
   schedule: every 1 minutes
   
 - description: generates RSVP and post event messages
-  url: /admin/event_message_factory
+  url: /admin/cron_jobs/event_message_factory
   schedule: every 10 minutes
 
 - description: generates messages for recommended events
-  url: /admin/recommended_events_message_factory
+  url: /admin/cron_jobs/recommended_events_message_factory
   schedule: every monday 03:00
   timezone: America/New_York
   

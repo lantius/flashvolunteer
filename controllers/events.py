@@ -166,14 +166,14 @@ class EventsPage(AbstractHandler):
         event = Event.get_by_id(int(event_id))
                 
         if not event or event.application.key().id() != application.key().id():
-            logging.info('didnt match' + str(application.name))
+            #logging.info('didnt match' + str(application.name))
             self.error(404)
             return
             
         owners = event.hosts()
         eventphotos = event.eventphotos.order('display_weight').fetch(limit=100)
         
-        logging.info(owners)
+        #logging.info(owners)
         for ep in eventphotos:
             if (ep.can_edit(account)):
                 ep.can_edit_now = True
