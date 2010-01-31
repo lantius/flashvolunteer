@@ -75,20 +75,15 @@ class AbstractHandler(webapp.RequestHandler):
         auth = session.get('auth', None)   
         if auth is None: return None
         else:
-            return auth.account
-        
+            try:
+                return auth.account
+            except:
+                session.flush()
+                return None
+            
     def auth(self, require_login = False, redirect_to = '/login', require_admin = False):
-        import inspect
-
-        def whoami():
-            return inspect.stack()[3][3]
-        def whosdaddy():
-            return inspect.stack()[2][3]
-
         session = self._session()
         #logging.info('auth: %s'%session.sid)
-
-
         #logging.error(whosdaddy() + '   ' + whoami() + 'login_redirect' in session)
         
         if require_admin: require_login = True
@@ -105,7 +100,6 @@ class AbstractHandler(webapp.RequestHandler):
         
         session = self._session()
         
-        auth = session.get('auth', None)
         account = self.get_account()
         
         if account:

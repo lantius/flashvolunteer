@@ -84,6 +84,7 @@ class SettingsPage(AbstractHandler):
         if 'is_delete' in params and params['is_delete'] == 'true':     
             if 'confirm_delete' in params and params['confirm_delete'] == 'true':
                 self.delete(account)
+                session.flush()
                 self.redirect('/#/logout')
         else:  
             if self.update(params, account):

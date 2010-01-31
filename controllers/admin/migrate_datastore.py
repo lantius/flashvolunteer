@@ -1,4 +1,6 @@
 from components.applications.operations import add_applications, add_messaging, synchronize_apps
+from components.time_zones import now
+
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -46,14 +48,27 @@ class MigrateDatastore(AbstractHandler):
 
         ## do migration here
         #synchronize_apps()
-        deferred.defer(set_admin_status)
+        #deferred.defer(set_admin_status)
+        deferred.defer(update_event_time_status)
 
-        session = self._session()
-        session['notification_message'] = ['added %i opportunities'%added, 
-                                           '%i already existed'%existed, 
-                                           'skipped %i opportunities from errors'%skipped]
         self.redirect('/admin/migrate')
     
+def update_event_time_status():
+    for e in Event.all().filter('in_past = ', True):
+        if e.enddate and e.endate < now() and e.inpast == False:
+            for ev in e.eventvolunteers:
+                ev.event_is_upcoming = False
+                ev.put()
+            e.inpast = True;
+            e.put()            
+            
+        if e.enddate and e.enddate > now():
+            for ev in e.eventvolunteers:
+                ev.event_is_upcoming = True
+                ev.put()
+            e.inpast = False;
+            e.put()
+            
 def set_admin_status():
     admins = [
               'aaron.hayden@gmail.com',

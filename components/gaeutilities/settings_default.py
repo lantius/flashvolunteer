@@ -44,7 +44,7 @@ session = {
                                     # the datastore of expired sessions
     "CHECK_IP": True, # validate sessions by IP
     "CHECK_USER_AGENT": True, # validate sessions by user agent
-    "SESSION_TOKEN_TTL": 300, # Number of seconds a session token is valid
+    "SESSION_TOKEN_TTL": 3000, # Number of seconds a session token is valid
                                     # for.
     "UPDATE_LAST_ACTIVITY": 60, # Number of seconds that may pass before
                                     # last_activity is updated

@@ -9,8 +9,7 @@ from google.appengine.ext.webapp import template
 from models.auth import Account, Auth
 from models.volunteer import Volunteer
 
-import os, logging, hashlib
-import urllib
+import os, logging, hashlib, urllib
 
 class CreateAccount(AbstractHandler):
 
@@ -31,17 +30,16 @@ class CreateAccount(AbstractHandler):
             name = login_info.get('displayName', None)
         else:
             email = None
-        
+    
         account = Account(
             preferred_email = email,
             name = name
         )
-        
+    
         volunteer = Volunteer()
                         
-        session['account'] = account
-        session['volunteer'] = volunteer
-        
+        #session['volunteer'] = volunteer
+        #session['account'] = account
             
         template_values = {
             'dev_server': dev_server,
@@ -52,7 +50,7 @@ class CreateAccount(AbstractHandler):
             'fv_account': login_info is None,
           }
         self._add_base_template_values(vals = template_values)
-
+    
         if dev_server:
             from google.appengine.api import users
             template_values['login_url'] = users.create_login_url(dest_url = '/dev_login') 
@@ -67,8 +65,8 @@ class CreateAccount(AbstractHandler):
         
         params = self.parameterize()    
         session = self._session()
-        account = session.get('account')
-        volunteer = session.get('volunteer')
+        account = Account()  #session.get('account')
+        volunteer = Volunteer() #session.get('volunteer')
         
         if params['session_id'] != session.sid:
             self.redirect('/timeout')
@@ -111,23 +109,14 @@ class CreateAccount(AbstractHandler):
         account.user = user
         
         try:
-            try:
-                account.put()
-            except: 
-                account.put()
+            account.put()
             
-            try:
-                volunteer.account = account
-                volunteer.user = user
-                volunteer.put()
-            except:
-                volunteer.put()
+            volunteer.account = account
+            volunteer.user = user
+            volunteer.put()
                 
-            try:
-                auth.account = account
-                auth.put()
-            except:
-                auth.put()
+            auth.account = account
+            auth.put()
 
         except:
             session['notification_message'].append('We\'re sorry, your account could not be created. Please try again.')

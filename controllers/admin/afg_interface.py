@@ -80,6 +80,13 @@ class AllForGoodInterface(AbstractHandler):
 
         opp = opportunity 
         
+        try:
+            neighborhood = get_neighborhood(application = self.get_application(), 
+                                        address = opp.location)[1]
+        except:
+            self._session()['notification_message'] = ['Error: could not find neighborhood around "%s"'%opp.location]
+            neighborhood = None
+            
         event = Event(
             application = self.get_application(),
             name = opp.title,
@@ -87,8 +94,7 @@ class AllForGoodInterface(AbstractHandler):
             enddate = opp.enddate,
             date = opp.startdate,
             special_instructions = opp.skills,
-            neighborhood = get_neighborhood(application = self.get_application(), 
-                                            address = opp.location)[1], 
+            neighborhood = neighborhood, 
             address = opp.location,
             event_url = opp.url,
             contact_email = opp.contact_email

@@ -133,6 +133,5 @@ class Account(db.Model):
         return self.get_user().avatar
 
     def is_admin(self):
-#TODO: make sure this test is valid...
-        return self.group_wheel or self.preferred_email == 'tkriplean@gmail.com'
+        return self.group_wheel
   
