@@ -67,6 +67,7 @@ SCRIPTS = [
     os.path.join(stylesheets, 'javascript', 'jquery.tooltip.min.js'),
     os.path.join(stylesheets, 'javascript', 'jquery.timepicker.js'),
 
+    os.path.join(stylesheets, 'javascript', 'handle_messages.js'),
 #    os.path.join(stylesheets, 'jquery.ezjax.js'),
     
     ]    

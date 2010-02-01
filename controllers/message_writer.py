@@ -71,7 +71,7 @@ class AbstractSendMessage(AbstractHandler):
 
         session = self._session()
         
-        session['notification_message'] = ['Message delivered.']
+        self.add_notification_message('Message delivered.')
         
         if 'message_redirect' in session:
             self.redirect(session['message_redirect'])

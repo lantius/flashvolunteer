@@ -71,6 +71,13 @@
         }
 		
     </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {% if notification_message %}handle_notification_message('{{notification_message}}');{%endif%}
+            handle_header_message({%if header_message%}'{{header_message}}'{%else%}null{%endif%});
+        });
+    </script>
 		
     <div id="centerwhole">
                 

@@ -84,7 +84,7 @@ class AllForGoodInterface(AbstractHandler):
             neighborhood = get_neighborhood(application = self.get_application(), 
                                         address = opp.location)[1]
         except:
-            self._session()['notification_message'] = ['Error: could not find neighborhood around "%s"'%opp.location]
+            self.add_notification_message('Error: could not find neighborhood around "%s"'%opp.location)
             neighborhood = None
             
         event = Event(

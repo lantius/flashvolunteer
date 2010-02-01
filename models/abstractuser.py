@@ -4,7 +4,11 @@ from controllers._twitter import Twitter
 ################################################################################
 # AbstractUser
 class AbstractUser(db.Model):
-    user = db.UserProperty()
+    
+    
+    #user = db.UserProperty()
+    #preferred_email = db.StringProperty(default=None)
+    
     name = db.StringProperty()
     avatar = db.BlobProperty()
     avatar_type = db.StringProperty()
@@ -14,7 +18,6 @@ class AbstractUser(db.Model):
     joinedon = db.DateProperty(auto_now_add=True)
     
     session_id = db.StringProperty()
-    preferred_email = db.StringProperty(default=None)
     
     verified = db.BooleanProperty(default=False)
     
@@ -49,12 +52,12 @@ class AbstractUser(db.Model):
         if 'delete_avatar' in params:
             self.avatar = None
           
-        try:
-            if not 'email' in params or not len(params['email']) > 0 or params['email'].find('@') == -1 :
-                raise Exception
-            self.preferred_email  = params['email']
-        except:
-            self.error['email'] = ('A valid email is required', params['email'])
+        #try:
+        #    if not 'email' in params or not len(params['email']) > 0 or params['email'].find('@') == -1 :
+        #        raise Exception
+        #    self.preferred_email  = params['email']
+        #except:
+        #    self.error['email'] = ('A valid email is required', params['email'])
           
         if 'twitter' in params and self.twitter != params['twitter']:
             self.twitter = params['twitter']
@@ -80,9 +83,6 @@ class AbstractUser(db.Model):
     
     def past_events_coordinated(self):
         return self.eventvolunteers.filter('isowner =',True).filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
-
-    def interestcategories(self):
-        return (vic.interestcategory for vic in self.user_interests)
     
     def events_past_count(self):
         return self.events_past().count()

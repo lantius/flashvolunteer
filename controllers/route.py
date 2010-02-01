@@ -17,7 +17,7 @@ from controllers.paginated_event_pages import \
 from controllers.home import MainPage
 from controllers.profile import ProfilePage
 
-from controllers.accounts import Login, CreateAccount
+from controllers.accounts import Login, CreateAccount, HelpLogin
 
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
@@ -100,6 +100,7 @@ def real_main():
            ('/incentives', MainPage),
            ('/rpx_auth', Login),
            ('/login', Login),
+           ('/login/help', HelpLogin),
            ('/dev_login', Login),
            ('/logout', Login),           
            ('/new', CreateAccount),

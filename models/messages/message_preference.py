@@ -19,8 +19,5 @@ class MessagePreference(db.Model):
     propagation = db.ListProperty(int) #list of MessagePropagationType ids
     
     account = db.ReferenceProperty(Account, collection_name = 'message_preferences', 
-                                   #required = True
+                                   required = True
                                    )    
-
-    ##### DEPRECATED
-    volunteer = db.ReferenceProperty(Volunteer, collection_name = 'message_preferences')    

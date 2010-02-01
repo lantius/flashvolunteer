@@ -88,10 +88,10 @@ class SettingsPage(AbstractHandler):
                 self.redirect('/#/logout')
         else:  
             if self.update(params, account):
-                session['notification_message'] = ['Your settings have been updated.']
+                self.add_notification_message('Your settings have been updated.')
                 self.redirect('/#/profile')
             else:
-                session['notification_message'] = ['Oops! Your messages could not be saved.']
+                self.add_notification_message('Oops! Your messages could not be saved.')
 
     ################################################################################
     # UPDATE

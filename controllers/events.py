@@ -91,7 +91,7 @@ class EventsPage(AbstractHandler):
             if event_id:
                 event = Event.get_by_id(event_id)
                 session = self._session()
-                session['notification_message'] = ['Event "%s" has been created!'%event.name]
+                self.add_notification_message('Event "%s" has been created!'%event.name)
         
         if event_id is None:
             self.redirect('/#/events')
@@ -115,7 +115,8 @@ class EventsPage(AbstractHandler):
         else: user = None
         
         if user:
-            recommended_events = user.recommended_events(application = self.get_application(),
+            recommended_events = None
+            user.recommended_events(application = self.get_application(),
                                                          session = self._session())[:EventsPage.LIMIT]
             future_events = [ev.event for ev in user.events_future().fetch(EventsPage.LIMIT)]
             my_past_events = [ev.event for ev in user.events_past().fetch(EventsPage.LIMIT)]
@@ -134,7 +135,8 @@ class EventsPage(AbstractHandler):
             neighborhoods = application.neighborhoods
             #TODO: convert to application-specific data model
             interest_categories = InterestCategory.all()
-            
+        
+        
         template_values = {
             'volunteer': user,
             'eventvolunteer': event_volunteers,
@@ -286,14 +288,14 @@ class EventsPage(AbstractHandler):
         session = self._session()
         
         if not event.validate(params):
-            session['notification_message'] = ['Sorry, your event could not be created']
+            self.add_notification_message('Sorry, your event could not be created')
             self.redirect('/#/events')
             return False
         
         try:
             event.put()
         except:
-            session['notification_message'] = ['Sorry, your event could not be created']
+            self.add_notification_message('Sorry, your event could not be created')
             self.redirect('/#/events')
             return False
         
@@ -366,7 +368,7 @@ class EventsPage(AbstractHandler):
         date = event.date
         session = self._session()
         if not event.validate(params):
-            session['notification_message'].append('Sorry, your changes could not be saved.')
+            self.add_notification_message('Sorry, your changes could not be saved.')
             self.redirect('/#' + event.url())
             return False
         

@@ -99,23 +99,23 @@ class VerifyEventAttendance(AbstractHandler):
                         hours = params['hours_' + event_volunteer_id]
                         self.update_volunteer_attendance(event_volunteer_id, attended, hours)
                         if not owner:
-                            session['notification_message'] = ['Thanks for volunteering for %s hours!'%hours]
+                            self.add_notification_message('Thanks for volunteering for %s hours!'%hours)
                         else: 
                             hours_logged += 1
                     elif params['event_volunteer_%s'%event_volunteer_id] == 'False':
                         if not eventvolunteer.isowner:
                             eventvolunteer.delete()
                             if not owner:
-                                session['notification_message'] = ['Thanks for removing yourself from the attendees!']
+                                self.add_notification_message('Thanks for removing yourself from the attendees!')
                             else:
                                 deleted += 1
         if deleted + hours_logged > 0: 
             if deleted > 0 and hours_logged > 0:
-                session['notification_message'] = ['You have logged hours for %i volunteers, and removed %i people from the attendees list.'%(hours_logged, deleted)]
+                self.add_notification_message('You have logged hours for %i volunteers, and removed %i people from the attendees list.'%(hours_logged, deleted))
             elif deleted > 0: 
-                session['notification_message'] = ['You have removed %i people from the attendees list.'%(deleted)]
+                self.add_notification_message('You have removed %i people from the attendees list.'%(deleted))
             else:
-                session['notification_message'] = ['You have logged hours for %i volunteers.'%(hours_logged)]
+                self.add_notification_message('You have logged hours for %i volunteers.'%(hours_logged))
 
                 
     ################################################################################

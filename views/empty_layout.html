@@ -6,25 +6,8 @@
 		<script type="text/javascript">
 		
 		    $(document).ready(function() {
-		        {% if notification_message %}
-		            $('#container').append('<div id="dialog" title="Notifications"><p>{{notification_message}}</p></div>');
-		            $.ui.dialog.defaults.bgiframe = true;
-		            $(function() {
-		                $("#dialog").dialog({
-		                    buttons: { "Ok": function() { $(this).dialog("close"); } },
-		                    modal: true,
-		                    draggable: false,
-		                    resizable: false,
-		                });
-		            });
-		        {% endif %}
-		        {% if header_message %} 
-		            $('#message_banner').html('<p>{{header_message}}</p>');
-		            $('#message_banner').show();
-		        {% else %}
-		           $('#message_banner').hide();
-		        {% endif %}           
-				
+		        {% if notification_message %}handle_notification_message('{{notification_message}}');{%endif%}
+				handle_header_message({%if header_message%}'{{header_message}}'{%else%}null{%endif%});
 				if (window.location.href.search('incentives') == -1 && $('#incentive_banner').css('display') == 'none'){
 					$('#incentive_banner').fadeIn();
 				}

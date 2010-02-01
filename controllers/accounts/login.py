@@ -85,7 +85,6 @@ class Login(AbstractHandler):
     def login(self, errors = None, email = None, redirect = None):
         dev_server = self.is_debugging() 
         session = self._session()
-        #session.flush()
 
         if redirect:
             session['login_redirect'] = redirect
@@ -135,7 +134,7 @@ class Login(AbstractHandler):
         auth = Auth.all().filter('identifier =', email).filter('strategy =', 'fv').get()
         if not auth:
             logging.info('could not log user in, no user by that name')
-            session['notification_message'] = ['Sorry, we do not have an account with that email. If you are new to Flash Volunteer, please click the "Signup" button. If you\'ve previously used a third party to login, please select the relevant third party to the right. Thanks!']
+            self.add_notification_message('Sorry, we do not have an account with that email. If you are new to Flash Volunteer, please click the "Signup" button. If you\'ve previously used a third party to login, please select the relevant third party to the right. Thanks!')
             self.redirect('/#/login')
             return
         
@@ -145,7 +144,7 @@ class Login(AbstractHandler):
         
         if not hash or (hash not in [auth.digest,auth.digest2] and hash2 not in [auth.digest,auth.digest2]):
             logging.info('could not log user in, wrong password')
-            session['notification_message'] = ['Sorry, that is not the right password for this account.']
+            self.add_notification_message('Sorry, that is not the right password for this account.')
             self.redirect('/#/login')
             return
         

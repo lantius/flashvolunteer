@@ -2,8 +2,8 @@
 
 from google.appengine.ext import db
 
-from models.volunteer import *
-from models.interestcategory import *
+from models.volunteer import Volunteer
+from models.interestcategory import InterestCategory
 
 class VolunteerInterestCategory(db.Model):
     volunteer = db.ReferenceProperty(Volunteer,

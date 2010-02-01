@@ -64,7 +64,11 @@ class AbstractHandler(webapp.RequestHandler):
             if log_ev:
                 vals['header_message'] = 'Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(account.get_first_name(), log_ev.event.url(), log_ev.event.name)
 
-        if 'notification_message' in session and len(session['notification_message']) > 0:
+        try:
+            logging.info('notific mess %s %s'%(session.sid, str(session['notification_message'])))
+        except:
+            logging.info('nothing')
+        if 'notification_message' in session and is_ajax_request and len(session['notification_message']) > 0:
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])
                 
             session['notification_message'] = []
@@ -116,7 +120,7 @@ class AbstractHandler(webapp.RequestHandler):
                         
             elif self.request.method == 'POST' and not account.check_session_id(self.request.get('session_id'), session = session):
                 self.redirect('/timeout')
-                session['notification_message'] = ['Your session has timed out. Please log back in when you are ready.']
+                self.add_notification_message('Your session has timed out. Please log back in when you are ready.')
                 raise TimeoutError("Session has timed out.")
                 #return (None)       # shouldn't get here except in tests    
             elif require_admin and not account.is_admin():
@@ -151,6 +155,8 @@ class AbstractHandler(webapp.RequestHandler):
         message.put()
         mrs = []        
         for recipient in to:
+            logging.info(recipient)
+            logging.info(message)
             mr = MessageReceipt(
               recipient = recipient,
               message = message)
@@ -184,7 +190,14 @@ class AbstractHandler(webapp.RequestHandler):
                     params[name] = unicode(params[name][0])
         return params
     
-
+    def add_notification_message(self, message):
+        session = self._session()
+        logging.info('writting %s to %s'%(session.sid, message))
+        if 'notification_message' in session:
+            session['notification_message'] = session['notification_message'] + [message]
+        else:
+            session['notification_message'] = [message]
+            
     def get_server(self):
         """Determines which host requests are being served from. 
         

@@ -72,6 +72,8 @@ def add_messaging():
 
         (11, 'event_forum_main_message', '', [], False),
         (12, 'neighborhood_forum_main_message', '', [], False),
+        
+        (13, 'account_reminder', '', [], False),
         ###########################################
     )
 

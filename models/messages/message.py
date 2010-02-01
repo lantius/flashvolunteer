@@ -22,9 +22,7 @@ class Message(db.Model):
     
     trigger = db.DateTimeProperty(auto_now_add = True)
     
-    ##### DEPRECATED; use sender
-    sent_by = db.ReferenceProperty(reference_class = None, collection_name = 'sent_messages')
-    ###############
+    sent_by = db.ReferenceProperty(reference_class = Account, collection_name = 'sent_messages')
         
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)

@@ -190,12 +190,12 @@ class VolunteersPage(AbstractHandler):
           except:
             pass
         
-        if 'email' in params and params['email']:
-          try:
-            email = params['email'] 
-            volunteers_query.filter('preferred_email =', email)
-          except:
-            pass
+#        if 'email' in params and params['email']:
+#          try:
+#            email = params['email'] 
+#            volunteers_query.filter('preferred_email =', email)
+#          except:
+#            pass
         
         volunteers = volunteers_query.fetch(limit = SEARCH_LIST + 1)
 
@@ -313,12 +313,12 @@ class VolunteerAvatar(AbstractHandler):
         session = self._session()
         if 'avatar' in params and params['avatar']:
             if len(params['avatar']) > 50 * 2**10:
-                session['notification_message'] = ['Sorry! That file is too big. Please choose one under 50kb.']
+                self.add_notification_message('Sorry! That file is too big. Please choose one under 50kb.')
                 return
           
         content_type = imghdr.what(None, params['avatar'])
         if not content_type:
-            session['notification_message'] = ['Sorry! We cannot read that type of file.']
+            self.add_notification_message('Sorry! We cannot read that type of file.')
             return
     
         user = account.get_user()

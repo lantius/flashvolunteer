@@ -50,7 +50,7 @@ class EventMessageFactory(AbstractHandler):
                 params['participation_statement'] = "You currently have %i Flash Volunteers signed up."%len(recipients)
             else:
                 params['participation_statement'] = "At this time, there are no Flash Volunteers signed up."
-            hosts = [ev.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
+            hosts = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
             self.send_message(to = hosts, 
                          subject = type6.subject%params, 
                          body = type6.body%params, 

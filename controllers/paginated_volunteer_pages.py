@@ -120,7 +120,7 @@ class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
      qry = self.category.user_interests.order('__key__')
      if bookmark: 
          qry = qry.filter('__key__ >=', bookmark)
-     return [i.account for i in qry.fetch(limit)]  
+     return [i.account.get_user() for i in qry.fetch(limit)]  
          
   def _get_title(self):
      return 'Interested in %s'%self.category.name

@@ -40,9 +40,6 @@ class Volunteer(AbstractUser):
     def url(self):
         return '/volunteers/' + str(self.key().id())
     
-    def interestcategories(self):
-        return (vic.interestcategory for vic in self.account.user_interests)
-    
     def friends(self):  #returns a generator of Volunteer objects
         return [vf.follows.get_user() for vf in self.account.following.filter('mutual =', True).order('__key__')]
 
@@ -114,38 +111,23 @@ class Volunteer(AbstractUser):
         session['%s_rec_events'%self.key().id()] = recommended_events
         return recommended_events
 
-
+    def interestcategories(self):
+        return (vic.interestcategory for vic in self.account.user_interests)
 
 ###### DEPRECATED; USE ACCOUNT'S METHODS INSTEAD #############
 
     def get_first_name(self):
-        if self.get_name().find('@') > -1:
-            return '@'.join(self.get_name().split('@')[:-1])
-        else:
-            return ' '.join(self.get_name().split(' ')[:-1])
+        return self.get_first_name()
     
     def get_last_name(self):
-        if self.get_name().find(' ') < 0: 
-            return ''
-        
-        if self.get_name().find('@') > -1:
-            return '@' + self.get_name().split('@')[-1]
-        else:
-            return self.get_name().split(' ')[-1]
+        return self.account.get_last_name()
         
     def get_name(self):
-        if self.name:
-            return self.name
-        
-        return self.user.nickname()
+        return self.account.get_name()
     
     def get_email(self):
-        if self.preferred_email is None:
-            return self.user.email()
-        else:
-            return self.preferred_email
-        
+        return self.account.get_email()
+    
     def _get_message_pref(self, type):
-        prefs = self.message_preferences.filter('type =', type).get()
-        return prefs
+        return self._get_message_pref(type)
 

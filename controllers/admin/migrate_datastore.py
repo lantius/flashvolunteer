@@ -47,28 +47,36 @@ class MigrateDatastore(AbstractHandler):
             return   
 
         ## do migration here
-        #synchronize_apps()
+        deferred.defer(synchronize_apps, self.get_server())
         #deferred.defer(set_admin_status)
         deferred.defer(update_event_time_status)
 
         self.redirect('/admin/migrate')
     
 def update_event_time_status():
-    for e in Event.all().filter('in_past = ', True):
-        if e.enddate and e.endate < now() and e.inpast == False:
+    right_now = now()
+    for e in Event.all().fetch(limit=500):
+        if e.enddate and e.enddate < right_now:
             for ev in e.eventvolunteers:
                 ev.event_is_upcoming = False
                 ev.put()
             e.inpast = True;
             e.put()            
             
-        if e.enddate and e.enddate > now():
+        elif e.enddate and e.enddate > right_now:
             for ev in e.eventvolunteers:
                 ev.event_is_upcoming = True
                 ev.put()
             e.inpast = False;
             e.put()
-            
+
+def migrate_event_duration():
+
+    for e in Event.all().filter('enddate =', None):
+        e.enddate = e.date + e.get_duration()
+        e.put()
+
+                        
 def set_admin_status():
     admins = [
               'aaron.hayden@gmail.com',

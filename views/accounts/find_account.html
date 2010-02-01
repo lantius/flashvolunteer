@@ -1,0 +1,55 @@
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('');
+      $(document).ready(function() {
+            load_title('Account help');
+      });
+</script>
+
+<script>
+  $(document).ready(function(){
+    $(".validate_form").validate({
+        messages: {
+            email: {
+              required: " ",
+              email: " "
+            }
+        },
+        submitHandler: function(form) {
+           form.submit();
+        }
+
+    })
+  });
+</script>
+
+
+    <div style="margin-top: 25px;"></div>
+
+    <div id="middle100">
+    	   <p style="font-size:115%">Please enter your email and we will try to find a matching account!</p>
+          <form class="validate_form" action="/login/help" id="new_account" method="post">
+	            <div style="margin:0;padding:0">
+	              <input name="session_id" type="hidden" value="{{session_id}}" />
+	            </div>
+	            <fieldset>
+	              <ol>
+	              	<!--<li>
+	              		<label for="name">Your Name:</label>
+						<input class="text required" id="createnameinput" type="text" name="name" tabindex="1" value=""/>
+					</li> -->   
+	                <li>
+	                  <label for="email">Email:</label> 
+					  <input class="text required email" id="email" name="email" tabindex="1" type="text" value="" />
+	                </li>
+	              </ol>
+	            </fieldset>
+	            <input class="submit" name="commit" tabindex="4" type="submit" value="Submit" />
+	          
+          </form>
+    </div>
+
+{% endblock content %}

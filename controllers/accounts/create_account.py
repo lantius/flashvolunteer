@@ -77,7 +77,7 @@ class CreateAccount(AbstractHandler):
         valid_entry = account.validate(params) and valid_entry
         
         if not valid_entry:
-            session['notification_message'] = ['<br>'.join(account.error.values())]
+            self.add_notification_message('<br>'.join(account.error.values()))
             self.redirect('/#/new')
             return False
 
@@ -112,14 +112,13 @@ class CreateAccount(AbstractHandler):
             account.put()
             
             volunteer.account = account
-            volunteer.user = user
             volunteer.put()
                 
             auth.account = account
             auth.put()
 
         except:
-            session['notification_message'].append('We\'re sorry, your account could not be created. Please try again.')
+            self.add_notification_message('We\'re sorry, your account could not be created. Please try again.')
             self.redirect('/#/new')
             return False
         

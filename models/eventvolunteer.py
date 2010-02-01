@@ -13,15 +13,8 @@ class EventVolunteer(db.Model):
                                  collection_name = 'eventvolunteers')
     
     volunteer = db.ReferenceProperty(Volunteer,
-           #                           required = True,
+                                      required = True,
                                       collection_name = 'eventvolunteers')
-    
-    #######################
-    ##### DEPRECATED
-    account = db.ReferenceProperty(Account,
-                                      #required = True,
-                                      collection_name = 'eventvolunteers')
-    ##################
     
     isowner = db.BooleanProperty(required = True)
     attended = db.BooleanProperty(default = None)

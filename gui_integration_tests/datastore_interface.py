@@ -78,7 +78,7 @@ def create_environment(name, session_id):
         v = Volunteer(
           name = k,
           account = account,
-          user = u,
+          #user = u,
           avatar = v['avatar'],
           quote = v['quote'],
           #twitter = None,
@@ -100,7 +100,7 @@ def create_environment(name, session_id):
         v = Volunteer(
           name = k,
           account = account,
-          user = u,
+          #user = u,
           avatar = v['avatar'],
           quote = v['quote'],
           #twitter = None,
@@ -130,7 +130,6 @@ def create_environment(name, session_id):
           date_created = date_created,
           date = date,
           enddate = enddate,
-          duration_minutes = duration,
           description = v['description'],
           special_instructions = v['special_instructions'],
           address = v['address'],

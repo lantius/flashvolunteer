@@ -77,6 +77,21 @@ If you have any questions, send an email to info@flashvolunteer.org.
 )
 
 ###############################################################
+# When someone has lost their account info
+###############################################################
+
+login_info_text = msg(
+
+    subject = 'Your account information for Flash Volunteer',
+    body = """Hello, 
+
+Someone has requested account information for this email address (we hope it was you, but if not, please report abuse to info@flashvolunteer.org). 
+
+We have determined that your account provider is %(provider)s. %(hint)s
+"""
+)
+
+###############################################################
 # Type 5: Event rsvp for volunteer
 ###############################################################
 

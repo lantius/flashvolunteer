@@ -26,9 +26,6 @@ class Event(db.Model):
     date = db.DateTimeProperty() #start date
     enddate = db.DateTimeProperty()
     
-    duration = db.IntegerProperty() #OBSOLETE; in hours, use enddate-startdate
-    duration_minutes = db.IntegerProperty() #OBSOLETE; full number of minutes e.g. 253 = 4 hours, 13 min, for now, total = duration * 60 + duration_minutes
-    
     special_instructions = db.TextProperty()
     address = db.StringProperty(multiline=True)
     location = db.GeoPtProperty() # No default
@@ -64,17 +61,9 @@ class Event(db.Model):
                           _from_entity=_from_entity, **kwds)
           
     def get_duration_hours(self):
-        if not self.enddate:
-            min = 0
-            if self.duration:
-                min = 60 * self.duration
-            if self.duration_minutes:
-                min += self.duration_minutes
-            return((min + 59) / 60) #round up
-        else:
-            diff = self.enddate - self.date
-            return (diff.seconds / 60 + 59) / 60 #round up
-    
+        diff = self.enddate - self.date
+        return (diff.seconds / 60 + 59) / 60 #round up
+
     def get_start_repr(self, strftime):
         if (self.save.has_key('eventstart')):
             return self.save['eventstart']['date']
@@ -111,11 +100,8 @@ class Event(db.Model):
             return self.save['eventend']['date']
         if not self.date:
             return "no date set"
-        
-        if self.enddate:
-            end = self.enddate
-        else: 
-            end = self.date + self.get_duration()
+
+        end = self.date + self.get_duration()
         return end.strftime(strftime)  
     
     def get_enddate_long(self):
@@ -307,15 +293,3 @@ class Event(db.Model):
     def inpast(self):
         return self.in_past or self.enddate is None or self.enddate < now()
     
-    #########################################
-    ## DEPRECATED
-      
-    def get_duration(self):
-        min = 0
-        if self.duration:
-            min = 60 * self.duration
-        if self.duration_minutes:
-            min += self.duration_minutes
-        dur = datetime.timedelta(minutes=min)
-        return dur
-

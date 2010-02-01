@@ -35,6 +35,7 @@ import hashlib
 import Cookie
 import pickle
 import sys
+import logging
 from time import strftime
  
 # google appengine imports

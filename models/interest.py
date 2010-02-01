@@ -5,7 +5,7 @@ from models.interestcategory import InterestCategory
 
 class Interest(db.Model):
     account = db.ReferenceProperty(Account,
- #                              required = True,
+                               required = True,
                                collection_name = 'user_interests')
   
     interestcategory = db.ReferenceProperty(InterestCategory,

@@ -77,11 +77,11 @@ class VolunteerForEvent(AbstractHandler):
                                         interest_level = interest_level)
                     eventvolunteer.put()
               
-                    session = self._session()
+                    #session = self._session()
                     if event.in_past:
-                        session['notification_message'] = ['Thanks for attending!']
+                        self.add_notification_message('Thanks for attending!')
                     else:
-                        session['notification_message'] = ['You are now signed up for "%s"!'%event.name]
+                        self.add_notification_message('You are now signed up for "%s"!'%event.name)
                         (to, subject, body) = self.get_message_text(event = event, 
                                                                       account = account,
                                                                       sign_up = True)

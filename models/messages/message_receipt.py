@@ -3,6 +3,7 @@ import re
 from google.appengine.ext import db
 
 from models.messages.message import Message
+from models.auth.account import Account
 
 from components.time_zones import Pacific, utc
 
