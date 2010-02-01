@@ -32,7 +32,7 @@ class EventMessageFactory(AbstractHandler):
                 continue
             #it appears that model instances accessed in a cron job do not have referenceproperties resolved; 
             #thats why we're not using e.volunteers() below (and e.hosts() later on...)
-            recipients = [ev.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
+            recipients = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
             params = {
                 'event_name': e.name,
                 'event_url': '%s%s'%(self._get_base_url(), e.url()),

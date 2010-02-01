@@ -8,7 +8,7 @@ class Account(db.Model):
     name = db.StringProperty()    
     group_wheel = db.BooleanProperty(default=False) #admin permissions flag
 
-    preferred_email = db.StringProperty(default=None, required=True)
+    preferred_email = db.StringProperty(default=None)
     active_applications = db.ListProperty(int)
 
     error = {}
