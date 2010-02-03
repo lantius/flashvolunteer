@@ -56,15 +56,12 @@ class BaseVolunteerListPage(AbstractHandler):
                 del session['vol_pagination']
             bookmark = None
       
-      
-      
-      
         if bookmark:
             volunteers = self._get_volunteers(self.LIST_LIMIT + 1, Key(bookmark))
         else:
             volunteers = self._get_volunteers(self.LIST_LIMIT + 1)
 
-        if len(volunteers) == self.LIST_LIMIT + 1:
+        if volunteers is not None and len(volunteers) == self.LIST_LIMIT + 1:
             next = volunteers[-1].key() 
             volunteers = volunteers[:self.LIST_LIMIT]
         else:

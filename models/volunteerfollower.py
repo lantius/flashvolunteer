@@ -1,7 +1,5 @@
 from google.appengine.ext import db
 
-from models.volunteer import Volunteer
-
 from models.auth.account import Account
 
 class VolunteerFollower(db.Model):
@@ -13,3 +11,5 @@ class VolunteerFollower(db.Model):
                                    collection_name = 'followers')
     
     mutual = db.BooleanProperty(default = False)
+    
+    date_added = db.DateProperty(auto_now_add=True)

@@ -10,6 +10,7 @@ class Account(db.Model):
 
     preferred_email = db.StringProperty(default=None)
     active_applications = db.ListProperty(int)
+    date_added = db.DateProperty(auto_now_add=True)
 
     error = {}
 

@@ -242,8 +242,9 @@ class AbstractHandler(webapp.RequestHandler):
         )
         message.put()
 
-        if len(to) > CHUNKSIZE: 
-            for i in range(0, len(to)/CHUNKSIZE + 1):
+        num_recipients = len(list(to))
+        if num_recipients > CHUNKSIZE: 
+            for i in range(0, num_recipients/CHUNKSIZE + 1):
                 deferred.defer(put_message_receipts, to[i*CHUNKSIZE:(i+1)*CHUNKSIZE], message.key().id(), domain, immediate)
         else:
             deferred.defer(put_message_receipts, to, message.key().id(), domain, immediate)

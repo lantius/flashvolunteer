@@ -121,6 +121,8 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     # DELETE
     def delete(self, account):
+        #TODO: check if batch deletes work and use them if so
+        
         # Remove followers relationship
         followers = account.followers
         for f in followers:
@@ -140,6 +142,11 @@ class SettingsPage(AbstractHandler):
         prefs = account.message_preferences
         for pref in prefs:
             pref.delete()
+            
+        # Remove message receipts
+        mrs = account.incoming_messages
+        for mr in mrs:
+            mr.delete()
               
         user = account.get_user()
         # Remove events you've volunteered for

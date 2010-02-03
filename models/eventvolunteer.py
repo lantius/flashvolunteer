@@ -12,6 +12,8 @@ class EventVolunteer(db.Model):
                                  required = True,
                                  collection_name = 'eventvolunteers')
     
+    date_added = db.DateProperty(auto_now_add=True)
+    
     volunteer = db.ReferenceProperty(Volunteer,
                                       required = True,
                                       collection_name = 'eventvolunteers')

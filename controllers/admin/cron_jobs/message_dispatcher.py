@@ -13,13 +13,17 @@ from google.appengine.ext import deferred
 def check_messages(domain, is_debugging):    
     messages_to_send = MessageReceipt.all().filter('sent =', False).filter('in_task_queue =', False).filter('timestamp <', datetime.now())
 
-    for receipt in messages_to_send.fetch(limit=100):
+    for receipt in messages_to_send.fetch(limit=20):
         try:
-            receipt.in_task_queue = True
-            receipt.put()
-            receipt.send(domain = domain,
-                         is_debugging = is_debugging)    
-        finally:
+            try:
+                receipt.in_task_queue = True
+                receipt.put()
+                receipt.send(domain = domain,
+                             is_debugging = is_debugging)    
+            finally:
+                receipt.in_task_queue = False
+                receipt.put()
+        except: 
             receipt.in_task_queue = False
             receipt.put()
             

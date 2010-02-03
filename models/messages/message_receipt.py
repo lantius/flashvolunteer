@@ -38,33 +38,35 @@ class MessageReceipt(db.Model):
 
         if self.message.flagged and not self.message.verified: return
 
-        if not is_debugging: 
-            if not self.emailed:                
-                try:
-                    self.email(domain = domain)
-                except Exception, e:
-                    logging.error('could not send message receipt %i %s: %s'%(self.key().id(), self.message.subject, str(e)))           
+        if not is_debugging:                 
+            if not self.emailed:
+                should_email = self.should_email()
+                if should_email:                        
+                    try:
+                        self.email(domain = domain)
+                    except Exception, e:
+                        logging.error('could not send message receipt %i %s: %s'%(self.key().id(), self.message.subject, str(e)))           
 
-        self.sent = self.emailed 
-        self.put()        
-        
-    def email(self, domain):
-
+        self.sent = self.emailed or not should_email 
+        self.put()
+    
+    def should_email(self):
         prop = MessagePropagationType.all().filter('name =', 'email').get()        
         #don't email forum messages and don't email folks who chose not to be emailed...
         if self.recipient is None or \
            not isinstance(self.recipient, Account) or \
            not self._get_message_pref(recipient = self.recipient, prop = prop): 
-            return
+            return False
+        else:
+            return True
+        
+        
+    def email(self, domain):
         
         domain = 'http://www.' + domain
-
         footer = self.message.get_email_footer(domain)
-        
-           
         body = self.message.body + footer
 
-        
         try:
             self.emailed = True    
             
