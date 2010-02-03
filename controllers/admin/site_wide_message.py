@@ -22,7 +22,7 @@ class SiteWideMessage(AbstractSendMessage):
         from_header = 'A message from your friends at Flash Volunteer.\n\n'
         params['body'] = from_header + params['body']
         
-        recipients = self._get_recipients(id = None, sender = account)
+        recipients = self._get_all_recipients()
         
         logging.info('Site wide message size: %i'%len(recipients))
         self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)
@@ -34,27 +34,6 @@ class SiteWideMessage(AbstractSendMessage):
         else:
             self.redirect('/#/messages')
 
-    def _get_recipients(self, id, sender):
-        recipients = []
-        CHUNK_SIZE = 250
-        
-        last_key = None
-        while True:
-            if last_key:
-                query = Account.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
-            else:
-                query = Account.gql('ORDER BY __key__')
-            
-            recips = query.fetch(limit = CHUNK_SIZE + 1)
-            
-            if len(recips) == CHUNK_SIZE + 1:
-                recipients += recips[:-1]
-                last_key = recips[-1].key()
-            else:
-                recipients += recips
-                break
-
-        return recipients
         
     def _get_message_type(self):
         return 'site_wide'

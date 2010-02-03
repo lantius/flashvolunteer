@@ -218,7 +218,8 @@ class AbstractHandler(webapp.RequestHandler):
         """
         return self.get_server() == 0
 
-    def send_message(self, to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
+    @classmethod
+    def send_message(cls, to, subject, body, type, domain, sender = None, immediate=False, autogen = True, forum = False):
         from models.messages.message import Message
         from utils.html_sanitize import sanitize_html
         from google.appengine.ext import deferred
@@ -241,13 +242,12 @@ class AbstractHandler(webapp.RequestHandler):
         )
         message.put()
 
-        domain = self.get_domain()
         if len(to) > CHUNKSIZE: 
             for i in range(0, len(to)/CHUNKSIZE + 1):
                 deferred.defer(put_message_receipts, to[i*CHUNKSIZE:(i+1)*CHUNKSIZE], message.key().id(), domain, immediate)
         else:
             deferred.defer(put_message_receipts, to, message.key().id(), domain, immediate)
-            
+
 def put_message_receipts(to, message_key, domain, immediate):
     from models.messages import Message, MessageReceipt
     

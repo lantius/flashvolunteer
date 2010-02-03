@@ -45,7 +45,8 @@ class HelpLogin(AbstractHandler):
                     #self.send_message(  to = [account], 
                     #                    subject = login_info_text.subject, 
                     #                    body = login_info_text.body%pars, 
-                    #                    type = MessageType.all().filter('name =', 'account_reminder').get())
+                    #                    type = MessageType.all().filter('name =', 'account_reminder').get(),
+                    # domain = self.get_domain())
                     self.add_notification_message('We found your account. You logged in using a Flash Volunteer account. Please use the form on the left of the page. If you have forgotten your password, please send us an email at info@flashvolunteer.org.')
                 
                 else:

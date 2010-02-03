@@ -136,7 +136,8 @@ class CreateAccount(AbstractHandler):
                      subject = type3.subject%msg_params,
                      body = type3.body%msg_params,
                      type= MessageType.all().filter('name =', 'welcome').get(), 
-                     immediate = True)
+                     immediate = True,
+                     domain = self.get_domain())
         
         del session['login_info']
         if 'login_redirect' in session:

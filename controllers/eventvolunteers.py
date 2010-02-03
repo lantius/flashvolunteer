@@ -63,7 +63,8 @@ class VolunteerForEvent(AbstractHandler):
                         self.send_message( to = to, 
                                     subject = subject, 
                                     body = body, 
-                                    type = MessageType.all().filter('name =', 'event_coord').get())
+                                    type = MessageType.all().filter('name =', 'event_coord').get(),
+                                    domain = self.get_domain())
             else:
                 if not eventvolunteer:
                     eventvolunteer = EventVolunteer(
@@ -89,7 +90,8 @@ class VolunteerForEvent(AbstractHandler):
                         self.send_message( to = to, 
                                 subject = subject, 
                                 body = body, 
-                                type = MessageType.all().filter('name =', 'event_coord').get())
+                                type = MessageType.all().filter('name =', 'event_coord').get(),
+                                domain = self.get_domain())
                 else:
                     if interest_level != eventvolunteer.interest_level:
                         eventvolunteer.interest_level = interest_level

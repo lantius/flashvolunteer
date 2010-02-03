@@ -248,7 +248,8 @@ class FollowVolunteer(AbstractHandler):
                         to = [to_follow.account], 
                         subject = subject, 
                         body = body, 
-                        type = MessageType.all().filter('name =', 'added_to_team').get())   
+                        type = MessageType.all().filter('name =', 'added_to_team').get(),
+                        domain = self.get_domain())   
         
         #self.redirect('/volunteers/' + url_data)
         #self.redirect(self.request.referrer)

@@ -11,7 +11,7 @@ from components.time_zones import now
 from components.message_text import type5, type6, type7, type8, type9
 
 from models.volunteer import Volunteer
-
+from models.auth.account import Account
 
 
 class EventMessageFactory(AbstractHandler):
@@ -44,7 +44,8 @@ class EventMessageFactory(AbstractHandler):
                              subject = type5.subject%params, 
                              body = type5.body%params, 
                              type = type5_msg, 
-                             autogen = True)
+                             autogen = True,
+                             domain = self.get_domain())
             
             if len(recipients) > 0: 
                 params['participation_statement'] = "You currently have %i Flash Volunteers signed up."%len(recipients)
@@ -55,7 +56,8 @@ class EventMessageFactory(AbstractHandler):
                          subject = type6.subject%params, 
                          body = type6.body%params, 
                          type = type6_msg, 
-                         autogen = True)
+                         autogen = True,
+                         domain = self.get_domain())
             
             e.reminder_message_sent = True
             e.put()
@@ -84,7 +86,8 @@ class EventMessageFactory(AbstractHandler):
                                  subject = type7.subject%params, 
                                  body = type7.body%params, 
                                  type = type7_msg, 
-                                 autogen = True)
+                                 autogen = True,
+                                 domain = self.get_domain())
                 
                 if len(recipients) > 0: 
                     params['participation_statement'] = "Please visit the event page at %(event_url)s to record the hours that each of your volunteers spent helping you so that they can get credit. You can also upload photos."%params
@@ -96,7 +99,8 @@ class EventMessageFactory(AbstractHandler):
                              subject = type8.subject%params, 
                              body = type8.body%params, 
                              type = type8_msg, 
-                             autogen = True)
+                             autogen = True,
+                             domain = self.get_domain())
                 e.post_event_message_sent = True
             e.in_past = True
             e.put()
@@ -104,49 +108,55 @@ class EventMessageFactory(AbstractHandler):
         return
 
 
+def recommend_event(acnt, domain, type9_msg, right_now, cached_descs, base_url, application, session):
+    account = Account.get_by_id(acnt)
+    user = account.get_user()
+    rec_events = [e for e in user.recommended_events(application = application,
+                                                  session = session) 
+                    if e.enddate and (e.enddate - right_now).days < 7][:10]
+    
+    desc = []
+    for i,e in enumerate(rec_events):
+        id = e.key().id()
+        if id in cached_descs:
+            d = '%i. %s'%(i,cached_descs[id])
+        else:
+            if e.get_startdate() == e.get_enddate():
+                dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time())
+            else:
+                dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time_full())
+                
+            url = '%s%s'%(base_url, e.url())
+            
+            d = '"%s" - %s \nWhen: %s\nWhere: %s\n"%s..."'%(i+1, e.name, url, dt, e.neighborhood.name, e.description[:100])
+            cached_descs[id] = d
+            d = '%i. %s'%(i,d)
+            
+        desc.append(d)
+    
+    if len(rec_events) > 0:
+        params = {
+            'vol_name': user.name,
+            'recommendation_text': '\n\n'.join(desc)
+        }
+
+        AbstractHandler.send_message(to = [user], 
+                     subject = type9.subject%params, 
+                     body = type9.body%params, 
+                     type = type9_msg, 
+                     autogen = True,
+                     domain = domain)    
+    
+from google.appengine.ext import deferred
 class RecommendedEventMessageFactory(AbstractHandler):
 
     def get(self):
-        s = self._session()
-
         type9_msg = MessageType.all().filter('name =', 'rec_event').get()
         right_now = now()
         cached_descs = {}
-        
-        for v in Volunteer.all():
-            rec_events = [e for e in v.recommended_events(application = self.get_application(),
-                                                          session = s) 
-                            if e.enddate and (e.enddate - right_now).days < 7][:10]
-            
-            desc = []
-            for i,e in enumerate(rec_events):
-                id = e.key().id()
-                if id in cached_descs:
-                    d = '%i. %s'%(i,cached_descs[id])
-                else:
-                    if e.get_startdate() == e.get_enddate():
-                        dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time())
-                    else:
-                        dt = '%s - %s'%(e.get_start_time_full(), e.get_end_time_full())
-                        
-                    url = '%s%s'%(self._get_base_url(), e.url())
-                    
-                    d = '"%s" - %s \nWhen: %s\nWhere: %s\n"%s..."'%(i+1, e.name, url, dt, e.neighborhood.name, e.description[:100])
-                    cached_descs[id] = d
-                    d = '%i. %s'%(i,d)
-                    
-                desc.append(d)
-            
-            if len(rec_events) > 0:
-                params = {
-                    'vol_name': v.name,
-                    'recommendation_text': '\n\n'.join(desc)
-                }
-
-                self.send_message(to = [v], 
-                             subject = type9.subject%params, 
-                             body = type9.body%params, 
-                             type = type9_msg, 
-                             autogen = True)
-            
-        return
+        base_url = self._get_base_url()
+        accounts = self._get_all_recipients()
+        for acnt in accounts:
+            deferred.defer(recommend_event, acnt, self.get_domain(), 
+                           type9_msg, right_now, cached_descs, base_url,
+                           self.get_application(), self._session())

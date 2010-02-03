@@ -29,7 +29,8 @@ class AbstractSendMessage(AbstractHandler):
                      type = type, 
                      sender = sender,
                      autogen = autogen,
-                     forum = forum)
+                     forum = forum,
+                     domain = self.get_domain())
         
         return
     
@@ -112,7 +113,30 @@ class AbstractSendMessage(AbstractHandler):
         self._add_base_template_values(vals = template_values)
       
         self.response.out.write(template.render(render_path, template_values))        
+
+
+    def _get_all_recipients(self):
+        recipients = []
+        CHUNK_SIZE = 250
+        
+        last_key = None
+        while True:
+            if last_key:
+                query = Account.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
+            else:
+                query = Account.gql('ORDER BY __key__')
             
+            recips = query.fetch(limit = CHUNK_SIZE + 1)
+            
+            if len(recips) == CHUNK_SIZE + 1:
+                recipients += recips[:-1]
+                last_key = recips[-1].key()
+            else:
+                recipients += recips
+                break
+
+        return recipients
+    
 class SendMessage_Personal(AbstractSendMessage):
     #enter message into database
 
