@@ -13,6 +13,8 @@ from models.volunteer import Volunteer
 from models.eventinterestcategory import EventInterestCategory
 from models.auth.account import Account
 from models.eventvolunteer import EventVolunteer
+from models.messages import Message, MessageReceipt
+from datetime import datetime
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
@@ -36,6 +38,11 @@ class MigrateDatastore(AbstractHandler):
           }
         self._add_base_template_values(vals = template_values)
         
+        
+        
+                
+        #template_values['data'] = [(mr.key().id(), mr.key()) for mr in messages_to_send]
+                
         path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'admin', 'migrate.html')
         self.response.out.write(template.render(path, template_values))
         
@@ -47,11 +54,27 @@ class MigrateDatastore(AbstractHandler):
             return   
 
         ## do migration here
-        deferred.defer(synchronize_apps, self.get_server())
+        #deferred.defer(synchronize_apps, self.get_server())
         #deferred.defer(set_admin_status)
-        deferred.defer(update_event_time_status)
+
+
+                
+        deferred.defer(fix_site_message)
 
         self.redirect('/admin/migrate')
+
+def fix_site_message():
+    message = Message.get_by_id(561790)
+    for mr in message.sent_to:
+        if mr.key().id() > 561912 and (mr.emailed == True or mr.sent==True):
+            mr.emailed = False
+            mr.sent = False
+            mr.put()
+        
+def upgrade_messaging():
+    for mr in MessageReceipt.all():
+        if not mr.sent or not mr.emailed:
+            mr.put()
     
 def update_event_time_status():
     right_now = now()

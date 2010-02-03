@@ -7,8 +7,6 @@ from google.appengine.ext import webapp
 from models.messages import MessageType
 from models.auth.account import Account
 
-from controllers.abstract_handler import AbstractHandler
-
 from controllers.message_writer import AbstractSendMessage
 
 class SiteWideMessage(AbstractSendMessage):
@@ -26,6 +24,7 @@ class SiteWideMessage(AbstractSendMessage):
         
         recipients = self._get_recipients(id = None, sender = account)
         
+        logging.info('Site wide message size: %i'%len(recipients))
         self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)
         session = self._session()
 

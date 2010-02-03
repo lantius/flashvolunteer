@@ -78,7 +78,7 @@ class EventMessageFactory(AbstractHandler):
                     'event_name': e.name,
                     'event_url': '%s%s'%(self._get_base_url(), e.url()),
                 }
-                recipients = [ev.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
+                recipients = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
                 if len(recipients) > 0:
                     self.send_message(to = recipients, 
                                  subject = type7.subject%params, 
@@ -91,7 +91,7 @@ class EventMessageFactory(AbstractHandler):
                 else:
                     params['participation_statement'] = "Unfortunately, it appears that no Flash Volunteers signed up to help out at your event (%(event_url)s)."%params
                 
-                hosts = [ev.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
+                hosts = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
                 self.send_message(to = hosts, 
                              subject = type8.subject%params, 
                              body = type8.body%params, 

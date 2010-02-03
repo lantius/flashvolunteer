@@ -13,6 +13,7 @@ from models.application import Application
 from models.applicationdomain import ApplicationDomain
 
 from google.appengine.api import memcache
+from google.appengine.ext.db import put, delete
 
 
 ################################################################################
@@ -64,10 +65,6 @@ class AbstractHandler(webapp.RequestHandler):
             if log_ev:
                 vals['header_message'] = 'Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(account.get_first_name(), log_ev.event.url(), log_ev.event.name)
 
-        try:
-            logging.info('notific mess %s %s'%(session.sid, str(session['notification_message'])))
-        except:
-            logging.info('nothing')
         if 'notification_message' in session and is_ajax_request and len(session['notification_message']) > 0:
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])
                 
@@ -132,48 +129,7 @@ class AbstractHandler(webapp.RequestHandler):
     def ajax_request(self):
         return 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     
-    def send_message(self, to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
-        from models.messages.message import Message
-        from models.messages import MessageReceipt
-        from google.appengine.ext.db import put, delete
-        from utils.html_sanitize import sanitize_html
-        
-        subject = sanitize_html(subject)
-        if subject == '' or subject is None:
-            subject = '(No subject)'
-        
-        body = sanitize_html(body)
-        
-        message = Message(
-          subject = subject,
-          body = body,
-          sent_by = sender,
-          type = type,
-          autogen = autogen,
-          forum_msg = forum
-        )
-        message.put()
-        mrs = []        
-        for recipient in to:
-            logging.info(recipient)
-            logging.info(message)
-            mr = MessageReceipt(
-              recipient = recipient,
-              message = message)
-            mrs.append(mr)
-    
-        try:
-            put(mrs)
-        except:
-            for mr in mrs:
-                if not mr.is_saved():
-                    try:
-                        mr.put()
-                    except:
-                        logging.error('Could not add message receipt of message %i for recipient %i'%(message.key().id(), mr.recipient.key().id()))
-    
-        if immediate:
-            message.send(domain = self.get_domain())
+
 
     def parameterize(self):
         params = {}
@@ -261,7 +217,59 @@ class AbstractHandler(webapp.RequestHandler):
         Returns a boolean.
         """
         return self.get_server() == 0
+
+    def send_message(self, to, subject, body, type, sender = None, immediate=False, autogen = True, forum = False):
+        from models.messages.message import Message
+        from utils.html_sanitize import sanitize_html
+        from google.appengine.ext import deferred
         
+        CHUNKSIZE = 50
+        
+        subject = sanitize_html(subject)
+        if subject == '' or subject is None:
+            subject = '(No subject)'
+        
+        body = sanitize_html(body)
+        
+        message = Message(
+          subject = subject,
+          body = body,
+          sent_by = sender,
+          type = type,
+          autogen = autogen,
+          forum_msg = forum
+        )
+        message.put()
+
+        domain = self.get_domain()
+        if len(to) > CHUNKSIZE: 
+            for i in range(0, len(to)/CHUNKSIZE + 1):
+                deferred.defer(put_message_receipts, to[i*CHUNKSIZE:(i+1)*CHUNKSIZE], message.key().id(), domain, immediate)
+        else:
+            deferred.defer(put_message_receipts, to, message.key().id(), domain, immediate)
+            
+def put_message_receipts(to, message_key, domain, immediate):
+    from models.messages import Message, MessageReceipt
+    
+    message = Message.get_by_id(message_key)
+    mrs = []        
+    
+    for recipient in to:
+        mr = MessageReceipt(
+          recipient = recipient,
+          message = message)
+        mrs.append(mr)
+            
+    try:
+        put(mrs)
+    except:
+        for mr in mrs:
+            if not mr.is_saved():
+                try:
+                    mr.put()
+                except:
+                    logging.error('Could not add message receipt of message %i for recipient %i'%(mr.message.key().id(), mr.recipient.key().id()))            
+                    
 class AuthError(Exception):
     """Exception raised for authorization errors.
 

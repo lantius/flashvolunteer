@@ -49,7 +49,7 @@ class VolunteerForEvent(AbstractHandler):
         event = Event.get_by_id(int(url_data))
         user = account.get_user()
         
-        if event:
+        if event and self.request.get('interested'):
             eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
             interest_level = int(self.request.get('interested'))
             

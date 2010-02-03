@@ -1,6 +1,6 @@
 from controllers.abstract_handler import AbstractHandler
 
-from models.messages.message import Message
+from models.messages import MessageReceipt
 
 from google.appengine.api import memcache
 
@@ -11,22 +11,22 @@ from google.appengine.ext import deferred
 
     
 def check_messages(domain, is_debugging):    
-    messages_to_send = Message.all().filter('sent =', False).filter('in_task_queue =', False).filter('trigger <', datetime.now())
+    messages_to_send = MessageReceipt.all().filter('sent =', False).filter('in_task_queue =', False).filter('timestamp <', datetime.now())
 
-    for message in messages_to_send:
+    for receipt in messages_to_send.fetch(limit=100):
         try:
-            message.in_task_queue = True
-            message.put()
-            message.send(domain = domain,
+            receipt.in_task_queue = True
+            receipt.put()
+            receipt.send(domain = domain,
                          is_debugging = is_debugging)    
         finally:
-            message.in_task_queue = False
-            message.put()
+            receipt.in_task_queue = False
+            receipt.put()
             
 class MessageDispatcher(AbstractHandler):
 
     def get(self):
-        if Message.all().filter('sent =', False).filter('in_task_queue =', False).filter('trigger <', datetime.now()).count() > 0:
+        if MessageReceipt.all().filter('sent =', False).filter('in_task_queue =', False).filter('timestamp <', datetime.now()).count() > 0:
             deferred.defer(check_messages, self.get_domain(), self.is_debugging())
             
             

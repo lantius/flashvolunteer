@@ -147,11 +147,11 @@ indexes:
   - name: trigger
     direction: desc
 
-- kind: Message
+- kind: MessageReceipt
   properties:
   - name: sent
   - name: in_task_queue
-  - name: trigger
+  - name: timestamp
 
 - kind: Message
   properties:

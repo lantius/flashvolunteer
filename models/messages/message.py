@@ -5,12 +5,10 @@ from google.appengine.api import mail
 
 from models.auth.account import Account
 
-from models.messages.message_type import MessageType, MessagePropagationType
+from models.messages.message_type import MessageType
 
 from components.time_zones import Pacific, utc
 
-from google.appengine.ext import deferred
-from google.appengine.runtime import apiproxy_errors 
     
 def remove_html_tags(data):
     p = re.compile(r'<.*?>')
@@ -33,24 +31,6 @@ class Message(db.Model):
     
     forum_msg = db.BooleanProperty(default = False)
 
-    #### state of message sending 
-    sent = db.BooleanProperty(default = False)
-    in_task_queue = db.BooleanProperty(default = False)
-    ##############
-    
-    def send(self, domain, is_debugging = False):
-        if self.flagged and not self.verified: return
-
-        self.sent = True
-        self.put()
-
-        if not is_debugging:                 
-            try:
-                self.email(domain = domain)
-            except Exception, e:
-                logging.error('could not send message %i %s: %s'%(self.key().id(), self.subject, str(e)))
-                self.sent = False            
-                self.put()
             
     def get_mailbox_friendly_body(self):
         reg = r"(http://(www\.)?([-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]))"
@@ -71,17 +51,7 @@ class Message(db.Model):
     def get_recipient(self):
         return self.sent_to.get().recipient
 
-    def _get_message_pref(self, recipient, prop):
-        prefs = recipient._get_message_pref(type = self.type)
-        if not prefs: 
-            prefs = self.type.default_propagation
-        else:
-            prefs = prefs.propagation
-        
-        return prop.key().id() in prefs        
-        
-    def email(self, domain):
-        domain = 'http://www.' + domain
+    def get_email_footer(self, domain):
 
         if self.forum_msg:
             footer = """\n
@@ -103,41 +73,5 @@ If you would prefer not to receive these types of messages, visit %(domain)s/set
         
         if self.autogen:
             footer = "\n\nThanks!\nThe Flash Volunteer team%s"%footer 
-        
-        prop = MessagePropagationType.all().filter('name =', 'email').get()
-           
-        body = self.body + footer
-        
-        for mr in self.sent_to.filter('emailed =', False):    
-            if mr.recipient is None or \
-                not isinstance(mr.recipient, Account) or \
-                not self._get_message_pref(recipient = mr.recipient, prop = prop): 
-                continue
-            
-            try:
-                mr.emailed = True    
-                mr.put()
-                #rate limiting for email sending. quota is 8 per minute free
-                deferred.defer(send_email, 
-                               subject = self.subject,
-                               to = mr.recipient.get_name() + "<" + mr.recipient.get_email() + ">", 
-                               body = body,
-                               _queue="email")
-                
-            except Exception, e:
-                mr.emailed = False
-                mr.put()
-                logging.info('could not send to %s'%mr.recipient.key().id())
-                raise
-                
-def send_email(subject, to, body):
-    message = mail.EmailMessage(
-            sender="Flash Volunteer <noreply@flashvolunteer.org>",
-            subject=subject,
-            to = to,
-            body = body
-            )
-    try: 
-        message.send()
-    except apiproxy_errors.DeadlineExceededError, e:
-        logging.warning('got deadline exceeded error on send mail; assuming that mail was delivered successfully')
+                    
+        return footer

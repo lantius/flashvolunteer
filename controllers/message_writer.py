@@ -17,10 +17,11 @@ from controllers.abstract_handler import AbstractHandler
 class AbstractSendMessage(AbstractHandler):
     ################################################################################
     # POST
-    def _send_message(self, sender, recipients, type, params, autogen = False, forum = True):            
+    def _send_message(self, sender, recipients, type, params, autogen = False, forum = True): 
+        ##TODO: eliminate this method, just call send_message directly           
         if len(recipients) == 0: return
         
-        #logging.info('recipient list size is %i'%len(recipients))
+        logging.info('recipient list size is %i'%len(recipients))
         
         self.send_message(to = recipients, 
                      subject = params['subject'], 

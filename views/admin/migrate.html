@@ -27,6 +27,22 @@
         <input class="submit" id="submit" type="submit" value="Migrate"/>
     </form>
                     
+					
+	{% if data %}
+	   <table>
+	   {% for y in data %}
+	       <tr>
+              
+			  {{y}}
+			  {% for x in y %}
+			     <td>{{x}}</td>
+			  {% endfor %}	       	
+			
+	       </tr>
+	   {% endfor %}
+      </table>  	
+	{% endif %}				
+					
     </div>
     
 

@@ -46,7 +46,7 @@ class EventPhoto(db.Model):
         
         #can edit if event owner 
         eventvolunteers_owners = self.event.hosts()
-        owner_keys = [ev.volunteer.account.key() for ev in eventvolunteers_owners]
+        owner_keys = [vol.account.key() for vol in eventvolunteers_owners]
         
         if (requester.key() in owner_keys):
             return True
