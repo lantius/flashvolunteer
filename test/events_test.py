@@ -1,5 +1,4 @@
 import unittest, timeit, datetime
-from webtest import TestApp
 from google.appengine.ext import webapp
 from components.geostring import *
 

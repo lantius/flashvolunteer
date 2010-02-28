@@ -7,10 +7,10 @@
 <script>
       set_active('category');
 
-      $(document).ready(function() {
-            load_title('{{ category.name  | striptags }}');
-	        load_header('{{ category.get_name }}');
 
+      $(document).ready(function() {
+            load_title('{{ category.name }}');
+	        load_header('{{ category.get_name }}');
       });
 </script>
 

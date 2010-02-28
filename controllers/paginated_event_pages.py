@@ -101,10 +101,11 @@ class PaginatedCategoryCompletedPage(BaseEventListPage):
 
     def _get_events(self, limit, bookmark = None):
         qry = self.category.past_events()
+        qry = [e for e in qry if e.application.key().id() == self.application.key().id()] 
         if bookmark:
-            qry = qry.filter('date >=', bookmark)
+            qry = [e for e in qry if qry.date >= bookmark]
         
-        events = qry.fetch(limit)
+        events = qry[:limit] 
         return events
               
     def _get_title(self):
@@ -266,11 +267,12 @@ class PaginatedCategoryUpcomingPage(BaseEventListPage):
         self.set_context()
 
     def _get_events(self, limit, bookmark = None):
-        qry = self.category.upcoming_events().filter('application =', self.application)
+        qry = self.category.upcoming_events()
+        qry = [e for e in qry if e.application.key().id() == self.application.key().id()] 
         if bookmark:
-            qry = qry.filter('date >=', bookmark)
+            qry = [e for e in qry if qry.date >= bookmark]
         
-        events = [eic.event for eic in qry][:limit] 
+        events = qry[:limit] 
         return events
     
     def _get_title(self):

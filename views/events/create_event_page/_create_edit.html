@@ -55,7 +55,16 @@
 			  }
 			  else {
 			  	$(".form_error").hide();
-			  	form.submit();
+				$.getJSON('http://maps.google.com/maps/geo?q='+$('#address1').val()+'&output=json&oe=utf8&sensor=false&key={{GOOGLEMAPSAPI}}&callback=?', function(data) {
+                    
+					if (data.Status.code == 200) {
+						form.submit();
+					}
+					else {
+						$('.form_error').html('Please enter a valid address!');
+						$(".form_error").show();
+					}
+				});
 			  }
 		   }
 	    }
@@ -97,7 +106,7 @@
 <div id="createevent" class="softmodule">
 	<div class="moduletitle"><h3>Create An Event</h3></div>
 	
-	<form class="validate_form" action="{% if event.is_saved %}
+	<form id="create_event_form" class="validate_form" action="{% if event.is_saved %}
 						{{event.url}}/edit
 					{% else %}
 						/events/new
@@ -188,7 +197,7 @@
 		{% if afg_opp %}
             <input type=hidden name="afg_opp" value="{{ afg_opp.key.id }}">	
 		{% endif %}
-		<input class="submit" id="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
+		<input class="submit" type="submit" value="{% if event.is_saved %}Update{% else %}Create Event{% endif %}"/>
 	</div>
 	</form>
 </div>

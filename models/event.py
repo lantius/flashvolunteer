@@ -101,7 +101,11 @@ class Event(db.Model):
         if not self.date:
             return "no date set"
 
-        end = self.date + self.get_duration()
+        if not self.enddate:
+            raise
+        else:
+            end = self.enddate
+            
         return end.strftime(strftime)  
     
     def get_enddate_long(self):

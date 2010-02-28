@@ -15,7 +15,7 @@ from models.applicationdomain import ApplicationDomain
 from google.appengine.api import memcache
 from google.appengine.ext.db import put, delete
 
-
+from utils.misc_methods import get_google_maps_api_key
 ################################################################################
 # MainPage
 class AbstractHandler(webapp.RequestHandler):
@@ -44,7 +44,8 @@ class AbstractHandler(webapp.RequestHandler):
             'application_alias': application.get_alias(),
             'session_id':  session.sid,
             'account': account,
-            'to_extend': to_extend
+            'to_extend': to_extend,
+            'GOOGLEMAPSAPI': get_google_maps_api_key()
         })
 
         if new_login:

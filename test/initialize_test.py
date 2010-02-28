@@ -1,5 +1,4 @@
 import unittest, logging
-from webtest import TestApp
 from google.appengine.ext import webapp
 
 

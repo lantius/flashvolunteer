@@ -382,10 +382,10 @@ class EventsPage(AbstractHandler):
 
         if date != event.date:
             for ev in event.eventvolunteers:
-                ev.event_date = event.event_date
+                ev.event_date = event.date
                 ev.put()
             for eic in event.event_categories:
-                eic.event_date = event.event_date
+                eic.event_date = event.date
                 eic.put()
                         
         #TODO: convert interest category helper to application-specific data model

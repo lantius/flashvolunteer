@@ -1,5 +1,4 @@
 import unittest
-from webtest import TestApp
 from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
 
