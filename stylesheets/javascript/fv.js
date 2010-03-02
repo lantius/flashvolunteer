@@ -71,7 +71,9 @@ function build_dialog(d_type, id){
         case 9: 
             var url = '/events/past/coordinated/'+id;
             break;
-			
+        case 10:
+            var url = '/events/upcoming/category/'+id;
+            break;			
 														
 		case 20:
 		    var url = '/events/'+id+'/attendees';

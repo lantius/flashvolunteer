@@ -21,12 +21,24 @@ class Application(db.Model):
         return self.name.replace('-', ' ').title()
 
   
+    def ongoing_opportunities(self, date = None):
+        if date is None: date = now()
+                
+        events = self.events.filter(
+            'date >= ', date).filter(
+            'hidden = ', False).filter(
+            'is_ongoing = ', True).order(
+            'date')
+        
+        return events        
+        
     def upcoming_events(self, date = None):
         if date is None: date = now()
                 
         events = self.events.filter(
             'date >= ', date).filter(
-            'hidden = ', False).order(
+            'hidden = ', False).filter(
+            'is_ongoing = ', False).order(
             'date')
         
         return events

@@ -13,6 +13,21 @@
     {% endifnotequal %}
 {% endif %}
 
+<div id="neighborhoodongoingevents" class="hardmodule">
+    <div class="moduletitle"><h3>Ongoing Opportunities</h3></div>
+    {% for event in ongoing_opportunities %}
+        {% include "../events/_event_list_item.html" %}
+    {% endfor %}
+</div>
+
+{% if ongoing_opportunities %}
+    {% ifnotequal ongoing_opportunities|length 0 %}
+    <div class="pagination_entry">
+        <a onclick="build_dialog(11,{{neighborhood.key.id }})">&raquo; View all</a>
+    </div>
+    {% endifnotequal %}
+{% endif %}
+
 <div id="neighborhoodpastevents" class="hardmodule">
     <div class="moduletitle"><h3>Past Events</h3></div>
     {% for event in past_events %}

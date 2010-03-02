@@ -12,7 +12,21 @@
     </div>
     {% endifnotequal %}
 {%else%}
-	<div class="faq-link-wrapper">
-		<a class="faq-link" href="/static/help#events">Why don't I have any upcoming events?</a>
-	</div>
+	No upcoming events
+{% endif %}
+
+<div id="ongoingopportunities" class="hardmodule">
+    <div class="moduletitle"><h3>Ongoing Opportunities <a style="cursor:pointer" title="A list of some ongoing opportunities. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
+        {% for event in ongoing_opportunities %}
+    		{% include "../events/_event_list_item.html" %}
+        {% endfor %}
+</div>
+{% if ongoing_opportunities %}
+    {% ifnotequal ongoing_opportunities|length 0 %}
+    <div class="pagination_entry">
+        <a onclick="build_dialog(0)">&raquo; View all</a>
+    </div>
+    {% endifnotequal %}
+{%else%}
+    No ongoing opportunities
 {% endif %}

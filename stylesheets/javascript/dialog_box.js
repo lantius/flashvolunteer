@@ -43,6 +43,9 @@ function close_dialog(){
 function build_dialog(d_type, id){
 
 	switch(d_type){
+        case 0:
+            var url = '/events/ongoing';
+            break;
 		case 1:
             var url = '/events/upcoming';
 		    break;
@@ -74,7 +77,10 @@ function build_dialog(d_type, id){
         case 10:
             var url = '/events/upcoming/category/'+id;
             break;			
-														
+        case 11:
+            var url = '/events/ongoing/neighborhood/'+id;
+            break;
+												
 		case 20:
 		    var url = '/events/'+id+'/attendees';
 		    break;

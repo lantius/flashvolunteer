@@ -23,11 +23,14 @@ class Neighborhood(db.Model):
     def volunteers_living_here(self):
         return self.home_neighborhood
     
+    def ongoing_opportunities(self):
+        return self.events.order('date').filter('in_past =', True).filter('hidden =', False).filter('is_ongoing =',True)
+    
     def events_past(self):
         return self.events.order('date').filter('in_past =', True).filter('hidden =', False)
     
     def events_future(self):
-        return self.events.order('date').filter('in_past =', False).filter('hidden =', False)
+        return self.events.order('date').filter('in_past =', False).filter('hidden =', False).filter('is_ongoing =',False)
 
     def distance_from_centroid(self, location):
         return math.sqrt( math.pow(self.centroid.lat - location.lat, 2) + math.pow(self.centroid.lon - location.lon, 2))

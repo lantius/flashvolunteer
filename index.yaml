@@ -35,7 +35,22 @@ indexes:
   properties:
   - name: application
   - name: hidden
+  - name: is_ongoing
+  - name: date
+
+- kind: Event
+  properties:
+  - name: application
+  - name: hidden
   - name: neighborhood
+  - name: date
+
+- kind: Event
+  properties:
+  - name: application
+  - name: hidden
+  - name: neighborhood
+  - name: is_ongoing
   - name: date
 
 - kind: Event
@@ -46,6 +61,14 @@ indexes:
 - kind: Event
   properties:
   - name: hidden
+  - name: date
+
+- kind: Event
+  properties:
+  - name: hidden
+  - name: in_past
+  - name: is_ongoing
+  - name: neighborhood
   - name: date
 
 - kind: Event
@@ -147,12 +170,6 @@ indexes:
   - name: trigger
     direction: desc
 
-- kind: MessageReceipt
-  properties:
-  - name: sent
-  - name: in_task_queue
-  - name: timestamp
-
 - kind: Message
   properties:
   - name: sent
@@ -194,6 +211,12 @@ indexes:
   - name: timestamp
     direction: desc
 
+- kind: MessageReceipt
+  properties:
+  - name: sent
+  - name: in_task_queue
+  - name: timestamp
+
 - kind: MessageType
   properties:
   - name: in_settings
@@ -203,3 +226,10 @@ indexes:
   properties:
   - name: application
   - name: name
+
+- kind: EventInterestCategory
+  properties:
+  - name: event_is_hidden
+  - name: interestcategory
+  - name: event_date
+  

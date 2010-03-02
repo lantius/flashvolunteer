@@ -37,9 +37,6 @@ class MigrateDatastore(AbstractHandler):
             'volunteer' : account.get_user()
           }
         self._add_base_template_values(vals = template_values)
-        
-        
-        
                 
         #template_values['data'] = [(mr.key().id(), mr.key()) for mr in messages_to_send]
                 
@@ -57,12 +54,20 @@ class MigrateDatastore(AbstractHandler):
         #deferred.defer(synchronize_apps, self.get_server())
         #deferred.defer(set_admin_status)
 
-
+        
                 
-        deferred.defer(fix_site_message)
+        deferred.defer(add_ongoing)
 
         self.redirect('/admin/migrate')
 
+def add_ongoing():
+    for e in Event.all():
+        try:
+            e.is_ongoing = e.is_ongoing_opportunity()
+            e.put()
+        except: 
+            pass
+        
 def fix_site_message():
     message = Message.get_by_id(561790)
     for mr in message.sent_to:

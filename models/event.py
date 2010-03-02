@@ -37,6 +37,8 @@ class Event(db.Model):
     
     in_past = db.BooleanProperty(default=False)
     
+    is_ongoing = db.BooleanProperty(default=False)
+    
     ###message state
     reminder_message_sent = db.BooleanProperty(default=False)
     post_event_message_sent = db.BooleanProperty(default=False)
@@ -60,6 +62,10 @@ class Event(db.Model):
                           _app=_app,
                           _from_entity=_from_entity, **kwds)
           
+    def is_ongoing_opportunity(self):
+        td = self.enddate - self.date
+        return td.days > 5
+    
     def get_duration_hours(self):
         diff = self.enddate - self.date
         return (diff.seconds / 60 + 59) / 60 #round up
@@ -289,7 +295,8 @@ class Event(db.Model):
             afg_opp = AFGOpportunity.get_by_id(int(params['afg_opp']))
             self.source = afg_opp
     
-            
+        self.is_ongoing = self.is_ongoing_opportunity()
+        
         if self.error:
             raise Exception(self.error)
         return not self.error

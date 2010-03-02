@@ -180,6 +180,28 @@ class PaginatedVolunteerCoordinatedCompletedPage(BaseEventListPage):
     def _get_url(self):
         return '/events/past/coordinated/%i'%self.volunteerid
 
+
+
+class PaginatedOngoingPage(BaseEventListPage):
+    def get(self):
+        self.volunteerid = None
+        self.set_context()
+
+    def _get_events(self, limit, bookmark = None):
+        qry = self.get_application().ongoing_opportunities()
+        if bookmark:
+            qry = qry.filter('date >=', bookmark)
+        
+        events = qry.fetch(limit)
+        return events
+              
+    def _get_title(self):
+        return 'Ongoing Opportunities'
+    
+    def _get_url(self):
+        return '/events/ongoing'
+    
+    
 class PaginatedUpcomingPage(BaseEventListPage):
     def get(self):
         self.volunteerid = None
@@ -238,6 +260,27 @@ class PaginatedVolunteerHostedPage(BaseEventListPage):
         return '/events/hosted/volunteer/%i'%self.volunteerid
 
 
+class PaginatedNeighborhoodOngoingPage(BaseEventListPage):
+    def get(self, neighborhoodid):
+        self.neighborhoodid = int(neighborhoodid)
+        self.neighborhood = Neighborhood.get_by_id(self.neighborhoodid)
+        self.volunteerid = None
+        self.set_context()
+        
+    def _get_events(self, limit, bookmark = None):
+        qry = self.neighborhood.ongoing_opportunities().filter('application =', self.application)
+        if bookmark:
+            qry = qry.filter('date >=', bookmark)
+        
+        events = qry.fetch(limit)
+        return events
+              
+    def _get_title(self):
+        return '%s\'s Ongoing Opportunities'%self.neighborhood.name
+    
+    def _get_url(self):
+        return '/events/ongoing/neighborhood/%i'%self.neighborhoodid
+    
 class PaginatedNeighborhoodUpcomingPage(BaseEventListPage):
     def get(self, neighborhoodid):
         self.neighborhoodid = int(neighborhoodid)

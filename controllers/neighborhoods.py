@@ -152,6 +152,7 @@ class NeighborhoodDetailPage(AbstractHandler):
             'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 
             'past_events': neighborhood.events_past().fetch(LIMIT),
             'upcoming_events':neighborhood.events_future().fetch(LIMIT),
+            'ongoing_opportunities':neighborhood.ongoing_opportunities().fetch(LIMIT),
             'n_stats':n_stats,
             'forum': forum
           }

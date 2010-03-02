@@ -110,6 +110,7 @@ class EventsPage(AbstractHandler):
             return
         
         upcoming_events = self.get_application().upcoming_events().fetch(EventsPage.LIMIT)
+        ongoing_opportunities = self.get_application().ongoing_opportunities().fetch(EventsPage.LIMIT)
         
         if account: user = account.get_user()
         else: user = None
@@ -147,6 +148,7 @@ class EventsPage(AbstractHandler):
             'upcoming_events': upcoming_events,
             'future_events': future_events,
             'past_events': my_past_events,
+            'ongoing_opportunities':ongoing_opportunities
           }
         self._add_base_template_values(vals = template_values)
         

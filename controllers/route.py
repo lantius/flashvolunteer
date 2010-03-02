@@ -12,7 +12,8 @@ from controllers.paginated_event_pages import \
     PaginatedCategoryCompletedPage, PaginatedVolunteerUpcomingPage, \
     PaginatedNeighborhoodUpcomingPage, PaginatedCategoryUpcomingPage, \
     PaginatedUpcomingPage, PaginatedRecommendedPage, PaginatedVolunteerHostedPage, \
-    PaginatedVolunteerCoordinatedCompletedPage        
+    PaginatedVolunteerCoordinatedCompletedPage, PaginatedOngoingPage, \
+    PaginatedNeighborhoodOngoingPage
 
 from controllers.home import MainPage
 from controllers.profile import ProfilePage
@@ -126,8 +127,10 @@ def real_main():
            ('/events/hosted/volunteer/(\d+)', PaginatedVolunteerHostedPage),
            ('/events/upcoming/volunteer/(\d+)', PaginatedVolunteerUpcomingPage),
            ('/events/upcoming/neighborhood/(\d+)', PaginatedNeighborhoodUpcomingPage),
+           ('/events/ongoing/neighborhood/(\d+)', PaginatedNeighborhoodOngoingPage),
            ('/events/upcoming/category/(\d+)', PaginatedCategoryUpcomingPage),         
            ('/events/upcoming', PaginatedUpcomingPage),
+           ('/events/ongoing', PaginatedOngoingPage),
            ('/events/recommended', PaginatedRecommendedPage),
            ('/events/(\d+)/send_message', SendMessage_Event),
            ('/events/(\d+)/messages', Forum),
