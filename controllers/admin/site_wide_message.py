@@ -22,7 +22,7 @@ class SiteWideMessage(AbstractSendMessage):
         from_header = 'A message from your friends at Flash Volunteer.\n\n'
         params['body'] = from_header + params['body']
         
-        recipients = self._get_all_recipients()
+        recipients = AbstractSendMessage.get_all_recipients()
         
         logging.info('Site wide message size: %i'%len(recipients))
         self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)

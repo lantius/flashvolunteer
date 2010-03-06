@@ -114,8 +114,8 @@ class AbstractSendMessage(AbstractHandler):
       
         self.response.out.write(template.render(render_path, template_values))        
 
-
-    def _get_all_recipients(self):
+    @classmethod
+    def get_all_recipients(self):
         recipients = []
         CHUNK_SIZE = 250
         

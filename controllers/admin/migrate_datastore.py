@@ -59,7 +59,9 @@ class MigrateDatastore(AbstractHandler):
         deferred.defer(add_ongoing)
 
         self.redirect('/admin/migrate')
-
+        
+    
+    
 def add_ongoing():
     for e in Event.all():
         try:

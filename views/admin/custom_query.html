@@ -1,0 +1,42 @@
+
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('admin');
+
+      $(document).ready(function() {
+            load_title('Custom query');
+            load_header('');
+      });
+</script>
+
+
+<ul>
+    <li><a href="/admin" class="fv">&laquo; back to admin home</a></li>
+
+    <li><button class="submit" onclick=rebuild()>Check for new opportunities</button></li>
+
+</ul>
+
+<table id="afg_opportunity_list">
+    <tbody>
+        <tr>
+            <th>Person</th>
+            <th>Date</th>
+			<th>Hours</th>
+        </tr>
+        {% for ev in results %}
+          <tr>
+            <td><a href={{ev.volunteer.url}}>{{ev.volunteer.get_name}}</a></td>
+            <td>{{ev.event_date}}</td>
+            <td>{{ev.hours}}</td>
+          </tr>
+        {% endfor %}
+        
+    </tbody>
+    
+</table>
+
+{% endblock content %}

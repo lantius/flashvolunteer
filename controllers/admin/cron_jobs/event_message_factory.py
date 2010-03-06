@@ -155,7 +155,7 @@ class RecommendedEventMessageFactory(AbstractHandler):
         right_now = now()
         cached_descs = {}
         base_url = self._get_base_url()
-        accounts = self._get_all_recipients()
+        accounts = AbstractSendMessage.get_all_recipients()
         for acnt in accounts:
             deferred.defer(recommend_event, acnt, self.get_domain(), 
                            type9_msg, right_now, cached_descs, base_url,

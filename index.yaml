@@ -232,4 +232,9 @@ indexes:
   - name: event_is_hidden
   - name: interestcategory
   - name: event_date
+
+- kind: EventVolunteer
+  properties:
+  - name: isowner
+  - name: hours
   
