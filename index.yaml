@@ -105,6 +105,12 @@ indexes:
   - name: interestcategory
   - name: event_date
 
+- kind: EventInterestCategory
+  properties:
+  - name: event_is_hidden
+  - name: interestcategory
+  - name: event_date
+
 - kind: EventPhoto
   properties:
   - name: event
@@ -147,6 +153,11 @@ indexes:
   - name: event_is_upcoming
   - name: volunteer
   - name: event_date
+
+- kind: EventVolunteer
+  properties:
+  - name: isowner
+  - name: hours
 
 - kind: Eventvolunteer
   properties:
@@ -226,15 +237,3 @@ indexes:
   properties:
   - name: application
   - name: name
-
-- kind: EventInterestCategory
-  properties:
-  - name: event_is_hidden
-  - name: interestcategory
-  - name: event_date
-
-- kind: EventVolunteer
-  properties:
-  - name: isowner
-  - name: hours
-  
