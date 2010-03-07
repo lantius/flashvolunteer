@@ -6,7 +6,7 @@
 	<input type="hidden" name="session_id" value="{{ session_id }}" />
 	
 	<ul>
-		<li><span class="label">Your Name:</span><input id="createnameinput" type="text" name="name"
+		<li><label>Your Name:</label><input id="createnameinput" type="text" name="name"
 			{% if account.name %}
 				value="{{ account.name|striptags }}"
 			{% else %}
@@ -16,7 +16,7 @@
 		</li>
 
 
-		<li><span class="label">Email (required):</span><input id="createnameinput" type="text" name="email"
+		<li><label>Email (required):</label><input id="createnameinput" type="text" name="email"
 			{% if account.get_email %}
 				value="{{ account.get_email|striptags }}"
 			{% else %}
@@ -25,8 +25,8 @@
 			/>
 		</li>
 
-        <li><span class="label">I live nearest to:</span> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
-        <li><span class="label">I work nearest to:</span> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
+        <li><label>I live nearest to:</label> {% include "../volunteers/settings/_select_home_neighborhood.html" %}
+        <li><label>I work nearest to:</label> {% include "../volunteers/settings/_select_work_neighborhood.html" %} </li>
 					
 		<li><input id='tosagree' type="checkbox" name="tosagree" value="1" /> I agree to the Flash Volunteer <a class="fv" href="/static/tos">Terms of Use</a></li>
 		{% if volunteer.error.tosagree %}

@@ -1,7 +1,7 @@
 <li class="imagenameli" id="verify_attendence" >
-    <div id="volunteer_summary_team" class="volunteer_summary_team">
+    <div class="volunteer_summary_team">
 		
-		<div id="left_verify">
+		<div id="left_verify" class="fl">
 	        <div class="volunteer_summary_pic">
 	            <a class="fv" href="{{ ev.volunteer.url }}" >
 	            <img class="smallavatar" src="
@@ -13,13 +13,13 @@
 	            " alt="{{ ev.volunteer.get_name }}" /></a>
 	        </div>
 	        
-	        <div id="volunteer_summary_desc" class="volunteer_summary_desc">
+	        <div class="volunteer_summary_desc">
 	            <div class="volunteer_summary_name">
-	             <a class="fv" id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
+	               <a class="fv" id="volunteer_link[{{ ev.volunteer.key.id }}]" href="{{ ev.volunteer.url }}" >{{ ev.volunteer.get_name }}</a>
 	            </div>
 			</div>
 		</div>
-		<div id="right_verify">
+		<div id="right_verify" class="fl">
 			<ul>
 	            <li><input type='radio' name='event_volunteer_{{ev.key.id}}' value='True' id='i_verify_{{ev.key.id}}_true' 
 				   	onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'

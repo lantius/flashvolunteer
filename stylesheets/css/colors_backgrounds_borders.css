@@ -133,12 +133,8 @@ div.shortevent {
     border-bottom: 1px solid #CCC;
 }
 
-.volunteer_summary_follower, 
-.volunteer_summary_follower .volunteer_summary_operations input.operation {
-    background: #E8E8E8;
-}
 
-.format_help {
+span.format_help {
 	color: #C6C6C6;
 }
 
@@ -192,4 +188,13 @@ table.zebra tr.even {
 	background-color: #E6F4F4;
 	font-size: 120%;
 	color: #333;
+}
+
+input.operation, input.operation_minimal, 
+a.operation, a.operation_minimal {
+    background: #FFFFFF;
+}
+
+#active_neighborhoods div.small {
+    color:#CCC;
 }

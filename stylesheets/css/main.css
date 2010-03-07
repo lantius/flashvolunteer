@@ -17,14 +17,6 @@ html, body {
 }
 
 html {
-    /*to create a vertical dummy scrollbar in Firefox or Safari which 
-     * would not have a scrollbar with height 100%. If you move to and 
-     * from pages which don't have a vertical scrollbar to a page which 
-     * does, it makes the page content jump sideways without a forced 
-     * dummy scrollbar (works in Firefox and Safari but not in Opera; 
-     * IE always shows a dummy scrollbar; Opera needs min-height and 
-     * height: 101% in the container styles but it causes a standard 
-     * scrollbar, not a dummy, and is less correct.)*/
     overflow-y: scroll; 
 
 }
@@ -58,8 +50,6 @@ p { margin: 8px 0 0 0; }
 /* Hide from IE Mac \*/
 .clearfix {display:block;}
 /* End hide from IE Mac */
-
-
 
 
 /*
@@ -117,6 +107,20 @@ div#navtabs {
 ======================================================
 */
 h1 { font-size: 24px; line-height: 36px; margin-bottom: 18px; }
+
+    h1.verification_warning {
+	    font-size: 60%;
+	    position:absolute;
+	    top: 10px;
+	    padding-left: 3px;
+	}
+
+	#pagespectitle h1 {
+	    text-align: left;
+	    font-size: 16pt;
+	    margin: 10px 20px 10px 0px;
+	}
+
 h2 { 
     font-size: 110%; 
 	font-weight: bold;
@@ -129,12 +133,6 @@ h3 {
 	margin: 10px 0 5px 0;
     font-size: 110%;
 	display: inline;
-}
-
-#pagespectitle h1 {
-    text-align: left;
-    font-size: 16pt;
-    margin: 10px 20px 10px 0px;
 }
 
 .softmodule, .hardmodule {
@@ -154,12 +152,6 @@ div.moduletitle{
 	font-weight: lighter;
 }
 
-h1.verification_warning {
-    font-size: 60%;
-    position:absolute;
-    top: 10px;
-    padding-left: 3px;
-}
 
 
 /*
@@ -168,6 +160,12 @@ h1.verification_warning {
 ======================================================
 */
 
+ol {}
+
+    #splash-right ol{
+        list-style-position: outside;
+    }
+	
 ul {
     list-style: none;
     text-align: left;
@@ -175,101 +173,130 @@ ul {
     margin: 0;
 }
 
-ul.bullets {
-    list-style: disc;
-    text-align: left;
-    padding: 0;
-    margin: 0 0 25px 0;
-}
+	ul.bullets {
+	    list-style: disc;
+	    text-align: left;
+	    padding: 0;
+	    margin: 0 0 25px 0;
+	}
 
+	#creationtips ul {
+	    padding-left: 10px;
+	}
+
+	ul.event_header {
+	    font-size: small;
+	    float:right;
+	}
+
+	#forum.nonembed ul {
+	    padding-bottom: 10px;
+	}
+	
 li {
     margin: 0;
     padding: 6px 0 0 0;
 }
 
-ul.bullets li {
-    margin: 5px 0 5px 50px;
-    list-style-type:disc;
-}
+	ul.bullets li {
+	    margin: 5px 0 5px 50px;
+	    list-style-type:disc;
+	}
 
-li.tallerlistitem {
-    margin: 11px 0 13px 0;
-}
+	li.tallerlistitem {
+	    margin: 11px 0 13px 0;
+	}
 
-/*for finding events*/
-ul.formlist select, 
-ul.leftformlist select, 
-ul.rightformlist select {
-    width: 90%;
-    margin: 2%;
-}
 
-ul.formlist .daterange, 
-ul.rightformlist .daterange {
-    width: 42%;
-    margin: 1% 2%;
-}
+	li.submiteventsearch {
+		text-align:right; 
+		padding-right: 10px;
+	}
 
-ul.formlist .narrowselect {
-    width: 50%;
-}
+	#splash-right li{
+	    list-style-type:decimal;
+	    margin: 5px 0 0 15px;
+	    font-size: 9pt;
+	}
 
-ul.leftformlist {
-    float: left;
-    width: 49%;
-}
+	.shortevent ul li {
+	    margin-left: 15px;
+	}
 
-ul.leftformlist li.submiteventsearch,
-ul.formlist li.submiteventsearch {
-	text-align:right; 
-	padding-right: 10px;
+	#creationtips li {
+	    list-style-image:none;
+	    list-style-position:outside;
+	    list-style-type:disc;
+	    padding-top:10px;
 	}
 	
-ul.leftformlist input#search_past_events,
-ul.formlist input#search_past_events {
-	vertical-align:middle;
+	.messages li {
+	    margin-left: 15px;
 	}
 
-ul.rightformlist {
-    float: right;
-    width: 49%;
-}
+	.verifiableevent ul li {
+	    margin-left: 15px;
+	}
 
-#splash-right ol{
-    list-style-position: outside;
-}
+	#footer li.badge {
+	    padding-right: 20px;
+	}
 
-#splash-right li{
-    list-style-type:decimal;
-    margin: 5px 0 0 15px;
-    font-size: 9pt;
-}
+	.event_operation_block li {
+	    height: 25px;
+	}
 
-.shortevent ul li {
-    margin-left: 15px;
-}
+	li#personstatement:before {
+	    content: open-quote
+	}
+	
+	li#personstatement:after {
+	    content: close-quote;
+	}
+	
+	#createvolunteer li {
+	    padding-top: 5px;
+	}
 
-.verifiableevent ul li {
-    margin-left: 15px;
-}
+	li.imagenameli {
+	    display: block;
+	    width: 85px;
+	    float: left;
+	    text-align: center;
+	    padding-left: 1px;
+	    padding-right: 1px;
+	    height: 140px;    
+	}
+	
+	li#verify_attendence{
+	    width: 100%;
+	    height: 120px;
+	    border-bottom: 1px solid #E8E8E8;
+	}
 
-#creationtips ul {
-	padding-left: 10px;
-}
-#creationtips li {
-	list-style-image:none;
-	list-style-position:outside;
-	list-style-type:disc;
-	padding-top:10px;
-}
+	.shortevent ul li {
+	    margin-left: 15px;
+	}
+	
+	#partners li {
+	    margin: 10px 10px;
+	    padding: 2px;
+	    border: 3px solid #eee;
+	}
 
-.messages li {
-	margin-left: 15px;
-}
+	ul.event_header li {
+	    display:inline;
+	    padding-top:0px;
+	}
+	
+	ul.event_header li.title {
+	    vertical-align: 7px;
+	}
 
-.messages div.operations {
-	margin-top: 5px;
-}
+	#message_settings li{
+	    padding-left: 15px;
+	    padding-bottom: 5px;    
+	}
 /*
 ======================================================
 >>Link Styles
@@ -281,26 +308,40 @@ a:hover { }
 a:active { }
 a:visited { }
 
-a.operation, a {
+a.operation, 
+a {
     border: none;
     font-weight: normal;
     text-decoration: none;
 	outline: none;
 	cursor: pointer;
 }
+    a.event_name {
+        font-weight:bold;
+    }
+	
+	.moduletitle a {
+	    position:absolute;
+	    right:15px;
+	}
 
-.moduletitle a {
-    position:absolute;
-    right:15px;
-}
-
-
-a.event_name {
-    font-weight:bold;
-}
-
-#footer #static_nav li a{
-    padding: 15px 15px 14px 15px;
+	#footer #static_nav li a {
+	    padding: 15px 15px 14px 15px;
+	}
+	
+    a.operation {
+        padding-left: 3px;
+    }
+	
+	a.event_name {
+	    font-weight:bold;
+	}
+	
+#active_neighborhoods th a:link, 
+#active_neighborhoods th a:visited,
+#active_volunteers th a:link, 
+#active_volunteers th a:visited {
+    font-weight: bold;
 }
 
 /*
@@ -314,67 +355,62 @@ img{
     margin: 0;
 }
 
-img#beta {
-    width: 35px;
+	img#beta {
+	    width: 35px;
+	
+	}
 
-}
+	img#nameavatar {
+	    margin: 0 0 0 0px;
+	    width: 100%;
+	}
 
-img#nameavatar {
-    margin: 0 0 0 0px;
-    width: 100%;
-}
+	img.smallavatar {
+		margin: 0 auto auto auto;
+	    display: block;
+	    max-height: 80px;
+	    max-width: 85px;
+	}
 
-img.smallavatar {
-	margin: 0 auto auto auto;
-    display: block;
-    max-height: 80px;
-    max-width: 85px;
-}
+	#volavatar img.smallavatar {
+	    max-height: 50px;
+	    max-width: 50px;
+		margin: 10px 0px 0px 10px;
+	}
 
-#volavatar img.smallavatar {
-    max-height: 50px;
-    max-width: 50px;
-	margin: 10px 0px 0px 10px;
-}
+	.message img.smallavatar {
+	    max-height: 60px;
+	    max-width: 60px;
+	}
 
-.message img.smallavatar {
-    max-height: 60px;
-    max-width: 60px;
-}
+	.message td img.smallavatar {
+	    margin: 10px 0px 0px 10px;
+	}
 
-.message img.microavatar {
-    max-height: 40px;
-    max-width: 40px;
-}
+	.message td img.microavatar {
+	    margin: 5px 0px 0px 5px;
+	}
 
-.message td img.smallavatar {
-    margin: 10px 0px 0px 10px;
-}
+    .message img.microavatar {
+        max-height: 40px;
+        max-width: 40px;
+    }
+	
 
-.message td img.microavatar {
-    margin: 5px 0px 0px 5px;
-}
+	img#fb-badge-img {
+		width: 125px;
+	}
+	img#twitter-badge-img {
+		width: 90px;
+	}
 
-#footer .badge {
-    padding-right: 20px;
-}
+	.person_list_ops img {
+		width: 15px;
+	}
 
-#donate-badge-img {
-}
-
-#fb-badge-img {
-	width: 125px;
-}
-#twitter-badge-img {
-	width: 90px;
-}
-
-.volunteer_summary_name img,
-.volunteer_summary_name input,
-.volunteer_summary_name form {
-	width: 15px;
-}
-
+	ul.event_header img{
+	    height: 25px;
+	}
 
 /*
 ======================================================
@@ -393,61 +429,126 @@ input.title { font-size:1.5em; }
 textarea { width: 390px; height: 250px; padding:5px; }
 */
 
-input, button {
+input, button, a {
 	cursor: pointer;
 }
+
 input {
     position: relative;
-    right: 0;   
+    right: 0;  
+	margin: 5px 0px; 
 }
 
+	input#avataruploadinput {
+	    width: 150px;
+	}
 
-input#avataruploadinput {
-    width: 150px;
+    ul.formlist input#search_past_events {
+        vertical-align:middle;
+    }
+
+	form input.text, 
+	form input.password {
+	    width: 95%;
+	    border:1px solid #aaa;
+	    color:#000000;
+	    font-size:125%;
+	    letter-spacing:-1px;
+	    line-height:normal;
+	    padding:2px 5px;
+	}
+
+button {}
+
+	button.volunteer_button {
+	    font-weight: normal;
+	    text-decoration: none;
+	    padding: 5px 5px;
+	    display:inline;
+	    cursor: pointer;
+	    font-size: 110%;
+	}
+
+select {}
+
+	ul.formlist select {
+	    width: 90%;
+	    margin: 2%;
+	}
+
+	#createvolunteer select {
+	    width: 100%;
+	}
+	
+
+form {}
+	#eventmessagescreate form {
+	    margin-top: 20px;
+	}
+
+textarea {}
+	#emcreatebody textarea {
+	    height: 250px;
+	}
+	
+	form textarea {
+	    width: 98%;
+	    height: 5em;
+	    font-size: 110%;
+	    padding: 3px 5px;
+	}
+
+option {}
+	form select option {
+	    padding: 0px 10px;
+	    font-size: 110%;    
+	}
+
+
+form textarea:focus,
+form input.text:focus, 
+form input.password:focus, 
+form input.textarea:focus {
+    background-color:#E6F4F4;
+    background-image:none;
+    border:1px solid #008c98;
 }
-
-button.volunteer_button {
-    font-weight: normal;
-    text-decoration: none;
-    padding: 5px 5px;
-    display:inline;
-    cursor: pointer;
-    font-size: 110%;
-}
-
-
-.event_operation_block li {
-	height: 25px;
-}
-
 
 /* for lists of operations. make the links & forms look the same */
-a.operation, a:link, a:visited, a:active, a:hover, a, 
+a.operation, 
+a:link, a:visited, a:active, a:hover, 
+a, 
 input.operation, input.operation_minimal {
     border: none;
     font-weight: normal;
     text-decoration: none;
-    /*width: 100%;*/
 }
 
-input.operation, input.operation_minimal, 
-a.operation, a.operation_minimal {
-    background: #FFFFFF;
-    cursor: pointer;
-}
-
-
-
-a.operation {
-    padding-left: 3px;
-}
-
-.volunteer_summary_neighbor input.operation, 
 .volunteer_summary_team input.operation, 
 .volunteer_summary_team a.operation {
     border:none;
 }
 
+#emcreatesubject input,
+#emcreatebody textarea {
+    width: 85%; 
+    float:right;
+}
+
+a.submit,
+button.submit,
+input.submit {
+    font-size:17px;
+    letter-spacing:-1px;
+    padding: 5px;
+}
+
+form input.text.error, 
+form input.password.error,
+.error {
+    padding: 0px;
+    border: 3px solid #CC3333;
+}
 
 
 /*
@@ -460,6 +561,19 @@ table {
     text-align: left;
 }
 
+    .messages table {
+	    width: 97%;
+	}
+
+	#active_neighborhoods table,
+	#active_volunteers table {
+	    margin-top:10px;
+	    font-size: 9pt;
+	    border-collapse: collapse;
+	    border-spacing: 0px;
+	    text-align: center;
+	}	
+	
 th, td {
     padding: 2px;
 }
@@ -468,35 +582,69 @@ th {
     font-weight: bold;
 }
 
-.message td {
-	margin-left: 5px;
-}
-
-.messages table {
-	width: 97%;
-}
-
-tr.message {
-	margin-bottom:10px;
+	#active_neighborhoods thead th,
+	#active_volunteers thead th {
+	    padding: 0 4px;
+	}
 	
-}
+	#active_neighborhoods tbody th,
+	#active_volunteers tbody th {
+	    text-align: left;
+	    border-top: 0px;
+	}
 
-#active_neighborhoods table,
-#active_volunteers table {
-    margin-top:10px;
-    font-size: 9pt;
-    border-collapse: collapse;
-    border-spacing: 0px;
-    text-align: center;
-}
+	.messages th.sender {
+	    width: 30%;
+	    margin-right: 2%;
+	}
+	
+	.messages th.subject {
+	    width: 60%;
+	}
 
-#volunteerstats td,
-#active_neighborhoods td,
-#active_volunteers td,
-#neighborhoodstats td {   
-    padding:3px 10px;
-    font-weight: normal;
-}
+
+td {}
+	.message td {
+		margin-left: 5px;
+	}
+
+	#volunteerstats td,
+	#active_neighborhoods td,
+	#active_volunteers td,
+	#neighborhoodstats td {   
+	    padding:3px 10px;
+	    font-weight: normal;
+	}
+
+	.message td.minfo {
+	    min-width: 105px;
+	    padding: 20px;
+	}
+	
+	#forum .message td.minfo {
+	    min-width: 95px;
+	    width: 95px;
+	    padding: 5px;
+	}
+	
+	.messages td.msubject{
+	    padding: 5px 20px 0px 0px;  
+	}   
+	
+	#forum .message td.msubject {
+	    padding: 5px 5px 5px 0px;   
+	}
+	
+	#forum .message td {
+	    vertical-align: top;
+	    text-align: left;
+	}
+
+tr{}
+	tr.message {
+		margin-bottom:10px;
+	}
+
 
 #active_neighborhoods thead th,
 #active_neighborhoods td,
@@ -505,95 +653,23 @@ tr.message {
     text-align: center;
 }
 
-#active_neighborhoods .small {
-    font-size:smaller;
-    color:#CCC;
-}
 
-#active_neighborhoods thead th,
-#active_volunteers thead th {
-    padding-left:4px;
-    padding-right:4px;
-}
-
-#active_neighborhoods tbody th,
-#active_volunteers tbody th {
-    text-align: left;
-    border-top: 0px;
-}
-
-#active_neighborhoods .corner {
-    background-color:#008C98;
-    color:white;
-    font-size:8pt;
-}
-
-#active_neighborhoods th a:link, 
-#active_neighborhoods th a:visited,
-#active_volunteers th a:link, 
-#active_volunteers th a:visited {
-    font-weight: bold;
-}
 /*
 ======================================================
->>Miscellaneous Styles
+>>Div Styles
 ======================================================
 */
 
-
-/* Search not currently enabled */
-#searchbox {
-    position: absolute;
-    padding-right: 20px;
-    padding-bottom: 4px;
-    bottom: 0;
-    right: 0;
-    height: 30px;
-    text-align: right;
-}
-
-#searchbox input {
-    width: 120px;
-}
-
-#searchbox #searchsubmit {
-    display: none;
-    visibility: hidden;
-}
-
-/*for message browsing*/
-.sender {
-    width: 30%;
-    margin-right: 2%;
-}
-
-.subject {
-    width: 60%;
-}
-
-/*for person's information */
-#personstatement:before {
-    content: open-quote
-}
-
-#personstatement:after {
-    content: close-quote;
-}
-
-/* Operations (e.g. add as flashfriend) */
 div.actionlist {
     border: none;
     padding:5px 0px;
 }
 
-/*for listed events*/
 div.shortevent {
     padding: 5px 0px;
     font-size: 9pt;
 }
 
-
-/*for event display*/
 div#eventdetails {
     padding-bottom: 28px;
 }
@@ -602,56 +678,168 @@ div.event_operation_block {
     margin-top: 15px;
 }
 
-/* google maps */
-div#map_canvas {
-    height: 169px;
-}
-
 div#eventmap {
     padding-top: 14px;
 }
 
-/* for pagination */
 div.pagination_entry {
     text-align: right;
     padding-bottom: 8px;
 }
 
-/* for (?) FAQ links */
-
 div.faq-link-wrapper {
     text-align: right;  
+    font-size: 7pt;
 }
 
-a.faq-link { font-size: 7pt;}
-
-/* for slogan on splash screen */
 div#slogan {
     font-size: 215%;
     font-family: serif;
-	margin-top: 15px;
-	font-weight:bold;
+    margin-top: 15px;
+    font-weight:bold;
 }
 
-/* for event warnings */
-span.verification_warning_wrapper {
-    padding-right: 5px;
+li#verify_attendence div#right_verify {
+    padding-left: 25px;
+}
+
+li#verify_attendence div#left_verify {
+    width: 100px;
+}
+
+div.volunteer_summary_team{
+    padding:5px;
+    position:relative;
+    float:left;
+}
+
+div.volunteer_summary_desc {
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+
+div.volunteer_summary_pic {
+    height: 80px;
+}
+
+#volavatar div.volunteer_summary_pic {
+    height: 60px;   
+}
+
+div.volunteer_summary_name {
+    font-size:90%;
+    padding-bottom: 8px;
+    text-align:center;
+    overflow:hidden;
+}
+
+div.emph {
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+#partners div.logo {
+    margin-bottom: 5px;
+}
+
+div#home-bottom {
+    margin-top: 10px;
+}
+
+div#home-top, 
+div#home-bottom {
+    height: 100%; 
     width: 100%;
 }
 
-/* the following is for the create module */
 
-#createvolunteer .label {
+.message div.subtext {
+    font-size: x-small;
+}
+
+.message div.additionalinfo {
+    font-size: 65%;
+}
+
+#forum div.morediv {
+    display: none;
+}
+
+#forum div.lessdiv {
+    display: block;
+}
+
+#forum div.subjectline {
+    font-weight: bold;
+    padding-bottom: 5px;    
+}
+
+#forum.nonembed .message div.subtext {
+    font-size: small;
+}
+
+#forum.embed .message div.subtext {
+    font-size: x-small;
+}
+
+
+#eventmessagescreate form div {
+    margin-bottom: 20px;    
+}
+
+div.person_list_ops {
+    padding-left: 25px;
+}
+
+div.form_error {
+    color: #992222;
+    display: none;
+    font-weight: bold;
+}
+
+div#copyright{
+   padding: 4px 0 8px 0;
+}
+
+.messages div.operations {
+    margin-top: 5px;
+}
+
+#active_neighborhoods div.small {
+    font-size:smaller;
+}
+
+/*
+======================================================
+>>Miscellaneous Styles
+======================================================
+*/
+
+
+span {}
+
+	span.verification_warning_wrapper {
+	    padding-right: 5px;
+	    width: 100%;
+	}
+
+	span.format_help {
+	    font-size: 7pt;
+	}
+
+#createvolunteer label {
     margin: 0 10px 2px 10px; 
 }
 
-#createvolunteer select {
-	width: 100%;
+label.error {
+    border: none;
 }
 
-#createvolunteer li {
-	padding-top: 5px;
-}
+strong.error{padding: 15px}
+
+
 /******************************************************
  * >> UNORGANIZED
  * 
@@ -660,145 +848,12 @@ span.verification_warning_wrapper {
  */
 
 
-/* the following is for image name links and friend lists */
-
-li.imagenameli {
-    display: block;
-    width: 85px;
-    float: left;
-    text-align: center;
-    padding-left: 1px;
-    padding-right: 1px;
-    height: 140px;    
-}
-
-li#verify_attendence{
-    width: 100%;
-    height: 120px;
-    border-bottom: 1px solid #E8E8E8;
-}
-
-
-li#verify_attendence #left_verify,
-li#verify_attendence #right_verify {
-    float:left; 
-    }
-
-li#verify_attendence #right_verify {
-    padding-left: 25px;
-}
-
-li#verify_attendence #left_verify {
-    width: 100px;
-}
-.volunteer_summary_neighbor,
-.volunteer_summary_follower, 
-.volunteer_summary_following, 
-.volunteer_summary_team, 
-.volunteer_summary_anonymous
-{
-    padding:5px;
-    position:relative;
-    float:left;
-}
-
-.volunteer_summary_operations {
-    float:right;
-    position:relative;
-}
-
-.volunteer_summary_operations,
-.volunteer_summary_desc {
-    padding-bottom: 5px;
-    padding-left: 5px;
-}
-
-.volunteer_summary_name input.operation,
-.volunteer_summary_name input.operation_minimal {
-    display: inline;
-}
-
-.volunteer_summary_pic {
-    height: 80px;
-}
-
-#volavatar .volunteer_summary_pic {
-    height: 60px;	
-}
-
-a.event_name {
-    font-weight:bold;
-}
-
-
-.shortevent ul li {
-    margin-left: 15px;
-}
-
-
-.volunteer_summary_name {
-    font-size:90%;
-    padding-bottom: 8px;
-    text-align:center;
-    overflow:hidden;
-}
-
-#volunteer_summary_home, 
-#volunteer_summary_work {
-    padding-left: 10px;
-}
-
-.button{
-    display: block;
-    height: 22px;
-    margin-top: 5px;
-    padding-right: 10px;
-    width: 70%;
-    font-size: 120%;
-    text-align: center;
-    font-weight:bold;
-    cursor:hand;
-}
-
-span#l_login {
-    color: #222;
-}
-
-.emph {
-    font-weight: bold;
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-
-.format_help {
-	font-size: 7pt;
-}
-
-#partners li {
-    margin: 10px 10px;
-    padding: 2px;
-	border: 3px solid #eee;
-}
-
-#partners .logo {
-    margin-bottom: 5px;
-}
-
-
-
-#home-bottom {
-	margin-top: 10px;
-}
-
-#home-top, #home-bottom {height: 100%; width: 100%;}
-
-
 #mtaTwitter a img {
     height: 48px;
     width: 48px;
     border: 1px solid #CCC;
 }
+
 #mtaTwitter ul {
     position: relative;
 
@@ -813,187 +868,3 @@ span#l_login {
 #mtaTwitter ul li.first span { font-weight: normal; }
 #mtaTwitter ul li span { font-style: normal; }
 
-.event_header li {
-    display:inline;
-	padding-top:0px;
-}
-
-.event_header li.title {
-	vertical-align: 7px;
-}
-
-ul.event_header {
-}
-
-ul.event_header img{
-    height: 25px;
-}
-
-.event_header {
-	font-size: small;
-	float:right;
-}
-
-.message .subtext {
-	font-size: x-small;
-}
-
-.message div.additionalinfo {
-	font-size: 65%;
-}
-
-.message td.minfo,
-.message li.minfo {
-	min-width: 105px;
-	padding: 20px;
-}
-
-
-#forum .message td.minfo {
-	min-width: 95px;
-	width: 95px;
-	padding: 5px;
-}
-
-.messages td.msubject{
-    padding: 5px 20px 0px 0px;	
-}	
-
-#forum .message td.msubject {
-    padding: 5px 5px 5px 0px;	
-}
-
-#forum .message td {
-	vertical-align: top;
-	text-align: left;
-}
-
-#forum .morediv {
-	display: none;
-}
-
-#forum .lessdiv {
-	display: block;
-}
-
-#forum .subjectline {
-	font-weight: bold;
-    padding-bottom: 5px;	
-}
-
-#forum.nonembed .message .subtext {
-	font-size: small;
-}
-
-#forum.embed .message .subtext {
-	font-size: x-small;
-}
-
-#forum.nonembed ul {
-	padding-bottom: 10px;
-}
-
-#emcreatesubject input,
-#emcreatebody textarea {
-    width: 85%;	
-	float:right;
-}
-
-#emcreatebody textarea {
-    height: 250px;
-}
-
-#eventmessagescreate form {
-	margin-top: 20px;
-}
-#eventmessagescreate form div {
-    margin-bottom: 20px;	
-	
-}
-
-#emcreatesubmit input {
-	float:right;
-}
-
-#message_settings li{
-	padding-left: 15px;
-	padding-bottom: 5px;    
-}
-
-.message_settings table {
-	margin-left: 10px;
-	
-}
-
-.person_list_ops {
-	padding-left: 25px;
-}
-
-
-form textarea:focus,
-form input.text:focus, 
-form input.password:focus, 
-form input.textarea:focus {
-	background-color:#E6F4F4;
-	background-image:none;
-	border:1px solid #008c98;
-}
-
-
-form input.text, 
-form input.password {
-	width: 95%;
-	border:1px solid #aaa;
-	color:#000000;
-	font-size:125%;
-	letter-spacing:-1px;
-	line-height:normal;
-	padding:2px 5px;
-}
-
-.submit {
-	font-size:17px;
-	letter-spacing:-1px;
-	padding: 5px;
-}
-
-.error{padding: 15px}
-
-
-form select option {
-	padding: 0px 10px;
-	font-size: 110%;	
-}
-
-form textarea,
-form input.textarea {
-	width: 98%;
-	height: 5em;
-	font-size: 110%;
-	padding: 3px 5px;
-}
-
-
-form input.text.error, form input.password.error,
-.error {
-    padding: 0px;
-    border: 3px solid #CC3333;
-}
-.form_error {
-    color: #992222;
-    display: none;
-    font-weight: bold;
-}
-
-label.error {
-	border: none;
-}
-
-
-form input {
-	margin: 5px 0px;
-}
-
-div#copyright{
-   padding: 4px 0 8px 0;
-}

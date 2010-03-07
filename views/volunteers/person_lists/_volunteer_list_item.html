@@ -27,31 +27,31 @@
             " alt="{{ volunteer_in_list.account.get_name }}" /></a>
         </div>
         <div class="volunteer_summary_name">
-                <div>
-                 <a class="fv" id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
-                    {{ volunteer_in_list.account.get_first_name }}
-                    <br/>
-                    {{ volunteer_in_list.account.get_last_name }}
-                 </a>
-                </div>
+            <div>
+             <a class="fv" id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
+                {{ volunteer_in_list.account.get_first_name }}
+                <br/>
+                {{ volunteer_in_list.account.get_last_name }}
+             </a>
+            </div>
 
-                {% if volunteer %}
-				    <div class="person_list_ops">
-	                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
-	                  {% if is_teammate %}
-					  {% else %} 
-					    <div id="add{{ volunteer_in_list.key.id }}" class="fl">
-			                <a class="operation_minimal" title="Add to your Flash Team" onclick=add("{{volunteer_in_list.url}}","add{{ volunteer_in_list.key.id }}")><img src="/stylesheets/media/add.png" /></a>
-						</div>
-                      {% endif %}
-                        <div class="fl">
-                        	<a class="fv" class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">
-                        		<img src="/stylesheets/media/email_icon.gif" />
-							</a>
-	                    </div>
-					{% endifnotequal %}
+            {% if volunteer %}
+			    <div class="person_list_ops">
+                {% ifnotequal volunteer.key.id volunteer_in_list.key.id %}
+                  {% if is_teammate %}
+				  {% else %} 
+				    <div id="add{{ volunteer_in_list.key.id }}" class="fl">
+		                <a class="operation_minimal" title="Add to your Flash Team" onclick=add("{{volunteer_in_list.url}}","add{{ volunteer_in_list.key.id }}")><img src="/stylesheets/media/add.png" /></a>
 					</div>
-                {% endif %}
+                  {% endif %}
+                    <div class="fl">
+                    	<a class="fv" class="operation" href="{{volunteer_in_list.url}}/send_message?redirect={{path}}" title="send message">
+                    		<img src="/stylesheets/media/email_icon.gif" />
+						</a>
+                    </div>
+				{% endifnotequal %}
+				</div>
+            {% endif %}
         </div>
                 
     </div>
