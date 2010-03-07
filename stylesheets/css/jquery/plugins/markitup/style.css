@@ -116,28 +116,3 @@
 	color:#FFF;
 	background-color:#000;
 }
-
-
-/*
- * custom FV
- */
-
-.markItUpEditor {
-    width: 100%;
-}
-.markItUp {
-    width: 100%;
-}
-
-div.markItUpHeader ul li {
-    padding-top: 3px;
-    margin-bottom: 0;
-    
-}
-div.markItUpHeader ul {
-   margin-bottom: 0;    
-   padding-bottom: 0;
-}
-.markItUpEditor {
-    height: 150px;
-}

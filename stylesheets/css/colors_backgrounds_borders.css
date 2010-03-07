@@ -28,6 +28,7 @@ Blue strip: #008c98
 */
 
 /* default text */
+#tabs p,
 html, body {
     color: #555;
 }
@@ -58,6 +59,7 @@ div#top a{
 /***********  BODY  *****************/
 
 /* heavy text */
+#faq-sections h3,
 #generic_dialog a.pagination_link,
 .event_note,
 #title_block h1,
@@ -145,6 +147,7 @@ input.operation, input.operation_minimal,
 
 /* default text */
 div#generic_dialog,
+.ui-tabs-nav,
 html, body {
     background-color: #fff;
 }
@@ -238,7 +241,7 @@ table.zebra tr.odd
     background-color: #c4c4c4;
 }
 
-.ui-tabs-nav,
+
 #dialog_content button, 
 #dialog_content input,
 .navtabs li#loadingContainer:hover,
@@ -256,7 +259,9 @@ table.zebra tr.even,
     background-color: #f99;
 }
 
-
+#tabs #nav li {
+	background:none;
+}
 
 /*
 ======================================================
@@ -373,6 +378,10 @@ div#generic_dialog {
 /*********** MISC *****************/
 
 
+div#tabs,
+div#tabs.ui-tabs li {
+	border:none;
+}
 div.moduletitle {
     -moz-border-radius: 2px;
     -webkit-border-radius:2px;

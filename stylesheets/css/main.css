@@ -85,7 +85,7 @@ div.navtabs {
 
 
 #nav.ui-tabs-nav li {
-    margin-bottom: -3px;
+
 }
 
 /*
@@ -1109,6 +1109,27 @@ div.time-picker li.selected {
   color: #fff;
 }
 
+
+
 .padding-bottom {
 	padding-bottom:6px;
+}
+
+.markItUpEditor {
+    width: 100%;
+}
+.markItUp {
+    width: 100%;
+}
+
+div#createevent div.markItUpHeader ul li {
+    padding-top: 3px;
+    margin-bottom: 0;
+}
+div#createevent div.markItUpHeader ul {
+   margin-bottom: 0;    
+   padding-bottom: 0;
+}
+.markItUpEditor {
+    height: 150px;
 }
