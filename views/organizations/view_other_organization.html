@@ -1,0 +1,35 @@
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('profile');
+      $(document).ready(function() {
+            load_title('{{ org_of_interest.name }}\'s page');
+			load_header('{{ org_of_interest.name|striptags }}');
+      });
+</script>
+
+
+
+<div id="leftthird">
+    
+</div><!--end leftthird-->
+
+<div id="middlethird">
+	<div id="organizationinfo" class="softmodule" >
+		<div class="moduletitle">
+        	<h3>Organization Information</h3>
+		</div>
+		<ul>
+			<li><span class="label">Name:</span> {{org_of_interest.name}}</li>
+			<li><span class="label">Email:</span> {{org_of_interest.email}}</li>
+		</ul>
+	</div>
+</div><!--end middlethird-->
+
+<div id="rightthird">
+   
+</div><!--end rightthird-->
+
+{% endblock content %}

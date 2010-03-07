@@ -18,13 +18,14 @@ from controllers.paginated_event_pages import \
 from controllers.home import MainPage
 from controllers.profile import ProfilePage
 
-from controllers.accounts import Login, CreateAccount, HelpLogin
+from controllers.accounts import Login, CreateAccount, HelpLogin, CreateOrganization
 
 from controllers.eventvolunteers import VolunteerForEvent
 from controllers.eventattendance import VerifyEventAttendance
 from controllers.messages import Mailbox, Forum
 from controllers.message_writer import SendMessage_Personal, SendMessage_Event, SendMessage_Neighborhood
 from controllers.volunteers import VolunteersPage, FollowVolunteer, VolunteerAvatar
+from controllers.organizations import OrganizationPage
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage 
 from controllers.applications import AllApplications, ThisApplication
@@ -105,8 +106,9 @@ def real_main():
            ('/dev_login', Login),
            ('/logout', Login),           
            ('/new', CreateAccount),
+           ('/neworg', CreateOrganization),
            
-            ('/delete', SettingsPage),
+           ('/delete', SettingsPage),
            ('/profile', ProfilePage),
            ('/messages(|/\d+)', Mailbox),
            ('/messages/(inbox|sent)', Mailbox),
@@ -150,6 +152,8 @@ def real_main():
            ('/volunteers(|/\d+|/search)', VolunteersPage),
            ('/volunteers/(\d+)/team', PaginatedVolunteerTeam),
            ('/volunteers/(\d+)/send_message', SendMessage_Personal),
+           
+           ('/organizations(|/\d+|/search)', OrganizationPage),
            
            ('/category/(\d+)', CategoryPage),
            ('/category/(\d+)/volunteers', PaginatedVolunteerCategoryPage),

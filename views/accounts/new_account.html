@@ -170,6 +170,58 @@
 	                {% endif %}
 	            </li>
 			{% endif %}
+			
+			{% if dev_server %}
+			<li class="fv-login-block fl" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:36%;height:100%">
+                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Create a Flash Volunteer Organization Account</h1>
+                  
+                <form class="validate_form_two" action="/neworg" method="post">
+                  <div class="form_error">
+                      Errors found! Please check the red-bordered fields. 
+                  </div>
+                  <input type="hidden" name="session_id" value="{{ session_id }}" />
+                      <fieldset>
+                          <ul>          
+                          
+                            <li><label for="name">Your Organization:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="6"
+    							{% if account.name %}
+                                    value="{{ account.name|striptags }}"
+                                {% else %}
+                                    value=""
+                                {% endif %}
+							/></li>                       
+                            <li>
+                            	 <label for="email">Email (required):</label>
+							     <input class="required email text" id="createnameinput" type="text" name="email" tabindex="7"
+	                                {% if account.preferred_email %}
+		                                value="{{ account.preferred_email|striptags }}"
+		                            {% else %}
+		                                value=""
+		                            {% endif %}
+							/></li>
+                            
+                            {% if fv_account %}
+                                <li>
+                                  <label for="password">Password</label>
+                                  <input class="password required" id="password" name="password" tabindex="7" type="password" />
+                        
+                                </li>
+                                <li>
+                                  <label for="password">Confirm Password</label>
+                                  <input class="password required" id="passwordcheck" name="passwordcheck" tabindex="8" type="password" />
+                                </li>                   
+                            {% endif %}
+                            </ul>
+                            </fieldset>
+		                    <fieldset>
+		                        <ul>    
+		                            <li><input id='tosagree' type="checkbox" name="tosagree" class="required" value="1" /> I accept the <a class="fv" target="_blank" href="/static/tos">Terms of Use</a> and <a href="/static/privacy">Privacy Policy</a></li>
+		                        </ul>
+		                    </fieldset>
+                    <ul><li><input class="submit" type="submit" value="Create my account" id="s_create_account"/></li></ul>
+                </form>
+            </li>
+			{% endif %}
 			<div class="cl"></div>
        </ol>
 	   <div class="cl"></div>

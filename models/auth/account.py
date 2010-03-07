@@ -77,7 +77,6 @@ class Account(db.Model):
         elif self.org_user:
             return self.org_user.get()
         
-        
     def get_messages(self):
         return self.incoming_messages.order('-timestamp')
     
