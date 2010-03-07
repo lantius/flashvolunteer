@@ -17,7 +17,7 @@
 	    <li><a title="Facebook" href="http://www.facebook.com/sharer.php?u={{domain}}{{event.url}}" onclick="return fbs_click()" target="_blank" class="operation fb_share_link"><img src="/stylesheets/media/facebook_icon.jpg" /></a></li>
 	
 	</ul>   
-	<div style="clear:both"></div>
+	<div class="clear"></div>
 	<ul class="event_header">
 	    <li class="title">Add to your calendar: </li>
 	    <li><a target="_blank" title="Google" class="operation" href="http://www.google.com/calendar/event?action=TEMPLATE&text=Volunteering at '{{event.name|striptags}}'</a>&dates={{event.get_google_calendar_date}}&location={{event.address}}&details=Visit {{domain}}{{event.url}} to read the description, manage your participation, and interact with the hosts and other volunteers.&trp=true&sprop= website:{{domain}}&sprop=name:Flash Volunteer">

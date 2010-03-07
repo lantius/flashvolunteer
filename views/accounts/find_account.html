@@ -27,20 +27,14 @@
 </script>
 
 
-    <div style="margin-top: 25px;"></div>
+    <div class="spacing_top" />
 
     <div id="middle100">
-    	   <p style="font-size:115%">Please enter your email and we will try to find a matching account!</p>
+    	   <p class="enlarged">Please enter your email and we will try to find a matching account!</p>
           <form class="validate_form" action="/login/help" id="new_account" method="post">
-	            <div style="margin:0;padding:0">
-	              <input name="session_id" type="hidden" value="{{session_id}}" />
-	            </div>
+	            <input class="hidden" name="session_id" type="hidden" value="{{session_id}}" />
 	            <fieldset>
 	              <ol>
-	              	<!--<li>
-	              		<label for="name">Your Name:</label>
-						<input class="text required" id="createnameinput" type="text" name="name" tabindex="1" value=""/>
-					</li> -->   
 	                <li>
 	                  <label for="email">Email:</label> 
 					  <input class="text required email" id="email" name="email" tabindex="1" type="text" value="" />

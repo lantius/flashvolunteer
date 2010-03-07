@@ -6,9 +6,9 @@
 
         {% ifnotequal event_categories '' %}
             <li>            
-                <ul style="padding-top:5px">
+                <ul>
                     {% for ic in event.interestcategories %}
-                        <li style="display:inline"><a  class="fv" id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name|striptags }}</a>{% if forloop.last %}{%else%},{%endif%}</li>
+                        <li class="eic_li"><a  class="fv" id="category[{{ic.key.id}}]" href="{{ ic.url }}">{{ ic.name|striptags }}</a>{% if forloop.last %}{%else%},{%endif%}</li>
                     {% endfor %}
                 </ul>
             </li>{% endifnotequal %}

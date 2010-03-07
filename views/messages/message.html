@@ -1,7 +1,7 @@
 {% extends to_extend %}
 
 
-{% block pagespectitle %}
+{% block title_block %}
     <h1>{{ message.subject }}</h1>
 {% endblock %}
 
@@ -19,7 +19,7 @@
 <div id="left75">
     <div id="mailbox" class="softmodule">
         <div class="messages">
-            <ul style="display:inline" class="message">
+            <ul class="message">
                 <li class="fl">
                 	<div class="volunteer_summary_pic">
                       {%if sender_viewing %}

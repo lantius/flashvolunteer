@@ -1,6 +1,6 @@
 
 <div id="upcomingevents" class="hardmodule">
-    <div class="moduletitle"><h3>Upcoming Events <a style="cursor:pointer" title="A list of the next few upcoming events hosted by Flash Volunteers. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
+    <div class="moduletitle"><h3>Upcoming Events <a title="A list of the next few upcoming events hosted by Flash Volunteers. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
         {% for event in upcoming_events %}
             {% include "../events/_event_list_item.html" %}
         {% endfor %}
@@ -16,7 +16,7 @@
 {% endif %}
 
 <div id="ongoingopportunities" class="hardmodule">
-    <div class="moduletitle"><h3>Ongoing Opportunities <a style="cursor:pointer" title="A list of some ongoing opportunities. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
+    <div class="moduletitle"><h3>Ongoing Opportunities <a title="A list of some ongoing opportunities. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
         {% for event in ongoing_opportunities %}
     		{% include "../events/_event_list_item.html" %}
         {% endfor %}

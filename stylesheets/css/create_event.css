@@ -145,16 +145,4 @@ div#official_coordinator {
     /* system theme (default) */
     border-width:1px;
     border-style:solid;
-    /*border-color:ThreeDLightShadow ThreeDShadow ThreeDShadow ThreeDLightShadow;
-    color:ButtonText;
-    background:ButtonFace;*/
-}
-
-#createevent .ui-timepickr-button span.ui-state-hover {
-    /*color:HighlightText;
-    background:Highlight;*/
-}
-
-#createevent .ui-state-hover span {
-    /*background:#c30;*/
 }

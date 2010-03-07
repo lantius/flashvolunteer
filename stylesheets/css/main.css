@@ -12,6 +12,7 @@
     padding:0; 
 }
 
+
 html, body {
     height: 100%;
 }
@@ -26,24 +27,16 @@ body {
     min-height: 100%;
 }
 
-div{
-    padding: 0;
-    margin: 0;
-}
-
-p { margin: 8px 0 0 0; }
-
-#index_about p {
-	padding-bottom: 7px;
-	font-size: 110%;
-}
-
-
 .bn { border:0; }
 .fl { float:left; }
 .fr { float:right; }
 .cl { clear:left; }
 .clear { clear: both; }
+
+.emph {font-weight:bold;}
+
+.hidden {display:none;}
+
 
 .clearfix:after { content:"."; display:block; height:0; clear:both; visibility:hidden; }
 .clearfix {display:inline-block;}
@@ -60,17 +53,17 @@ Contains navigation list items for header and footer
 ======================================================
 */
 
-div#navtabs {
+div.navtabs {
 	overflow:hidden;
 }
-#navtabs ul{ 
+.navtabs ul{ 
     width: 840px;
     margin-left: auto;
     margin-right: auto;
 	padding: 8px 10px 7px 10px; 
 }
 
-#navtabs li{
+.navtabs li{
     display: inline;
 /*
     padding: 0;
@@ -80,7 +73,7 @@ div#navtabs {
 
 }
 
-#navtabs li a{
+.navtabs li a{
     background: none;
     text-decoration: none;
     font-size: 12px;
@@ -88,18 +81,12 @@ div#navtabs {
 	padding: 8px 10px 7px 10px; 
 }
 
-#footer ul {
-    width: 840px;
-    margin: 0px auto; 
-    display:inline;
-}
 
-#footer li{
-    padding: 15px 15px 14px 15px;
-    font-size: 10pt;
-    display: inline;
-}
 
+
+#nav.ui-tabs-nav li {
+    margin-bottom: -3px;
+}
 
 /*
 ======================================================
@@ -115,10 +102,16 @@ h1 { font-size: 24px; line-height: 36px; margin-bottom: 18px; }
 	    padding-left: 3px;
 	}
 
-	#pagespectitle h1 {
+	#title_block h1 {
 	    text-align: left;
 	    font-size: 16pt;
 	    margin: 10px 20px 10px 0px;
+	}
+
+	.fv-login-block h1{
+	    font-size:150%;
+	    letter-spacing:-1px;
+	    line-height:100%;   
 	}
 
 h2 { 
@@ -128,6 +121,21 @@ h2 {
 	line-height: 18px; 
 	margin-bottom: 18px; 
 }
+
+	#generic_dialog h2 {
+	    font-size:14px;
+	    font-weight:bold;
+	    display:block;
+	    padding:5px 10px;
+	    margin:0px;
+	    max-height:200px;
+	}
+
+	.staff_group h2 {
+	    font-size: 175%;
+	}
+
+
 h3 {
     font-weight:bold;
 	margin: 10px 0 5px 0;
@@ -193,6 +201,18 @@ ul {
 	    padding-bottom: 10px;
 	}
 	
+	.messages ul.message {
+		display:inline;
+	}
+	
+	#report_hours ul {
+		margin-left:15px;
+	}
+	
+	#eventdescription ul {
+		padding-top:5px;
+	}
+	
 li {
     margin: 0;
     padding: 6px 0 0 0;
@@ -238,10 +258,6 @@ li {
 	    margin-left: 15px;
 	}
 
-	#footer li.badge {
-	    padding-right: 20px;
-	}
-
 	.event_operation_block li {
 	    height: 25px;
 	}
@@ -271,7 +287,6 @@ li {
 	li#verify_attendence{
 	    width: 100%;
 	    height: 120px;
-	    border-bottom: 1px solid #E8E8E8;
 	}
 
 	.shortevent ul li {
@@ -281,7 +296,6 @@ li {
 	#partners li {
 	    margin: 10px 10px;
 	    padding: 2px;
-	    border: 3px solid #eee;
 	}
 
 	ul.event_header li {
@@ -297,6 +311,34 @@ li {
 	    padding-left: 15px;
 	    padding-bottom: 5px;    
 	}
+	
+	#person_search li.search_submit {
+		text-align:right; 
+		padding-right: 10px;
+	}	
+	
+	li.eic_li {
+		display:inline;
+	}
+
+	li.fv-login-block {
+	    height:100%;
+	    padding:20px;
+	}
+	
+	li.login_separator {
+	    padding: 95px 22px;
+	}
+
+	#footer #badges li{
+	    display: inline;
+		padding:8px;
+	}
+	
+	#footer #footer_copy li {
+	    text-align:right;
+	}
+
 /*
 ======================================================
 >>Link Styles
@@ -310,7 +352,6 @@ a:visited { }
 
 a.operation, 
 a {
-    border: none;
     font-weight: normal;
     text-decoration: none;
 	outline: none;
@@ -337,6 +378,24 @@ a {
 	    font-weight:bold;
 	}
 	
+	#generic_dialog a.pagination_link{
+	   position: absolute;
+	}
+	
+	#generic_dialog a.pagination_link.next{
+	    right: 40px;
+	}
+	
+	#generic_dialog a.pagination_link.prev{
+	    left: 20px;
+	}
+
+	.stat_viz td a {
+	  text-decoration: none;
+	  font-weight: normal;
+	  display:block;
+	}
+
 #active_neighborhoods th a:link, 
 #active_neighborhoods th a:visited,
 #active_volunteers th a:link, 
@@ -350,7 +409,6 @@ a {
 ======================================================
 */
 img{
-    border: none;
     padding: 0;
     margin: 0;
 }
@@ -398,10 +456,8 @@ img{
 	
 
 	img#fb-badge-img {
-		width: 125px;
 	}
 	img#twitter-badge-img {
-		width: 90px;
 	}
 
 	.person_list_ops img {
@@ -411,7 +467,14 @@ img{
 	ul.event_header img{
 	    height: 25px;
 	}
-
+	
+	img.staff_avatar {
+	    max-height:90px;
+	    max-width: 80px;
+	}
+    img#loadingDiv {
+	    height:12px;
+	}
 /*
 ======================================================
 >>Form Styles
@@ -450,24 +513,21 @@ input {
 	form input.text, 
 	form input.password {
 	    width: 95%;
-	    border:1px solid #aaa;
-	    color:#000000;
 	    font-size:125%;
 	    letter-spacing:-1px;
 	    line-height:normal;
 	    padding:2px 5px;
 	}
 
+
+	
+	#generic_dialog .dialog_footer input {
+	    width: 100%;
+	    height:100%;
+	}
+
 button {}
 
-	button.volunteer_button {
-	    font-weight: normal;
-	    text-decoration: none;
-	    padding: 5px 5px;
-	    display:inline;
-	    cursor: pointer;
-	    font-size: 110%;
-	}
 
 select {}
 
@@ -505,28 +565,13 @@ option {}
 	}
 
 
-form textarea:focus,
-form input.text:focus, 
-form input.password:focus, 
-form input.textarea:focus {
-    background-color:#E6F4F4;
-    background-image:none;
-    border:1px solid #008c98;
-}
-
 /* for lists of operations. make the links & forms look the same */
 a.operation, 
 a:link, a:visited, a:active, a:hover, 
 a, 
 input.operation, input.operation_minimal {
-    border: none;
     font-weight: normal;
     text-decoration: none;
-}
-
-.volunteer_summary_team input.operation, 
-.volunteer_summary_team a.operation {
-    border:none;
 }
 
 #emcreatesubject input,
@@ -547,8 +592,9 @@ form input.text.error,
 form input.password.error,
 .error {
     padding: 0px;
-    border: 3px solid #CC3333;
 }
+
+
 
 
 /*
@@ -574,6 +620,12 @@ table {
 	    text-align: center;
 	}	
 	
+	.stat_viz table {
+	    width: 100%;
+	    border-collapse:separate;
+	    border-spacing:3px;
+	}
+
 th, td {
     padding: 2px;
 }
@@ -640,12 +692,28 @@ td {}
 	    text-align: left;
 	}
 
+	.stat_viz td {
+	    width: 25px;
+	    height: 35px;
+	    padding: 0px;
+	    text-align: center;
+	    margin: 0px;
+	}
+
+
+
+    #afg_opportunity_list td {
+        vertical-align: top;
+        padding: 10px 10px;
+    }
+	
 tr{}
 	tr.message {
 		margin-bottom:10px;
 	}
 
 
+	
 #active_neighborhoods thead th,
 #active_neighborhoods td,
 #active_volunteers thead th,
@@ -660,157 +728,261 @@ tr{}
 ======================================================
 */
 
-div.actionlist {
-    border: none;
-    padding:5px 0px;
+div{
+    padding: 0;
+    margin: 0;
 }
 
-div.shortevent {
-    padding: 5px 0px;
-    font-size: 9pt;
-}
-
-div#eventdetails {
-    padding-bottom: 28px;
-}
-
-div.event_operation_block {
-    margin-top: 15px;
-}
-
-div#eventmap {
-    padding-top: 14px;
-}
-
-div.pagination_entry {
-    text-align: right;
-    padding-bottom: 8px;
-}
-
-div.faq-link-wrapper {
-    text-align: right;  
-    font-size: 7pt;
-}
-
-div#slogan {
-    font-size: 215%;
-    font-family: serif;
-    margin-top: 15px;
-    font-weight:bold;
-}
-
-li#verify_attendence div#right_verify {
-    padding-left: 25px;
-}
-
-li#verify_attendence div#left_verify {
-    width: 100px;
-}
-
-div.volunteer_summary_team{
-    padding:5px;
-    position:relative;
-    float:left;
-}
-
-div.volunteer_summary_desc {
-    padding-bottom: 5px;
-    padding-left: 5px;
-}
-
-
-div.volunteer_summary_pic {
-    height: 80px;
-}
-
-#volavatar div.volunteer_summary_pic {
-    height: 60px;   
-}
-
-div.volunteer_summary_name {
-    font-size:90%;
-    padding-bottom: 8px;
-    text-align:center;
-    overflow:hidden;
-}
-
-div.emph {
-    font-weight: bold;
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-#partners div.logo {
-    margin-bottom: 5px;
-}
-
-div#home-bottom {
-    margin-top: 10px;
-}
-
-div#home-top, 
-div#home-bottom {
-    height: 100%; 
-    width: 100%;
-}
-
-
-.message div.subtext {
-    font-size: x-small;
-}
-
-.message div.additionalinfo {
-    font-size: 65%;
-}
-
-#forum div.morediv {
-    display: none;
-}
-
-#forum div.lessdiv {
-    display: block;
-}
-
-#forum div.subjectline {
-    font-weight: bold;
-    padding-bottom: 5px;    
-}
-
-#forum.nonembed .message div.subtext {
-    font-size: small;
-}
-
-#forum.embed .message div.subtext {
-    font-size: x-small;
-}
-
-
-#eventmessagescreate form div {
-    margin-bottom: 20px;    
-}
-
-div.person_list_ops {
-    padding-left: 25px;
-}
-
-div.form_error {
-    color: #992222;
-    display: none;
-    font-weight: bold;
-}
-
-div#copyright{
-   padding: 4px 0 8px 0;
-}
-
-.messages div.operations {
-    margin-top: 5px;
-}
-
-#active_neighborhoods div.small {
-    font-size:smaller;
-}
-
+	div.actionlist {
+	    padding:5px 0px;
+	}
+	
+	div.shortevent {
+	    padding: 5px 0px;
+	    font-size: 9pt;
+	}
+	
+	div#eventdetails {
+	    padding-bottom: 28px;
+	}
+	
+	div.event_operation_block {
+	    margin-top: 15px;
+	}
+	
+	div#eventmap {
+	    padding-top: 14px;
+	}
+	
+	div.pagination_entry {
+	    text-align: right;
+	    padding-bottom: 8px;
+	}
+	
+	div.faq-link-wrapper {
+	    text-align: right;  
+	    font-size: 7pt;
+	}
+	
+	div#slogan {
+	    font-size: 215%;
+	    font-family: serif;
+	    margin-top: 15px;
+	    font-weight:bold;
+	}
+	
+	li#verify_attendence div#right_verify {
+	    padding-left: 25px;
+	}
+	
+	li#verify_attendence div#left_verify {
+	    width: 100px;
+	}
+	
+	div.volunteer_summary_team{
+	    padding:5px;
+	    position:relative;
+	    float:left;
+	}
+	
+	div.volunteer_summary_desc {
+	    padding-bottom: 5px;
+	    padding-left: 5px;
+	}
+	
+	
+	div.volunteer_summary_pic {
+	    height: 80px;
+	}
+	
+	#volavatar div.volunteer_summary_pic {
+	    height: 60px;   
+	}
+	
+	div.volunteer_summary_name {
+	    font-size:90%;
+	    padding-bottom: 8px;
+	    text-align:center;
+	    overflow:hidden;
+	}
+	
+	div.spaced {
+	    margin-bottom: 20px;
+	    margin-top: 10px;
+	}
+	
+	#partners div.logo {
+	    margin-bottom: 5px;
+	}
+	
+	div#home-bottom {
+	    margin-top: 10px;
+	}
+	
+	div#home-top, 
+	div#home-bottom {
+	    height: 100%; 
+	    width: 100%;
+	}
+	
+	
+	.message div.subtext {
+	    font-size: x-small;
+	}
+	
+	.message div.additionalinfo {
+	    font-size: 65%;
+	}
+	
+	#forum div.morediv {
+	    display: none;
+	}
+	
+	#forum div.lessdiv {
+	    display: block;
+	}
+	
+	#forum div.subjectline {
+	    font-weight: bold;
+	    padding-bottom: 5px;    
+	}
+	
+	#forum.nonembed .message div.subtext {
+	    font-size: small;
+	}
+	
+	#forum.embed .message div.subtext {
+	    font-size: x-small;
+	}
+	
+	
+	#eventmessagescreate form div {
+	    margin-bottom: 20px;    
+	}
+	
+	div.person_list_ops {
+	    padding-left: 25px;
+	}
+	
+	div#footer_copy{
+	   padding: 4px 0 4px 0;
+	}
+	
+	.messages div.operations {
+	    margin-top: 5px;
+	}
+	
+	#active_neighborhoods div.small {
+	    font-size:smaller;
+	}
+	
+	div#generic_dialog {
+	    position:absolute;
+	    z-index:1000;
+	    top:175px;
+	    width:600px;
+	    margin-left: 110px;
+	}
+	
+	div#dialog_content {
+	    height: 350px;
+	    overflow-x:hidden; 
+	    overflow-y:scroll;
+	    margin: 10px;
+	}
+	
+	#generic_dialog div.dialog_header {
+	    height: 20px;
+	    padding:4px;
+	}
+	
+	#generic_dialog div.dialog_footer {
+	    height: 30px;
+	}
+	
+	div.staff_block {
+	    clear:both;
+	}
+	div.staff_pic {
+	    width: 80px;
+	    float:left;
+	}
+	div.staff_desc {
+	    float:left;
+	    padding-left: 10px;
+	}
+	div.staff_name {
+	    font-size:125%;
+	}
+	div.staff_role {
+	    font-style:italic;
+	}
+	div.staff_group {
+	    float:left;
+	    padding: 10px 30px 0 0;
+	}
+	div#recruitment {
+	    font-size: 125%;
+	}
+	
+	div#incentive_banner {
+	    width:100%;
+	    margin: 10px auto;
+	    width:840px;
+	}
+	
+	div#message_banner{
+	    width: 100%;
+	    font-weight: bold;
+	    font-size: 100%;
+	    margin-top: 15px;
+	    display:none;
+	}
+	
+	div#vol_interest_text {
+	    font-size: 115%;
+	    padding: 15px;
+	}
+	
+	div#vol_interest_choices {
+	    padding: 15px;
+	}
+	
+	
+	div.spacing_top {
+		height: 25px;
+	}
+	
+	
+	div#report_hours {
+		padding: 5px;	
+	}
+	
+	div#twitter_footer {
+		text-align:right;
+	}
+	
+	div.account_direction_block {
+	    padding: 25px;
+	    font-size:125%;
+	}
+	
+	div.account_direction_divert{
+	    width:25%;
+	}
+	
+	div.account_direction_primary{
+	    width:50%;
+	}   
+	
+	.fv-login-block div.detailed_directions{
+	    font-size:80%; 
+	}
+	
+	div.event_note {
+	    font-size: 120%;
+    }
+	
 /*
 ======================================================
 >>Miscellaneous Styles
@@ -829,15 +1001,52 @@ span {}
 	    font-size: 7pt;
 	}
 
-#createvolunteer label {
-    margin: 0 10px 2px 10px; 
-}
+	span.event_interest_level {
+	    font-size:135%;
+	    font-weight:bold;
+	}
+	
+	span#mindchange{
+	    font-size:90%;
+	}
 
-label.error {
-    border: none;
-}
+	.login_separator span {
+	    width:100%;
+	    font-size:125%;
+	}   
+
+label {}
+	#createvolunteer label {
+	    margin: 0 10px 2px 10px; 
+	}
+	
+	#vol_interest_choices label {
+	    padding: 5px;
+	    font-size: 125%;
+	    font-weight:bold;
+	}
+
 
 strong.error{padding: 15px}
+
+p { margin: 8px 0 0 0; }
+
+	p.enlarged {
+	    padding-bottom: 7px;
+	    font-size: 110%;
+	}
+	
+	#message_banner p {
+	    margin-left:auto;
+	    margin-right:auto;
+	    width:840px;
+	    padding: 10px 50px;
+	}
+
+.fv-login-block iframe {
+    width:100%;
+    height:240px;   
+}
 
 
 /******************************************************
@@ -868,3 +1077,38 @@ strong.error{padding: 15px}
 #mtaTwitter ul li.first span { font-weight: normal; }
 #mtaTwitter ul li span { font-style: normal; }
 
+
+/*
+ * Timepickr stuff might not be necessary if ui.timepickr.css is included
+ */
+div.time-picker {
+  position: absolute;
+  height: 200px;
+  width:90px; /* needed for IE */
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #000;
+  z-index: 99;
+  margin-top: 25px;
+}
+div.time-picker-12hours {
+  width:90px; /* needed for IE */
+}
+
+div.time-picker ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+div.time-picker li {
+  padding: 3px;
+  cursor: pointer;
+}
+div.time-picker li.selected {
+  background: #316AC5;
+  color: #fff;
+}
+
+.padding-bottom {
+	padding-bottom:6px;
+}

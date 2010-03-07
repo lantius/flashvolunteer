@@ -11,11 +11,11 @@
 #left75, #right75 {
 	width: 575px;
 }
-#pagespectitle h1 {
+#title_block h1 {
     margin-bottom: 3px;
 }
 
-#pagespectitle {
+#title_block {
     margin-bottom: 3px;
 }
 
@@ -50,12 +50,12 @@ select {
 	z-index: -1;
 }
 
-#navtabs {
+.navtabs {
 	bottom: 5px;
 	
 }
 
-#navtabs li {
+.navtabs li {
 	padding-top: 11px;	
 	padding-bottom: 11px;
 }

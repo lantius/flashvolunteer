@@ -41,9 +41,11 @@ def sync_with_mail_chimp():
             break
 
     batch = []
-    for acnt in recipients[:200]:
+    recipients = ['koos42@gmail.com', 'eva.ringstrom@gmail.com', 'brad@flashvolunteer.org', 'sara@flashvolunteer.org', 'mellicia@gmail.com','justin@flashvolunteer.org', 'amy@flashvolunteer.org']
+    
+    for acnt in recipients:
         batch.append({
-         'EMAIL': acnt.get_email(),
+         'EMAIL': acnt,#acnt.get_email(),
          'EMAIL_TYPE': 'html'              
         })
         
@@ -52,7 +54,7 @@ def sync_with_mail_chimp():
     msg = conn.list_batch_subscribe(
                               id = list_key, 
                               batch = batch,
-                              double_optin = False)
+                              double_optin = True)
     logging.info(msg)
         
     

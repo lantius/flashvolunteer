@@ -45,12 +45,11 @@ div#container{
 			div#volavatar {
 				float:right;
 			}
-    div#navtabs { 
+    div.navtabs { 
         width: 100%;
         height: 30px;
     }
     
-    div.gradient { height:1px;}
      
     div#content { 
         width: 840px; 
@@ -142,22 +141,27 @@ div#container{
                     width: 780px;
                 }
 			
-        div#clearfooter { height: 130px; }
+        div#clearfooter { 
+		  height: 130px; 
+		  margin-top:20px;
+		}
 
 /* NOTE: the footer is NOT in the container. See http://www.wickham43.net/footerfix.php */
+
 div#footer { 
     width: 100%;
     height: 130px;
-    margin: -110px auto 0 auto; 
+    margin: -130px auto 0 auto; 
     text-align:center;
-    padding-top: 15px;
 }
-    div#copyright{
-        font-size: 9pt;
+    div#footer_content {
+    	width: 840px;
+		margin: 0px auto; 
+		padding-top:10px;
     }
-	
-	div#badges {
-		margin: 14px 0px;
-        width: 100%;
-		padding-top: 10px;
-	}
+	    div#footer_copy{
+	    }
+		
+		div#badges {
+			margin:auto;
+		}

@@ -20,113 +20,268 @@ Green background: #2fb002
 Blue strip: #008c98
 */
 
+
+/*
+======================================================
+>>Color
+======================================================
+*/
+
+/* default text */
 html, body {
-    background-color: #fff;
     color: #555;
 }
 
+
+/*********** HEADER *****************/
+
+/* header text */
+div#footer,
 div#top {
-    background-color: #3b3b3b;
-    border-top: 4px solid #008c98; 
+    color: #cccccc;
 }
 
-div.gradient {
-   background: #000 repeat-x top center;
-}
+/* header link */
 
-div#footer {
-    border-top: 3px solid #E6E6E6;
-}
-
-div#footer #copyright{
-}
-
-#navtabs {
-    background: #fff url("../media/body-top-rpt-horiz.png") repeat-x top center;
-}
-
-#navtabs li.current,
-#navtabs li:hover,
-#navtabs li a.current,
-#navtabs li a:hover {
-    background-color: #000;
-}
-
-#navtabs li#loadingContainer:hover {
-	background-color: inherit;
-}
-
-
-#navtabs li a{
-    color: #FFF;
-}
-
-#pagespectitle h1 {
-    border-bottom: #b6e6a5 3px solid;
-}
-
-a.operation, a:link, a:visited, a:active, a:hover, a, 
-input.operation, input.operation_minimal {
-    color: #4eA0A7;
-}
-
-#volunteerwelcome a {
+div#footer a,
+div#top a{
     color: #aeF396;
 }
 
-div#volunteerwelcome {
+/* navigation tabs */
+
+#footer div.navtabs li a,
+.navtabs li a{
     color: #FFF;
 }
-            
 
+/***********  BODY  *****************/
 
-
-.label {
+/* heavy text */
+#generic_dialog a.pagination_link,
+.event_note,
+#title_block h1,
+div.label,
+form input.text,
+form input.password,
+div#message_banner {
     color: #333;
 }
 
-.error{
-    color: #FF0000;
+/* light text */
+
+.fv-login-block div.detailed_directions{
+    color:#777777;
 }
 
-.moduletitle {
-    -moz-border-radius: 2px;
-    -webkit-border-radius:2px;
+
+/* extra light text */
+#active_neighborhoods div.small,
+span.format_help {
+    color: #C6C6C6;
 }
-div.hardmodule .moduletitle{
-    border-color: #3b3b3b;
-    background-color: #666;
-}
+
+/* section heading */
+
+#generic_dialog h2,
 div.moduletitle {
     color: #fff;
-    background-color: #008C98;
 }
 
+/* section heading link text */
 div.moduletitle a{
     color: #DDD;
 }
 
-button.volunteer_button {
-    color: #FFFFFF;
-    background-color: #4eA0A7;
-    border: 1px solid #444;
-}
-
+/* attention text */
+div.form_error,
+div.error,
 a.verification_warning, 
 a.verification_warning:hover {
     color: #ff6900;
 }
 
-div#slogan {
+
+/* link text */
+div#slogan,
+a.operation, a:link, a:visited, a:active, a:hover, a, 
+input.operation, input.operation_minimal,
+.staff_group h2 {
     color: #4eA0A7;
 }
 
-#pagespectitle h1 {
-    color: #3b3b3b;
+
+
+/*********** FOOTER *****************/
+
+
+
+/*********** MISC *****************/
+
+
+
+.green{
+    color:#127818;
+}
+.yellow{
+    color:#9f9c0b;
+}   
+.red {
+    color:#aa1814;
 }
 
-th {
-    color: #525252;
+
+.stat_viz td a {
+   color: inherit;
+}
+
+
+
+/*
+======================================================
+>>Background
+======================================================
+*/
+
+/* default text */
+div#generic_dialog,
+html, body {
+    background-color: #fff;
+}
+
+
+/*********** HEADER *****************/
+
+/* header background */
+div#footer,
+div#top {
+    background-color: #3b3b3b;
+}
+
+/* nav tabs background */
+div.navtabs {
+    background: #fff url("../media/body-top-rpt-horiz.png") repeat-x top center;
+}
+
+/* nav tabs hover */
+.navtabs li.current,
+.navtabs li:hover,
+.navtabs li a.current,
+.navtabs li a:hover {
+    background-color: #000;
+}
+
+/* banner background text */
+
+div#message_banner{
+    background-color: #B2DCE0;
+}
+
+/***********  BODY  *****************/
+
+/* section header soft */
+#generic_dialog h2,
+div.moduletitle {
+    background-color: #008C98;
+}
+
+/* section header hard */
+div.hardmodule .moduletitle{
+    background-color: #666;
+}
+
+/* subtle highlight */
+
+div#report_hours,
+div.account_direction_divert,
+form textarea:focus,
+form input.text:focus, 
+form input.password:focus, 
+form input.textarea:focus,
+.event_note,
+tr.message.unread,
+table.zebra tr.odd
+ {
+    background-color: #E6F4F4;
+}
+
+/*********** FOOTER *****************/
+
+/* footer nav hover */
+#footer #static_nav a:hover {
+    background-color: #E6F4F4;
+}
+
+
+/*********** MISC *****************/
+
+#generic_dialog .dialog_footer input:hover{
+    background-color: #ddd;
+}
+
+#generic_dialog div.dialog_footer,
+#generic_dialog div.dialog_header {
+    background:#efefef none repeat scroll 0 0;
+}
+
+
+.stat_viz td.ur {
+    background-color: #e2e2e2;
+}
+.stat_viz td.ul {
+    background-color: #c0e7b3;
+}
+.stat_viz td.lr {
+    background-color: #b2dce0;
+}
+.stat_viz td.ll {
+    background-color: #c4c4c4;
+}
+
+.ui-tabs-nav,
+#dialog_content button, 
+#dialog_content input,
+.navtabs li#loadingContainer:hover,
+input.operation, input.operation_minimal, 
+a.operation, a.operation_minimal,
+table.zebra tr.even,
+.stat_viz td a {
+   background-color: inherit;
+}
+
+#afg_opportunity_list tr.published {
+    background-color: #00ff00;
+}
+#afg_opportunity_list tr.dismissed {
+    background-color: #f99;
+}
+
+
+
+/*
+======================================================
+>>Border
+======================================================
+*/
+
+
+/*********** HEADER *****************/
+
+/*header strip */
+div#top {
+    border-top: 4px solid #008c98; 
+}
+div#footer {
+    border-bottom: 4px solid #008c98; 
+}
+
+
+/***********  BODY  *****************/
+
+
+
+div#report_hours {
+    border: 1px solid #008c98; 
 }
 
 div.shortevent {
@@ -134,16 +289,12 @@ div.shortevent {
 }
 
 
-span.format_help {
-	color: #C6C6C6;
+#title_block h1 {
+    border-bottom: #b6e6a5 3px solid;
 }
 
-div#badges {
-	border-top: 3px solid #eee;
-}
-
-#footer #static_nav a:hover {
-    background-color: #E6F4F4;
+button.volunteer_button {
+    border: 1px solid #444;
 }
 
 tr.message {
@@ -153,48 +304,98 @@ tr.message {
 #forum tr.message {
     border-top: 3px solid #E6E6E6;
 }
-
-tr.message.unread {
-	background-color: #F5F5F5;
-}
-
-table.zebra tr.odd {
-    background-color: #EDEEFD;
-}
-
-table.zebra tr.even {
-    background-color: #FFFFFF;
-}
-
 #mailbox-tab-sections.ui-widget-content {
+    border:none;
+}
+
+#nav .ui-state-active {
+    border-color: 3px solid #E6E6E6;
+}
+
+form input.text,
+form input.password {
+    border:1px solid #aaa;
+}
+
+form textarea:focus,
+form input.text:focus, 
+form input.password:focus, 
+form input.textarea:focus {
+    border:1px solid #008c98;
+}
+
+/* attention border */
+form input.text.error, 
+form input.password.error,
+.error {
+    border: 3px solid #ff6900;
+}
+
+#afg_opportunity_list td {
+    border-bottom:3px dotted #AAAAAA;
+}
+
+
+
+li#verify_attendence{
+    border-bottom: 1px solid #E8E8E8;
+}
+
+#partners li {
+    border: 3px solid #eee;
+}
+
+li.fv-login-block {
+    border:5px solid #C3E5E5;
+}
+
+/***********  DIALOG  *****************/
+
+div#generic_dialog {
+    border: 5px #aaa solid;
+}
+
+#generic_dialog div.dialog_header {
+    border-top: 3px solid #ddd;
+}
+
+#generic_dialog div.dialog_footer {
+    border-top: 3px solid #ddd;
+}
+
+
+/*********** FOOTER *****************/
+
+
+
+
+
+/*********** MISC *****************/
+
+
+div.moduletitle {
+    -moz-border-radius: 2px;
+    -webkit-border-radius:2px;
+}
+
+ {
+    background: #ffffff;
+    border-bottom: 3px solid #E6E6E6;
+}
+
+
+img,
+a,
+a.operation, 
+a:link, a:visited, a:active, a:hover, 
+input.operation, input.operation_minimal,
+.volunteer_summary_team input.operation, 
+.volunteer_summary_team a.operation,
+label.error,
+div.actionlist,
+#dialog_content button, 
+#dialog_content input,
+#nav.ui-widget-header {
 	border:none;
 }
-#nav.ui-widget-header {
-	background: #ffffff;
-	border: none;
-	border-bottom: 3px solid #E6E6E6;
-}
-#nav .ui-state-active {
-	border-color: #E6E6E6;
-    border-width: 3px;
-}
 
-#nav.ui-tabs-nav li {
-	margin-bottom: -3px;
-}
-
-
-.event_note {
-	background-color: #E6F4F4;
-	font-size: 120%;
-	color: #333;
-}
-
-input.operation, input.operation_minimal, 
-a.operation, a.operation_minimal {
-    background: #FFFFFF;
-}
-
-#active_neighborhoods div.small {
-    color:#CCC;
-}

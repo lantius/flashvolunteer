@@ -25,11 +25,11 @@
 </script>-->
 
 
-<div style="border: 3px solid #B2DCE0; background-color:#E6F4F4; padding: 5px;" id="report_hours">
+<div id="report_hours">
 	<h3>{% ifequal eventvolunteer.hours None %}Please report your volunteer hours, rounded to the nearest hour, to get credit! {%else%}According to our records, you volunteered {{eventvolunteer.hours}} hours. Please revise if incorrect.{%endifequal%}</h3>
 
 	<form id='f_verify' method="post" class="validate_form" action="{{event.url}}/verify">
-        <ul style="margin-left:15px">
+        <ul>
         	
 			<li><input type='radio' name='event_volunteer_{{eventvolunteer.key.id}}' value='True' id='i_verify_{{eventvolunteer.key.id}}_true' 
                 onclick='var text_id = this.id.replace(/true/, "text"); document.getElementById(text_id).disabled = false;'

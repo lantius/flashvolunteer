@@ -1,22 +1,5 @@
 
 
-<style>
-	.yellow,
-	.green {
-    	font-size:135%;
-		font-weight:bold;
-	}
-	.green{
-		color:#127818;
-    }
-    .yellow{
-        color:#9f9c0b;
-    }   
-	#mindchange{
-		font-size:90%;
-	}
-</style>
-
 <div id="eventdetails" class="hardmodule">
 	
     <div>
@@ -37,7 +20,7 @@
 				
 				{% if not event.inpast %}
 				    <li>
-					    You are {%ifequal eventvolunteer.interest_level 2%}<span class="green">attending</span>{%else%}{%ifequal eventvolunteer.interest_level 1%}<span class="yellow">interested</span>{%endifequal%}{%endifequal%} <span id="mindchange">(change your mind? 
+					    You are {%ifequal eventvolunteer.interest_level 2%}<span class="event_interest_level green">attending</span>{%else%}{%ifequal eventvolunteer.interest_level 1%}<span class="yellow event_interest_level">interested</span>{%endifequal%}{%endifequal%} <span id="mindchange">(change your mind? 
 						<a onclick=build_dialog(200,{{event.key.id}}) title="Change your participation level" class="operation" id="s_unvolunteer">Click here.</a>)</span>
 					</li>
 				{% endif %}
@@ -54,7 +37,7 @@
 					<li><a class="operation" href="mailto:info@flashvolunteer.org?subject={{event.name|striptags}} is inappropriate!&body={{event.name|striptags}}({{event.url}}) is inappropriate because...">&raquo; Flag event as inappropriate</a></li>
 				{% endif %}
             
-            <li><button onclick=build_dialog(200,{{event.key.id}}) title="Volunteer for this event" class="volunteer_button" id="s_volunteer">{% if event.inpast %}I attended this event.{%else %}I'm thinking about volunteering...{%endif%}</button></li>
+            <li><button onclick=build_dialog(200,{{event.key.id}}) title="Volunteer for this event" class="submit" id="s_volunteer">{% if event.inpast %}I attended this event.{%else %}I'm thinking about volunteering...{%endif%}</button></li>
 
 			{% else %}
 			    <li>You must <a  class="fv" href='/login?redirect={{event.url}}'>login</a> to signup for this event</li>

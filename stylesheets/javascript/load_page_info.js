@@ -4,9 +4,9 @@ function load_title(title){
 
 function load_header(header){
 	if (header != '')
-    	$('#pagespectitle').html('<h1>'+header+'</h1>');
+    	$('#title_block').html('<h1>'+header+'</h1>');
     else
-	   $('#pagespectitle').remove();
+	   $('#title_block').remove();
 }
 
 function set_active(active){

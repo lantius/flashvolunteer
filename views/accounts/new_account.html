@@ -46,7 +46,7 @@
         invalidHandler: function(form, validator) {
           var errors = validator.numberOfInvalids();
           if (errors) {
-            $('.form_error').html('Errors found! Please check the red-bordered fields.');
+            $('.form_error').html('Errors found! Please check the highlighted fields.');
             $(".form_error").show();
           } else {
             $(".form_error").hide();
@@ -65,31 +65,32 @@
   });
 </script>
 
-    <div style="margin-top: 25px;"></div>
+    <div class="spacing_top"></div>
         
 	{% if fv_account %}	
-    <div id="middle100">
-        <div style="width:50%;padding: 25px;font-size:125%; " class='fl'>
-            New to Flash Volunteer? Choose either of the two options below to create an account. Make sure to write down your choice!
-        </div>  
-        <div  class='fl' style="width:25%;padding: 25px;background-color:#E6F4F4;font-size:125%;">
-            Returning user? If you already have a Flash Volunteer account, please <a href="/login" class="fv">login here.</a></div>
-        <div class='cl'><!--empty--></div>
-    </div>
+	    <div id="middle100">
+	        <div class="account_direction_block account_direction_primary fl">
+	            New to Flash Volunteer? Choose either of the two options below to create an account. Make sure to write down your choice!
+	        </div>  
+	        <div class="account_direction_block account_direction_divert fl">
+	            If you already have an account, please <a href="/login" class="fv">login here.</a>
+			</div>
+	        <div class='cl'><!--empty--></div>
+	    </div>
     {% endif %} 
 
-    <div class="cl"></div>
-    <div style="height:15px"></div>
+    <div class="cl spacing_top" />
+
     <div id="middle100">
         <ol >
-            <li class="fv-login-block fl" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:36%;height:100%">
-                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Create a Flash Volunteer account</h1>
+            <li class="fv-login-block fl" style="width:36%;">
+                <h1>Create a Flash Volunteer account</h1>
                   
                 <form class="validate_form" action="/new" method="post">
                   <div class="form_error">
-                      Errors found! Please check the red-bordered fields. 
+                      Errors found! Please check the highlighted fields. 
                   </div>
-                  <input type="hidden" name="session_id" value="{{ session_id }}" />
+                  <input class="hidden" type="hidden" name="session_id" value="{{ session_id }}" />
                       <fieldset>
                           <ul>          
                           
@@ -153,14 +154,16 @@
         
             </li>  
 			{% if fv_account %}
-	            <li class="fl" style="padding: 95px 22px;"><span style="width:100%;font-size:125%">OR</span></li>
-	            <li class="fv-login-block fr" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:42%;height:100%">
-	                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Sign in through a third party</h1>
+	            <li class="fl login_separator">
+				    <span>OR</span>
+				</li>
+	            <li class="fv-login-block fr" style="width:42%">
+	                <h1>Sign in through a third party</h1>
 	
-	                <div class="emph" style="font-size:80%; font-color:#777777">When you login through a third party provider, you will first be taken to their site. After logging in there, you will be redirected back to Flash Volunteer.</div>
+	                <div class="detailed_instructions emph">When you login through a third party provider, you will first be taken to their site. After logging in there, you will be redirected back to Flash Volunteer.</div>
 	        
 	                {% if not dev_server %}
-	                    <iframe src="https://flash-volunteer.rpxnow.com/openid/embed?token_url={{token_url}}" scrolling="no" frameBorder="no" style="width:100%;height:240px;">
+	                    <iframe src="https://flash-volunteer.rpxnow.com/openid/embed?token_url={{token_url}}" scrolling="no" frameBorder="no">
 	                        You do not have JavaScript enabled in your browser. Please enable JavaScript, or download a web browser that supports it.                   
 	                    </iframe>
 	                {% else %}
@@ -172,11 +175,11 @@
 			{% endif %}
 			
 			{% if dev_server %}
-			<li class="fv-login-block fl" style="height:100%;padding:20px;border:5px solid #C3E5E5;width:36%;height:100%">
-                <h1 style="font-size:150%;letter-spacing:-1px;line-height:100%;">Create a Flash Volunteer Organization Account</h1>
+			<li class="fv-login-block fl" style="width:36%;">
+                <h1">Create a Flash Volunteer Organization Account</h1>
                   
                 <form class="validate_form_two" action="/neworg" method="post">
-                  <div class="form_error">
+                  <div class="hidden emph form_error">
                       Errors found! Please check the red-bordered fields. 
                   </div>
                   <input type="hidden" name="session_id" value="{{ session_id }}" />

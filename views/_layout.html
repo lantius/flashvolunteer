@@ -9,9 +9,9 @@
 	<!--<link rel="stylesheet" type="text/css" href="/stylesheets/css/reset-min.css"> 
     <link type="text/css" href="/stylesheets/jquery/css/flashvolunteer/jquery-ui-1.7.2.custom.css" rel="Stylesheet" />  
     <link type="text/css" rel="stylesheet" href="/stylesheets/css/main.css" />
-	<link type="text/css" rel="stylesheet" href="/stylesheets/css/layout.css" />
+	<link type="text/css" rel="stylesheet" href="/stylesheets/css/layout.css" /> -->
 	<link type="text/css" rel="stylesheet" href="/stylesheets/css/colors_backgrounds_borders.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/css/create_event.css" /> 
+    <!--<link rel="stylesheet" type="text/css" href="/stylesheets/css/create_event.css" /> 
     <link rel="stylesheet" type="text/css" href="/stylesheets/css/event_photos.css" />-->
 
 	<script>
@@ -158,9 +158,8 @@
 				{% endif %}
 		    </div><!--end logo-strip-->
     </div><!--end top-->
-    <!--<div class="gradient"></div>-->
 
-	<div id="navtabs">
+	<div id="header-navtabs" class="navtabs">
 		<ul>
 			<!--<li id="homelink"><a class="fv" href="/" {% block homeactive %}{% endblock homeactive %} id="l_home">HOME</a></li>-->
             {%if volunteer and volunteer.is_saved%}
@@ -175,35 +174,12 @@
 				<li id="adminlink"><a class="fv" href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>
 			{% endif %}
 		    <li id="loadingContainer">
-		        <img style="height:12px" id="loadingDiv" src="/stylesheets/media/ajax-loader.gif" alt="Loading" />
+		        <img id="loadingDiv" src="/stylesheets/media/ajax-loader.gif" alt="Loading" />
 			</li>
 		</ul>
 	</div><!--end navtabs-->
 
-    <style>
-    	#incentive_banner {
-    		width:100%;
-			margin: 10px auto;
-			width:840px;
-    	}
-    	#message_banner{
-    		width: 100%;
-			background-color: #B2DCE0;
-			font-weight: bold;
-			font-size: 100%;
-			margin-top: 15px;
-			color: #111;
-			display:none;
-    	}
 
-		#message_banner p {
-			margin-left:auto;
-			margin-right:auto;
-			width:840px;
-			padding: 10px 50px;
-		}
-    </style>
-	
 	<!--<div id="incentive_banner"> 
     	<a class="fv" href="/incentives">
     		<img src="/stylesheets/media/FV_Incentive_Banner.png" />
@@ -222,37 +198,60 @@
 		<div id="dialogs"><!----></div>
 	</div><!--end bottom-->
 
+
 </div><!--end content-->
+
+
+
 <div id="clearfooter"><!--empty--></div>
 
 </div><!--end container-->
 
+
+		
 <div id="footer">
-		<ul id="static_nav">
-			<li><a class="fv" href="/static/about">About</a></li>
-			<li><a class="fv" href="/static/partners">Partners</a></li>
-			<li><a class="fv" href="/static/privacy">Privacy Policy</a></li>
-			<li><a class="fv" href="/static/tos">Terms of Use</a></li>
-		</ul>
-        <div id="badges">
+	<div id="footer-navtabs" class="navtabs">
+	    <ul>
+	        <li><a class="fv" href="/static/about">ABOUT</a></li>
+	        <li><a class="fv" href="/static/partners">PARTNERS</a></li>
+	        <li><a class="fv" href="/static/privacy">PRIVACY</a></li>
+	        <li><a class="fv" href="/static/tos">TERMS OF USE</a></li>
+	    </ul>
+	</div>
+	<div id="footer_content">
+        <div id="badges" class="fl">
         	<ul>
+
+                <li class="badge" id="twitter-badge">
+                    <a target="_blank" href="http://twitter.com/flashvolunteer">
+                        <img id="twitter-badge-img" src="/stylesheets/media/twitterbutton.png" alt="Follow us on Twitter"/>
+                    </a>                     
+                </li>
+				
 	            <li class="badge" id="fb-badge">
-	                <a target="_blank" href="http://www.facebook.com/pages/Flash-Volunteer/75272433226"><img id="fb-badge-img" src="/stylesheets/media/find-us-on-facebook.png" alt="Find us on Facebook"/></a>
+	                <a target="_blank" href="http://www.facebook.com/pages/Flash-Volunteer/75272433226">
+	                	<img id="fb-badge-img" src="/stylesheets/media/find-us-on-facebook.png" alt="Find us on Facebook"/>
+					</a>
 	            </li>
-	            <li class="badge" id="twitter-badge">
-	                <a target="_blank" href="http://twitter.com/flashvolunteer"><img id="twitter-badge-img" src="/stylesheets/media/tw2_gif.gif" alt="Follow us on Twitter"/></a>                     
-	            </li>
+
+                <li class="badge" id="iphone-badge">
+                    <a target="_blank" href="http://itunes.apple.com/us/app/flash-volunteer/id353017547">
+                    	<img id="iphone-badge-img" src="/stylesheets/media/iphoneapp.png" alt="Get our iPhone application"/>
+					</a>
+                </li>
 	        </ul>          
         </div>
-		  <div id="copyright">Built by volunteers, for volunteers: <a target="_blank" href="http://code.google.com/p/flashvolunteer/">join the open source effort!</a></div>
-          <div id="copyright">Flash Volunteer &copy; 2009, a 501(c)3 non-profit.</div>
-        <div>
-            <ul>
-                <li class="badge" id="donate-badge">
-                    <a class="fv" href="/static/donate"><img id="donate-badge-img" alt="" border="0" src="/stylesheets/media/donate.gif"></a>                     
-                </li>
-            </ul>          
+		<div id="footer_copy" class="fr">
+		  <ul>
+			  <li>Built by volunteers, for volunteers: <a target="_blank" href="http://code.google.com/p/flashvolunteer/">join the open source effort!</a></li>
+	          <li>Flash Volunteer &copy; 2009, a 501(c)3 non-profit.</li>
+              <li class="badge" id="donate-badge">
+                  <a class="fv" href="/static/donate"><img id="donate-badge-img" alt="" border="0" src="/stylesheets/media/donate.gif"></a>                     
+              </li>
+          </ul>          
         </div>
+		<div class="clear" />
+	</div>
 </div><!--end footer-->
 
 
