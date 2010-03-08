@@ -1,3 +1,0 @@
-from gui_integration_tests.test_runner.package_tester import PackageTester
-
-PackageTester().run_all_tests_for_package('gui_integration_tests')
