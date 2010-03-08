@@ -1,4 +1,4 @@
-import os
+import os, logging
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
@@ -21,6 +21,9 @@ class AdminPage(AbstractHandler):
         region = self.get_application()
         #unverified_events = region.events.filter('verified = ',False)
         
+        for name in os.environ.keys():
+            logging.info("%s = %s<br />\n" % (name, os.environ[name]))
+            
         template_values = {
             'volunteer' : account.get_user()
           }

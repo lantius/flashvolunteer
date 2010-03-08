@@ -7,20 +7,18 @@ from models.messages.message_type import MessageType
 from models.messages.message_propagation_type import MessagePropagationType
 from models.skin import Skin
 
-from components.applications.defs import regions
+from components.applications.defs import regions, georgetown_app
+
 from google.appengine.ext import db
 
 import os
 
 
 def synchronize_apps(server):
-    add_applications(server = server, applications=regions)
+    add_applications(server = server)
     add_categories()
     add_messaging()
 
-
-def get_all_applications():
-    self.tables_to_map = [f[:-3] for f in os.listdir(path) if fnmatch(f,'*.py') and f!='__init__.py']
 
 def add_categories():
     categories = ("Animals","Arts & Culture","Children & Youth", "Education & Literacy", 
@@ -98,16 +96,22 @@ def add_messaging():
             )
             mt.put()
 
-def add_applications(server, applications):
+def add_applications(server):
         
     if server == 0:
         from gui_integration_tests.test_settings import host
         domains = [host]
+        applications = regions
     elif server == 1:
         domains = ['development.flashvolunteer.org', 'flashvolunteer-dev.appspot.com']
-    else:
+        applications = regions
+    elif server == 2:
         domains = ['flashvolunteer.org']
-
+        applications = regions
+    elif server == 3:
+        domains = ['georgetown-fv.appspot.com', 'georgetown.flashvolunteer.org']
+        applications = georgetown_app
+        
     for application_def in applications: 
         if Application().all().filter('name =', application_def.get_name()).count() == 0: 
             a = Application(name = application_def.get_name(), 

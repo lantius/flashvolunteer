@@ -1,4 +1,3 @@
-from components.applications.operations import add_applications, add_messaging, synchronize_apps
 from components.time_zones import now
 
 from controllers.abstract_handler import AbstractHandler

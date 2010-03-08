@@ -46,6 +46,7 @@
 <form name="adminEditForm" method="post"
     action="{{ urlPrefix }}/{{ moduleTitle }}/{% if item %}edit/{{ item.key }}{% else %}new{% endif %}/"
     {% if editForm.enctype %}enctype="{{ editForm.enctype }}"{% endif %}>
+    	<input type="hidden" name="session_id" value="{{ session_id }}">
 <table class="editForm">
     <tr>
         <td colspan="2"><h3>Editable properties</h3></td>

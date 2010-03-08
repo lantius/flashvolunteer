@@ -304,7 +304,7 @@ class Event(db.Model):
     def inpast(self):
         return self.in_past or self.enddate is None or self.enddate < now()
 
-from components.appengine_admin import register, ModelAdmin
+from components.appengine_admin.model_register import register, ModelAdmin
 ## Admin views ##
 class AdminEvent(ModelAdmin):
     model = Event

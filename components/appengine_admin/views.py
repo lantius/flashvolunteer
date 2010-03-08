@@ -9,7 +9,7 @@ from google.appengine.ext import webapp
 from google.appengine.api import datastore_errors
 from google.appengine.ext.webapp import template
 
-from . import authorized
+#from . import authorized
 from . import utils
 from . import admin_settings
 from . import model_register
@@ -55,17 +55,13 @@ class Admin(BaseRequestHandler):
     """
     def __init__(self):
         logging.info("NEW Admin object created")
-        super(Admin, self).__init__()
-        
-        try:
-            account = self.auth(require_login=True, require_admin = True)
-        except:
-            return   
+        super(Admin, self).__init__()   
         
         # Define and compile regexps for Admin site URL scheme.
         # Every URL will be mapped to appropriate method of this
         # class that handles all requests of particular HTTP message
         # type (GET or POST).
+        
         self.getRegexps = [
             [r'^/?$', self.index_get],
             [r'^/([^/]+)/list/$', self.list_get],
@@ -91,19 +87,29 @@ class Admin(BaseRequestHandler):
         """Compiles all regular expressions in regexps list
         """
         for i in range(len(regexps)):
-            logging.info(regexps[i][0])
             regexps[i][0] = re.compile(regexps[i][0])
             
     def get(self, urlPrefix, url):
         """Handle HTTP GET
         """
-        
+
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return
+                
         self.urlPrefix = urlPrefix
         self._callHandlingMethod(url, self.getRegexps)
 
     def post(self, urlPrefix, url):
         """Handle HTTP POST
         """
+
+        try:
+            account = self.auth(require_login=True, require_admin = True)
+        except:
+            return
+        
         self.urlPrefix = urlPrefix
         self._callHandlingMethod(url, self.postRegexps)
 
@@ -116,8 +122,8 @@ class Admin(BaseRequestHandler):
         
         for regexp, function in regexps:
             matched = regexp.match(url)
-            logging.info("Url: %s" % str(url))
-            logging.info("regex: %s" % str(regexp))
+            #logging.info("Url: %s" % str(url))
+            #logging.info("regex: %s" % str(regexp))
             if matched:
                 function(*matched.groups())
                 return
@@ -157,10 +163,12 @@ class Admin(BaseRequestHandler):
         """Show admin start page
         """
         path = os.path.join(ADMIN_TEMPLATE_DIR, 'index.html')
-        self.response.out.write(template.render(path, {
+        template_vals = {
             'models': self.models,
             'urlPrefix': self.urlPrefix,
-        }))
+        }
+        self._add_base_template_values(template_vals)
+        self.response.out.write(template.render(path, template_vals))
     
     #@authorized.role("admin")
     def list_get(self, modelName):
@@ -175,14 +183,19 @@ class Admin(BaseRequestHandler):
             )
         # Get only those items that should be displayed in current page
         items = page.getDataForPage()
-        self.response.out.write(template.render(path, {
+        
+        template_vals = {
             'models': self.models,
             'urlPrefix': self.urlPrefix,
             'moduleTitle': modelAdmin.modelName,
             'listProperties': modelAdmin._listProperties,
             'items': map(modelAdmin._attachListFields, items),
             'page': page,
-        }))
+        }
+        
+        self._add_base_template_values(template_vals)
+        
+        self.response.out.write(template.render(path, template_vals))
 
     #@authorized.role("admin")
     def new_get(self, modelName):
@@ -190,7 +203,7 @@ class Admin(BaseRequestHandler):
         """
         modelAdmin = getModelAdmin(modelName)
 
-        templateValues = {
+        template_vals = {
             'models': self.models,
             'urlPrefix': self.urlPrefix,
             'item' : None,
@@ -199,7 +212,9 @@ class Admin(BaseRequestHandler):
             'readonlyProperties': modelAdmin._readonlyProperties,
         }
         path = os.path.join(ADMIN_TEMPLATE_DIR, 'model_item_edit.html')
-        self.response.out.write(template.render(path, templateValues))
+        self._add_base_template_values(template_vals)
+        
+        self.response.out.write(template.render(path, template_vals))
 
     #@authorized.role("admin")
     def new_post(self, modelName):
@@ -213,7 +228,7 @@ class Admin(BaseRequestHandler):
             self.redirect("%s/%s/edit/%s/" % (self.urlPrefix, modelAdmin.modelName, item.key()))
         else:
             # Display errors with entered values
-            templateValues = {
+            template_vals = {
                 'models': self.models,
                 'urlPrefix': self.urlPrefix,
                 'item' : None,
@@ -222,16 +237,18 @@ class Admin(BaseRequestHandler):
                 'readonlyProperties': modelAdmin._readonlyProperties,
             }
             path = os.path.join(ADMIN_TEMPLATE_DIR, 'model_item_edit.html')
-            self.response.out.write(template.render(path, templateValues))
+            self._add_base_template_values(template_vals)
+            
+            self.response.out.write(template.render(path, template_vals))
 
-    @#authorized.role("admin")
+    #@authorized.role("admin")
     def edit_get(self, modelName, key = None):
         """Show for for editing existing record of particular model.
             Raises Http404 if record not found.
         """
         modelAdmin = getModelAdmin(modelName)
         item = self._safeGetItem(modelAdmin.model, key)
-        templateValues = {
+        template_vals = {
             'models': self.models,
             'urlPrefix': self.urlPrefix,
             'item' : item,
@@ -240,7 +257,9 @@ class Admin(BaseRequestHandler):
             'readonlyProperties': self._readonlyPropsWithValues(item, modelAdmin),
         }
         path = os.path.join(ADMIN_TEMPLATE_DIR, 'model_item_edit.html')
-        self.response.out.write(template.render(path, templateValues))
+        self._add_base_template_values(template_vals)
+        
+        self.response.out.write(template.render(path, template_vals))
 
     #@authorized.role("admin")
     def edit_post(self, modelName, key):
@@ -255,7 +274,7 @@ class Admin(BaseRequestHandler):
             item = form.save()
             self.redirect("%s/%s/edit/%s/" % (self.urlPrefix, modelAdmin.modelName, item.key()))
         else:
-            templateValues = {
+            template_vals = {
                 'models': self.models,
                 'urlPrefix': self.urlPrefix,
                 'item' : item,
@@ -263,8 +282,11 @@ class Admin(BaseRequestHandler):
                 'editForm': form,
                 'readonlyProperties': self._readonlyPropsWithValues(item, modelAdmin),
             }
+            
             path = os.path.join(ADMIN_TEMPLATE_DIR, 'model_item_edit.html')
-            self.response.out.write(template.render(path, templateValues))
+            self._add_base_template_values(template_vals)
+            
+            self.response.out.write(template.render(path, template_vals))
 
 
     #@authorized.role("admin")

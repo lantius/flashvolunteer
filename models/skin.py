@@ -69,7 +69,7 @@ fields = ('application', 'misc_css',
     'body_item_separator_border_color','body_page_title_underline_color')
     
     
-from components.appengine_admin import register, ModelAdmin
+from components.appengine_admin.model_register import register, ModelAdmin
 ## Admin views ##
 class AdminSkin(ModelAdmin):
     model = Skin

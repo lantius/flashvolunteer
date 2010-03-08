@@ -11,13 +11,14 @@ from controllers.admin.cron_jobs.event_message_factory import EventMessageFactor
 from controllers.admin.site_wide_message import SiteWideMessage
 from controllers.admin.custom_query import CustomQueryHandler
 from controllers.admin.sync_with_mail_chimp import SyncWithMailChimp
+from controllers.admin.sync_application import SyncApplication
 
 from controllers.admin.afg_interface import AllForGoodInterface
 
 from controllers.settings import SettingsPage
 from controllers.admin.home import AdminPage
 
-import components.appengine_admin
+from components.appengine_admin.views import Admin as AppEngineAdmin
 
 webapp.template.register_template_library('templatetags.filters')
 
@@ -38,7 +39,9 @@ def main():
         ('/admin/custom_query', CustomQueryHandler),
         
         ('/admin/sync_with_mail_chimp', SyncWithMailChimp),
-        (r'^(/admin/proj)(.*)$', components.appengine_admin.Admin),
+        ('/admin/sync_with_mail_chimp', SyncApplication),
+
+        (r'^(/admin/proj)(.*)$', AppEngineAdmin),
         
     ], debug=True)
 

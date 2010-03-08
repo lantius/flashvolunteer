@@ -7,7 +7,7 @@ class Seattle(ApplicationDef):
     sw_coord = db.GeoPt(lat = 47.434343 , lon = -122.567596 )
     
     def get_name(self):
-        return'seattle'
+        return 'seattle'
     
     def get_subdomains(self):
         return ['','seattle']

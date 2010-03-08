@@ -171,12 +171,14 @@ class AbstractHandler(webapp.RequestHandler):
         if 'SERVER_SOFTWARE' not in os.environ or os.environ['SERVER_SOFTWARE'].startswith('Development'): 
             return 0
         else:
-            domain = self.get_domain()
-            if domain.find('flashvolunteer-dev.appspot.com') > -1 or domain.find('development.flashvolunteer.org') > -1:
+            app_id = os.environ['APPLICATION_ID']
+            if app_id == 'flashvolunteer-dev':
                 return 1
-            else:
+            elif app_id == 'flashvolunteer': 
                 return 2
-    
+            elif app_id == 'georgetown-fv':
+                return 3
+                
     def get_application(self, just_id = False):
         domain = self.get_domain()
         key = "app-%s"%domain
@@ -194,6 +196,7 @@ class AbstractHandler(webapp.RequestHandler):
         else: return app_domain.application
         
     def get_domain(self):
+        
         session = self._session()
         if 'this_domain' not in session:
             domain = os.environ['HTTP_HOST']
@@ -204,6 +207,8 @@ class AbstractHandler(webapp.RequestHandler):
                 domain = domain.replace('flashvolunteer.appspot.com', 'flashvolunteer.org')
             elif domain.endswith('flashvolunteer-dev.appspot.com'): 
                 domain = 'development.flashvolunteer.org'
+            elif domain.endswith('georgetown-fv.appspot.com'):
+                domain = 'georgetown.flashvolunteer.org'
     
     #        logging.info('************')
     #        logging.info('DOMAIN: '+ domain)

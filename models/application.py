@@ -40,7 +40,7 @@ class Application(db.Model):
         
         return events
 
-from components.appengine_admin import register, ModelAdmin
+from components.appengine_admin.model_register import register, ModelAdmin
 ## Admin views ##
 class AdminApplication(ModelAdmin):
     model = Application
