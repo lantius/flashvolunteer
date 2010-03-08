@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>App admin panel</title>
+<style type="text/css" media="screen">
+    @import url( /appengine_admin_media/style.css );
+</style>
+<script type="text/javascript" src="/appengine_admin_media/js/core.js">
+</script>
+<script type="text/javascript" src="/appengine_admin_media/js/calendar.js">
+</script>
+<script type="text/javascript" src="/appengine_admin_media/js/DateTimeShortcuts.js">
+</script>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+
+	<link rel="stylesheet" media="screen" type="text/css" href="/stylesheets/javascript/jquery_plugins/colorpicker/css/colorpicker.css" />
+	<script type="text/javascript" src="/stylesheets/javascript/jquery_plugins/colorpicker/js/colorpicker.js"></script>
+
+
+
+    <script type="text/javascript" src="/stylesheets/javascript/fv.min.js"></script>        
+
+</head>
+<body>
+
+<div id="wrapper">
+
+        <div id="header">
+            <h1><a href="{{ urlPrefix }}/">App admin panel</a></h1>
+        </div>
+
+        {% if not errorpage %}
+        <div id="sidebar">
+
+            <p>Models</p>
+            <ul>
+                {% for modelName in models %}
+                <li><a href="{{ urlPrefix }}/{{ modelName }}/list/">{{ modelName }}</a></li>
+                {% endfor %}
+            </ul>
+            <!--<p>Recent Actions</p>
+            <ul>
+                <li><a href="#">Recent entry one</a></li>
+                <li><a href="#">Recent entry two</a></li>
+                <li><a href="#">Recent entry three</a></li>
+                <li><a href="#">Recent entry four</a></li>
+            </ul>-->
+
+        </div>
+        {% endif %}
+
+        <div id="body">
+            {% block content %}{% endblock %}
+        </div>
+
+</div>
+
+</body>
+</html>
