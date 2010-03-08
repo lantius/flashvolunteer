@@ -11,9 +11,12 @@ import urllib, logging
 
 from models.application import Application
 from models.applicationdomain import ApplicationDomain
+from models.skin import Skin
 
 from google.appengine.api import memcache
 from google.appengine.ext.db import put, delete
+
+
 
 from utils.misc_methods import get_google_maps_api_key
 ################################################################################
@@ -31,6 +34,7 @@ class AbstractHandler(webapp.RequestHandler):
         #logging.info('_add_base_template_values: %s'%session.sid)
         account = self.get_account()
         application = self.get_application()
+            
         is_ajax_request = self.ajax_request()
         new_login = 'new_login' in session and session['new_login']
         redirected = 'redirected' in session and session['redirected']
@@ -45,6 +49,7 @@ class AbstractHandler(webapp.RequestHandler):
             'session_id':  session.sid,
             'account': account,
             'to_extend': to_extend,
+            'skin': application.skin.get(),
             'GOOGLEMAPSAPI': get_google_maps_api_key()
         })
 

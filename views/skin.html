@@ -1,0 +1,247 @@
+
+<style>
+
+/*
+======================================================
+>>Color
+======================================================
+*/
+
+
+
+/*HEADER AND FOOTER */
+
+{% if skin.header_default_text_color %}
+	div#footer,
+	div#top {
+	    color: {{skin.header_default_text_color}};
+	}
+{% endif %}
+
+{% if skin.header_link_color %}
+	div#footer a,
+	div#top a{
+	    color: {{skin.header_link_color}};
+	}
+{% endif %}
+
+{% if skin.header_nav_text_color %}
+	#footer div.navtabs li a,
+	.navtabs li a{
+	    color: {{skin.header_nav_text_color}};
+	}
+{% endif %}
+
+    
+/* BODY */
+
+{% if skin.body_default_text_color %}
+#tabs p,
+html, body{
+    color: {{skin.body_default_text_color}};
+	
+}
+{% endif %}
+
+
+{% if skin.body_heavy_text_color %}
+#faq-sections h3,
+#generic_dialog a.pagination_link,
+.event_note,
+#title_block h1,
+div.label,
+form input.text,
+form input.password,
+div#message_banner {
+    color: {{skin.body_heavy_text_color}};
+}
+{% endif %}
+
+{% if skin.body_light_text_color %}
+.fv-login-block div.detailed_directions{
+    color:{{skin.body_light_text_color}};
+}
+{% endif %}
+
+{% if skin.body_extra_light_text_color %}
+#active_neighborhoods div.small,
+span.format_help {
+    color: {{skin.body_extra_light_text_color}};
+}
+{% endif %}
+
+{% if skin.body_section1_text_color %}
+#generic_dialog h2,
+div.moduletitle {
+    color: {{skin.body_section1_text_color}};
+}
+{% endif %}
+
+{% if skin.body_section2_text_color %}
+div.hardmodule .moduletitle {
+    color: {{skin.body_section2_text_color}};
+}
+{% endif %}
+
+{% if skin.body_section_link_color %}
+div.moduletitle a{
+    color: {{skin.body_section_link_color}};
+}
+{% endif %}
+
+{% if skin.body_section2_link_color %}
+div.hardmodule .moduletitle a{
+    color: {{skin.body_section2_link_color}};
+}
+{% endif %}
+
+{% if skin.body_attention_color %}
+div.form_error,
+div.error,
+a.verification_warning, 
+a.verification_warning:hover {
+    color: {{skin.body_attention_color}};
+}
+{% endif %}
+
+{% if skin.body_link_color %}
+div#slogan,
+a.operation, a:link, a:visited, a:active, a:hover, a, 
+input.operation, input.operation_minimal,
+.staff_group h2 {
+    color: {{skin.body_link_color}};
+}
+
+{% endif %}
+
+/*
+======================================================
+>>Background
+======================================================
+*/
+
+
+
+
+/***** Header & footer******/
+
+{% if skin.header_background_color %}
+div#footer,
+div#top {
+    background-color: {{skin.header_background_color}};
+}
+{% endif %}
+{% if skin.header_nav_background_color %}
+div.navtabs {
+    background-color: {{skin.header_nav_background_color}};
+}
+{% endif %}
+{% if skin.header_nav_hover_color %}
+.navtabs li.current,
+.navtabs li:hover,
+.navtabs li a.current,
+.navtabs li a:hover {
+    background-color: {{skin.header_nav_hover_color}};
+}
+{% endif %}
+{% if skin.header_banner_background_color %}
+div#message_banner{
+    background-color: {{skin.header_banner_background_color}};
+}
+{% endif %}
+/****** BODY ******/
+
+{% if skin.body_background_color %}
+div#generic_dialog,
+.ui-tabs-nav,
+html, body {
+    background-color: {{skin.body_background_color}};
+}
+{% endif %}
+{% if skin.body_section1_background_color %}
+#generic_dialog h2,
+div.moduletitle {
+    background-color: {{skin.body_section1_background_color}};
+}
+{% endif %}
+{% if skin.body_section2_background_color %}
+div.hardmodule .moduletitle {
+    background-color: {{skin.body_section2_background_color}};
+}
+{% endif %}
+{% if skin.body_subtle_block_background_color %}
+div#report_hours,
+div.account_direction_divert,
+form textarea:focus,
+form input.text:focus, 
+form input.password:focus, 
+form input.textarea:focus,
+.event_note,
+tr.message.unread,
+table.zebra tr.odd
+ {
+    background-color: {{skin.body_subtle_block_background_color}};
+}
+{% endif %}
+
+/*
+======================================================
+>>BORDER
+======================================================
+*/
+
+{% if skin.header_strip_color %}
+div#top {border-color: {{skin.header_strip_color}};}
+div#footer {border-color: {{skin.header_strip_color}};}
+{%endif%}
+
+{% if skin.body_subtle_block_border_color %}
+div#report_hours,
+div.account_direction_divert,
+form textarea:focus,
+form input.text:focus, 
+form input.password:focus, 
+form input.textarea:focus {
+    border-color: {{skin.body_subtle_block_border_color}};
+}
+{%endif%}
+
+{% if skin.body_subtle_block_border_color %}
+li.fv-login-block {
+    border-color: {{skin.body_subtle_block_border_color}};
+}
+{%endif%}
+
+{% if skin.body_item_separator_border_color %}
+li#verify_attendence,
+#forum tr.message,
+tr.message,
+div.shortevent,
+form input.text,
+form input.password  {
+    border-color: {{skin.body_item_separator_border_color}};
+}
+{%endif%}
+
+
+{% if skin.body_page_title_underline_color %}
+/* page title underline */
+#title_block h1 {
+    border-color: {{skin.body_page_title_underline_color}};
+}
+{%endif%}
+
+{% if skin.body_attention_color %}
+/* attention border */
+form input.text.error, 
+form input.password.error,
+.error {
+    border-color: {{skin.body_attention_color}};
+}
+{%endif%}
+
+</style>
+
+        
+    
+    

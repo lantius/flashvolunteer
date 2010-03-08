@@ -65,6 +65,7 @@ SCRIPTS = [
     os.path.join(stylesheets, 'javascript', 'jquery_plugins', 'markItUp', 'jquery.markitup.js'),
     os.path.join(stylesheets, 'javascript', 'jquery_plugins', 'markItUp', 'html_set.js'),
     os.path.join(stylesheets, 'javascript', 'jquery_plugins', 'jquery.tooltip', 'jquery.tooltip.min.js'),
+
     #os.path.join(stylesheets, 'javascript', 'jquery_plugins', 'jquery.timepicker', 'jquery.timepicker.js'),
 
     os.path.join(stylesheets, 'javascript', 'handle_messages.js'),    
@@ -80,11 +81,14 @@ STYLESHEETS = [
     os.path.join(stylesheets, 'css', 'jquery', 'plugins', 'jquery.tooltip', 'jquery.tooltip.css'),
     os.path.join(stylesheets, 'css', 'jquery', 'plugins', 'markItUp', 'style.css'),
     os.path.join(stylesheets, 'css', 'jquery', 'plugins', 'markItUp', 'html.css'),
+
+
     os.path.join(stylesheets, 'css', 'main.css'),
     os.path.join(stylesheets, 'css', 'layout.css'),
     os.path.join(stylesheets, 'css', 'colors_backgrounds_borders.css'),
     os.path.join(stylesheets, 'css', 'create_event.css'),
     os.path.join(stylesheets, 'css', 'event_photos.css'),
+    
 ]
 
 STYLESHEETS_OUT =  os.path.join(stylesheets, 'css', 'fv.min.css')

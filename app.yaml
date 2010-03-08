@@ -16,6 +16,10 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin    
 
+- url: /appengine_admin_media
+  static_dir: components/appengine_admin/media
+  secure: never
+  
 - url: /admin/cron_jobs/.*
   script: controllers/admin/route.py
   login: admin

@@ -1,8 +1,5 @@
-import datetime
 import logging
 import urllib
-from components.geostring import *
-from components.time_zones import Pacific
 
 from components.time_zones import now
 
@@ -42,3 +39,13 @@ class Application(db.Model):
             'date')
         
         return events
+
+from components.appengine_admin import register, ModelAdmin
+## Admin views ##
+class AdminApplication(ModelAdmin):
+    model = Application
+    listFields = ('name', 'ne_coord', 'sw_coord')
+    editFields = ('name', 'ne_coord', 'sw_coord')
+    readonlyFields = ()
+
+register(AdminApplication)

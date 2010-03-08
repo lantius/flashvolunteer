@@ -1,6 +1,6 @@
 """Utilities for working with HTML."""
-import html5lib
-from html5lib import sanitizer, serializer, tokenizer, treebuilders, treewalkers
+import components.html5lib
+from components.html5lib import sanitizer, serializer, tokenizer, treebuilders, treewalkers
 
 class HTMLSanitizerMixin(sanitizer.HTMLSanitizerMixin):
     acceptable_elements = ('a', 'abbr', 'acronym', 'address', 'b', 'big',

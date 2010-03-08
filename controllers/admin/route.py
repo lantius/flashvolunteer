@@ -17,7 +17,11 @@ from controllers.admin.afg_interface import AllForGoodInterface
 from controllers.settings import SettingsPage
 from controllers.admin.home import AdminPage
 
+import components.appengine_admin
+
 webapp.template.register_template_library('templatetags.filters')
+
+
 
 
 def main():
@@ -34,6 +38,8 @@ def main():
         ('/admin/custom_query', CustomQueryHandler),
         
         ('/admin/sync_with_mail_chimp', SyncWithMailChimp),
+        (r'^(/admin/proj)(.*)$', components.appengine_admin.Admin),
+        
     ], debug=True)
 
     wsgiref.handlers.CGIHandler().run(application)

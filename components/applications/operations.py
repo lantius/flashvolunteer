@@ -5,6 +5,7 @@ from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
 from models.messages.message_type import MessageType
 from models.messages.message_propagation_type import MessagePropagationType
+from models.skin import Skin
 
 from components.applications.defs import regions
 from google.appengine.ext import db
@@ -49,7 +50,7 @@ def add_messaging():
         mps[mp] = mpt
         
     message_types = (
-        (-1, 'site_wide', 'Flash Volunteer news updates (no more than once per week)', ['email'], True),
+        #(-1, 'site_wide', 'Flash Volunteer news updates (no more than once per week)', ['email'], True),
 
         (0, 'rec_event', 'Digest of upcoming, recommended events (weekly)', [], True),
         (1, 'person_to_person', 'If someone sends me a personal message', ['email'], True),
@@ -113,6 +114,9 @@ def add_applications(server, applications):
                             ne_coord = application_def.ne_coord, 
                             sw_coord = application_def.sw_coord)
             a.put()
+            skin = Skin(application=a)
+            skin.put()
+
         else:
             a = Application().all().filter('name =', application_def.get_name()).get()
             if a.ne_coord != application_def.ne_coord:

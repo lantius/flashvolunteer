@@ -42,6 +42,8 @@ div#top {
     color: #cccccc;
 }
 
+
+
 /* header link */
 
 div#footer a,
@@ -86,6 +88,7 @@ span.format_help {
 /* section heading */
 
 #generic_dialog h2,
+div.hardmodule .moduletitle,
 div.moduletitle {
     color: #fff;
 }
@@ -208,12 +211,6 @@ table.zebra tr.odd
     background-color: #E6F4F4;
 }
 
-/*********** FOOTER *****************/
-
-/* footer nav hover */
-#footer #static_nav a:hover {
-    background-color: #E6F4F4;
-}
 
 
 /*********** MISC *****************/
@@ -273,61 +270,41 @@ table.zebra tr.even,
 /*********** HEADER *****************/
 
 /*header strip */
-div#top {
-    border-top: 4px solid #008c98; 
-}
-div#footer {
-    border-bottom: 4px solid #008c98; 
-}
+div#top {border-top: 4px solid #008c98;}
+div#footer {border-bottom: 4px solid #008c98;}
 
 
 /***********  BODY  *****************/
 
 
-
-div#report_hours {
-    border: 1px solid #008c98; 
-}
-
-div.shortevent {
-    border-bottom: 1px solid #CCC;
-}
-
-
-#title_block h1 {
-    border-bottom: #b6e6a5 3px solid;
-}
-
-button.volunteer_button {
-    border: 1px solid #444;
-}
-
-tr.message {
-    border-bottom: 3px solid #E6E6E6;
-}
-
-#forum tr.message {
-    border-top: 3px solid #E6E6E6;
-}
-#mailbox-tab-sections.ui-widget-content {
-    border:none;
-}
-
-#nav .ui-state-active {
-    border-color: 3px solid #E6E6E6;
-}
-
-form input.text,
-form input.password {
-    border:1px solid #aaa;
-}
-
+/* subtle highlight */
+div#report_hours,
+div.account_direction_divert,
 form textarea:focus,
 form input.text:focus, 
 form input.password:focus, 
 form input.textarea:focus {
     border:1px solid #008c98;
 }
+li.fv-login-block {
+    border:3px solid #008C98;
+}
+
+/* item separator */
+li#verify_attendence,
+#forum tr.message,
+tr.message,
+div.shortevent,
+form input.text,
+form input.password  {
+    border-bottom: 1px solid #CCC;
+}
+
+/* page title underline */
+#title_block h1 {
+    border-bottom: #b6e6a5 3px solid;
+}
+
 
 /* attention border */
 form input.text.error, 
@@ -336,23 +313,8 @@ form input.password.error,
     border: 3px solid #ff6900;
 }
 
-#afg_opportunity_list td {
-    border-bottom:3px dotted #AAAAAA;
-}
 
 
-
-li#verify_attendence{
-    border-bottom: 1px solid #E8E8E8;
-}
-
-#partners li {
-    border: 3px solid #eee;
-}
-
-li.fv-login-block {
-    border:5px solid #C3E5E5;
-}
 
 /***********  DIALOG  *****************/
 
@@ -368,16 +330,14 @@ div#generic_dialog {
     border-top: 3px solid #ddd;
 }
 
-
-/*********** FOOTER *****************/
-
-
-
-
-
 /*********** MISC *****************/
 
 
+#afg_opportunity_list td {
+    border-bottom:3px dotted #AAAAAA;
+}
+
+#mailbox-tab-sections.ui-widget-content,
 div#tabs,
 div#tabs.ui-tabs li {
 	border:none;
@@ -386,12 +346,6 @@ div.moduletitle {
     -moz-border-radius: 2px;
     -webkit-border-radius:2px;
 }
-
- {
-    background: #ffffff;
-    border-bottom: 3px solid #E6E6E6;
-}
-
 
 img,
 a,
@@ -408,3 +362,6 @@ div.actionlist,
 	border:none;
 }
 
+#nav .ui-state-active {
+    border-color: 3px solid #CCC;
+}

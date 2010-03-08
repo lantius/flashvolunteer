@@ -14,6 +14,8 @@ from models.eventinterestcategory import EventInterestCategory
 from models.auth.account import Account
 from models.eventvolunteer import EventVolunteer
 from models.messages import Message, MessageReceipt
+from models.skin import Skin
+
 from datetime import datetime
 
 from google.appengine.ext import webapp, db
@@ -56,7 +58,9 @@ class MigrateDatastore(AbstractHandler):
 
         
                 
-        deferred.defer(add_ongoing)
+        for app in Application.all():
+            skin = Skin(application = app)
+            skin.put()
 
         self.redirect('/admin/migrate')
         
