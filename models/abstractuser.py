@@ -1,5 +1,4 @@
 from google.appengine.ext import db
-from controllers._twitter import Twitter 
 
 ################################################################################
 # AbstractUser
@@ -59,9 +58,9 @@ class AbstractUser(db.Model):
         #except:
         #    self.error['email'] = ('A valid email is required', params['email'])
           
-        if 'twitter' in params and self.twitter != params['twitter']:
-            self.twitter = params['twitter']
-            Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
+#        if 'twitter' in params and self.twitter != params['twitter']:
+#            self.twitter = params['twitter']
+#            Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
         
         
         return not self.error

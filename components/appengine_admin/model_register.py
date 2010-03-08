@@ -14,11 +14,11 @@ from .utils import Http404
 
 class PropertyWrapper(object):
     def __init__(self, prop, name):
-        logging.info("Caching info about property '%s'" % name)
+        #logging.info("Caching info about property '%s'" % name)
         self.prop = prop
         self.name = name
         self.typeName = prop.__class__.__name__
-        logging.info("  Property type: %s" % self.typeName)
+        #logging.info("  Property type: %s" % self.typeName)
         # Cache referenced class name to avoid BadValueError when rendering model_item_edit.html template.
         # Line like this could cause the exception: field.reference_class.kind
         if self.typeName == 'ReferenceProperty':

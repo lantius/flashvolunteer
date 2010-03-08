@@ -338,7 +338,8 @@ li {
 	#footer #footer_copy li {
 	    text-align:right;
 	}
-
+    div#footer-navtabs li{
+    }
 /*
 ======================================================
 >>Link Styles

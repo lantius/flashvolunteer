@@ -3,12 +3,14 @@ import os, os.path, shutil
 #### CODE DERIVED FROM http://stackoverflow.com/questions/1199470/combine-javascript-files-at-deployment-in-python
 
 
-import utils
-path = os.path.dirname(utils.__file__)
+import components.compress_js_and_css
+path = os.path.dirname(components.compress_js_and_css.__file__)
 
 
 YUI_COMPRESSOR = os.path.join(path,'yuicompressor-2.4.2.jar')
 
+import components
+path = os.path.dirname(components.__file__)
 stylesheets = os.path.join(path,'..','stylesheets')
 
 

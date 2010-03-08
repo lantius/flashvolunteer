@@ -94,16 +94,16 @@ def createAdminForm(formModel, editFields, editProps):
             fields = editFields
 
     # Adjust widgets by widget type
-    logging.info("Ajusting widgets for AdminForm")
+    #logging.info("Ajusting widgets for AdminForm")
     for fieldName, field in AdminForm.base_fields.items():
         if isinstance(field.widget, forms.widgets.Textarea):
-            logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
+            #logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
             field.widget.attrs.update({'rows': '15', 'cols': '40', 'class': 'adminTextarea'})
         if isinstance(field.widget, forms.widgets.TextInput):
-            logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
+            #logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
             field.widget.attrs.update({'class': 'adminTextInput'})
         if isinstance(field, djangoforms.ModelChoiceField):
-            logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
+            #logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
             # Use custom widget with link "Add new" near dropdown box
             field.widget = admin_widgets.ReferenceSelect(
                 attrs = field.widget.attrs,

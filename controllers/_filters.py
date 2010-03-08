@@ -1,12 +1,8 @@
-from google.appengine.ext.webapp import template
+from google.appengine.ext import webapp
+from django import template
 
-register = template.create_template_register()
+register = webapp.template.create_template_register()
 
-@register.filter
-def cut(value, arg):
-    return value.replace(arg, '')
- 
-@register.filter
 def team_status(parser, token):
     try:
         tag_name, account, account2 = token.split_contents()
@@ -30,8 +26,10 @@ class RelationshipStatusNode(template.Node):
             context['is_teammate'] = account.following.filter('follows =', account2).get() is not None
         return ''
 
+register.tag(team_status)
 
-@register.filter
+#############################################################
+
 def message_type_pref(parser, token):
     try:
         tag_name, volunteer, message_type, propagation_type = token.split_contents()
@@ -61,3 +59,7 @@ class MessageTypePrefNode(template.Node):
             
             context['mt_checked'] = propagation_type.key().id() in prop
         return ''
+
+register.tag(message_type_pref)
+ 
+    
