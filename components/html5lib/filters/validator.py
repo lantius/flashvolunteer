@@ -3,8 +3,8 @@
 Warning: this module is experimental, incomplete, and subject to removal at any time.
 
 Usage:
->>> from html5lib.html5parser import HTMLParser
->>> from html5lib.filters.validator import HTMLConformanceChecker
+>>> from components.html5lib.html5parser import HTMLParser
+>>> from components.html5lib.filters.validator import HTMLConformanceChecker
 >>> p = HTMLParser(tokenizer=HTMLConformanceChecker)
 >>> p.parse('<!doctype html>\n<html foo=bar></html>')
 <<class 'html5lib.treebuilders.simpletree.Document'> None>
@@ -22,8 +22,8 @@ import _base
 import iso639codes
 import rfc3987
 import rfc2046
-from html5lib.constants import E, spaceCharacters, digits
-from html5lib import tokenizer
+from components.html5lib.constants import E, spaceCharacters, digits
+from components.html5lib import tokenizer
 import gettext
 _ = gettext.gettext
 

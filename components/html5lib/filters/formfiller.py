@@ -6,7 +6,7 @@
 
 import _base
 
-from html5lib.constants import spaceCharacters
+from components.html5lib.constants import spaceCharacters
 spaceCharacters = u"".join(spaceCharacters)
 
 class SimpleFilter(_base.Filter):

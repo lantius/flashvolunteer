@@ -1,7 +1,7 @@
 import _base
 import new
 import warnings
-from html5lib.constants import DataLossWarning
+from components.html5lib.constants import DataLossWarning
 import etree as etree_builders
 try:
     import lxml.etree as etree

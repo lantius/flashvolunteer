@@ -7,7 +7,7 @@ except NameError:
 import re
 
 import _base
-from html5lib.constants import rcdataElements, spaceCharacters
+from components.html5lib.constants import rcdataElements, spaceCharacters
 spaceCharacters = u"".join(spaceCharacters)
 
 SPACES_REGEX = re.compile(u"[%s]+" % spaceCharacters)

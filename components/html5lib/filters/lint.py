@@ -2,9 +2,9 @@ from gettext import gettext
 _ = gettext
 
 import _base
-from html5lib.constants import cdataElements, rcdataElements, voidElements
+from components.html5lib.constants import cdataElements, rcdataElements, voidElements
 
-from html5lib.constants import spaceCharacters
+from components.html5lib.constants import spaceCharacters
 spaceCharacters = u"".join(spaceCharacters)
 
 class LintError(Exception): pass

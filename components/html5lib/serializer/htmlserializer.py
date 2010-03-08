@@ -7,8 +7,8 @@ except NameError:
 import gettext
 _ = gettext.gettext
 
-from html5lib.constants import voidElements, booleanAttributes, spaceCharacters
-from html5lib.constants import rcdataElements
+from components.html5lib.constants import voidElements, booleanAttributes, spaceCharacters
+from components.html5lib.constants import rcdataElements
 
 from xml.sax.saxutils import escape
 
@@ -21,7 +21,7 @@ except ImportError:
 else:
     unicode_encode_errors = "htmlentityreplace"
 
-    from html5lib.constants import entities
+    from components.html5lib.constants import entities
 
     encode_entity_map = {}
     for k, v in entities.items():
@@ -87,18 +87,18 @@ class HTMLSerializer(object):
         in_cdata = False
         self.errors = []
         if encoding and self.inject_meta_charset:
-            from html5lib.filters.inject_meta_charset import Filter
+            from components.html5lib.filters.inject_meta_charset import Filter
             treewalker = Filter(treewalker, encoding)
         # XXX: WhitespaceFilter should be used before OptionalTagFilter
         # for maximum efficiently of this latter filter
         if self.strip_whitespace:
-            from html5lib.filters.whitespace import Filter
+            from components.html5lib.filters.whitespace import Filter
             treewalker = Filter(treewalker)
         if self.sanitize:
-            from html5lib.filters.sanitizer import Filter
+            from components.html5lib.filters.sanitizer import Filter
             treewalker = Filter(treewalker)
         if self.omit_optional_tags:
-            from html5lib.filters.optionaltags import Filter
+            from components.html5lib.filters.optionaltags import Filter
             treewalker = Filter(treewalker)
         for token in treewalker:
             type = token["type"]

@@ -5,7 +5,7 @@ _ = gettext
 
 import _base
 
-from html5lib.constants import voidElements
+from components.html5lib.constants import voidElements
 
 class Root(object):
     def __init__(self, et):

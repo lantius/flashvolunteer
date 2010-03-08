@@ -4,7 +4,7 @@ from genshi.output import NamespaceFlattener
 
 import _base
 
-from html5lib.constants import voidElements
+from components.html5lib.constants import voidElements
 
 class TreeWalker(_base.TreeWalker):
     def __iter__(self):

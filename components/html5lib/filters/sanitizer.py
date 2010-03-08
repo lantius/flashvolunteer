@@ -1,5 +1,5 @@
 import _base
-from html5lib.sanitizer import HTMLSanitizerMixin
+from components.html5lib.sanitizer import HTMLSanitizerMixin
 
 class Filter(_base.Filter, HTMLSanitizerMixin):
     def __iter__(self):
