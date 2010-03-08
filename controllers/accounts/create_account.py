@@ -129,7 +129,7 @@ class CreateAccount(AbstractHandler):
                 
         msg_params = {'name': volunteer.name} 
                 
-        from components.message_text import type3  
+        from utils.message_text import type3  
         from models.messages import MessageType
                   
         self.send_message(to = [account], 

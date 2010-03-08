@@ -8,7 +8,7 @@ from models.eventvolunteer import EventVolunteer
 
 from components.time_zones import now
 
-from components.message_text import type5, type6, type7, type8, type9
+from utils.message_text import type5, type6, type7, type8, type9
 
 from models.volunteer import Volunteer
 from models.auth.account import Account

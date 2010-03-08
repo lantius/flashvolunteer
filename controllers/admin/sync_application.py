@@ -10,7 +10,7 @@ from google.appengine.ext.webapp import template
 from django.utils import simplejson
 from google.appengine.api import urlfetch
 
-from components.applications.operations import synchronize_apps
+from utils.applications.operations import synchronize_apps
 from google.appengine.ext import deferred
 
 

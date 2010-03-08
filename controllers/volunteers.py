@@ -211,7 +211,7 @@ class VolunteersPage(AbstractHandler):
 ################################################################################
 # FollowVolunteer
 
-from components.message_text import type2
+from utils.message_text import type2
 from models.messages import MessageType
 
 class FollowVolunteer(AbstractHandler):

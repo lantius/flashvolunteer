@@ -10,7 +10,7 @@ from models.messages import MessageType
 
 from controllers.abstract_handler import AbstractHandler
 
-from components.message_text import type1_vol, type1_unvol
+from utils.message_text import type1_vol, type1_unvol
 ################################################################################
 # VolunteerForEvent
 ################################################################################

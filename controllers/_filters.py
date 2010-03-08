@@ -1,28 +1,63 @@
 from google.appengine.ext.webapp import template
-from django.template import Library, Node, loader
-from django.template.context import Context
 
 register = template.create_template_register()
 
-class PartialTemplateNode(Node):
-	def __init__(self, template_name, context_item):
-		self.template_name = template_name
-		self.context_item = context_item
+@register.filter
+def cut(value, arg):
+    return value.replace(arg, '')
+ 
+@register.filter
+def team_status(parser, token):
+    try:
+        tag_name, account, account2 = token.split_contents()
+    except ValueError:
+        return None
+    return RelationshipStatusNode(account = account, account2 = account2)
 
-	def render(self, context):
-		template = loader.get_template('partials/%s.html' % (self.template_name,))
-		item = self.context_item.resolve(context)
-		template_context = Context({
-			'item': item
-		})
-		return template.render(template_context)
-
-@register.tag
-def partial_template(parser, token):
-	tag, template_name, context_item = token.split_contents()
-	return PartialTemplateNode(template_name, context_item)
+class RelationshipStatusNode(template.Node):
+    def __init__(self, account, account2):
+        self.account = account
+        self.account2 = account2 
+        
+    def render(self, context):
+        account = template.resolve_variable(self.account,context)
+        try:
+            account2 = template.resolve_variable(self.account2,context)
+        except:
+            context['is_teammate'] = False
+            return ''
+        if account:
+            context['is_teammate'] = account.following.filter('follows =', account2).get() is not None
+        return ''
 
 
 @register.filter
-def cut(value, arg):
-  return value.replace(arg, '')
+def message_type_pref(parser, token):
+    try:
+        tag_name, volunteer, message_type, propagation_type = token.split_contents()
+    except ValueError:
+        return None
+    return MessageTypePrefNode(volunteer = volunteer, 
+                               message_type = message_type, 
+                               propagation_type = propagation_type)
+
+class MessageTypePrefNode(template.Node):
+    def __init__(self, volunteer, message_type, propagation_type):
+        self.volunteer = volunteer
+        self.message_type = message_type
+        self.propagation_type = propagation_type 
+        
+    def render(self, context):
+        volunteer = template.resolve_variable(self.volunteer,context)
+        propagation_type = template.resolve_variable(self.propagation_type,context)
+        message_type = template.resolve_variable(self.message_type,context)
+        
+        if volunteer:
+            mp = volunteer.account.message_preferences.filter('type =', message_type).get()
+            if not mp: 
+                prop = message_type.default_propagation
+            else:
+                prop = mp.propagation
+            
+            context['mt_checked'] = propagation_type.key().id() in prop
+        return ''

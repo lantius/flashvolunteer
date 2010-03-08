@@ -41,7 +41,7 @@ from controllers.interest_categories import CategoryPage
 
 from controllers.abstract_handler import AbstractHandler
 
-webapp.template.register_template_library('templatetags.filters')
+webapp.template.register_template_library('controllers._filters')
 
 ################################################################################
 # Timeout page
@@ -88,7 +88,7 @@ def real_main():
     debug = 'SERVER_SOFTWARE' not in os.environ or os.environ['SERVER_SOFTWARE'].startswith('Development')
     
     if debug:
-        from components.applications.operations import synchronize_apps
+        from utils.applications.operations import synchronize_apps
         from models.application import Application
         if Application.all().count() == 0:
             class hack(AbstractHandler):

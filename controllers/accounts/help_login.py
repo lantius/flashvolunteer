@@ -35,7 +35,7 @@ class HelpLogin(AbstractHandler):
         account = Account.all().filter('preferred_email = ', params['email']).get()
         
         if account:
-            from components.message_text import login_info_text
+            from utils.message_text import login_info_text
             
             try: 
                 auth = account.auth_methods.get()

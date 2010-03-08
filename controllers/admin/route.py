@@ -20,7 +20,7 @@ from controllers.admin.home import AdminPage
 
 from components.appengine_admin.views import Admin as AppEngineAdmin
 
-webapp.template.register_template_library('templatetags.filters')
+webapp.template.register_template_library('controllers._filters')
 
 
 

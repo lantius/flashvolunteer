@@ -7,7 +7,7 @@ import wsgiref.handlers
 from controllers.settings import SettingsPage
 from controllers.google_api.map import MapHandler
 
-webapp.template.register_template_library('templatetags.filters')
+webapp.template.register_template_library('controllers._filters')
 
 
 def main():
