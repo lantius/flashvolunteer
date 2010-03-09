@@ -187,6 +187,12 @@ class AbstractHandler(webapp.RequestHandler):
         if app_domain is None:
             app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
             if app_domain is None:
+                #if Application.all().count() == 0:
+                from utils.applications.operations import synchronize_apps
+                logging.info('syncing apps')
+                synchronize_apps(server = self.get_server())
+                
+        
                 logging.error('got bad domain name: %s'%domain)
                 #TODO: is it a good policy to return seattle app by default?
                 return Application.all().filter('name = ', 'seattle').get()

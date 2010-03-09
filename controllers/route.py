@@ -93,9 +93,10 @@ def real_main():
         if Application.all().count() == 0:
             class hack(AbstractHandler):
                 def sync(self):
+                    logging.info('syncing')
                     synchronize_apps(server = self.get_server())
             hack().sync()
-        
+    
     logging.getLogger().setLevel(logging.DEBUG)
     application = webapp.WSGIApplication(
           [('/', MainPage),

@@ -148,6 +148,8 @@ def recommend_event(acnt, domain, type9_msg, right_now, cached_descs, base_url, 
                      domain = domain)    
     
 from google.appengine.ext import deferred
+from controllers.message_writer import AbstractSendMessage
+
 class RecommendedEventMessageFactory(AbstractHandler):
 
     def get(self):

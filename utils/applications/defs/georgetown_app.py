@@ -10,7 +10,7 @@ class GeorgeTown(ApplicationDef):
         return 'georgetown'
     
     def get_subdomains(self):
-        return ['georgetown']
+        return ['']
     
     def get_neighborhoods(self):
         return (
