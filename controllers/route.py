@@ -1,7 +1,10 @@
-import os
-import wsgiref.handlers
-import cgi, logging
+import os,sys
 
+from google.appengine.api import apiproxy_stub_map,memcache
+from google.appengine.datastore import datastore_index
+import operator
+import wsgiref.handlers
+import cgi, logging, traceback
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
@@ -40,8 +43,11 @@ from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
 
 from controllers.abstract_handler import AbstractHandler
+from google.appengine.ext.webapp.util import run_wsgi_app
 
 webapp.template.register_template_library('controllers._filters')
+
+
 
 ################################################################################
 # Timeout page
@@ -67,9 +73,42 @@ class TimeoutPage(AbstractHandler):
 # /events/1/volunteer?delete=true POST: unsign up for an event
 # /events/1?delete=true POST: delete up for an event
 
+def db_log(model, call, details=''):
+    """Call this method whenever the database is invoked.
 
+    Args:
+        model: the model name (aka kind) that the operation is on
+        call: the kind of operation (Get/Put/...)
+        details: any text that should be added to the detailed log entry.
+    """
+
+    # First, let's update memcache
+    if model:
+        stats = memcache.get('DB_TMP_STATS')
+        if stats is None: stats = {}
+        key = '%s_%s' % (call, model)
+        stats[key] = stats.get(key, 0) + 1
+        memcache.set('DB_TMP_STATS', stats)
+
+    # Next, let's log for some more detailed analysis
+    logging.debug('DB_LOG: %s @ %s (%s)', call, model, details)
+    
+def patch_appengine():
+    """Apply a hook to app engine that logs db statistics."""
+    def model_name_from_key(key):
+        return key.path().element_list()[0].type()
+    
+    def hook(service, call, request, response):
+        logging.info('%s %s - %s' % (service, call, str(request)))
+        stack = traceback.format_stack()
+        logging.debug('%s %s - %s' % (service, call, "n".join(stack)))
+    
+    apiproxy_stub_map.apiproxy.GetPreCallHooks().Append(
+           'db_log', hook, 'datastore_v3')
+       
+#patch_appengine()  
 def profile_main():
-    # This is the main function for profiling 
+    # This is the main function for profiling
     # We've renamed our original main() above to real_main()
     import cProfile, pstats, StringIO
     prof = cProfile.Profile()
@@ -81,7 +120,7 @@ def profile_main():
     # The rest is optional.
     # stats.print_callees()
     # stats.print_callers()
-    #logging.info("Profile data:\n%s", stream.getvalue())
+    logging.info("Profile data:\n%s", stream.getvalue())
  
  
 def real_main():
@@ -168,10 +207,10 @@ def real_main():
 
           ],
           debug=debug)
-    wsgiref.handlers.CGIHandler().run(application)
+    run_wsgi_app(application)
 
 if __name__ == "__main__":
-    #profile_main
+    #profile_main()
     
     real_main()
   

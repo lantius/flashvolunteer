@@ -51,11 +51,11 @@ def sync_with_mail_chimp():
         
     conn = MailChimp(apikey = api_key)
     
-    msg = conn.list_batch_subscribe(
-                              id = list_key, 
-                              batch = batch,
-                              double_optin = True)
-    logging.info(msg)
+    #msg = conn.list_batch_subscribe(
+    #                          id = list_key, 
+    #                          batch = batch,
+    #                          double_optin = True)
+    #logging.info(msg)
         
     
 class SyncWithMailChimp(AbstractHandler):

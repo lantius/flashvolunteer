@@ -24,7 +24,7 @@ from components.appengine_admin.views import Admin as AppEngineAdmin
 
 webapp.template.register_template_library('controllers._filters')
 
-
+from google.appengine.ext.webapp.util import run_wsgi_app
 
 
 def main():
@@ -48,7 +48,7 @@ def main():
         
     ], debug=True)
 
-    wsgiref.handlers.CGIHandler().run(application)
+    run_wsgi_app(application)
     
 if __name__ == '__main__':
     main()

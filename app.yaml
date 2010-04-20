@@ -1,5 +1,5 @@
-application: flashvolunteer-dev
-version: development
+application: flashvolunteer
+version: v02-04
 runtime: python
 api_version: 1
 
@@ -24,6 +24,9 @@ handlers:
   script: controllers/admin/route.py
   login: admin
 
+- url: /admin/stats.*
+  script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
+ 
 - url: /admin
   script: controllers/admin/route.py
   
@@ -44,5 +47,8 @@ handlers:
   static_files: stylesheets/favicon.ico
   upload: stylesheets/favicon.ico
 
-
+admin_console:
+ pages:
+ - name: Appstats
+   url: /admin/stats
 

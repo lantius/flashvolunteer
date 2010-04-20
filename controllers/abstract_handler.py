@@ -183,8 +183,8 @@ class AbstractHandler(webapp.RequestHandler):
         domain = self.get_domain()
         key = "app-%s"%domain
         
-        app_domain = memcache.get(key)
-        if app_domain is None:
+        application = memcache.get(key)
+        if application is None:
             app_domain = ApplicationDomain.all().filter('domain = ',domain).get()
             if app_domain is None:
                 #if Application.all().count() == 0:
@@ -196,10 +196,12 @@ class AbstractHandler(webapp.RequestHandler):
                 logging.error('got bad domain name: %s'%domain)
                 #TODO: is it a good policy to return seattle app by default?
                 return Application.all().filter('name = ', 'seattle').get()
-            memcache.add(key, app_domain, 100000)
-    
-        if just_id: return app_domain.application.key().id()
-        else: return app_domain.application
+            application = app_domain.application
+            memcache.set(key, application)
+            
+            
+        if just_id: return application.key().id()
+        else: return application
         
     def get_domain(self):
         
