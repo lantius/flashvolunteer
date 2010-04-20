@@ -12,3 +12,7 @@ cron:
   schedule: every monday 03:00
   timezone: America/New_York
   
+- description: visits neighborhoods page to regenerate stats
+  url: /neighborhoods
+  schedule: every 1 minutes
+  timezone: America/New_York
