@@ -9,6 +9,7 @@ from models.messages import MessageType
 from models.volunteer import Volunteer
 from models.event import Event
 from models.neighborhood import Neighborhood
+from models.auth.account import Account
 
 from utils.message_text import event_forum_txt, neighborhood_forum_txt
 

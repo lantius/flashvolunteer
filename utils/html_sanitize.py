@@ -1,5 +1,5 @@
 """Utilities for working with HTML."""
-import components.html5lib
+import components.html5lib as html5lib
 from components.html5lib import sanitizer, serializer, tokenizer, treebuilders, treewalkers
 
 class HTMLSanitizerMixin(sanitizer.HTMLSanitizerMixin):
