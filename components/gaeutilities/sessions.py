@@ -237,7 +237,7 @@ Returns True
                 u"_AppEngineUtilities_SessionData_%s" % \
                 (unicode(self.session_key))])
         except:
-            mc = memcache.get(u"_AppEngineUtilities_Session_%s" %+ \
+            mc = memcache.get(u"_AppEngineUtilities_Session_%s" % \
                 (unicode(self.session_key)))
             if mc:
                 mc.deleted = True

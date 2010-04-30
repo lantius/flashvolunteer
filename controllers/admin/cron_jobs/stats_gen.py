@@ -10,7 +10,9 @@ from google.appengine.ext import deferred
 from models.application import Application
     
 def gen_stats(app_id, is_debugging): 
-    application = Application.get_by_id(app_id)   
+    application = Application.get_by_id(app_id)  
+    if application is None: return
+     
     if not memcache.get('%s-neighborhood_stats'%application.name):
         stats = {}
         neighborhoods = application.neighborhoods.order('name').fetch(limit=500)                 
