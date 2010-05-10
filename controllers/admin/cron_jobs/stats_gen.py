@@ -38,9 +38,10 @@ def gen_stats(app_id, is_debugging):
         for n, total, scores in all_scores:
             #scores.append(total)  #dont show total score at this time...
             neighborhood_stats.append((n, scores))
-        memcache.set('%s-neighborhood_stats'%application.name, neighborhood_stats, 1000)    
+        memcache.set('%s-neighborhood_stats'%application.name, neighborhood_stats, 60 * 10)    
             
 class StatsGen(AbstractHandler):
 
     def get(self):
-        deferred.defer(gen_stats, self.get_application().key().id(), self.is_debugging())
+        for app in Application.all():
+            deferred.defer(gen_stats, app.key().id(), self.is_debugging())

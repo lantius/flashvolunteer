@@ -63,7 +63,7 @@ class Volunteer(AbstractUser):
         if self.privacy__event_attendance == 'everyone': return True
         return self.privacy__event_attendance == 'friends' and self.account.following.filter('follows =', account).get()
 
-    def recommended_events(self, application, session, date = None):
+    def recommended_events(self, application, session):
         #TODO make more efficient
         recommended_events = session.get('%s_rec_events'%self.key().id(), None)
         if recommended_events:
@@ -81,7 +81,7 @@ class Volunteer(AbstractUser):
         vol_interests = set([ic.key().id() for ic in self.interestcategories()])
         vol_interest_map = dict([(ic.key().id(),ic) for ic in self.interestcategories()])
                 
-        upcoming_events = application.upcoming_events(date = date)
+        upcoming_events = application.upcoming_events()
         
         recommended_events = []
         reason_recommended = {}

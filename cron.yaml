@@ -9,6 +9,10 @@ cron:
   
 - description: regenerate stats
   url: /admin/cron_jobs/stats_gen
-  schedule: every 1 minutes
+  schedule: every 3 minutes
   timezone: America/New_York
   
+- description: updates memcache
+  url: /admin/cron_jobs/mem_cache
+  schedule: every 5 minutes
+  timezone: America/New_York

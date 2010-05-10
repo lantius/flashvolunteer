@@ -2,41 +2,33 @@
         
 	    <!--page title--><div id="title_block"></div><!--end title_block-->
 
-        
-		<script type="text/javascript">
-		
-		    $(document).ready(function() {
-		        {% if notification_message %}handle_notification_message('{{notification_message}}');{%endif%}
-				handle_header_message({%if header_message%}'{{header_message}}'{%else%}null{%endif%});
-				if (window.location.href.search('incentives') == -1 && $('#incentive_banner').css('display') == 'none'){
-					$('#incentive_banner').fadeIn();
-				}
-		    });
-		</script>
-
-        {% if not account %}
-        <script>
-        	/* This is for detecting a session timeout and refreshing 
-        	 * all the content. 
-        	 */
-            $(document).ready(function(){
-              if ($('#l_logout').length > 0){
-				location.reload(true); 
-              }             				
-			});
-		</script>
-        {% endif %}
-
-	    <script>
-	        $(document).ready(function(){	
-	          set_page_loader('#content');
-			  set_page_loader('#message_banner');
-	        });
-	    </script>
-		
-		
 		
         {% block content %}
         {% endblock content %}
 
+        <script type="text/javascript">
+        
+            {% if notification_message %}handle_notification_message('{{notification_message}}');{%endif%}
+            handle_header_message({%if header_message%}'{{header_message}}'{%else%}null{%endif%});
+            if (window.location.href.search('incentives') == -1 && $('#incentive_banner').css('display') == 'none'){
+                $('#incentive_banner').fadeIn();
+            }
+        </script>
+
+        {% if not account %}
+        <script>
+            /* This is for detecting a session timeout and refreshing 
+             * all the content. 
+             */
+              if ($('#l_logout').length > 0){
+                location.reload(true); 
+              }                             
+        </script>
+        {% endif %}
+
+        <script>
+              set_page_loader('#content');
+              set_page_loader('#message_banner');
+        </script>
+		
         <div class="clear"> </div>

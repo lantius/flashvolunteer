@@ -8,6 +8,7 @@ import wsgiref.handlers
 from controllers.admin.migrate_datastore import MigrateDatastore
 from controllers.admin.cron_jobs.message_dispatcher import MessageDispatcher
 from controllers.admin.cron_jobs.stats_gen import StatsGen
+from controllers.admin.cron_jobs.mem_cache import MemCache
 
 from controllers.admin.cron_jobs.event_message_factory import EventMessageFactory, RecommendedEventMessageFactory
 from controllers.admin.site_wide_message import SiteWideMessage
@@ -38,6 +39,7 @@ def main():
         ('/admin/cron_jobs/event_message_factory', EventMessageFactory),
         ('/admin/cron_jobs/recommended_events_message_factory', RecommendedEventMessageFactory),
         ('/admin/cron_jobs/stats_gen', StatsGen),
+        ('/admin/cron_jobs/mem_cache', MemCache),
           
         ('/admin/custom_query', CustomQueryHandler),
         

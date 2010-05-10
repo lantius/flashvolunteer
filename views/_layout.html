@@ -47,7 +47,7 @@
 
 	<script type="text/javascript" src="/stylesheets/javascript/mtaTwitterStatuses.js"></script>
 
-		<script type="text/javascript" src="/stylesheets/javascript/jquery.validate.js"></script>
+	<script type="text/javascript" src="/stylesheets/javascript/jquery.validate.js"></script>
     -->
 	
 	
@@ -63,58 +63,6 @@
     <![endif]-->
 		
 	</script>
-	
-	<script>
-	  
-      $(document).ready(function(){ //this is for dynamic page loader
-          set_page_loader('.navtabs a.fv, #incentive_banner a.fv, a#l_create, a#l_login, a#l_settings');
-		  
-		  var cur_loaded = null;
-	      $.address.change(function(event) { //every time the address bar is changed...
-	        if (event.value != cur_loaded) {
-				$('#columns').load(event.value);
-				//console.log("address change:" + $.address.path());
-				cur_loaded = event.value;
-			}
-	      }); 
-		  $.address.init(function(event){
-		  	var start_of_path_url = event.target.baseURL().indexOf('/', 7);
-            if (start_of_path_url > -1){
-				var nest_path = event.target.baseURL().substring(start_of_path_url);
-				//console.log("INIT changing address from " + event.target.baseURL() + " to:"+nest_path);
-                
-				cur_loaded = $.address.value();
-		    	$.address.value(nest_path);
-            }
-		  });
-          
-      });
-	</script>
-
-    <script type="text/javascript">
-        $(document).ready(function(){ //this is for the ajax loading gif
-
-          $('#loadingDiv')
-		    .hide()  // hide it initially
-		    .ajaxStart(function() {
-				$(this).fadeIn();
-				//$('#content').fadeTo('slow',.33);
-		    })
-		  	.ajaxStop(function() {
-				$(this).fadeOut();
-				//$('#content').fadeTo('normal', 1.0);
-		    });
-
-        });
-    </script>
-
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-            {% if notification_message %}handle_notification_message('{{notification_message}}');{%endif%}
-            handle_header_message({%if header_message%}'{{header_message}}'{%else%}null{%endif%}); 
-        });
-    </script>
 	
 	{% include "../skin.html" %}
 	
@@ -258,34 +206,77 @@
 
 
 
+<script type="text/javascript">
+  
+   //this is for dynamic page loader
+      set_page_loader('.navtabs a.fv, #incentive_banner a.fv, a#l_create, a#l_login, a#l_settings');
+      
+      var cur_loaded = null;
+      $.address.change(function(event) { //every time the address bar is changed...
+        if (event.value != cur_loaded) {
+            $('#columns').load(event.value);
+            //console.log("address change:" + $.address.path());
+            cur_loaded = event.value;
+        }
+      }); 
+      $.address.init(function(event){
+        var start_of_path_url = event.target.baseURL().indexOf('/', 7);
+        if (start_of_path_url > -1){
+            var nest_path = event.target.baseURL().substring(start_of_path_url);
+            //console.log("INIT changing address from " + event.target.baseURL() + " to:"+nest_path);
+            
+            cur_loaded = $.address.value();
+            $.address.value(nest_path);
+        }
+      
+  });
+</script>
 
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    //this is for the ajax loading gif
+
+  $('#loadingDiv')
+    .hide()  // hide it initially
+    .ajaxStart(function() {
+        $(this).fadeIn();
+        //$('#content').fadeTo('slow',.33);
+    })
+    .ajaxStop(function() {
+        $(this).fadeOut();
+        //$('#content').fadeTo('normal', 1.0);
+    });
+
 </script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-10613308-2");
-pageTracker._trackPageview();
-} catch(err) {}</script>
 
 <script type="text/javascript">
-  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
-  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+    {% if notification_message %}handle_notification_message('{{notification_message}}');{%endif%}
+    handle_header_message({%if header_message%}'{{header_message}}'{%else%}null{%endif%}); 
 </script>
+
 <script type="text/javascript">
-UserVoice.Tab.show({ 
-  /* required */
-  key: 'flashvolunteer',
-  host: 'flashvolunteer.uservoice.com', 
-  forum: '26150', 
-  /* optional */
-  alignment: 'left',
-  background_color:'#2fb002', 
-  text_color: 'white',
-  hover_color: '#008c98',
-  lang: 'en'
-})
+	$(document).ready(function(){
+    	jQuery.getScript('http://www.google-analytics.com/ga.js', function(data, textStatus){
+			try {
+			var pageTracker = _gat._getTracker("UA-10613308-2");
+			pageTracker._trackPageview();
+			} catch(err) {}
+		});
+
+		jQuery.getScript('http://cdn.uservoice.com/javascripts/widgets/tab.js', function(data, textStatus){
+			UserVoice.Tab.show({ 
+			  /* required */
+			  key: 'flashvolunteer',
+			  host: 'flashvolunteer.uservoice.com', 
+			  forum: '26150', 
+			  /* optional */
+			  alignment: 'left',
+			  background_color:'#2fb002', 
+			  text_color: 'white',
+			  hover_color: '#008c98',
+			  lang: 'en'
+			});
+		});
+    });
 </script>
 </body>
 </html>
