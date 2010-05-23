@@ -27,12 +27,12 @@
                 <input type="button" onclick=close_dialog() class="submit closedialog fr" name="close" value="Close"/></li>
         </div> 
     </div>
-    <script>
+    <script type="text/javascript">
         function LoadNextPage(url){
             $('#dialogs').load(url+'&' + get_params());
         }
     </script>
-	<script>
+	<script type="text/javascript">
 	    $(document).ready(function(){
 	      set_page_loader('#generic_dialog');
 	      $('#generic_dialog a.fv').click(close_dialog);

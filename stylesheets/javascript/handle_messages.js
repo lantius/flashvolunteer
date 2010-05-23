@@ -6,7 +6,7 @@ function handle_notification_message(notification_message){
             buttons: { "Ok": function() { $(this).dialog("close"); } },
             modal: true,
             draggable: false,
-            resizable: false,
+            resizable: false
         });
     });
 }

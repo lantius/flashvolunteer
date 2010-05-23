@@ -16,17 +16,16 @@
         </script>
 
         {% if not account %}
-        <script>
+        <script type="text/javascript">
             /* This is for detecting a session timeout and refreshing 
-             * all the content. 
-             */
+             * all the content.*/
               if ($('#l_logout').length > 0){
                 location.reload(true); 
               }                             
         </script>
         {% endif %}
 
-        <script>
+        <script type="text/javascript">
               set_page_loader('#content');
               set_page_loader('#message_banner');
         </script>

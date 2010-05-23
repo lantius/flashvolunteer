@@ -198,7 +198,9 @@ class AbstractHandler(webapp.RequestHandler):
                 return Application.all().filter('name = ', 'seattle').get()
             application = app_domain.application
             memcache.set(key, application)
-            
+        elif isinstance(application, ApplicationDomain):
+            application = application.application
+            memcache.set(key, application)
             
         if just_id: return application.key().id()
         else: return application
