@@ -133,7 +133,7 @@
         <li>
             <div class="eventcreatelabel">Contact email:</div>
             <div class="eventinput">
-                <input class="text" name="contact_email" type="text" value="{% if event.contact_email %}{{event.contact_email}}{% else %}{{account.preferred_email}}{% endif %}" />
+                <input class="text" name="contact_email" type="text" value="{% if event.contact_email %}{{event.contact_email}}{% else %}{{volunteer.preferred_email}}{% endif %}" />
             </div>
         </li>
 				

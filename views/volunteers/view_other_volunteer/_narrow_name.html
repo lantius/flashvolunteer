@@ -5,7 +5,7 @@
         {% else %}
         /stylesheets/media/default-profile-pic.png
         {% endif %}"  
-    alt="{{ page_volunteer.account.get_name|striptags }}"
+    alt="{{ page_volunteer.get_name|striptags }}"
 />
 <ul>
     {% if page_volunteer.quote|striptags %}

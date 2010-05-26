@@ -82,7 +82,7 @@
 				<div id="logo" class="fl"><a class="fv" href="/">
 					<img id="logoimg" src="/stylesheets/media/logo-smaller.png" alt="Flash Volunteer Logo"/></a>
 				</div>
-				{%if account and account.is_saved%}
+				{%if volunteer and volunteer.is_saved%}
 				    <div class="fr">
 						<div id="volavatar">
 			    	        <div class="volunteer_summary_pic">
@@ -93,11 +93,11 @@
 					            {% else %}
 					                /stylesheets/media/default-profile-pic-small.png
 					            {% endif %}
-					            " alt="{{ account.get_name }}" /></a>
+					            " alt="{{ volunteer.get_name }}" /></a>
 					        </div>
 					    </div>
 						<div id="volunteerwelcome" class="loggedin">
-							  Welcome, {{ account.get_name|striptags }} 
+							  Welcome, {{ volunteer.get_name|striptags }} 
 						      <br />
                                <a class="fv" href="/settings" id="l_settings">Settings</a><br/>
 							  <a class="fv" href="/logout" id="l_logout">Log Out</a>
@@ -120,7 +120,7 @@
 			<li id="neighborhoodslink"><a class="fv" href="/neighborhoods" {% block neighborhoodsactive %}{% endblock neighborhoodsactive %} id="l_neighborhoods">NEIGHBORHOODS</a></li>
 			<li id="teamlink"><a class="fv" href="/team" {% block friendsactive %}{% endblock friendsactive %} id="l_friends">PEOPLE</a></li>
 			<li id="helplink"><a class="fv" href="/static/help" {% block helpactive %}{% endblock helpactive %} id="l_help">HELP</a></li>
-			{%if account and account.is_admin %}
+			{%if volunteer and volunteer.is_admin %}
 				<li id="adminlink"><a class="fv" href="/admin" {% block adminactive %}{% endblock adminactive %} id="l_admin">ADMIN</a></li>
 			{% endif %}
 		    <li id="loadingContainer">

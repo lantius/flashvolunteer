@@ -14,7 +14,7 @@ class AdminPage(AbstractHandler):
     LIMIT = 100 
     def get(self):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
           
@@ -25,7 +25,7 @@ class AdminPage(AbstractHandler):
             logging.info("%s = %s<br />\n" % (name, os.environ[name]))
             
         template_values = {
-            'volunteer' : account.get_user()
+            'volunteer' : volunteer
           }
         self._add_base_template_values(vals = template_values)
         

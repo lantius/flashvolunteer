@@ -1,5 +1,5 @@
 import os, string, random
-import imghdr
+import imghdr, logging
 
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
@@ -36,15 +36,10 @@ class VolunteersPage(AbstractHandler):
     # SHOW
     def show(self, volunteer_id):
         try:
-            account = self.auth(require_login=False)
+            volunteer = self.auth(require_login=False)
         except:
             return
         
-        if account:
-            volunteer = account.get_user()
-        else:
-            volunteer = None
-            
         session = self._session()
         if volunteer and volunteer.key().id() == int(volunteer_id):
             session['redirected'] = True
@@ -59,11 +54,11 @@ class VolunteersPage(AbstractHandler):
             self.error(404)
             return
         
-        if account:
-            volunteerfollower = account.following.filter('follows =', page_volunteer.account).get()                  
-            volunteerfollowing = account.followers.filter('follower =', page_volunteer.account).get()
+        if volunteer:
+            volunteerfollower = volunteer.following.filter('followed =', page_volunteer).get()                  
+            volunteerfollowing = volunteer.followers.filter('follower =', page_volunteer).get()
                                                     
-            event_access = page_volunteer.event_access(account = account) 
+            event_access = page_volunteer.event_access(volunteer = volunteer) 
         else:
             event_access = False
             volunteerfollower = None
@@ -112,14 +107,9 @@ class VolunteersPage(AbstractHandler):
     # SEARCH
     def search(self, params):
         try:
-            account = self.auth(require_login=False)
+            volunteer = self.auth(require_login=False)
         except:
             return
-        
-        if account:
-            volunteer = account.get_user()
-        else:
-            volunteer = None
         
         (name, email, neighborhood, volunteers, next, prev)  = self.do_search(params)
         template_values = { 
@@ -220,16 +210,16 @@ class FollowVolunteer(AbstractHandler):
     # POST
     def post(self, url_data):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         to_follow = Volunteer.get_by_id(int(url_data))
         
         if to_follow:
-            volunteerfollower = to_follow.account.followers.filter('follower =', account).get()
+            volunteerfollower = to_follow.followers.filter('follower =', volunteer).get()
             
-            mutual = to_follow.account.following.filter('follows =', account).get()
+            mutual = to_follow.following.filter('followed =', volunteer).get()
             
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if volunteerfollower:
@@ -239,13 +229,13 @@ class FollowVolunteer(AbstractHandler):
                         mutual.put()
             else:
                 if not volunteerfollower:
-                    volunteerfollower = VolunteerFollower(follows=to_follow.account, follower=account, mutual = mutual is not None)
+                    volunteerfollower = VolunteerFollower(followed=to_follow, follower=volunteer, mutual = mutual is not None)
                     volunteerfollower.put()
-                    params = self.get_message_params(adder = account, account = to_follow.account, volunteer = to_follow)
+                    params = self.get_message_params(adder = volunteer, volunteer = to_follow)
                     subject = type2.subject%params
                     body = type2.body%params
                     self.send_message( 
-                        to = [to_follow.account], 
+                        to = [to_follow], 
                         subject = subject, 
                         body = body, 
                         type = MessageType.all().filter('name =', 'added_to_team').get(),
@@ -256,16 +246,16 @@ class FollowVolunteer(AbstractHandler):
         
         return
     
-    def get_message_params(self,adder, account, volunteer):
+    def get_message_params(self,adder, volunteer):
         params = {
             'adder_name': adder.name,
-            'vol_name': account.name,
-            'adder_url': '%s%s'%(self._get_base_url(), adder.get_user().url()),
+            'vol_name': volunteer.name,
+            'adder_url': '%s%s'%(self._get_base_url(), adder.url()),
             'vol_team_url': '%s%s'%(self._get_base_url(), volunteer.url()), 
             'reciprocation':''
         }
         
-        reciprocal = adder.following.filter('account =', volunteer.account).get()
+        reciprocal = adder.following.filter('volunteer =', volunteer).get()
         if reciprocal:
             params['reciprocation'] = ' also'
         
@@ -278,6 +268,7 @@ class VolunteerAvatar(AbstractHandler):
     # GET
     def get(self, url_data):
         volunteer = Volunteer.get_by_id(int(url_data))
+
         if volunteer.avatar:
             self.response.headers['Content-Type'] = str(volunteer.avatar_type)
             self.response.out.write(volunteer.avatar)
@@ -288,29 +279,28 @@ class VolunteerAvatar(AbstractHandler):
     # POST
     def post(self):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
           
         params = self.parameterize() 
         
         if 'delete_avatar' in params and params['delete_avatar'] == 'true':
-            self.delete(account)
+            self.delete(volunteer)
         else:
-            self.update(params, account)
+            self.update(params, volunteer)
         
         self.redirect('/#/settings')
     
     ################################################################################
     # DELETE
-    def delete(self, account):
-        user = account.get_user()
-        user.avatar = None
-        user.put()
+    def delete(self, volunteer):
+        volunteer.avatar = None
+        volunteer.put()
       
     ################################################################################
     # UPDATE
-    def update(self, params, account):
+    def update(self, params, volunteer):
         session = self._session()
         if 'avatar' in params and params['avatar']:
             if len(params['avatar']) > 50 * 2**10:
@@ -322,8 +312,7 @@ class VolunteerAvatar(AbstractHandler):
             self.add_notification_message('Sorry! We cannot read that type of file.')
             return
     
-        user = account.get_user()
-        user.avatar_type = 'image/' + content_type
-        user.avatar = params['avatar']
-        user.put()
+        volunteer.avatar_type = 'image/' + content_type
+        volunteer.avatar = params['avatar']
+        volunteer.put()
 

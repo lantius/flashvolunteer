@@ -194,14 +194,14 @@ indexes:
 
 - kind: Message
   properties:
-  - name: sent_by
+  - name: sender
   - name: sent
   - name: trigger
     direction: desc
 
 - kind: Message
   properties:
-  - name: sent_by
+  - name: sender
   - name: trigger
     direction: desc
 

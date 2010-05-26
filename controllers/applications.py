@@ -9,7 +9,7 @@ from models.application import Application
 class AllApplications(AbstractHandler):
   def get(self):    
 
-    account = self.auth()
+    volunteer = self.auth()
     
     params = self.parameterize() 
     
@@ -41,9 +41,7 @@ class AllApplications(AbstractHandler):
     
 class ThisApplication(AbstractHandler):
   def get(self):    
-    account = self.auth(redirect_to='/settings')
-    if account: user = account.get_user()
-    else: user = None
+    user = self.auth(redirect_to='/settings')
     
     params = self.parameterize() 
     

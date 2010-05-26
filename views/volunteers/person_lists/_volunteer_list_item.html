@@ -11,7 +11,7 @@
 
 <li class="imagenameli" >
 
-    {% team_status account volunteer_in_list.account %}    
+    {% team_status volunteer volunteer_in_list %}    
         
     <div class="volunteer_summary">
 
@@ -24,14 +24,14 @@
             {% else %}
                 /stylesheets/media/default-profile-pic-small.png
             {% endif %}
-            " alt="{{ volunteer_in_list.account.get_name }}" /></a>
+            " alt="{{ volunteer_in_list.get_name }}" /></a>
         </div>
         <div class="volunteer_summary_name">
             <div>
              <a class="fv" id="volunteer_link[{{ volunteer_in_list.key.id }}]" href="{{ volunteer_in_list.url }}" >
-                {{ volunteer_in_list.account.get_first_name }}
+                {{ volunteer_in_list.get_first_name }}
                 <br/>
-                {{ volunteer_in_list.account.get_last_name }}
+                {{ volunteer_in_list.get_last_name }}
              </a>
             </div>
 

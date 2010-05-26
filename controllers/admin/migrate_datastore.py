@@ -8,12 +8,17 @@ from models.applicationdomain import ApplicationDomain
 from models.event import Event
 from models.interestcategory import InterestCategory
 from models.neighborhood import Neighborhood
+from models.auth.account import Account
+
 from models.volunteer import Volunteer
 from models.eventinterestcategory import EventInterestCategory
-from models.auth.account import Account
 from models.eventvolunteer import EventVolunteer
-from models.messages import Message, MessageReceipt
+from models.messages import Message, MessageReceipt, MessagePreference
 from models.skin import Skin
+from models.auth.auth import Auth
+from models.eventphoto import EventPhoto
+from models.interest import Interest
+from models.volunteerfollower import VolunteerFollower
 
 from datetime import datetime
 
@@ -30,12 +35,12 @@ class MigrateDatastore(AbstractHandler):
 
     def get(self):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
                 
         template_values = {
-            'volunteer' : account.get_user()
+            'volunteer' : volunteer
           }
         self._add_base_template_values(vals = template_values)
                 
@@ -47,24 +52,140 @@ class MigrateDatastore(AbstractHandler):
 
     def post(self):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
 
         ## do migration here
         #deferred.defer(synchronize_apps, self.get_server())
-        #deferred.defer(set_admin_status)
-
-        
+        #deferred.defer(consolidate_account_data)
+        #deferred.defer(chunk, migrate_account_vol, Auth)
+        deferred.defer(chunk, migrate_account_vol7, Message)
+        deferred.defer(chunk, migrate_account_vol8, MessageReceipt)
+        #deferred.defer(chunk, migrate_account_vol3, EventPhoto)
+        #deferred.defer(chunk, migrate_account_vol4, Interest)
+        #deferred.defer(chunk, migrate_account_vol5, VolunteerFollower)
+        #deferred.defer(chunk, migrate_account_vol6, VolunteerFollower)
                 
-        for app in Application.all():
-            skin = Skin(application = app)
-            skin.put()
+        #for app in Application.all():
+        #    skin = Skin(application = app)
+        #    skin.put()
 
         self.redirect('/admin/migrate')
         
+
+CHUNK_SIZE = 100
+def chunk(func, model):
+    
+    qry = model.all(keys_only = True).order('__key__')
+    while True:
+        results = qry.fetch(CHUNK_SIZE)
+        if len(results) == 0: break
+        key = results[0]
+        deferred.defer(func, key)
+        if len(results) < CHUNK_SIZE:
+            break
+        
+        qry = qry.filter('__key__ >', results[-1])
     
     
+def migrate_account_vol(key):
+    logging.info('migrate_account_vol')
+
+    for a in Auth.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if a.user: continue
+        try:
+            a.user = a.account.get_user()
+            a.put()
+        except:
+            pass
+    logging.info('/migrate_account_vol')
+
+
+
+def migrate_account_vol2(key):
+    logging.info('migrate_account_vol2')
+
+    for a in MessagePreference.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if a.user: continue
+        
+        try:
+            a.user = a.account.get_user()
+            a.put() 
+        except:pass
+    logging.info('/migrate_account_vol2')
+
+def migrate_account_vol3(key):
+    logging.info('migrate_account_vol3')
+
+    for a in EventPhoto.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if a.user: continue
+        a.user = a.account.get_user()
+        a.put() 
+    logging.info('/migrate_account_vol3')
+
+def migrate_account_vol4(key):       
+    logging.info('migrate_account_vol4')
+
+    for a in Interest.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if a.user: continue
+        a.user = a.account.get_user()
+        a.put() 
+    logging.info('/migrate_account_vol4')
+
+def migrate_account_vol5(key):
+    logging.info('migrate_account_vol5')
+
+    for a in VolunteerFollower.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if a.followed: continue
+        a.followed = a.follows.get_user()
+        a.put() 
+    logging.info('/migrate_account_vol5')
+
+def migrate_account_vol6(key):
+    logging.info('migrate_account_vol6')
+
+    for a in VolunteerFollower.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if isinstance(a.follower, Volunteer): continue
+        a.follower = a.follower.get_user()
+        a.put() 
+    logging.info('/migrate_account_vol6')
+
+def migrate_account_vol7(key):
+    logging.info('migrate_account_vol2')
+
+    for a in Message.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        try:
+            a.sender = a.sent_by.get_user()
+            a.put() 
+        except:pass
+    logging.info('/migrate_account_vol2')
+
+def migrate_account_vol8(key):
+    logging.info('migrate_account_vol2')
+
+    for a in MessageReceipt.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        try:
+            if isinstance(a.recipient, Account):
+                a.recipient = a.recipient.get_user()
+                a.put() 
+        except:pass
+    logging.info('/migrate_account_vol2')
+                  
+def consolidate_account_data():
+    for v in Volunteer.all():
+        accnt = v.account        
+        if accnt:
+            v.user = accnt.user
+            v.group_wheel = accnt.group_wheel
+            v.preferred_email = accnt.preferred_email
+            v.date_added = accnt.date_added
+            v.put()
+        else:
+            try:
+                logging.info(v.get_name() + ' has no account')
+            except: pass
+            
 def add_ongoing():
     for e in Event.all():
         try:

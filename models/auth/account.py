@@ -86,11 +86,6 @@ class Account(db.Model):
     def get_sent_messages(self):
         return self.sent_messages.order('-trigger')
     
-    def is_recipient(self, message):
-        from models.messages import MessageReceipt
-        mr = MessageReceipt.filter('recipient =', self.account)
-        return mr.get() is not None
-    
     def get_first_name(self):
         if self.get_name().find('@') > -1:
             return '@'.join(self.get_name().split('@')[:-1])

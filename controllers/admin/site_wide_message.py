@@ -5,14 +5,13 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
 from models.messages import MessageType
-from models.auth.account import Account
 
 from controllers.message_writer import AbstractSendMessage
 
 class SiteWideMessage(AbstractSendMessage):
     def post(self, url_data = None):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
@@ -25,7 +24,7 @@ class SiteWideMessage(AbstractSendMessage):
         recipients = AbstractSendMessage.get_all_recipients()
         
         logging.info('Site wide message size: %i'%len(recipients))
-        self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = False)
+        self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params, forum = False)
         session = self._session()
 
         if 'message_redirect' in session:
@@ -38,7 +37,7 @@ class SiteWideMessage(AbstractSendMessage):
     def _get_message_type(self):
         return 'site_wide'
     def _get_recipient_type(self):
-        return 'account'
+        return 'volunteer'
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', '..', 'views', 'messages', 'create_message.html')
     def _get_url(self, recipients):

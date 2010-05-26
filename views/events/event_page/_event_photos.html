@@ -296,7 +296,7 @@
 					albums[{{ep.key.id}}] = {
 					   content: "{{ep.content}}", 
 					   volunteer_url:"{{ep.volunteer.url}}", 
-					   volunteer_name: "{{ep.volunteer.account.name|striptags}}"};
+					   volunteer_name: "{{ep.volunteer.name|striptags}}"};
 					load_album("{{ep.key.id}}", showmore_id=={{ep.key.id}});
 				</script>
 				<div id="rss_album_{{ep.key.id}}" class="rss_album">

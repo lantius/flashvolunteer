@@ -30,14 +30,14 @@ class Mailbox(AbstractHandler):
     
     def show(self, id):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         message = Message.get_by_id(int(id))
-        viewer_is_sender = message.sent_by and account.key().id() == message.sent_by.key().id()
+        viewer_is_sender = message.sender and volunteer.key().id() == message.sender.key().id()
         if message:
-            mr = message.sent_to.filter('recipient =', account).get()
+            mr = message.sent_to.filter('recipient =', volunteer).get()
         if not message or not (mr or viewer_is_sender):
             if self.request.referrer:
                 self.redirect(self.request.referrer)
@@ -46,9 +46,9 @@ class Mailbox(AbstractHandler):
             return
                 
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
             'message': message,
-            'sender_viewing': message.sent_by is not None and message.sent_by.key().id() == account.key().id()
+            'sender_viewing': message.sender is not None and message.sender.key().id() == volunteer.key().id()
             
           }
         self._add_base_template_values(vals = template_values)
@@ -80,11 +80,11 @@ class Mailbox(AbstractHandler):
              
     def sent(self):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             raise
         
-        sent_messages = account.get_sent_messages()
+        sent_messages = volunteer.get_sent_messages()
         
         bookmark = self.request.get("bookmark", None)
         if bookmark:
@@ -100,7 +100,7 @@ class Mailbox(AbstractHandler):
             sent_next = None
 
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
             'sent_messages': sent_messages,
             'sent_next': sent_next,
           }
@@ -112,11 +112,11 @@ class Mailbox(AbstractHandler):
 
     def inbox(self):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             raise
         
-        messages = account.get_messages()
+        messages = volunteer.get_messages()
         
         bookmark = self.request.get("bookmark", None)
         if bookmark:
@@ -132,7 +132,7 @@ class Mailbox(AbstractHandler):
             next = None
 
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
             'messages': messages,
             'next': next,
           }
@@ -144,12 +144,12 @@ class Mailbox(AbstractHandler):
     # LIST
     def list(self):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             raise
 
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
           }
         self._add_base_template_values(vals = template_values)
         
@@ -165,7 +165,7 @@ class Forum(Mailbox):
     # GET
     def get(self, url_data):
         try:
-            account = self.auth(require_login=False)
+            volunteer = self.auth(require_login=False)
         except:
             return
 
@@ -176,8 +176,8 @@ class Forum(Mailbox):
             #event forum 
             event = Event.get_by_id(int(url_data))
             if not event or event.application.key().id() != application.key().id():
-              self.error(404)
-              return
+                self.error(404)
+                return
             forum['name'] = event.name
             forum['path'] = '/events/' + str(event.key().id())
             forum['recipient_type'] = 'event'
@@ -195,7 +195,7 @@ class Forum(Mailbox):
         forum['messages'] = messages.fetch(1000)
             
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
             'forum': forum,
           }
         self._add_base_template_values(vals = template_values)

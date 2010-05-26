@@ -69,7 +69,7 @@ class EventsPage(AbstractHandler):
     # POST
     def post(self, url_data):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
@@ -78,16 +78,16 @@ class EventsPage(AbstractHandler):
         
         if'/edit' == url_data[-5:]:
             params['id'] = url_data[1:-5]
-            event_id = self.update(params, account)
+            event_id = self.update(params, volunteer)
         elif 'is_delete' in params and params['is_delete'] == 'true':
-            self.delete(url_data[1:], account)
+            self.delete(url_data[1:], volunteer)
             self.redirect("/#/events")
             return
         elif 'action' in params: #add an event photo album
-            self._handle_photos(params, account)
+            self._handle_photos(params, volunteer)
             return
         else:
-            event_id = self.create(params, account)
+            event_id = self.create(params, volunteer)
             if event_id:
                 event = Event.get_by_id(event_id)
                 session = self._session()
@@ -105,27 +105,24 @@ class EventsPage(AbstractHandler):
     # LIST
     def list(self):
         try:
-            account = self.auth()
+            volunteer = self.auth()
         except:
             return
         
         upcoming_events = self.get_application().upcoming_events().fetch(EventsPage.LIMIT)
         ongoing_opportunities = self.get_application().ongoing_opportunities().fetch(EventsPage.LIMIT)
         
-        if account: user = account.get_user()
-        else: user = None
-        
-        if user:
+        if volunteer:
             recommended_events = None
-            user.recommended_events(application = self.get_application(),
+            volunteer.recommended_events(application = self.get_application(),
                                                          session = self._session())[:EventsPage.LIMIT]
-            future_events = [ev.event for ev in user.events_future().fetch(EventsPage.LIMIT)]
-            my_past_events = [ev.event for ev in user.events_past().fetch(EventsPage.LIMIT)]
+            future_events = [ev.event for ev in volunteer.events_future().fetch(EventsPage.LIMIT)]
+            my_past_events = [ev.event for ev in volunteer.events_past().fetch(EventsPage.LIMIT)]
             my_past_events.reverse()
-            event_volunteers = user.eventvolunteers
-            neighborhoods = NeighborhoodHelper().selected(self.get_application(),user.home_neighborhood)
+            event_volunteers = volunteer.eventvolunteers
+            neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)
             #interest_categories = InterestCategoryHelper().selected(user)
-            events_coordinating = [ev.event for ev in user.events_coordinating().fetch(EventsPage.LIMIT)]
+            events_coordinating = [ev.event for ev in volunteer.events_coordinating().fetch(EventsPage.LIMIT)]
         else: 
             application = self.get_application()
             recommended_events = None
@@ -139,7 +136,7 @@ class EventsPage(AbstractHandler):
         
         
         template_values = {
-            'volunteer': user,
+            'volunteer': volunteer,
             'eventvolunteer': event_volunteers,
             'neighborhoods': neighborhoods,
             'recommended_events': recommended_events,
@@ -164,7 +161,7 @@ class EventsPage(AbstractHandler):
         
         offset = 0
         
-        account = self.auth()
+        volunteer = self.auth()
         application = self.get_application()
         
         event = Event.get_by_id(int(event_id))
@@ -179,7 +176,7 @@ class EventsPage(AbstractHandler):
         
         #logging.info(owners)
         for ep in eventphotos:
-            if (ep.can_edit(account)):
+            if (ep.can_edit(volunteer)):
                 ep.can_edit_now = True
             else:
                 ep.can_edit_now = False
@@ -202,9 +199,8 @@ class EventsPage(AbstractHandler):
         forum['path'] = self.request.path
         #end fill forum block
 
-        if account:
-            user = account.get_user()
-            eventvolunteer = event.eventvolunteers.filter('volunteer = ', user).get()
+        if volunteer:
+            eventvolunteer = event.eventvolunteers.filter('volunteer = ', volunteer).get()
         
             if eventvolunteer and (eventvolunteer.isowner or event.in_past): 
                 # TODO: randomize this...
@@ -212,18 +208,15 @@ class EventsPage(AbstractHandler):
             else:
                 public_attendees = []
                 for v in event.volunteers():
-                    if v.account.key().id() == account.key().id() or v.event_access(account = account):
+                    if v.key().id() == volunteer.key().id() or v.event_access(volunteer = volunteer):
                         public_attendees.append(v)
                     else:
                         attendees_anonymous.append(v)
                 
                 attendees = public_attendees[offset:offset+EventsPage.LIMIT]
         
-        if account: user = account.get_user()
-        else: user = None
-        
         template_values = { 
-                            'volunteer': user,
+                            'volunteer': volunteer,
                             'event' : event, 
                             'eventvolunteer': eventvolunteer, 
                             'eventphotos': eventphotos,
@@ -245,11 +238,10 @@ class EventsPage(AbstractHandler):
    
     ################################################################################
     # DELETE
-    def delete(self, event_id, account):
+    def delete(self, event_id, volunteer):
         event = Event.get_by_id(int(event_id))
-        if account: user = account.get_user()
         
-        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).filter('isowner =', True).get()
         if eventvolunteer:
             for ev in event.eventvolunteers:
                 #TODO notify everyone who was going to attend that this was cancelled.
@@ -262,11 +254,10 @@ class EventsPage(AbstractHandler):
     # NEW
     def new(self, event):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
-        volunteer = account.get_user()
         neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)
         if event:
             neighborhoods = NeighborhoodHelper().selected(self.get_application(),event.neighborhood)
@@ -284,7 +275,7 @@ class EventsPage(AbstractHandler):
 
     ################################################################################
     # CREATE
-    def create(self, params, account):
+    def create(self, params, volunteer):
         application = self.get_application()
         event = Event(application = application)
         session = self._session()
@@ -308,9 +299,8 @@ class EventsPage(AbstractHandler):
                 eic = EventInterestCategory(event = event, interestcategory = interestcategory)
                 eic.put()
         
-        user = account.get_user()
         eventVolunteer = EventVolunteer(
-                                volunteer=user, 
+                                volunteer=volunteer, 
                                 event=event, 
                                 isowner=True,
                                 event_is_upcoming = not event.in_past,
@@ -325,13 +315,11 @@ class EventsPage(AbstractHandler):
     # EDIT
     def edit(self, event): 
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return   
         
-        if account: user = account.get_user()
-        
-        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True)
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).filter('isowner =', True)
         
         if not eventvolunteer:
             self.redirect("/#/events/" + event.id)
@@ -346,7 +334,7 @@ class EventsPage(AbstractHandler):
             'event' : event, 
             'eventvolunteer': eventvolunteer, 
             'owners': owners, 
-            'volunteer': account.get_user(), 
+            'volunteer': volunteer, 
             'neighborhoods': NeighborhoodHelper().selected(self.get_application(),event.neighborhood),
             'interestcategories' : InterestCategoryHelper().selected(event),
         }
@@ -357,11 +345,10 @@ class EventsPage(AbstractHandler):
       
     ################################################################################
     # UPDATE
-    def update(self, params, account):
+    def update(self, params, volunteer):
         event = Event.get_by_id(int(params['id']))
-        if account: user = account.get_user()
         
-        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).filter('isowner =', True).get()
 
         if not eventvolunteer:
             return None
@@ -408,9 +395,7 @@ class EventsPage(AbstractHandler):
     # SEARCH
     def search(self, params):
         
-        account = self.auth()
-        if account: user = account.get_user()
-        else: user = None
+        volunteer = self.auth()
         
         (neighborhood, events, interestcategory, next, prev)  = self.do_search(params)
         
@@ -418,7 +403,7 @@ class EventsPage(AbstractHandler):
           'neighborhood' : neighborhood,
           'events' : events,
           'interestcategory': interestcategory,
-          'volunteer': user,
+          'volunteer': volunteer,
           'next': next,
           'prev': prev,
           'url': '/events/search'
@@ -531,7 +516,6 @@ class EventsPage(AbstractHandler):
         else:
             next = None
             
-            
         if ur and ll:
             events = [event for event in events if 
                              event.location.lon > ll.lon 
@@ -553,7 +537,7 @@ class EventsPage(AbstractHandler):
   
     ################################################################################
     # all posts that deal with photo albums from the events page
-    def _handle_photos(self, params, account):
+    def _handle_photos(self, params, volunteer):
         event_id = params['event_id']
         event = Event.get_by_id(int(event_id))
         if params['action'] == 's_addexternalalbum':
@@ -568,12 +552,11 @@ class EventsPage(AbstractHandler):
                 display_weight = 0
             
             eventphoto = EventPhoto(event=Event.get_by_id(int(event_id)), 
-                                             account=account,
                                              content=params['content'], 
                                              display_weight = display_weight,
                                              type=EventPhoto.RSS_ALBUM, 
                                              status=EventPhoto.PUBLISHED,
-                                             volunteer=account.get_user()
+                                             user=volunteer
                                              )
             eventphoto.put()
         elif params['action'] == 'Remove':
@@ -620,14 +603,13 @@ class EventAddCoordinatorPage(AbstractHandler):
     # GET
     def get(self, event_id):   
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         event = Event.get_by_id(int(event_id))
-        if account: user = account.get_user()
         
-        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).filter('isowner =', True).get()
         
         if not eventvolunteer:
             self.redirect("/#/events") #TODO REDIRECT to error page
@@ -635,7 +617,7 @@ class EventAddCoordinatorPage(AbstractHandler):
         
         template_values = {
             'event' : event,
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
           }
         self._add_base_template_values(vals = template_values)
         
@@ -644,16 +626,15 @@ class EventAddCoordinatorPage(AbstractHandler):
       
     def post(self, event_id):   
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         params = self.parameterize() 
         
         event = Event.get_by_id(int(event_id))
-        if account: user = account.get_user()
         
-        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).filter('isowner =', True).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).filter('isowner =', True).get()
         
         if not eventvolunteer:
             self.redirect("/#/events") #TODO REDIRECT to error page

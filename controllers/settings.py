@@ -31,11 +31,10 @@ class SettingsPage(AbstractHandler):
     def show(self, volunteer):    
         if not volunteer:
             try:
-                account = self.auth(require_login=True)
+                volunteer = self.auth(require_login=True)
             except:
                 return
 
-        volunteer = account.get_user()
         (future_events, past_events, 
          events_coordinating, past_events_coordinated) = volunteer.get_activities(SettingsPage.LIMIT)
         
@@ -74,7 +73,7 @@ class SettingsPage(AbstractHandler):
     ################################################################################
     def post(self):
         try:
-            account = self.auth(require_login = True)
+            volunteer = self.auth(require_login = True)
         except:
             return
           
@@ -83,11 +82,11 @@ class SettingsPage(AbstractHandler):
         
         if 'is_delete' in params and params['is_delete'] == 'true':     
             if 'confirm_delete' in params and params['confirm_delete'] == 'true':
-                self.delete(account)
+                self.delete(volunteer)
                 session.flush()
                 self.redirect('/#/logout')
         else:  
-            if self.update(params, account):
+            if self.update(params, volunteer):
                 self.add_notification_message('Your settings have been updated.')
                 self.redirect('/#/profile')
             else:
@@ -95,83 +94,78 @@ class SettingsPage(AbstractHandler):
 
     ################################################################################
     # UPDATE
-    def update(self, params, account):
+    def update(self, params, volunteer):
 
-        user = account.get_user()
-        valid_entry = account.validate(params) 
-        valid_entry = user.validate(params) and valid_entry
+        valid_entry = volunteer.validate(params) 
       
         for interestcategory in InterestCategory.all():
             param_name = 'interestcategory[' + str(interestcategory.key().id()) + ']'
             if not param_name in params:
                 continue
-            vic = account.user_interests.filter('interestcategory =', interestcategory).get()
+            vic = volunteer.user_interests.filter('interestcategory =', interestcategory).get()
             if params[param_name] == ['1','1'] and not vic:          
-                vic = Interest(account = account, interestcategory = interestcategory)
+                vic = Interest(user = volunteer, interestcategory = interestcategory)
                 vic.put()
             elif params[param_name] == '1' and vic:
                 vic.delete()
     
-        user.put()
-        account.put()
-        if memcache.get('%s_rec_events'%user.key().id()):
-            memcache.delete('%s_rec_events'%user.key().id())
+        volunteer.put()
+        if memcache.get('%s_rec_events'%volunteer.key().id()):
+            memcache.delete('%s_rec_events'%volunteer.key().id())
         return True
         
     ################################################################################
     # DELETE
-    def delete(self, account):
+    def delete(self, volunteer):
         #TODO: check if batch deletes work and use them if so
         
         # Remove followers relationship
-        followers = account.followers
+        followers = volunteer.followers
         for f in followers:
             f.delete()
         
         # Remove following relationship
-        following = account.following
+        following = volunteer.following
         for f in following:
             f.delete()
         
         # Remove volunteer interest categories
-        interests = account.user_interests
+        interests = volunteer.user_interests
         for interest in interests:
             interest.delete()
         
         # Remove your message preferences
-        prefs = account.message_preferences
+        prefs = volunteer.message_preferences
         for pref in prefs:
             pref.delete()
             
         # Remove message receipts
-        mrs = account.incoming_messages
+        mrs = volunteer.incoming_messages
         for mr in mrs:
             mr.delete()
               
-        user = account.get_user()
         # Remove events you've volunteered for
-        evs = user.eventvolunteers
+        evs = volunteer.eventvolunteers
         for ev in evs:
             ev.delete()
         
         # Finally remove the volunteer
-        for auth in account.auth_methods:
+        for auth in volunteer.auth_methods:
             auth.delete()
             
-        user.delete()
-        account.delete()
+        volunteer.delete()
         
     
     ################################################################################
     # CONFIRM_DELETE
     def confirm_delete(self):
         try:
-            account = self.auth(require_login = True)
+            volunteer = self.auth(require_login = True)
         except:
             return
 
         template_values = {
-            'volunteer' : account.get_user(), 
+            'volunteer' : volunteer, 
           }
         self._add_base_template_values(vals = template_values)
         path = os.path.join(os.path.dirname(__file__),'..', 'views', 'volunteers', 'confirm_delete.html')

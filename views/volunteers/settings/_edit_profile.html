@@ -34,8 +34,8 @@
     <input type="hidden" name="session_id" value="{{ session_id }}">
     <ul>
 	
-        <li><label for="name">Name:</label> <input class="required text" type="text" name="name" value="{{ account.name|striptags }}" /></li>
-        <li><label for="email">Email:</label> <input class="text required email" type="text" name="email" value="{{ account.get_email|striptags }}"  /></li>
+        <li><label for="name">Name:</label> <input class="required text" type="text" name="name" value="{{ volunteer.name|striptags }}" /></li>
+        <li><label for="email">Email:</label> <input class="text required email" type="text" name="email" value="{{ volunteer.get_email|striptags }}"  /></li>
         <li><label for="quote">About:</label> <textarea class="textarea" name="quote">{{ volunteer.get_quote|striptags }}</textarea></li>
     </ul>
     <table><tr><td><label for="home_neighborhood">I live nearest to:</label></td><td>{% include "../volunteers/settings/_select_home_neighborhood.html" %}</td></tr>

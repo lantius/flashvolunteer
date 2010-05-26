@@ -3,7 +3,7 @@ import re, logging, time
 from google.appengine.ext import db
 from google.appengine.api import mail
 
-from models.auth.account import Account
+from models.volunteer import Volunteer
 
 from models.messages.message_type import MessageType
 
@@ -20,8 +20,9 @@ class Message(db.Model):
     
     trigger = db.DateTimeProperty(auto_now_add = True)
     
-    sent_by = db.ReferenceProperty(reference_class = Account, collection_name = 'sent_messages')
-        
+    #TODO: convert sent_by to sender
+    sender = db.ReferenceProperty(reference_class = Volunteer, collection_name = 'sent_messages')
+    
     flagged = db.BooleanProperty(default = False)
     verified = db.BooleanProperty(default = False)
         
@@ -46,7 +47,7 @@ class Message(db.Model):
         return self.trigger.replace(tzinfo=utc).astimezone(Pacific).strftime("%m/%d/%Y %I:%M %p")
     
     def get_sender(self):
-        return self.sent_by
+        return self.sender
     
     def get_recipient(self):
         return self.sent_to.get().recipient

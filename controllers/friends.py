@@ -17,13 +17,12 @@ class FriendsPage(AbstractHandler):
         LIMIT = 12
         LIMIT2 = 15
         try:
-            account = self.auth(require_login=False)
+            volunteer = self.auth(require_login=False)
         except:
             return       
     
-        if account:
-            volunteer = account.get_user()
-            candidates = list(volunteer.following(limit = 250))
+        if volunteer:
+            candidates = list(volunteer.following_all(limit = 250))
             friends = random.sample(candidates,min(len(candidates),LIMIT))
             followers = (v for v in volunteer.followers_only())
             neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)

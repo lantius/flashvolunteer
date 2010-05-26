@@ -6,7 +6,7 @@ from google.appengine.api.users import User
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-from models.auth import Account, Auth
+from models.auth import Auth
 from models.volunteer import Volunteer
 
 import os, logging, hashlib, urllib
@@ -19,8 +19,8 @@ class CreateAccount(AbstractHandler):
         dev_server = self.is_debugging() 
         login_info = session.get('login_info', None)
         
-        account = self.auth()
-        if account: 
+        volunteer = self.auth()
+        if volunteer: 
             self.redirect('/')
             return
         
@@ -30,13 +30,11 @@ class CreateAccount(AbstractHandler):
             name = login_info.get('displayName', None)
         else:
             email = None
-    
-        account = Account(
+        
+        volunteer = Volunteer(
             preferred_email = email,
-            name = name
+            name = name                              
         )
-    
-        volunteer = Volunteer()
                         
         #session['volunteer'] = volunteer
         #session['account'] = account
@@ -44,7 +42,6 @@ class CreateAccount(AbstractHandler):
         template_values = {
             'dev_server': dev_server,
             'volunteer': volunteer,
-            'account': account,
             'home_neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood),
             'work_neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.work_neighborhood),
             'fv_account': login_info is None,
@@ -65,7 +62,7 @@ class CreateAccount(AbstractHandler):
         
         params = self.parameterize()    
         session = self._session()
-        account = Account()  #session.get('account')
+        #account = Account()  #session.get('account')
         volunteer = Volunteer() #session.get('volunteer')
         
         if params['session_id'] != session.sid:
@@ -74,10 +71,10 @@ class CreateAccount(AbstractHandler):
         
         #can't combine these two else risk not validating both...
         valid_entry = volunteer.validate(params) 
-        valid_entry = account.validate(params) and valid_entry
+        #valid_entry = account.validate(params) and valid_entry
         
         if not valid_entry:
-            self.add_notification_message('<br>'.join(account.error.values()))
+            self.add_notification_message('<br>'.join(volunteer.error.values()))
             self.redirect('/#/new')
             return False
 
@@ -101,20 +98,17 @@ class CreateAccount(AbstractHandler):
             auth.salt = login_info['salt']
 
 
-        if not account:
+        if not volunteer:
             self.redirect('/#/new')
             return False
 
-        user = User(email = account.preferred_email)
-        account.user = user
+        user = User(email = volunteer.preferred_email)
+        volunteer.user = user
         
         try:
-            account.put()
-            
-            volunteer.account = account
             volunteer.put()
                 
-            auth.account = account
+            auth.user = volunteer
             auth.put()
 
         except:
@@ -125,14 +119,14 @@ class CreateAccount(AbstractHandler):
         session['auth'] = auth
         session['login_info'] = login_info
         
-        check_avatar(account = account, session = session)
+        check_avatar(volunteer = volunteer, session = session)
                 
         msg_params = {'name': volunteer.name} 
                 
         from utils.message_text import type3  
         from models.messages import MessageType
                   
-        self.send_message(to = [account], 
+        self.send_message(to = [volunteer], 
                      subject = type3.subject%msg_params,
                      body = type3.body%msg_params,
                      type= MessageType.all().filter('name =', 'welcome').get(), 

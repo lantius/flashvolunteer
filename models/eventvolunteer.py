@@ -3,7 +3,6 @@ from google.appengine.ext import db
 from models.event import Event
 
 from models.volunteer import Volunteer
-from models.auth.account import Account
 from models.application import Application
 
 ################################################################################

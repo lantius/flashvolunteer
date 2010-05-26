@@ -4,7 +4,6 @@ from google.appengine.ext import db
 from google.appengine.api import mail
 
 from models.messages.message import Message
-from models.auth.account import Account
 
 from models.messages.message_type import MessageType, MessagePropagationType
 
@@ -16,7 +15,7 @@ from google.appengine.runtime import apiproxy_errors
 
 class MessageReceipt(db.Model):
     
-    message = db.ReferenceProperty(Message, collection_name = 'sent_to', required = True)
+    message = db.ReferenceProperty(Message, collection_name = 'receipt', required = True)
     recipient = db.ReferenceProperty(reference_class = None, collection_name = 'incoming_messages')
 
     read = db.BooleanProperty(default = False)
@@ -54,7 +53,7 @@ class MessageReceipt(db.Model):
         prop = MessagePropagationType.all().filter('name =', 'email').get()        
         #don't email forum messages and don't email folks who chose not to be emailed...
         if self.recipient is None or \
-           not isinstance(self.recipient, Account) or \
+           not isinstance(self.recipient, Volunteer) or \
            not self._get_message_pref(recipient = self.recipient, prop = prop): 
             return False
         else:

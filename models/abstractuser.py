@@ -22,10 +22,18 @@ class AbstractUser(db.Model):
     
     applications = db.ListProperty(int)
     
+    user = db.UserProperty()
+    group_wheel = db.BooleanProperty(default=False) #admin permissions flag
+
+    preferred_email = db.StringProperty(default=None)
+    date_added = db.DateProperty(auto_now_add=True)
+
     error = {}
+ 
     
     
     def validate(self, params):
+        from models.volunteer import Volunteer
         self.error.clear()
         
         # AbstractUser.user is set in the settings controller
@@ -46,25 +54,50 @@ class AbstractUser(db.Model):
         
         if 'quote' in params:
             self.quote = "" + params['quote']
-        if 'name' in params:
-            self.name  = params['name']
         if 'delete_avatar' in params:
             self.avatar = None
-          
-        #try:
-        #    if not 'email' in params or not len(params['email']) > 0 or params['email'].find('@') == -1 :
-        #        raise Exception
-        #    self.preferred_email  = params['email']
-        #except:
-        #    self.error['email'] = ('A valid email is required', params['email'])
-          
-#        if 'twitter' in params and self.twitter != params['twitter']:
-#            self.twitter = params['twitter']
-#            Twitter.toot("Welcome to Flash Volunteer!", self.twitter)
+
+
+        if not 'email' in params or not len(params['email']) > 0 or params['email'].find('@') == -1 :
+            self.error['email'] = 'A valid email is required'
+        else:
+            existing_account = Volunteer.all().filter('preferred_email =', params['email']).get()
+            if existing_account and existing_account.is_saved():
+                self.error['email'] = 'An account with that email already exists. If it is your account, please login in the same way that you created the account.'
+            else:
+                self.preferred_email  = params['email']
         
+        if 'password' in params and params['password'] != params['passwordcheck']:
+            self.error['passwords'] = 'Passwords do not match'
+
+        if self.is_saved():
+            from models.messages import MessageType, MessagePreference, MessagePropagationType
+            
+            for message_type in MessageType.all():
+                try:
+                    message_prefs = self.message_preferences.filter('type =', message_type).get()
+                except:
+                    message_prefs = None
+                    
+                if not message_prefs:
+                    #### ERROR HERE, can't do volunteer = self
+                    #    message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, volunteer = self)
+                    # BadValueError: Volunteer instance must have a complete key before it can be stored as a reference
+                    message_prefs = MessagePreference(type = message_type, propagation = message_type.default_propagation, user = self)
+                    message_prefs.put()
+                    
+                for mp in MessagePropagationType.all():
+                    key = '%s[%s]'%(message_type.key().id(), mp.key().id())
+                    if key in params and mp.key().id() not in message_prefs.propagation:
+                        message_prefs.propagation.append(mp.key().id())
+                        message_prefs.put()
+                    elif key not in params and mp.key().id() in message_prefs.propagation:
+                        message_prefs.propagation.remove(mp.key().id())
+                        message_prefs.put()
+
+            
+        return len(self.error) == 0
         
-        return not self.error
-    
     def get_quote(self):
         if self.quote:
             return self.quote
@@ -113,3 +146,49 @@ class AbstractUser(db.Model):
             
         
         return (future_events, past_events, events_coordinating, past_events_coordinated)
+           
+    def get_messages(self):
+        return self.incoming_messages.order('-timestamp')
+    
+    def get_unread_message_count(self):
+        return self.incoming_messages.filter('read =', False).count()
+
+    def get_sent_messages(self):
+        return self.sent_messages.order('-trigger')
+    
+    def get_first_name(self):
+        if self.get_name().find('@') > -1:
+            return '@'.join(self.get_name().split('@')[:-1])
+        else:
+            if self.get_name().find(' ') > -1:
+                return ' '.join(self.get_name().split(' ')[:-1])
+            else: return self.get_name()
+            
+    def get_last_name(self):
+        if self.get_name().find(' ') == -1: return ''
+        if self.get_name().find('@') > -1:
+            return '@' + self.get_name().split('@')[-1]
+        else:
+            return self.get_name().split(' ')[-1]
+        
+    def get_name(self):
+        if self.name:
+            return self.name
+        
+        return self.user.nickname()
+    
+    def get_email(self):
+        if self.preferred_email is None:
+            return self.user.email()
+        else:
+            return self.preferred_email
+        
+    def _get_message_pref(self, type):
+        prefs = self.message_preferences.filter('type =', type).get()
+        return prefs
+
+    def check_session_id(self, form_session_id, session):
+        return form_session_id == session.sid
+ 
+    def is_admin(self):
+        return self.group_wheel

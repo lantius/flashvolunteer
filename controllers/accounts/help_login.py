@@ -3,24 +3,21 @@ from controllers.abstract_handler import AbstractHandler
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-from models.auth import Account, Auth
-from models.messages import MessageType
-
 import os, logging, hashlib, urllib
+from models.volunteer import Volunteer
 
 class HelpLogin(AbstractHandler):
-
 
     def get(self):
         session = self._session()
         
-        account = self.auth()
-        if account: 
+        volunteer = self.auth()
+        if volunteer: 
             self.redirect('/')
             return
         
         template_values = {
-            'account': account,
+            'volunteer': volunteer,
           }
         self._add_base_template_values(vals = template_values)
     
@@ -32,13 +29,13 @@ class HelpLogin(AbstractHandler):
         params = self.parameterize()    
         session = self._session()
 
-        account = Account.all().filter('preferred_email = ', params['email']).get()
+        volunteer = Volunteer.all().filter('preferred_email = ', params['email']).get()
         
-        if account:
+        if volunteer:
             from utils.message_text import login_info_text
             
             try: 
-                auth = account.auth_methods.get()
+                auth = volunteer.auth_methods.get()
                 
                 pars = {'provider': auth.strategy, 'hint':''}
                 if auth.strategy == 'fv':

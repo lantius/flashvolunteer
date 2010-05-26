@@ -15,7 +15,7 @@ class InterestCategory(db.Model):
         return [eic.event for eic in self.event_categories.filter('event_is_upcoming =', True).filter('event_is_hidden =', False).order('event_date')]
     
     def volunteers_interested(self):
-        return (vic.account.get_user() for vic in self.user_interests)
+        return (vic.user for vic in self.user_interests)
     
     def url(self):
         return '/category/' + str(self.key().id())

@@ -16,7 +16,7 @@ class BaseVolunteerListPage(AbstractHandler):
     
     def set_context(self):  
         try:
-            self.account = self.auth(require_login=False)
+            self.volunteer = self.auth(require_login=False)
         except:
             return
         
@@ -26,9 +26,6 @@ class BaseVolunteerListPage(AbstractHandler):
         bookmark = self.request.get("bookmark", None)
         params = self.parameterize()
         
-        if self.account: self.volunteer = self.account.get_user()
-        else: self.volunteer = None
-         
         first_page = not bookmark or bookmark == '-'
         if not first_page:
             trace = session.get('vol_pagination', None)
@@ -87,9 +84,9 @@ class PaginatedTeamPage(BaseVolunteerListPage):
         self.set_context()
           
     def _get_volunteers(self, limit, bookmark = None):
-        if not self.account: return []
+        if not self.volunteer: return []
         
-        vols = [vf.follows.get_user() for vf in self.account.following.fetch(limit=1000)]
+        vols = [vf.followed for vf in self.volunteer.following.fetch(limit=1000)]
         if bookmark:
             vols = [v for v in vols if v.key() >= bookmark]                      
         vols.sort(lambda a,b: cmp(a.key(),b.key()))
@@ -117,7 +114,7 @@ class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
      qry = self.category.user_interests.order('__key__')
      if bookmark: 
          qry = qry.filter('__key__ >=', bookmark)
-     return [i.account.get_user() for i in qry.fetch(limit)]  
+     return [i.user for i in qry.fetch(limit)]  
          
   def _get_title(self):
      return 'Interested in %s'%self.category.name
@@ -180,8 +177,8 @@ class PaginatedVolunteerTeam(BaseVolunteerListPage):
         self.set_context()
     
     def _get_volunteers(self, limit, bookmark = None):
-        if not self.account: return []
-        vols = [vf.follows.get_user() for vf in self.account.following.fetch(limit=1000)]
+        if not self.volunteer: return []
+        vols = [vf.followed for vf in self.volunteer.following.fetch(limit=1000)]
         if bookmark:
             vols = [v for v in vols if v.key() >= bookmark]                      
         vols.sort(lambda a,b: cmp(a.key(),b.key()))
@@ -214,7 +211,7 @@ class PaginatedEventAttendeesPage(BaseVolunteerListPage):
         else:
             results = []
             for ev in qry.fetch(limit):
-                if ev.volunteer.event_access(account=self.account):
+                if ev.volunteer.event_access(volunteer = self.volunteer):
                     results.append(ev.volunteer)
                     if len(results) >= limit:
                         break

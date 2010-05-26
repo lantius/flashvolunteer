@@ -13,20 +13,16 @@ from google.appengine.api import urlfetch
 from utils.applications.operations import synchronize_apps
 from google.appengine.ext import deferred
 
-
-from models.auth.account import Account
-        
-    
 class SyncApplication(AbstractHandler):
 
     def get(self):
         try:
-            account = self.auth(require_login = True, require_admin = True)
+            volunteer = self.auth(require_login = True, require_admin = True)
         except:
             return
 
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
           }
         self._add_base_template_values(vals = template_values)
         
@@ -35,7 +31,7 @@ class SyncApplication(AbstractHandler):
 
     def post(self):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
 

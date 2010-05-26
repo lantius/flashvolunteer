@@ -15,6 +15,6 @@ class AddApplications(AbstractHandler):
 
     def get(self):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   

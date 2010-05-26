@@ -6,7 +6,7 @@ from google.appengine.api.users import User
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-from models.auth import Account, Auth
+from models.auth import Auth
 from models.volunteer import Volunteer
 from models.organization import Organization
 
@@ -18,7 +18,6 @@ class CreateOrganization(AbstractHandler):
         
         params = self.parameterize()    
         session = self._session()
-        account = Account()  #session.get('account')
         volunteer = Volunteer() #session.get('volunteer')
         
         if params['session_id'] != session.sid:

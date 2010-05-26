@@ -36,7 +36,6 @@ def create_environment(name, session_id):
     from models.volunteerfollower import VolunteerFollower
     from models.interest import Interest
     from models.interestcategory import InterestCategory
-    from models.auth.account import Account
     from models.auth.auth import Auth
     
     from utils.applications.operations import synchronize_apps
@@ -65,19 +64,9 @@ def create_environment(name, session_id):
             privacy__event_attendance = v['privacy__event_attendance']
         else:
             privacy__event_attendance = 'friends'
-        
-        account = Account(user = u, name = k, preferred_email=email)
-        account.put()
-        auth = Auth(
-                strategy = 'dev',
-                identifier = email,
-                account = account
-            )
-        auth.put()
 
         v = Volunteer(
           name = k,
-          account = account,
           #user = u,
           avatar = v['avatar'],
           quote = v['quote'],
@@ -87,7 +76,17 @@ def create_environment(name, session_id):
           session_id = session_id,
           create_rights = v['create_rights'],
           privacy__event_attendance = privacy__event_attendance,
-          applications = [application.key().id()])    
+          applications = [application.key().id()],
+          user = u, name = k, preferred_email=email)    
+
+        auth = Auth(
+                strategy = 'dev',
+                identifier = email,
+                user = v
+            )
+        auth.put()
+
+
     
         volunteers[k] = v
 
@@ -95,11 +94,9 @@ def create_environment(name, session_id):
     for k,v in organizations.items():
         email = k.replace(' ', '_').lower() + '@organization.org'
         u = User(email)
-        account = Account(user = u, name = k, preferred_email=email)
-        account.put()
         v = Volunteer(
           name = k,
-          account = account,
+          user = u, name = k, preferred_email=email,
           #user = u,
           avatar = v['avatar'],
           quote = v['quote'],
@@ -151,7 +148,7 @@ def create_environment(name, session_id):
     for k,v in volunteers.items():
         ic = Interest(
             interestcategory = cat,
-            account = v.account,
+            account = v,
         )
         ic_volunteers.append(ic)
         
@@ -182,8 +179,8 @@ def create_environment(name, session_id):
     volunteer_followers = []
     for follower, followed in followers:
         vf = VolunteerFollower(
-           follower = volunteers[follower].account,
-           follows = volunteers[followed].account
+           follower = volunteers[follower],
+           follows = volunteers[followed]
         )
         volunteer_followers.append(vf)
 

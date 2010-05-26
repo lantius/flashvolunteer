@@ -5,8 +5,8 @@
 <script>
       set_active('profile');
       $(document).ready(function() {
-            load_title('{{ page_volunteer.account.get_name }}\'s public page');
-			load_header('{{ page_volunteer.account.name|striptags }}');
+            load_title('{{ page_volunteer.get_name }}\'s public page');
+			load_header('{{ page_volunteer.name|striptags }}');
       });
 </script>
 

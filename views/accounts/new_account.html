@@ -95,8 +95,8 @@
                           <ul>          
                           
                             <li><label for="name">Your Name:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="1"
-    							{% if account.name %}
-                                    value="{{ account.name|striptags }}"
+    							{% if volunteer.name %}
+                                    value="{{ volunteer.name|striptags }}"
                                 {% else %}
                                     value=""
                                 {% endif %}
@@ -104,8 +104,8 @@
                             <li>
                             	 <label for="email">Email (required):</label>
 							     <input class="required email text" id="createnameinput" type="text" name="email" tabindex="2"
-	                                {% if account.preferred_email %}
-		                                value="{{ account.preferred_email|striptags }}"
+	                                {% if volunteer.preferred_email %}
+		                                value="{{ volunteer.preferred_email|striptags }}"
 		                            {% else %}
 		                                value=""
 		                            {% endif %}
@@ -187,8 +187,8 @@
                           <ul>          
                           
                             <li><label for="name">Your Organization:</label><input class="text required" id="createnameinput" type="text" name="name" tabindex="6"
-    							{% if account.name %}
-                                    value="{{ account.name|striptags }}"
+    							{% if volunteer.name %}
+                                    value="{{ volunteer.name|striptags }}"
                                 {% else %}
                                     value=""
                                 {% endif %}
@@ -196,8 +196,8 @@
                             <li>
                             	 <label for="email">Email (required):</label>
 							     <input class="required email text" id="createnameinput" type="text" name="email" tabindex="7"
-	                                {% if account.preferred_email %}
-		                                value="{{ account.preferred_email|striptags }}"
+	                                {% if volunteer.preferred_email %}
+		                                value="{{ volunteer.preferred_email|striptags }}"
 		                            {% else %}
 		                                value=""
 		                            {% endif %}

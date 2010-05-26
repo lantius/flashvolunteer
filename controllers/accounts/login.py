@@ -2,9 +2,8 @@ import os, logging, hashlib
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 
-
 from models.volunteer import Volunteer
-from models.auth import Account, Auth
+from models.auth import Auth
 
 import urllib
 
@@ -19,7 +18,7 @@ class Login(AbstractHandler):
     LIMIT = 12 
     def get(self, errors = None):
         
-        account = self.auth()
+        volunteer = self.auth()
         
         params = self.parameterize()
             
@@ -27,7 +26,7 @@ class Login(AbstractHandler):
             self.rpx_auth()
         elif self.request.path.find('dev_login') > -1:    
             self.dev_login()    
-        elif not account:
+        elif not volunteer:
             redirect = None
             if 'redirect' in params:
                 redirect = params['redirect']
@@ -51,34 +50,31 @@ class Login(AbstractHandler):
         
         auth = Auth.all().filter('identifier =', user.email()).filter('strategy =', 'dev').get()
         if auth is None:
-            account = Account(
+            volunteer = Volunteer(
                 preferred_email = user.email(),
                 name = user.email(),
                 group_wheel = False
             )
-            account.put()
+            volunteer.put()
 
             auth = Auth(
                 strategy = 'dev',
                 identifier = user.email()
             )
-            auth.account = account
+            auth.user = volunteer
             auth.put()
-            v = Volunteer(account = account)
-            v.put()
         else:
-            account = auth.account
+            volunteer = auth.user
             
             
         session['auth'] = auth
         session['user'] = user
-        session['account'] = account
+        session['volunteer'] = volunteer
         
         if 'login_redirect' in session:
             self.redirect(session['login_redirect'])
             del session['login_redirect']
         else:
-            
             self.redirect('/#/settings')
         session['new_login'] = True
       
@@ -111,7 +107,6 @@ class Login(AbstractHandler):
     def post(self):
         session = self._session()
         
-        
         if self.request.get('token', None):
             #logging.info('posting from rpx')
             self.rpx_auth()
@@ -140,7 +135,6 @@ class Login(AbstractHandler):
         
         hash = hashlib.sha224(password + auth.salt).hexdigest()
         hash2 = hashlib.sha224(hashlib.sha224(password).hexdigest() + auth.salt).hexdigest() #for mobile clients that hash before sending password on...
-        
         
         if not hash or (hash not in [auth.digest,auth.digest2] and hash2 not in [auth.digest,auth.digest2]):
             logging.info('could not log user in, wrong password')
@@ -197,8 +191,8 @@ class Login(AbstractHandler):
             
             if auth:
                 session['auth'] = auth
-                account = self.auth()
-                check_avatar(account = account, session = session)
+                volunteer = self.auth()
+                check_avatar(volunteer = volunteer, session = session)
 
                 if 'login_redirect' in session:
                     self.redirect(session['login_redirect'])
@@ -211,12 +205,10 @@ class Login(AbstractHandler):
         else:
             self.redirect('/#/login')      
 
-def check_avatar(account, session):
-    if not account: return
-    volunteer = account.get_user()
+def check_avatar(volunteer, session):
+    if not volunteer: return
     
-    if volunteer and \
-      volunteer.avatar is None and \
+    if volunteer.avatar is None and \
       'photo' in session['login_info']:
 
         try:
@@ -225,7 +217,7 @@ def check_avatar(account, session):
             img = fetch(url = session['login_info']['photo']).content   
             content_type = imghdr.what(None, img)
             if not content_type:
-              return
+                return
         
             volunteer.avatar_type = 'image/' + content_type
             volunteer.avatar = img

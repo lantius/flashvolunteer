@@ -16,7 +16,6 @@ import datetime
 class AllForGoodInterface(AbstractHandler):
 
     def get(self, urldata = None):
-        logging.info('in afg')
         if not urldata:
             self.list()
         elif urldata == '/publish':
@@ -28,7 +27,7 @@ class AllForGoodInterface(AbstractHandler):
 
     def list(self): 
         try:
-            account = self.auth(require_login = True, require_admin = True)
+            volunteer = self.auth(require_login = True, require_admin = True)
         except:
             return
         
@@ -37,7 +36,7 @@ class AllForGoodInterface(AbstractHandler):
                                if o.source.get() is None ] 
                     
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
             'opportunities': opportunities,
           }
         self._add_base_template_values(vals = template_values)
@@ -48,7 +47,7 @@ class AllForGoodInterface(AbstractHandler):
     
     def post(self, urldata = None):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
         
@@ -74,7 +73,7 @@ class AllForGoodInterface(AbstractHandler):
         from controllers._helpers import NeighborhoodHelper
         
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
 
@@ -102,7 +101,7 @@ class AllForGoodInterface(AbstractHandler):
         
         template_values = { 
             'event' : event, 
-            'volunteer': account.get_user(), 
+            'volunteer': volunteer, 
             'neighborhoods': NeighborhoodHelper().selected(self.get_application(),event.neighborhood),
             'interestcategories' : InterestCategory.all().order('name').fetch(limit=500),
             'afg_opp': opp
@@ -116,7 +115,7 @@ class AllForGoodInterface(AbstractHandler):
     def rebuild(self):
 
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
                 

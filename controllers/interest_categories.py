@@ -47,12 +47,9 @@ class CategoryPage(AbstractHandler):
     def show(self, category_id):
         LIMIT = 12
         try:
-            account = self.auth()
+            volunteer = self.auth()
         except:
             return
-        
-        if account: user = account.get_user()
-        else: user = None
         
         category = InterestCategory.get_by_id(int(category_id))
         if not category:
@@ -65,7 +62,7 @@ class CategoryPage(AbstractHandler):
         upcoming_events = list(category.upcoming_events())        
         
         template_values = {
-            'volunteer': user,
+            'volunteer': volunteer,
             'category': category,
             'volunteers_interested': random.sample(candidates, min(len(candidates), LIMIT)),
             'past_events': random.sample(past_events, min(len(past_events),LIMIT)),

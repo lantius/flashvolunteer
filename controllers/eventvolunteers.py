@@ -18,17 +18,16 @@ class VolunteerForEvent(AbstractHandler):
 
     def get(self, id):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         event = Event.get_by_id(int(id))
-        user = account.get_user()
 
-        ev = event.eventvolunteers.filter('volunteer = ', user).get()
+        ev = event.eventvolunteers.filter('volunteer = ', volunteer).get()
         
         template_values = {
-            'volunteer' : user,
+            'volunteer' : volunteer,
             'event' : event,
             'eventvolunteer': ev
           }
@@ -42,22 +41,21 @@ class VolunteerForEvent(AbstractHandler):
   # POST
     def post(self, url_data):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         event = Event.get_by_id(int(url_data))
-        user = account.get_user()
         
         if event and self.request.get('interested'):
-            eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
+            eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).get()
             interest_level = int(self.request.get('interested'))
             
             if interest_level == 0:
                 if eventvolunteer:
                     eventvolunteer.delete()
                     (to, subject, body) = self.get_message_text(event = event, 
-                                                                  account = account, 
+                                                                  volunteer = volunteer, 
                                                                   sign_up = False)
                     if not event.inpast():
                         self.send_message( to = to, 
@@ -68,7 +66,7 @@ class VolunteerForEvent(AbstractHandler):
             else:
                 if not eventvolunteer:
                     eventvolunteer = EventVolunteer(
-                                        volunteer=user, 
+                                        volunteer=volunteer, 
                                         event=event, 
                                         isowner=False,
                                         event_is_upcoming = not event.in_past,
@@ -84,7 +82,7 @@ class VolunteerForEvent(AbstractHandler):
                     else:
                         self.add_notification_message('You are now signed up for "%s"!'%event.name)
                         (to, subject, body) = self.get_message_text(event = event, 
-                                                                      account = account,
+                                                                      volunteer = volunteer,
                                                                       sign_up = True)
                         
                         self.send_message( to = to, 
@@ -100,8 +98,8 @@ class VolunteerForEvent(AbstractHandler):
         self.redirect('/#/events/' + url_data)
         return
 
-    def get_message_text(self, event, account, sign_up = True):
-        to = (ev.volunteer.account for ev in event.eventvolunteers.filter('isowner =', True).fetch(limit=10))
+    def get_message_text(self, event, volunteer, sign_up = True):
+        to = (ev.volunteer for ev in event.eventvolunteers.filter('isowner =', True).fetch(limit=10))
                           
         if sign_up:
             msg = type1_vol
@@ -113,7 +111,7 @@ class VolunteerForEvent(AbstractHandler):
             'owner_name': ', '.join([owner.get_name().strip() for owner in to]),
             'event_url': '%s%s'%(self._get_base_url(), event.url()),
             'vol_count': event.volunteer_count(),
-            'vol_name': account.get_name()
+            'vol_name': volunteer.get_name()
         }
         body = msg.body%params
         subject = msg.subject%params

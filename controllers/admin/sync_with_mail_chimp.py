@@ -14,7 +14,7 @@ from components.mailchimp.chimpy import Connection as MailChimp
 from google.appengine.ext import deferred
 
 
-from models.auth.account import Account
+from models.volunteer import Volunteer
 
 def sync_with_mail_chimp():
     api_key = '125fa723ae114a190658112cdb647040'
@@ -27,9 +27,9 @@ def sync_with_mail_chimp():
     last_key = None
     while True:
         if last_key:
-            query = Account.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
+            query = Volunteer.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
         else:
-            query = Account.gql('ORDER BY __key__')
+            query = Volunteer.gql('ORDER BY __key__')
         
         recips = query.fetch(limit = CHUNK_SIZE + 1)
         
@@ -62,12 +62,12 @@ class SyncWithMailChimp(AbstractHandler):
 
     def get(self):
         try:
-            account = self.auth(require_login = True, require_admin = True)
+            volunteer = self.auth(require_login = True, require_admin = True)
         except:
             return
 
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
           }
         self._add_base_template_values(vals = template_values)
         
@@ -76,7 +76,7 @@ class SyncWithMailChimp(AbstractHandler):
 
     def post(self):
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return   
 

@@ -11,7 +11,6 @@ from components.time_zones import now
 from utils.message_text import type5, type6, type7, type8, type9
 
 from models.volunteer import Volunteer
-from models.auth.account import Account
 
 
 class EventMessageFactory(AbstractHandler):
@@ -32,7 +31,7 @@ class EventMessageFactory(AbstractHandler):
                 continue
             #it appears that model instances accessed in a cron job do not have referenceproperties resolved; 
             #thats why we're not using e.volunteers() below (and e.hosts() later on...)
-            recipients = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
+            recipients = [ev.volunteer for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
             params = {
                 'event_name': e.name,
                 'event_url': '%s%s'%(self._get_base_url(), e.url()),
@@ -51,7 +50,7 @@ class EventMessageFactory(AbstractHandler):
                 params['participation_statement'] = "You currently have %i Flash Volunteers signed up."%len(recipients)
             else:
                 params['participation_statement'] = "At this time, there are no Flash Volunteers signed up."
-            hosts = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
+            hosts = [ev.volunteer for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
             self.send_message(to = hosts, 
                          subject = type6.subject%params, 
                          body = type6.body%params, 
@@ -80,7 +79,7 @@ class EventMessageFactory(AbstractHandler):
                     'event_name': e.name,
                     'event_url': '%s%s'%(self._get_base_url(), e.url()),
                 }
-                recipients = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
+                recipients = [ev.volunteer for ev in e.eventvolunteers.filter('isowner =', False).fetch(limit=500)]
                 if len(recipients) > 0:
                     self.send_message(to = recipients, 
                                  subject = type7.subject%params, 
@@ -94,7 +93,7 @@ class EventMessageFactory(AbstractHandler):
                 else:
                     params['participation_statement'] = "Unfortunately, it appears that no Flash Volunteers signed up to help out at your event (%(event_url)s)."%params
                 
-                hosts = [ev.volunteer.account for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
+                hosts = [ev.volunteer for ev in e.eventvolunteers.filter('isowner =', True).fetch(limit=500)]
                 self.send_message(to = hosts, 
                              subject = type8.subject%params, 
                              body = type8.body%params, 
@@ -108,9 +107,8 @@ class EventMessageFactory(AbstractHandler):
         return
 
 
-def recommend_event(acnt, domain, type9_msg, right_now, cached_descs, base_url, application, session):
-    account = Account.get_by_id(acnt)
-    user = account.get_user()
+def recommend_event(vol_id, domain, type9_msg, right_now, cached_descs, base_url, application, session):
+    user = Volunteer.get_by_id(vol_id)
     rec_events = [e for e in user.recommended_events(application = application,
                                                   session = session) 
                     if e.enddate and (e.enddate - right_now).days < 7][:10]
@@ -157,8 +155,8 @@ class RecommendedEventMessageFactory(AbstractHandler):
         right_now = now()
         cached_descs = {}
         base_url = self._get_base_url()
-        accounts = AbstractSendMessage.get_all_recipients()
-        for acnt in accounts:
-            deferred.defer(recommend_event, acnt, self.get_domain(), 
+        volunteers = AbstractSendMessage.get_all_recipients()
+        for vol_id in volunteers:
+            deferred.defer(recommend_event, vol_id, self.get_domain(), 
                            type9_msg, right_now, cached_descs, base_url,
                            self.get_application(), self._session())

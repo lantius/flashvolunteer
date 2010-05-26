@@ -3,7 +3,6 @@ from models.neighborhood import Neighborhood
 from models.abstractuser import AbstractUser
 
 from google.appengine.api import memcache
-from models.auth.account import Account
     
 ################################################################################
 # Volunteer
@@ -13,7 +12,6 @@ class Volunteer(AbstractUser):
     work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
     
     privacy__event_attendance = db.StringProperty(default='everyone')
-    account = db.ReferenceProperty(Account, collection_name = 'vol_user')
 
     def validate(self, params):
       
@@ -41,27 +39,27 @@ class Volunteer(AbstractUser):
         return '/volunteers/' + str(self.key().id())
     
     def friends(self):  #returns a generator of Volunteer objects
-        return [vf.follows.get_user() for vf in self.account.following.filter('mutual =', True).order('__key__')]
+        return [vf.followed for vf in self.following.filter('mutual =', True).order('__key__')]
 
     def followers_only(self):   #returns a generator of Volunteer objects
-        return (vf.follower.get_user() for vf in self.account.followers.filter('mutual =', False).order('__key__'))
+        return (vf.follower for vf in self.followers.filter('mutual =', False).order('__key__'))
     
     def following_only(self):   #returns a generator of Volunteer objects
-        return (vf.follows.get_user() for vf in self.account.following.filter('mutual =', False).order('__key__'))
+        return (vf.followed for vf in self.following.filter('mutual =', False).order('__key__'))
 
-    def following(self, key = None, limit = None):   #returns a generator of account objects
-        qry = self.account.following.order('__key__')
+    def following_all(self, key = None, limit = None):   #returns a generator of account objects
+        qry = self.following.order('__key__')
         if key: 
             qry = qry.filter('__key__ >=', key)
         if limit:
-            return (vf.follows.get_user() for vf in qry.fetch(limit))
+            return (vf.followed for vf in qry.fetch(limit))
         else:
-            return (vf.follows.get_user() for vf in qry)
+            return (vf.followed for vf in qry)
 
-    def event_access(self, account):
-        if not account: return False
+    def event_access(self, volunteer):
+        if not volunteer: return False
         if self.privacy__event_attendance == 'everyone': return True
-        return self.privacy__event_attendance == 'friends' and self.account.following.filter('follows =', account).get()
+        return self.privacy__event_attendance == 'friends' and self.volunteer.following.filter('followed =', volunteer).get()
 
     def recommended_events(self, application, session):
         #TODO make more efficient
@@ -112,22 +110,6 @@ class Volunteer(AbstractUser):
         return recommended_events
 
     def interestcategories(self):
-        return (vic.interestcategory for vic in self.account.user_interests)
+        return (vic.interestcategory for vic in self.user_interests)
 
-###### DEPRECATED; USE ACCOUNT'S METHODS INSTEAD #############
-
-    def get_first_name(self):
-        return self.get_first_name()
-    
-    def get_last_name(self):
-        return self.account.get_last_name()
-        
-    def get_name(self):
-        return self.account.get_name()
-    
-    def get_email(self):
-        return self.account.get_email()
-    
-    def _get_message_pref(self, type):
-        return self._get_message_pref(type)
 

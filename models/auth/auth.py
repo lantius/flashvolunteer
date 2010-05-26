@@ -2,7 +2,8 @@ from google.appengine.api import urlfetch
 from google.appengine.ext import db
 import datetime, logging, urllib
 
-from models.auth import Account
+from models.volunteer import Volunteer
+
 ################################################################################
 # Event
 class Auth(db.Model):
@@ -11,7 +12,5 @@ class Auth(db.Model):
     digest = db.StringProperty()
     digest2 = db.StringProperty()
     salt = db.StringProperty()
-    account = db.ReferenceProperty(Account,
-                                   collection_name='auth_methods')
-    
+    user = db.ReferenceProperty(Volunteer, collection_name = 'auth_methods')
     

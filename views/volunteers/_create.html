@@ -7,8 +7,8 @@
 	
 	<ul>
 		<li><label>Your Name:</label><input id="createnameinput" type="text" name="name"
-			{% if account.name %}
-				value="{{ account.name|striptags }}"
+			{% if volunteer.name %}
+				value="{{ volunteer.name|striptags }}"
 			{% else %}
 				value="{{ default_name|striptags }}"
 			{% endif %}
@@ -17,8 +17,8 @@
 
 
 		<li><label>Email (required):</label><input id="createnameinput" type="text" name="email"
-			{% if account.get_email %}
-				value="{{ account.get_email|striptags }}"
+			{% if volunteer.get_email %}
+				value="{{ volunteer.get_email|striptags }}"
 			{% else %}
 				value="{{ default_email|striptags }}"
 			{% endif %}

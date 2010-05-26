@@ -5,25 +5,25 @@ register = webapp.template.create_template_register()
 
 def team_status(parser, token):
     try:
-        tag_name, account, account2 = token.split_contents()
+        tag_name, volunteer, volunteer2 = token.split_contents()
     except ValueError:
         return None
-    return RelationshipStatusNode(account = account, account2 = account2)
+    return RelationshipStatusNode(volunteer = volunteer, volunteer2 = volunteer2)
 
 class RelationshipStatusNode(template.Node):
-    def __init__(self, account, account2):
-        self.account = account
-        self.account2 = account2 
+    def __init__(self, volunteer, volunteer2):
+        self.volunteer = volunteer
+        self.volunteer2 = volunteer2 
         
     def render(self, context):
-        account = template.resolve_variable(self.account,context)
+        volunteer = template.resolve_variable(self.volunteer,context)
         try:
-            account2 = template.resolve_variable(self.account2,context)
+            volunteer2 = template.resolve_variable(self.volunteer2,context)
         except:
             context['is_teammate'] = False
             return ''
-        if account:
-            context['is_teammate'] = account.following.filter('follows =', account2).get() is not None
+        if volunteer:
+            context['is_teammate'] = volunteer.following.filter('followed =', volunteer2).get() is not None
         return ''
 
 register.tag(team_status)
@@ -51,7 +51,7 @@ class MessageTypePrefNode(template.Node):
         message_type = template.resolve_variable(self.message_type,context)
         
         if volunteer:
-            mp = volunteer.account.message_preferences.filter('type =', message_type).get()
+            mp = volunteer.message_preferences.filter('type =', message_type).get()
             if not mp: 
                 prop = message_type.default_propagation
             else:

@@ -16,13 +16,10 @@ from google.appengine.api import memcache
 class NeighborhoodsPage(AbstractHandler):
     def get(self, url_data):    
         try:
-            account = self.auth()
+            volunteer = self.auth()
         except:
             return
         
-        if account: user = account.get_user()
-        else: user = None
-                
         params = self.parameterize() 
         
         application = self.get_application()
@@ -36,7 +33,7 @@ class NeighborhoodsPage(AbstractHandler):
         
         template_values = {                              
             'neighborhoods': neighborhoods,
-            'volunteer': user                                
+            'volunteer': volunteer                                
           }
         self._add_base_template_values(vals = template_values)
         
@@ -66,7 +63,7 @@ class NeighborhoodsPage(AbstractHandler):
             path = os.path.join(os.path.dirname(__file__),'..', 'views', 'neighborhoods', 'neighborhoods.json')
             render_out = template.render(path, template_values)
             if (('jsoncallback' in params)):
-              render_out = params['jsoncallback'] + '(' + render_out + ');'
+                render_out = params['jsoncallback'] + '(' + render_out + ');'
           
         self.response.out.write(render_out)
         return
@@ -84,12 +81,9 @@ class NeighborhoodDetailPage(AbstractHandler):
     def get(self, neighborhood_id):
         LIMIT = 4
         try:
-            account = self.auth()
+            volunteer = self.auth()
         except:
             return
-        
-        if account: user = account.get_user()
-        else: user = None
         
         neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
         if not neighborhood:
@@ -124,7 +118,7 @@ class NeighborhoodDetailPage(AbstractHandler):
         #end fill forum block
         
         template_values = {
-            'volunteer': user,
+            'volunteer': volunteer,
             'neighborhood': neighborhood,
             'volunteers_living_here': random.sample(candidates_living, min(len(candidates_living),LIMIT)), 
             'volunteers_working_here': random.sample(candidates_working, min(len(candidates_working),LIMIT)), 

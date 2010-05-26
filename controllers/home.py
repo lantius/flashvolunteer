@@ -17,18 +17,14 @@ class MainPage(AbstractHandler):
       
     def homepage(self):
         try:
-            account = self.auth()
+            volunteer = self.auth()
         except:
-            raise
             return  
         
-        if account: user = account.get_user()
-        else: user = None
-          
         upcoming_events = self.get_application().upcoming_events().fetch(MainPage.LIMIT)
         
         template_values = {
-            'volunteer' : user,
+            'volunteer' : volunteer,
             'upcoming_events': upcoming_events,
           }
         self._add_base_template_values(vals = template_values)
@@ -38,15 +34,12 @@ class MainPage(AbstractHandler):
 
     def incentives(self):
         try:
-            account = self.auth()
+            volunteer = self.auth()
         except:
             return    
         
-        if account: user = account.get_user()
-        else: user = None
-          
         template_values = {
-            'volunteer' : user,
+            'volunteer' : volunteer,
           }
         self._add_base_template_values(vals = template_values)
         

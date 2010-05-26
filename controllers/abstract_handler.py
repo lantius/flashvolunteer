@@ -32,7 +32,7 @@ class AbstractHandler(webapp.RequestHandler):
     def _add_base_template_values(self, vals):
         session = self._session()
         #logging.info('_add_base_template_values: %s'%session.sid)
-        account = self.get_account()
+        volunteer = self.get_account()
         application = self.get_application()
             
         is_ajax_request = self.ajax_request()
@@ -47,7 +47,7 @@ class AbstractHandler(webapp.RequestHandler):
             'path': self.request.path,
             'application_alias': application.get_alias(),
             'session_id':  session.sid,
-            'account': account,
+            'volunteer': volunteer,
             'to_extend': to_extend,
             'skin': application.skin.get(),
             'GOOGLEMAPSAPI': get_google_maps_api_key()
@@ -58,10 +58,9 @@ class AbstractHandler(webapp.RequestHandler):
         if redirected:
             del session['redirected']
                 
-        if account:
-            vals['unread_message_count'] = account.get_unread_message_count()
-            user = account.get_user()
-            evs = user.eventvolunteers.filter('event_is_upcoming =', False).filter('attended =', None).filter('event_is_hidden =', False).fetch(20)
+        if volunteer:
+            vals['unread_message_count'] = volunteer.get_unread_message_count()
+            evs = volunteer.eventvolunteers.filter('event_is_upcoming =', False).filter('attended =', None).filter('event_is_hidden =', False).fetch(20)
             log_ev = None
             for ev in evs:
                 if ev.application.key().id() == application.key().id():
@@ -69,7 +68,7 @@ class AbstractHandler(webapp.RequestHandler):
                     break
                 
             if log_ev:
-                vals['header_message'] = 'Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(account.get_first_name(), log_ev.event.url(), log_ev.event.name)
+                vals['header_message'] = 'Hi %s! Please log your hours for <a href="%s" class="fv">"%s"</a> (or remove yourself from the attendees). Thanks!'%(volunteer.get_first_name(), log_ev.event.url(), log_ev.event.name)
 
         if 'notification_message' in session and is_ajax_request and len(session['notification_message']) > 0:
             vals['notification_message'] = '<br><br>'.join(session['notification_message'])
@@ -83,7 +82,7 @@ class AbstractHandler(webapp.RequestHandler):
         if auth is None: return None
         else:
             try:
-                return auth.account
+                return auth.user
             except:
                 session.flush()
                 return None
@@ -95,9 +94,9 @@ class AbstractHandler(webapp.RequestHandler):
         
         if require_admin: require_login = True
         
-        account = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
+        volunteer = self._auth(require_login=require_login, redirect_to = redirect_to, require_admin = require_admin)
         
-        return account
+        return volunteer
     
     #def redirect(self, uri):
     #    logging.info('redirecting to %s'%uri)
@@ -107,30 +106,30 @@ class AbstractHandler(webapp.RequestHandler):
         
         session = self._session()
         
-        account = self.get_account()
+        volunteer = self.get_account()
         
-        if account:
+        if volunteer:
             application = self.get_application()
-            if not application.key().id() in account.active_applications:
-                account.add_application(application)                      
+            if not application.key().id() in volunteer.applications:
+                volunteer.add_application(application)                      
 
         if require_login:
-            if not account:
+            if not volunteer:
                 self.redirect(redirect_to)        
                 if redirect_to == '/login': 
                     session['login_redirect'] = self.request.path        
                 raise AuthError("You must be signed in to perform this action.")
                         
-            elif self.request.method == 'POST' and not account.check_session_id(self.request.get('session_id'), session = session):
+            elif self.request.method == 'POST' and not volunteer.check_session_id(self.request.get('session_id'), session = session):
                 self.redirect('/timeout')
                 self.add_notification_message('Your session has timed out. Please log back in when you are ready.')
                 raise TimeoutError("Session has timed out.")
                 #return (None)       # shouldn't get here except in tests    
-            elif require_admin and not account.is_admin():
+            elif require_admin and not volunteer.is_admin():
                 self.redirect(redirect_to)
                 raise AuthError('You do not have permission to view this page.')
         
-        return account
+        return volunteer
 
     def ajax_request(self):
         return 'HTTP_X_REQUESTED_WITH' in os.environ and os.environ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
@@ -256,7 +255,7 @@ class AbstractHandler(webapp.RequestHandler):
         message = Message(
           subject = subject,
           body = body,
-          sent_by = sender,
+          sender = sender,
           type = type,
           autogen = autogen,
           forum_msg = forum

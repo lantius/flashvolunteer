@@ -94,7 +94,7 @@ class Admin(BaseRequestHandler):
         """
 
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return
                 
@@ -106,7 +106,7 @@ class Admin(BaseRequestHandler):
         """
 
         try:
-            account = self.auth(require_login=True, require_admin = True)
+            volunteer = self.auth(require_login=True, require_admin = True)
         except:
             return
         

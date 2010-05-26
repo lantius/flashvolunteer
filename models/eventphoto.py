@@ -1,7 +1,7 @@
 from google.appengine.ext import db
 
 from models.event import Event
-from models.auth.account import Account
+from models.volunteer import Volunteer
 
 ################################################################################
 class EventPhoto(db.Model):
@@ -10,9 +10,8 @@ class EventPhoto(db.Model):
                                  collection_name = 'eventphotos')
     
     #person who posted photo or created album
-    account = db.ReferenceProperty(Account,
-                                   required = True,
-                                   collection_name = 'eventphotos')  
+    user = db.ReferenceProperty(Volunteer,
+                                collection_name = 'eventphotos')  
     
     #link, or title for INTERNAL_ALBUM)
     content = db.StringProperty(required = True)
@@ -38,15 +37,15 @@ class EventPhoto(db.Model):
     
     def can_edit(self, requester):
         #want to know if requester can edit; 
-        if not self.account or not requester: return False
+        if not self.volunteer or not requester: return False
         
         #can edit if the original poster
-        if (requester.key() == self.account.key()):
+        if (requester.key() == self.volunteer.key()):
             return True
         
         #can edit if event owner 
         eventvolunteers_owners = self.event.hosts()
-        owner_keys = [vol.account.key() for vol in eventvolunteers_owners]
+        owner_keys = [vol.key() for vol in eventvolunteers_owners]
         
         if (requester.key() in owner_keys):
             return True

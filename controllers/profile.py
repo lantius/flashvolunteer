@@ -13,40 +13,38 @@ class ProfilePage(AbstractHandler):
     LIMIT = 2
     def get(self):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return    
         
-        user = account.get_user()
-        
-        events = { 'Your events' : user.events() }
+        events = { 'Your events' : volunteer.events() }
         byinterest = []
         
-        if user.home_neighborhood:
-            events['Neighborhood events'] = user.home_neighborhood.events
+        if volunteer.home_neighborhood:
+            events['Neighborhood events'] = volunteer.home_neighborhood.events
         
-        for ic in user.interestcategories():
+        for ic in volunteer.interestcategories():
             if ic.events():
                 byinterest.append(ic)
         
-        recommended_events = user.recommended_events(application = self.get_application(),
+        recommended_events = volunteer.recommended_events(application = self.get_application(),
                                                      session = self._session())[:ProfilePage.LIMIT]
 
         (future_events, past_events, 
-         events_coordinating, past_events_coordinated) = user.get_activities(ProfilePage.LIMIT)
+         events_coordinating, past_events_coordinated) = volunteer.get_activities(ProfilePage.LIMIT)
         
         (future_events_cnt, past_events_cnt, 
-         events_coordinating_cnt, past_events_coordinated_cnt) = user.get_activities()
+         events_coordinating_cnt, past_events_coordinated_cnt) = volunteer.get_activities()
         
-        vhours = sum([ev.hours for ev in user.eventvolunteers if ev.hours])
+        vhours = sum([ev.hours for ev in volunteer.eventvolunteers if ev.hours])
         
-        friends = user.friends()
+        friends = volunteer.friends()
         if len(friends) > 5:
             friends = random.sample(friends, 5)
             
         template_values = {
-            'volunteer' : user,
-            'neighborhoods': NeighborhoodHelper().selected(self.get_application(),user.home_neighborhood),
+            'volunteer' : volunteer,
+            'neighborhoods': NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood),
             'recommended_events': recommended_events,
             #TODO: convert to application-specific data model
             'interest_categories': InterestCategory.all(),
@@ -61,7 +59,7 @@ class ProfilePage(AbstractHandler):
             'past_events_coordinated_cnt': past_events_coordinated_cnt,
             'events_coordinating_cnt': events_coordinating_cnt,
             
-            'user_of_interest': user,
+            'user_of_interest': volunteer,
             'event_access': True,
             'friends': friends
             

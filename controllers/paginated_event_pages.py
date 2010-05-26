@@ -16,7 +16,7 @@ class BaseEventListPage(AbstractHandler):
 
     def set_context(self):  
         try:
-            self.account = self.auth()
+            self.volunteer = self.auth()
         except:
             return
         
@@ -26,16 +26,13 @@ class BaseEventListPage(AbstractHandler):
         bookmark_loc = self.request.get("bookmark", None)
         params = self.parameterize()
         
-        if self.account: 
-            if self.volunteerid:
-                self.volunteer = Volunteer.get_by_id(self.volunteerid)
-            else:
-                self.volunteer = self.account.get_user()
-            
-        else: 
-            self.volunteer = None
-
-
+        #if self.volunteer: 
+        #    if self.volunteerid:
+        #        self.volunteer = Volunteer.get_by_id(self.volunteerid)
+        #    else:
+        #        self.volunteer = self.account.get_user()
+        #else: 
+        #    self.volunteer = None
 
         first_page = not bookmark_loc or bookmark_loc == '-'
         if not first_page:
@@ -150,7 +147,7 @@ class PaginatedVolunteerCompletedPage(BaseEventListPage):
         return events
     
     def _get_title(self):
-        if self.account.get_user().key().id() == self.volunteerid:
+        if self.volunteer.key().id() == self.volunteerid:
             return 'My Completed Events'
         else:
             return '%s\'s Completed Events'%self.volunteer.name
@@ -172,7 +169,7 @@ class PaginatedVolunteerCoordinatedCompletedPage(BaseEventListPage):
         return events
     
     def _get_title(self):
-        if self.account.get_user().key().id() == self.volunteerid:
+        if self.volunteer.key().id() == self.volunteerid:
             return 'Events I Coordinated'
         else:
             return '%s\'s Coordinated Events'%self.volunteer.name

@@ -9,7 +9,6 @@ from models.messages import MessageType
 from models.volunteer import Volunteer
 from models.event import Event
 from models.neighborhood import Neighborhood
-from models.auth.account import Account
 
 from utils.message_text import event_forum_txt, neighborhood_forum_txt
 
@@ -57,20 +56,20 @@ class AbstractSendMessage(AbstractHandler):
     
     def post(self, url_data = None):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         id = url_data
         
-        recipients = self._get_recipients(id, account)
+        recipients = self._get_recipients(id, volunteer)
          
         params = self.parameterize() 
         
         mt = MessageType.all().filter('name = ', self._get_message_type()).get()  
         
-        self._send_message(sender = account, recipients = recipients, type = mt, params = params, forum = self._is_forum_post())
-        self._do_additional_post_processing(id = id, sender = account, params = params)
+        self._send_message(sender = volunteer, recipients = recipients, type = mt, params = params, forum = self._is_forum_post())
+        self._do_additional_post_processing(id = id, sender = volunteer, params = params)
 
         session = self._session()
         
@@ -85,7 +84,7 @@ class AbstractSendMessage(AbstractHandler):
     #show message entry form
     def get(self, url_data = None):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         params = self.parameterize() 
@@ -95,7 +94,7 @@ class AbstractSendMessage(AbstractHandler):
         id = url_data
  
         template_values = {}
-        recipients = self._get_recipients(id, account)
+        recipients = self._get_recipients(id, volunteer)
         render_path = self._get_render_path()
         
         url = self._get_url(recipients)
@@ -106,7 +105,7 @@ class AbstractSendMessage(AbstractHandler):
             recipients = ', '.join([r.name for r in recipients])
             
         template_values.update({
-          'volunteer': account.get_user(),
+          'volunteer': volunteer,
           'recipients': recipients,
           'url': url,
           'recipient_type': self._get_recipient_type()
@@ -123,9 +122,9 @@ class AbstractSendMessage(AbstractHandler):
         last_key = None
         while True:
             if last_key:
-                query = Account.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
+                query = Volunteer.gql('WHERE __key__ > :1 ORDER BY __key__', last_key)
             else:
-                query = Account.gql('ORDER BY __key__')
+                query = Volunteer.gql('ORDER BY __key__')
             
             recips = query.fetch(limit = CHUNK_SIZE + 1)
             
@@ -143,13 +142,13 @@ class SendMessage_Personal(AbstractSendMessage):
 
     def _get_recipients(self, id, sender):
         #send to person
-        return [Volunteer.get_by_id(int(id)).account]
+        return [Volunteer.get_by_id(int(id))]
 
     def _get_message_type(self):
         return 'person_to_person'
     
     def _get_recipient_type(self):
-        return 'account'
+        return 'volunteer'
     
     def _get_render_path(self):
         return os.path.join(os.path.dirname(__file__),'..', 'views', 'messages', 'create_message.html')
@@ -174,7 +173,7 @@ class SendMessage_Event(AbstractSendMessage):
 
     def _do_additional_post_processing(self, id, sender, params):
         event = Event.get_by_id(int(id))
-        recipients = [ev.volunteer.account for ev in event.eventvolunteers if ev.volunteer.account.key().id() != sender.key().id()]
+        recipients = [ev.volunteer for ev in event.eventvolunteers if ev.volunteer.key().id() != sender.key().id()]
         
         mt = MessageType.all().filter('name = ', 'event_forum').get()
         substitution_params = {
@@ -210,8 +209,8 @@ class SendMessage_Neighborhood(AbstractSendMessage):
 
     def _do_additional_post_processing(self, id, sender, params):
         neighborhood = Neighborhood.get_by_id(int(id))
-        recips = dict([(v.account.key().id(),v.account) for v in neighborhood.home_neighborhood if v.account.key().id() != sender.key().id()])
-        recips.update(dict([(v.account.key().id(),v.account) for v in neighborhood.work_neighborhood if v.account.key().id() != sender.key().id()]))
+        recips = dict([(v.key().id(),v) for v in neighborhood.home_neighborhood if v.key().id() != sender.key().id()])
+        recips.update(dict([(v.key().id(),v) for v in neighborhood.work_neighborhood if v.key().id() != sender.key().id()]))
         recipients = recips.values()
         
         mt = MessageType.all().filter('name = ', 'neighborhood_forum').get()

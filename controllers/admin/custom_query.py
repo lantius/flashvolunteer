@@ -18,7 +18,7 @@ class CustomQueryHandler(AbstractHandler):
 
     def get(self):
         try:
-            account = self.auth(require_login = True, require_admin = True)
+            volunteer = self.auth(require_login = True, require_admin = True)
         except:
             return
         
@@ -26,7 +26,7 @@ class CustomQueryHandler(AbstractHandler):
         
                     
         template_values = {
-            'volunteer': account.get_user(),
+            'volunteer': volunteer,
             'results': results,
           }
         self._add_base_template_values(vals = template_values)

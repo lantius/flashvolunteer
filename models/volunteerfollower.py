@@ -1,13 +1,13 @@
 from google.appengine.ext import db
 
-from models.auth.account import Account
+from models.volunteer import Volunteer
 
 class VolunteerFollower(db.Model):
     follower = db.ReferenceProperty(reference_class = None,
                                     required = True,
                                     collection_name = 'following')
-    
-    follows = db.ReferenceProperty(Account,
+   
+    followed = db.ReferenceProperty(Volunteer,
                                    collection_name = 'followers')
     
     mutual = db.BooleanProperty(default = False)

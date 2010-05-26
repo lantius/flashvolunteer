@@ -20,20 +20,20 @@ class VerifyEventAttendance(AbstractHandler):
     # GET
     def get(self, url_data):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
         
         params = self.parameterize() 
         params['id'] = url_data
         
-        self.show(params, account)
+        self.show(params, volunteer)
     
     ################################################################################
     # POST
     def post(self, url_data):
         try:
-            account = self.auth(require_login=True)
+            volunteer = self.auth(require_login=True)
         except:
             return
            
@@ -41,21 +41,20 @@ class VerifyEventAttendance(AbstractHandler):
         params['id'] = url_data
         
         event = Event.get_by_id(int(params['id']))
-        self.update(params, account)
+        self.update(params, volunteer)
         
         if not self.ajax_request():
             self.redirect(event.url())
     
     ################################################################################
     # SHOW
-    def show(self, params, account):
+    def show(self, params, volunteer):
         event = Event.get_by_id(int(params['id']))    
         if not event:
             self.redirect('/#' + event.url())
             return
         
-        if account: user = account.get_user()
-        ev = event.eventvolunteers.filter('volunteer =', user).get()
+        ev = event.eventvolunteers.filter('volunteer =', volunteer).get()
                             
         if not ev:
             self.redirect('/#' + event.url())
@@ -63,7 +62,7 @@ class VerifyEventAttendance(AbstractHandler):
         
         template_values = {
             'eventvolunteer': ev,
-            'volunteer' : account.get_user(),
+            'volunteer' : volunteer,
             'event' : event,
             'now' : now().strftime("%A, %d %B %Y"),
           }
@@ -74,14 +73,13 @@ class VerifyEventAttendance(AbstractHandler):
       
     ################################################################################
     # UPDATE
-    def update(self, params, account):
+    def update(self, params, volunteer):
         event = Event.get_by_id(int(params['id']))
         
         if not event:
             return
         
-        if account: user = account.get_user()
-        eventvolunteer = event.eventvolunteers.filter('volunteer =', user).get()
+        eventvolunteer = event.eventvolunteers.filter('volunteer =', volunteer).get()
         owner = eventvolunteer.isowner
 
         i = len('event_volunteer_')
