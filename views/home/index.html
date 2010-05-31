@@ -62,7 +62,7 @@
 	
 	<div id="righthalf"> 
         <div class="softmodule">
-            <div class="moduletitle"><h3>News Feed</h3></div>
+            <div class="moduletitle"><h3>Twitter Feed</h3></div>
             <div id=mtaTwitter> 
                 <div id=mtaTwitterbody></div>
             </div>
@@ -70,7 +70,7 @@
 
         <script type="text/javascript">
                 $(document).ready(function(){ 
-                var html = "<script type=text/javascript src=http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=3><\/script>";
+                var html = "<script type=text/javascript src=http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=10><\/script>";
                 $('#mtaTwitterbody').prepend(html);
 
                 mtaTwitterStatusesFilterReplies = false;

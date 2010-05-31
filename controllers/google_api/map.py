@@ -62,4 +62,24 @@ class RegionMapHandler(AbstractHandler):
         
         path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'google', 'events_map.html')
         self.response.out.write(template.render(path, template_values))
+
+class NeighborhoodsMapHandler(AbstractHandler):
+    LIMIT = 4 
+    def get(self):
+        app = self.get_application()
+        lon = app.sw_coord.lon + (app.ne_coord.lon - app.sw_coord.lon) / 2.0
+        lat = app.ne_coord.lat + (app.sw_coord.lat - app.ne_coord.lat) / 2.0
+        
+        events = app.upcoming_events().fetch(3)
+            
+        template_values = {
+            'lon' : lon,
+            'lat': lat,
+            'neighborhoods': [n for n in app.neighborhoods.fetch(limit=250) if n.centroid],
+            'zoom': 10
+          }
+        self._add_base_template_values(vals = template_values)
+        
+        path = os.path.join(os.path.dirname(__file__), '..', '..', 'views', 'google', 'neighborhoods_map.html')
+        self.response.out.write(template.render(path, template_values))
     
