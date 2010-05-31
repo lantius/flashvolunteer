@@ -56,30 +56,30 @@
 
 <div id="home-bottom">
 	<div id="lefthalf">
-    	
-		<div class="softmodule">
-    		<div class="moduletitle"><h3>News Feed</h3></div>
-        	<div id=mtaTwitter>	
-				<div id=mtaTwitterbody></div>
-		   	</div>
-        </div>
+       {% include "../events/events_page/_upcoming_events.html" %}
 
-    	<script type="text/javascript">
-   		 		$(document).ready(function(){ 
-		    	var html = "<script type=text/javascript src=http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=3><\/script>";
-		    	$('#mtaTwitterbody').prepend(html);
-
-            	mtaTwitterStatusesFilterReplies = false;
-			});
-    	</script>
-		
-		<div id="twitter_footer">
-  			<a target="_blank" href=http://twitter.com/flashvolunteer>&raquo; Read more</a>
-		</div>
 	</div>
 	
 	<div id="righthalf"> 
-		{% include "../events/events_page/_upcoming_events.html" %}
+        <div class="softmodule">
+            <div class="moduletitle"><h3>News Feed</h3></div>
+            <div id=mtaTwitter> 
+                <div id=mtaTwitterbody></div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+                $(document).ready(function(){ 
+                var html = "<script type=text/javascript src=http://www.twitter.com/statuses/user_timeline/flashvolunteer.json?callback=mtaTwitterCallback&amp;count=3><\/script>";
+                $('#mtaTwitterbody').prepend(html);
+
+                mtaTwitterStatusesFilterReplies = false;
+            });
+        </script>
+        
+        <div id="twitter_footer">
+            <a target="_blank" href=http://twitter.com/flashvolunteer>&raquo; Read more</a>
+        </div>
 	</div>
 </div>
 

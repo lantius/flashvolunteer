@@ -307,6 +307,7 @@ class VolunteerAvatar(AbstractHandler):
     ################################################################################
     # DELETE
     def delete(self, volunteer):
+        logging.info('deleting avatar')
         volunteer.avatar = None
         volunteer.put()
       
@@ -326,5 +327,7 @@ class VolunteerAvatar(AbstractHandler):
     
         volunteer.avatar_type = 'image/' + content_type
         volunteer.avatar = params['avatar']
+        logging.info('set avatar')
+        logging.info(volunteer.preferred_email)
         volunteer.put()
 

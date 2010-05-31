@@ -1,3 +1,4 @@
+from google.appengine.ext.webapp import template 
 from controllers.abstract_handler import AbstractHandler
 
 

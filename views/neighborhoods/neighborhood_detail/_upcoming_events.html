@@ -1,5 +1,18 @@
 <div id="neighborhoodupcomingevents" class="hardmodule">
+
     <div class="moduletitle"><h3>Upcoming Events</h3></div>
+
+    {% if neighborhood.centroid %}
+    <div id="eventmap" class="hardmodule">
+        
+      <iframe style="border:none" width="100%" height="250px" src="/google/neighborhood_map?nid={{neighborhood.key.id}}&lat={{neighborhood.centroid.lat}}&lon={{neighborhood.centroid.lon}}">
+        
+      </iframe>
+      
+    </div><!--end eventmap-->
+    {%else%}
+    {%endif%}
+	
     {% for event in upcoming_events %}
         {% include "../events/_event_list_item.html" %}
     {% endfor %}

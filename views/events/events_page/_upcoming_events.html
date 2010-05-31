@@ -1,6 +1,12 @@
 
 <div id="upcomingevents" class="hardmodule">
     <div class="moduletitle"><h3>Upcoming Events <a title="A list of the next few upcoming events hosted by Flash Volunteers. Visit a Neighborhood page to filter the event list by neighborhood.">(?)</a></h3></div>
+
+	    <div id="eventmap" class="hardmodule">
+	      <iframe style="border:none" width="100%" height="250px" src="/google/regional_map">
+	      </iframe>
+	    </div><!--end eventmap-->
+
         {% for event in upcoming_events %}
             {% include "../events/_event_list_item.html" %}
         {% endfor %}

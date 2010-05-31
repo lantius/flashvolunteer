@@ -294,7 +294,7 @@ li.fv-login-block {
 li#verify_attendence,
 #forum tr.message,
 tr.message,
-div.shortevent,
+div.shortevent {
     border-bottom: 1px solid #CCC;
 }
 

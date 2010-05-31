@@ -1,9 +1,12 @@
+from google.appengine.ext.webapp import template 
+
 import re, logging
 
 from google.appengine.ext import db
 from google.appengine.api import mail
 
 from models.messages.message import Message
+from models.volunteer import Volunteer
 
 from models.messages.message_type import MessageType, MessagePropagationType
 
@@ -34,7 +37,6 @@ class MessageReceipt(db.Model):
     
     
     def send(self, domain, is_debugging = False):
-
         if self.message.flagged and not self.message.verified: return
 
         if not is_debugging:                 

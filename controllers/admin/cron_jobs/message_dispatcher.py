@@ -1,3 +1,5 @@
+from google.appengine.ext.webapp import template 
+
 from controllers.abstract_handler import AbstractHandler
 
 from models.messages import MessageReceipt
@@ -13,9 +15,13 @@ from google.appengine.ext import deferred
 def check_messages(domain, is_debugging):    
     messages_to_send = MessageReceipt.all().filter('sent =', False).filter('in_task_queue =', False).filter('timestamp <', datetime.now())
 
+    logging.info('checking messages')
     for receipt in messages_to_send.fetch(limit=20):
+        
         try:
             try:
+                logging.info('putting in queue:')
+                logging.info(receipt)
                 receipt.in_task_queue = True
                 receipt.put()
                 receipt.send(domain = domain,
@@ -23,7 +29,8 @@ def check_messages(domain, is_debugging):
             finally:
                 receipt.in_task_queue = False
                 receipt.put()
-        except: 
+        except Exception, e: 
+            logging.error(e)
             receipt.in_task_queue = False
             receipt.put()
             
