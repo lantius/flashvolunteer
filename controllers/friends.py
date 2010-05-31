@@ -22,16 +22,15 @@ class FriendsPage(AbstractHandler):
             return       
     
         if volunteer:
-            candidates = list(volunteer.following_all(limit = 250))
+            candidates = volunteer.following_all()
             friends = random.sample(candidates,min(len(candidates),LIMIT))
-            followers = (v for v in volunteer.followers_only())
+            followers = volunteer.followers_only()
             neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)
         else:
             volunteer = None
             friends = None
             followers = None
             neighborhoods = Neighborhood.all()
-
 
 #        volunteer_stats = memcache.get('volunteer_stats')
 #        if not volunteer_stats: 

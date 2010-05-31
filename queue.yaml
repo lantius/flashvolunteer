@@ -3,3 +3,5 @@ queue:
   rate: 5/s
 - name: email
   rate: 8/m
+- name: login
+  rate: 5/s

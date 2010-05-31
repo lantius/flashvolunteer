@@ -295,10 +295,14 @@ li#verify_attendence,
 #forum tr.message,
 tr.message,
 div.shortevent,
-form input.text,
-form input.password  {
     border-bottom: 1px solid #CCC;
 }
+
+form input.text,
+form input.password  {
+    border: 1px solid #CCC;
+}
+
 
 /* page title underline */
 #title_block h1 {
@@ -364,4 +368,8 @@ div.actionlist,
 
 #nav .ui-state-active {
     border-color: 3px solid #CCC;
+}
+
+.ui-widget-header {
+	background: none;
 }

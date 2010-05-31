@@ -115,20 +115,18 @@ class EventsPage(AbstractHandler):
         if volunteer:
             recommended_events = None
             volunteer.recommended_events(application = self.get_application(),
-                                                         session = self._session())[:EventsPage.LIMIT]
-            future_events = [ev.event for ev in volunteer.events_future().fetch(EventsPage.LIMIT)]
-            my_past_events = [ev.event for ev in volunteer.events_past().fetch(EventsPage.LIMIT)]
-            my_past_events.reverse()
-            event_volunteers = volunteer.eventvolunteers
+                                         session = self._session())[:EventsPage.LIMIT]
             neighborhoods = NeighborhoodHelper().selected(self.get_application(),volunteer.home_neighborhood)
             #interest_categories = InterestCategoryHelper().selected(user)
-            events_coordinating = [ev.event for ev in volunteer.events_coordinating().fetch(EventsPage.LIMIT)]
+            
+            (future_events, my_past_events, events_coordinating, past_events_coordinated) = volunteer.get_activities(EventsPage.LIMIT)
+            my_past_events.reverse()
+            
         else: 
             application = self.get_application()
             recommended_events = None
             future_events = None
             my_past_events = None
-            event_volunteers = None
             events_coordinating = None
             neighborhoods = application.neighborhoods
             #TODO: convert to application-specific data model
@@ -137,7 +135,6 @@ class EventsPage(AbstractHandler):
         
         template_values = {
             'volunteer': volunteer,
-            'eventvolunteer': event_volunteers,
             'neighborhoods': neighborhoods,
             'recommended_events': recommended_events,
             'events_coordinating': events_coordinating,
@@ -388,6 +385,8 @@ class EventsPage(AbstractHandler):
                 eic.delete()    
         
         event.put()
+        memcache.set('Event-interestcategories-%i'%event.key().id(), None)
+        
         return event.key().id()
   
      
@@ -590,6 +589,8 @@ class EventsPage(AbstractHandler):
                 higher.display_weight = temp
                 higher.put()
         
+        memcache.set('Event-get_numphotoalbums-%i'%event.key().id(), None)
+        
         if event_id and event_id != None:
             self.redirect("/#/events/" + str(int(event_id)))
       
@@ -657,6 +658,9 @@ class EventAddCoordinatorPage(AbstractHandler):
                 new_coord.put()
         except:
             pass
+        
+        memcache.set('Event-hosts-%i'%event.key().id(), None)
+        memcache.set('Event-get_contact_email-%i'%event.key().id(), None)
         
         self.redirect('/#/events/'+ event_id)
       

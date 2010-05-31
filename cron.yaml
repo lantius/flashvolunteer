@@ -1,7 +1,7 @@
 cron:
 - description: the FV message dispatcher
   url: /admin/cron_jobs/message_dispatch
-  schedule: every 1 minutes
+  schedule: every 5 minutes
   
 - description: generates RSVP and post event messages
   url: /admin/cron_jobs/event_message_factory
@@ -9,7 +9,7 @@ cron:
   
 - description: regenerate stats
   url: /admin/cron_jobs/stats_gen
-  schedule: every 3 minutes
+  schedule: every 5 minutes
   timezone: America/New_York
   
 - description: updates memcache

@@ -220,13 +220,17 @@ class FollowVolunteer(AbstractHandler):
             volunteerfollower = to_follow.followers.filter('follower =', volunteer).get()
             
             mutual = to_follow.following.filter('followed =', volunteer).get()
-            
+            team = memcache.get('volunteer_teammates_%i'%volunteer.key().id())            
             if self.request.get('delete') and self.request.get('delete') == "true":
                 if volunteerfollower:
                     volunteerfollower.delete()
                     if mutual:
                         mutual.mutual = False
                         mutual.put()
+                    team = memcache.get('volunteer_teammates_%i'%volunteer.key().id())
+                    if team is not None: 
+                        del team[to_follow.key().id()]
+                        memcache.set('volunteer_teammates_%i'%volunteer.key().id(), team)
             else:
                 if not volunteerfollower:
                     volunteerfollower = VolunteerFollower(followed=to_follow, follower=volunteer, mutual = mutual is not None)
@@ -239,7 +243,15 @@ class FollowVolunteer(AbstractHandler):
                         subject = subject, 
                         body = body, 
                         type = MessageType.all().filter('name =', 'added_to_team').get(),
-                        domain = self.get_domain())   
+                        domain = self.get_domain()) 
+                    if team is not None: 
+                        team[to_follow.key().id()] = 1
+                        memcache.set('volunteer_teammates_%i'%volunteer.key().id(), team)
+                    
+            memcache.set('Volunteer-friends-%i'%volunteer.key().id(), None)  
+            memcache.set('Volunteer-followers_only-%i'%volunteer.key().id(), None)  
+            memcache.set('Volunteer-following_only-%i'%volunteer.key().id(), None)  
+            memcache.set('Volunteer-following_all-%i'%volunteer.key().id(), None)  
         
         #self.redirect('/volunteers/' + url_data)
         #self.redirect(self.request.referrer)

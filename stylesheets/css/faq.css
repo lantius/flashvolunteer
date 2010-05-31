@@ -5,7 +5,7 @@
 
 ul#nav {
 	float:left;
-	width:140px;
+	width:250px;
 	margin-bottom:30px;
 }
 
@@ -23,7 +23,7 @@ body.ie7 ul#nav li, body.ie6 ul#nav li {
 
 ul#nav>li>a {
 	display:block;
-	padding:6px 0 14px 0;
+	padding:6px 0 0px 0;
 	_padding:0;
 	*padding:0;
 	line-height:18px;
@@ -43,7 +43,7 @@ ul#nav li.ui-tabs-selected a:hover {
 #faq-sections {
 	float:right;
 	position:relative;
-	width:540px;
+	width:450px;
 	margin-right:20px;
 	margin-top:0;
 }

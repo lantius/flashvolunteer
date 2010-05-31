@@ -7,6 +7,9 @@ import datetime, logging, urllib
 from utils.html_sanitize import sanitize_html
 from models.afg_opportunity import AFGOpportunity
 
+from google.appengine.api import memcache
+from inspect import stack
+
 ################################################################################
 # Event
 class Event(db.Model):
@@ -149,26 +152,69 @@ class Event(db.Model):
         return '/events'
       
     def volunteers(self):
-        return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', False))
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', False)]
+            memcache.set(key, result, 1000)
+                    
+        return result
+    
     
     def volunteer_count(self):
-        return self.eventvolunteers.filter('isowner = ', False).count()
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = self.eventvolunteers.filter('isowner = ', False).count()
+            memcache.set(key, result, 1000)
+                    
+        return result
     
     def hosts(self):
-        return (ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', True))
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [ev.volunteer for ev in self.eventvolunteers.filter('isowner = ', True)]
+            memcache.set(key, result, 1000)
+                    
+        return result 
     
     def get_contact_email(self):
         if self.contact_email:
             return self.contact_email
-        return ','.join([ev.volunteer.get_email() for ev in self.eventvolunteers.filter('isowner = ', True)])
+
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = ','.join([ev.volunteer.get_email() for ev in self.eventvolunteers.filter('isowner = ', True)])
+            memcache.set(key, result, 1000)
+                    
+        return result 
     
     def get_numphotoalbums(self):
-        eventphotosphotos = [photo for photo in self.eventphotos]
-        return len(eventphotosphotos)
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = len(eventphotosphotos = [list(self.eventphotos)])
+            memcache.set(key, result, 1000)
+                    
+        return result
     
     def interestcategories(self):
-        return (eic.interestcategory for eic in self.event_categories)
-          
+        method = stack()[0][3]
+        key = key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [eic.interestcategory for eic in self.event_categories]
+            memcache.set(key, result, 1000)
+                    
+        return result 
+    
     def validate_time(self, date, time):
         save = {
             'date' : date,

@@ -3,7 +3,8 @@ from models.neighborhood import Neighborhood
 from models.abstractuser import AbstractUser
 
 from google.appengine.api import memcache
-    
+from inspect import stack
+
 ################################################################################
 # Volunteer
 class Volunteer(AbstractUser):
@@ -38,28 +39,50 @@ class Volunteer(AbstractUser):
     def url(self):
         return '/volunteers/' + str(self.key().id())
     
-    def friends(self):  #returns a generator of Volunteer objects
-        return [vf.followed for vf in self.following.filter('mutual =', True).order('__key__')]
+    def friends(self):  
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [vf.followed for vf in self.following.filter('mutual =', True).order('__key__')]
+            memcache.set(key, result, 1000)
+                    
+        return result 
 
-    def followers_only(self):   #returns a generator of Volunteer objects
-        return (vf.follower for vf in self.followers.filter('mutual =', False).order('__key__'))
+    def followers_only(self):   
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [vf.follower for vf in self.followers.filter('mutual =', False).order('__key__')]
+            memcache.set(key, result, 1000)
+                    
+        return result 
     
-    def following_only(self):   #returns a generator of Volunteer objects
-        return (vf.followed for vf in self.following.filter('mutual =', False).order('__key__'))
-
-    def following_all(self, key = None, limit = None):   #returns a generator of account objects
-        qry = self.following.order('__key__')
-        if key: 
-            qry = qry.filter('__key__ >=', key)
-        if limit:
-            return (vf.followed for vf in qry.fetch(limit))
-        else:
-            return (vf.followed for vf in qry)
-
+    def following_only(self):
+        method = stack()[0][3]
+        key = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [vf.followed for vf in self.following.filter('mutual =', False).order('__key__')]
+            memcache.set(key, result, 1000)
+                
+        return result 
+    
+    def following_all(self):   #returns a generator of account objects
+        method = stack()[0][3]
+        memkey = '%s-%s-%i'%(self.__class__.__name__, method, self.key().id())
+        result = memcache.get(memkey)
+        if not result:
+            result = [vf.followed for vf in self.following]
+            memcache.set(memkey, result, 1000)
+        
+        return result 
+    
     def event_access(self, volunteer):
         if not volunteer: return False
         if self.privacy__event_attendance == 'everyone': return True
-        return self.privacy__event_attendance == 'friends' and self.volunteer.following.filter('followed =', volunteer).get()
+        return self.privacy__event_attendance == 'friends' and self.following.filter('followed =', volunteer).get()
 
     def recommended_events(self, application, session):
         #TODO make more efficient
@@ -110,6 +133,12 @@ class Volunteer(AbstractUser):
         return recommended_events
 
     def interestcategories(self):
-        return (vic.interestcategory for vic in self.user_interests)
-
-
+        method = stack()[0][3]
+        key = self.__class__.__name__ + method + str(self.key().id())
+        result = memcache.get(key)
+        if not result:
+            result = [vic.interestcategory for vic in self.user_interests]
+            memcache.set(key, result, 1000)
+                    
+        return result 
+    

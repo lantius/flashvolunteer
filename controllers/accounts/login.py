@@ -10,7 +10,8 @@ import urllib
 from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import urlfetch
 from django.utils import simplejson
-
+from google.appengine.ext import deferred
+from google.appengine.api import memcache
 
 ################################################################################
 # MainPage
@@ -114,6 +115,8 @@ class Login(AbstractHandler):
             self.fv_auth()
 
         session['new_login'] = True
+        if 'auth' in session:
+            self.__login_cache()
             
     def fv_auth(self):
         params = self.parameterize() 
@@ -205,6 +208,17 @@ class Login(AbstractHandler):
         else:
             self.redirect('/#/login')      
 
+    def __login_cache(self):
+        volunteer = self.auth()
+        deferred.defer(cache_on_login, vol_id = volunteer.key().id(), _queue="login")
+        
+def cache_on_login(vol_id):
+    volunteer = Volunteer.get_by_id(vol_id)
+    logging.info('cache on login for vol %i'%vol_id)
+    key = 'volunteer_teammates_%i'%vol_id
+    
+    memcache.set(key, dict( [(vf.followed.key().id(), 1) for vf in volunteer.following] ))
+    
 def check_avatar(volunteer, session):
     if not volunteer: return
     

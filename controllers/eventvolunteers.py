@@ -3,6 +3,7 @@ import os, string
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext import db
+from google.appengine.api import memcache
 
 from models.event import Event
 from models.eventvolunteer import EventVolunteer
@@ -94,6 +95,11 @@ class VolunteerForEvent(AbstractHandler):
                     if interest_level != eventvolunteer.interest_level:
                         eventvolunteer.interest_level = interest_level
                         eventvolunteer.put()
+                        
+            memcache.set('Event-volunteers-%i'%event.key().id(), None)
+            memcache.set('Event-volunteer_count-%i'%event.key().id(), None)
+            memcache.set('AbstractUser-get_activities-%i-True'%volunteer.key().id(), None)
+            memcache.set('AbstractUser-get_activities-%i-False'%volunteer.key().id(), None)
                         
         self.redirect('/#/events/' + url_data)
         return

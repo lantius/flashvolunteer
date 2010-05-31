@@ -1,5 +1,7 @@
 from google.appengine.ext import webapp
 from django import template
+from google.appengine.api import memcache
+import logging
 
 register = webapp.template.create_template_register()
 
@@ -17,13 +19,24 @@ class RelationshipStatusNode(template.Node):
         
     def render(self, context):
         volunteer = template.resolve_variable(self.volunteer,context)
+
+        if not volunteer:
+            context['is_teammate'] = False
+            return ''
+        
         try:
             volunteer2 = template.resolve_variable(self.volunteer2,context)
         except:
             context['is_teammate'] = False
             return ''
-        if volunteer:
+        
+        key = 'volunteer_teammates_%i'%volunteer.key().id()
+        results = memcache.get(key)
+        
+        if not results:
             context['is_teammate'] = volunteer.following.filter('followed =', volunteer2).get() is not None
+        else:
+            context['is_teammate'] = volunteer2.key().id() in results
         return ''
 
 register.tag(team_status)

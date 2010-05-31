@@ -87,6 +87,7 @@ class SettingsPage(AbstractHandler):
                 self.redirect('/#/logout')
         else:  
             if self.update(params, volunteer):
+                memcache.set('Volunteer-interestcategories-%i'%volunteer.key().id(), None)
                 self.add_notification_message('Your settings have been updated.')
                 self.redirect('/#/profile')
             else:

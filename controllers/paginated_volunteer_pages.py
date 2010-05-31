@@ -124,47 +124,47 @@ class PaginatedVolunteerCategoryPage(BaseVolunteerListPage):
 
 class PaginatedNeighborhoodVolunteerWorkPage(BaseVolunteerListPage):
   
-  def get(self, neighborhood_id):
-      self.neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
-      if not self.neighborhood:
-          self.error(404)
-          self.response.out.write('404 page! boo!')
-
-      self.set_context()
-
-  def _get_volunteers(self, limit, bookmark = None):
-     qry = self.neighborhood.work_neighborhood.order('__key__')
-     if bookmark: 
-         qry = qry.filter('__key__ >=', bookmark)
-     return [v for v in qry.fetch(limit)]
-         
-  def _get_title(self):
-     return 'Working in %s'%self.neighborhood.name
- 
-  def _get_url(self):
-     return '/neighborhoods/%i/volunteers_work/'%self.neighborhood.key().id()
+     def get(self, neighborhood_id):
+         self.neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
+         if not self.neighborhood:
+             self.error(404)
+             self.response.out.write('404 page! boo!')
+    
+         self.set_context()
+    
+     def _get_volunteers(self, limit, bookmark = None):
+        qry = self.neighborhood.work_neighborhood.order('__key__')
+        if bookmark: 
+            qry = qry.filter('__key__ >=', bookmark)
+        return [v for v in qry.fetch(limit)]
+            
+     def _get_title(self):
+        return 'Working in %s'%self.neighborhood.name
+    
+     def _get_url(self):
+        return '/neighborhoods/%i/volunteers_work'%self.neighborhood.key().id()
 
 class PaginatedNeighborhoodVolunteerHomePage(BaseVolunteerListPage):
   
-  def get(self, neighborhood_id):
-      self.neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
-      if not self.neighborhood:
-          self.error(404)
-          self.response.out.write('404 page! boo!')
-
-      self.set_context()
-
-  def _get_volunteers(self, limit, bookmark = None):
-     qry = self.neighborhood.home_neighborhood.order('__key__')
-     if bookmark: 
-         qry = qry.filter('__key__ >=', bookmark)
-     return [v for v in qry.fetch(limit)]
- 
-  def _get_title(self):
-     return 'Living in %s'%self.neighborhood.name
- 
-  def _get_url(self):
-     return '/neighborhoods/%i/volunteers_home'%self.neighborhood.key().id()
+     def get(self, neighborhood_id):
+         self.neighborhood = Neighborhood.get_by_id(int(neighborhood_id))
+         if not self.neighborhood:
+             self.error(404)
+             self.response.out.write('404 page! boo!')
+    
+         self.set_context()
+    
+     def _get_volunteers(self, limit, bookmark = None):
+        qry = self.neighborhood.home_neighborhood.order('__key__')
+        if bookmark: 
+            qry = qry.filter('__key__ >=', bookmark)
+        return [v for v in qry.fetch(limit)]
+    
+     def _get_title(self):
+        return 'Living in %s'%self.neighborhood.name
+    
+     def _get_url(self):
+        return '/neighborhoods/%i/volunteers_home'%self.neighborhood.key().id()
 
 class PaginatedVolunteerTeam(BaseVolunteerListPage):
   

@@ -380,15 +380,15 @@ a {
 	}
 	
 	#generic_dialog a.pagination_link{
-	   position: absolute;
+	   position: relative;
 	}
 	
 	#generic_dialog a.pagination_link.next{
-	    right: 40px;
+	    left:90%;;
 	}
 	
 	#generic_dialog a.pagination_link.prev{
-	    left: 20px;
+	    left:5%;;
 	}
 
 	.stat_viz td a {
@@ -886,14 +886,13 @@ div{
 	}
 	
 	div#dialog_content {
-	    height: 350px;
+	    height: auto;
 	    overflow-x:hidden; 
-	    overflow-y:scroll;
+	    overflow-y:auto;
 	    margin: 10px;
 	}
 	
 	#generic_dialog div.dialog_header {
-	    height: 20px;
 	    padding:4px;
 	}
 	

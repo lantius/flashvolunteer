@@ -1,10 +1,11 @@
 from google.appengine.ext import db
+from google.appengine.api import memcache
+from inspect import stack
+import logging
 
 ################################################################################
 # AbstractUser
 class AbstractUser(db.Model):
-    
-    
     #user = db.UserProperty()
     #preferred_email = db.StringProperty(default=None)
     
@@ -30,8 +31,6 @@ class AbstractUser(db.Model):
 
     error = {}
  
-    
-    
     def validate(self, params):
         from models.volunteer import Volunteer
         self.error.clear()
@@ -116,14 +115,8 @@ class AbstractUser(db.Model):
     def past_events_coordinated(self):
         return self.eventvolunteers.filter('isowner =',True).filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
     
-    def events_past_count(self):
-        return self.events_past().count()
-    
     def events_past(self):
         return self.eventvolunteers.filter('isowner =',False).filter('event_is_upcoming =',False).filter('event_is_hidden =', False).order('event_date')
-    
-    def events_future_count(self):
-        return self.events_future().count()
     
     def events_future(self):
         return self.eventvolunteers.filter('isowner =',False).filter('event_is_upcoming =',True).filter('event_is_hidden =', False).order('event_date')
@@ -133,20 +126,28 @@ class AbstractUser(db.Model):
         self.put()
       
     def get_activities(self, limit = None):
-        if limit:     
-            future_events = [ev.event for ev in self.events_future().fetch(limit)]
-            past_events = [ev.event for ev in self.events_past().fetch(limit)]     
-            events_coordinating = [ev.event for ev in self.events_coordinating().fetch(limit)]
-            past_events_coordinated = [ev.event for ev in self.past_events_coordinated().fetch(limit)]
-        else:
-            future_events = self.events_future().count()
-            past_events = self.events_past().count()     
-            events_coordinating = self.events_coordinating().count()
-            past_events_coordinated = self.past_events_coordinated().count()
+        method = stack()[0][3]
+        key = '%s-%s-%i-%s'%(self.__class__.__name__, method, self.key().id(), str(limit is None))
+        result = memcache.get(key)
+        if not result:
+            if limit:     
+                future_events = [ev.event for ev in self.events_future().fetch(10)]
+                past_events = [ev.event for ev in self.events_past().fetch(10)]     
+                events_coordinating = [ev.event for ev in self.events_coordinating().fetch(10)]
+                past_events_coordinated = [ev.event for ev in self.past_events_coordinated().fetch(10)]
+            else:
+                future_events = self.events_future().count()
+                past_events = self.events_past().count()     
+                events_coordinating = self.events_coordinating().count()
+                past_events_coordinated = self.past_events_coordinated().count()
             
+            result = (future_events, past_events, events_coordinating, past_events_coordinated)
+            memcache.set(key, result, 1000)
+                    
+        if limit: result = (result[0][:limit],result[1][:limit],result[2][:limit],result[3][:limit]) 
         
-        return (future_events, past_events, events_coordinating, past_events_coordinated)
-           
+        return result
+    
     def get_messages(self):
         return self.incoming_messages.order('-timestamp')
     

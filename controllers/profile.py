@@ -18,14 +18,9 @@ class ProfilePage(AbstractHandler):
             return    
         
         events = { 'Your events' : volunteer.events() }
-        byinterest = []
         
         if volunteer.home_neighborhood:
             events['Neighborhood events'] = volunteer.home_neighborhood.events
-        
-        for ic in volunteer.interestcategories():
-            if ic.events():
-                byinterest.append(ic)
         
         recommended_events = volunteer.recommended_events(application = self.get_application(),
                                                      session = self._session())[:ProfilePage.LIMIT]
