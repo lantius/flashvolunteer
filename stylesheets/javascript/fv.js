@@ -2,6 +2,7 @@ function get_search_params(){
     if ($('#search_past_events:checked').val()) var past = 'on';
     else var past='';
 
+    var searchterms = $('#searchterms').val();
     var nval = $('#event_search select.neighborhood_select option:selected').val();
     if (nval && nval!='none') 
        var nid = $('#event_search select.neighborhood_select option:selected').val();
@@ -12,8 +13,9 @@ function get_search_params(){
     //if (cval && cval!='none') var cid = cval;
     //else var cid='';
 	
-	return 'past_events='+past+'&neighborhood='+nid;//+'&interestcategory='+cid;
+	return 'past_events='+past+'&neighborhood='+nid+'&searchterms='+searchterms;//+'&interestcategory='+cid;
 }
+
 
 function event_search_submit(bookmark){
 	search_params = get_search_params();

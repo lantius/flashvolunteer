@@ -6,13 +6,16 @@ from models.neighborhood import Neighborhood
 import datetime, logging, urllib
 from utils.html_sanitize import sanitize_html
 from models.afg_opportunity import AFGOpportunity
+from django.utils.html import strip_tags
 
+from controllers.search_katz import search
 from google.appengine.api import memcache
+from google.appengine.ext import deferred
 from inspect import stack
 
 ################################################################################
 # Event
-class Event(db.Model):
+class Event(search.SearchableEvent, db.Model):
     name = db.StringProperty()
     
     neighborhood = db.ReferenceProperty(Neighborhood,
@@ -349,6 +352,23 @@ class Event(db.Model):
     
     def inpast(self):
         return self.in_past or self.enddate is None or self.enddate < now()
+
+
+        
+    def put(self):
+        db.Model.put(self)
+        deferred.defer(self.index)
+    
+    #called from Searchable, provides data that should be indexed for full-text search
+    def searchindex_getprop_func(self):
+        props = []
+        props.append(self.name)
+        props.append(self.neighborhood.name)
+        props.append(strip_tags(self.description))
+        props.append(strip_tags(self.special_instructions))
+        return props
+
+    
 
 from components.appengine_admin.model_register import register, ModelAdmin
 ## Admin views ##

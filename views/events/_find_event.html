@@ -9,10 +9,14 @@
     				{% include "../events/_select_event_type.html" %}
 				{% endcomment %}
             </li>
-            <li>
+            </li>
                 <input type="checkbox" id="search_past_events" name="past_events" />
                 <label class="checkboxlabel" title="Include past and future events in search results." for="past_events">Include past events</label>
             </li>
+            <li>
+                <input type="text" id="searchterms" name="searchterms" />
+                <label class="textlabel" title="Enter search terms" for="searchterms"></label>
+            <li>
             <li class="submiteventsearch">
                 <button class="submit" onclick="event_search_submit()" id="s_events_wide_search">Search</button>                       
             </li>                   

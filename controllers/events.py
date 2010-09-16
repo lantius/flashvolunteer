@@ -5,6 +5,8 @@ from controllers.abstract_handler import AbstractHandler
 from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
+#from google.appengine.ext import deferred
+
 from models.event import Event
 from models.eventinterestcategory import EventInterestCategory
 from models.eventphoto import EventPhoto
@@ -403,6 +405,7 @@ class EventsPage(AbstractHandler):
           'events' : events,
           'interestcategory': interestcategory,
           'volunteer': volunteer,
+          'searchterms': params['searchterms'],
           'next': next,
           'prev': prev,
           'url': '/events/search'
@@ -440,13 +443,35 @@ class EventsPage(AbstractHandler):
         application = self.get_application()
         session = self._session()
         
-        events_query = application.events.filter('hidden = ', False)
         bookmark_loc = self.request.get("bookmark", None)
+        events_filter_keys = []
+        events_search_keys = []
+        
+        cursor_filter = None
+        do_filter = True
+        bookmark = None
+        bookmark_key = None
+        events_filter_result = []
+        events_search_result = []
+        local_now = now()
+
+        searchterms = params['searchterms']
+
+        #argh: need join between StemmedIndex entities from Event.search and results from Event
+        #get all results for searchterms - since we can't ask for an order on these, we need to get all of them :-(
+        if (len(searchterms) != 0):
+            events_search_result = Event.search(phrase = searchterms, keys_only=True)
+            events_search_keys += [tup[0] for tup in events_search_result]
+
+
+        events_query = Event.all(keys_only=True)
+        events_query = events_query.filter('hidden = ', False)
+        events_query = events_query.filter('application = ', application)
         
         if bookmark_loc and bookmark_loc != '-':
-            bookmark = datetime.strptime(bookmark_loc, '%Y-%m-%d%H:%M:%S')      
-            events_query = events_query.filter('date >=', bookmark)
-            
+            bookmark_key = db.Key(bookmark_loc)
+            bookmark_event = db.get(bookmark_key)
+            bookmark = bookmark_event.date
             trace = session.get('events_search_prev', None)
             if not trace or trace == []:
                 session['events_search_prev'] = [bookmark_loc]
@@ -454,9 +479,10 @@ class EventsPage(AbstractHandler):
             else:                
                 if 'back' in params and params['back'] == '1':
                     prev = trace.pop() 
-                    while prev >= bookmark_loc:
+                    prev_event = db.get(prev)
+                    while prev_event.date >= bookmark_event.date:
                         try:
-                            prev = trace.pop()
+                            prev = trace.pop()                                                                    
                         except: 
                             prev = '-'
                             break
@@ -466,19 +492,23 @@ class EventsPage(AbstractHandler):
                     
                 session['events_search_prev'] = trace
                 
-        else:
+        else: #no bookmark requested
             if 'events_search_prev' in session:
                 del session['events_search_prev']
                     
             prev = ''
-            if 'past_events' in params and params['past_events']:
+            if 'past_events' in params and params['past_events']: #all requested
                 session['past_events'] = str(params['past_events'])
                 session['searchurl'] = True             
-            else:
-                events_query = events_query.filter('date >= ', now())
+            else: #only current requested
+                bookmark = local_now
+
+        if (bookmark):                        
+            events_query = events_query.filter('date >= ', bookmark)
         
               
         events_query = events_query.order('date') 
+        
         memcache.delete('past_events')
         memcache.delete('searchurl')
         
@@ -507,11 +537,41 @@ class EventsPage(AbstractHandler):
             except:
                 pass
         
-        events = events_query.fetch(limit = SEARCH_LIST + 1)
         
-        if len(events) == SEARCH_LIST+1:
-            next = events[-1].date.strftime('%Y-%m-%d%H:%M:%S')  
-            events = events[:SEARCH_LIST]
+        while (do_filter): 
+            if cursor_filter:
+                events_query.with_cursor(cursor_filter)
+            events_filter_result = events_query.fetch(limit = SEARCH_LIST + 1)
+            num_events_filter_result = len(events_filter_result)
+            cursor_filter = events_query.cursor()
+            
+            if bookmark_key: 
+                try:
+                    ind = events_filter_result.index(bookmark_key)
+                    events_filter_result = events_filter_result[ind:] #discard items before ind
+                except:
+                    pass
+    
+            events_filter_keys += events_filter_result
+        
+            if (len(searchterms) == 0): #no searchterms, use just filters
+                events_search_keys = events_filter_keys
+    
+            #find events that are in both filter and search results
+            events_keys = filter(lambda x:x in events_search_keys , events_filter_keys)    
+            
+            if (len(events_keys) >= SEARCH_LIST + 1):
+                break #enough found: get out
+            
+            if (num_events_filter_result < SEARCH_LIST + 1): #must be last batch of events
+                break
+            
+        #from keys to entities
+        events = [Event.get(key) for key in events_keys]
+        
+        if len(events) >= SEARCH_LIST+1:
+            next = events[SEARCH_LIST].key() 
+            events = events[:SEARCH_LIST] #first SEARCH_LIST items
         else:
             next = None
             

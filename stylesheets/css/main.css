@@ -254,6 +254,19 @@ li {
 	    margin-left: 15px;
 	}
 
+    ul.leftformlist input#searchterms,
+    ul.formlist input#searchterms {
+	   margin-top: 20px;
+	   height: 20px; 
+	   width: 180px;
+	   vertical-align:middle;
+        float:left;
+    }
+
+    ul.rightformlist {
+        float: right;
+        width: 49%;
+    }
 	.verifiableevent ul li {
 	    margin-left: 15px;
 	}
@@ -379,16 +392,23 @@ a {
 	    font-weight:bold;
 	}
 	
+	#generic_dialog div.dialog_header {
+		overflow: auto;
+		width: 98.5%
+	}
+	
 	#generic_dialog a.pagination_link{
 	   position: relative;
 	}
 	
 	#generic_dialog a.pagination_link.next{
-	    left:90%;;
+	    float: right;
+		right:5%;
 	}
 	
 	#generic_dialog a.pagination_link.prev{
-	    left:5%;;
+	    float: left;
+		left:5%;
 	}
 
 	.stat_viz td a {

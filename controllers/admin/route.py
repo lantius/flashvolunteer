@@ -23,6 +23,8 @@ from controllers.admin.home import AdminPage
 
 from components.appengine_admin.views import Admin as AppEngineAdmin
 
+from controllers.search_katz.searchadmin import SearchAdmin
+
 webapp.template.register_template_library('controllers._filters')
 
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -38,6 +40,7 @@ def main():
         ('/admin/cron_jobs/message_dispatch', MessageDispatcher),
         ('/admin/cron_jobs/event_message_factory', EventMessageFactory),
         ('/admin/cron_jobs/recommended_events_message_factory', RecommendedEventMessageFactory),
+        ('/admin/searchadmin(.*)', SearchAdmin),
         ('/admin/cron_jobs/stats_gen', StatsGen),
         ('/admin/cron_jobs/mem_cache', MemCache),
           

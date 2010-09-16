@@ -6,7 +6,11 @@
 
 {% block dialog_content %}
     <div class="padding-bottom">
-        <span class="label">You have searched for events
+        <span class="label">You have searched 
+        {% if searchterms %}
+             '{{searchterms}}'
+        {% endif %}
+		in events
         {% if neighborhood %}
             in {{neighborhood.name}}.
         {% else %}

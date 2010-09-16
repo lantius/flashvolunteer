@@ -178,16 +178,6 @@ indexes:
 - kind: Message
   properties:
   - name: sender
-  - name: trigger
-    direction: desc
-
-- kind: Message
-  properties:
-  - name: sent
-  - name: trigger
-
-- kind: Message
-  properties:
   - name: sent
   - name: trigger
     direction: desc
@@ -195,13 +185,17 @@ indexes:
 - kind: Message
   properties:
   - name: sender
-  - name: sent
   - name: trigger
     direction: desc
 
 - kind: Message
   properties:
-  - name: sender
+  - name: sent
+  - name: trigger
+
+- kind: Message
+  properties:
+  - name: sent
   - name: trigger
     direction: desc
 
