@@ -54,6 +54,7 @@ def create_environment(name, session_id):
         )
         neighborhoods[k] = n
 
+    print 'Adding neighborhoods'
     put(neighborhoods.values())
 
     for k,v in volunteers.items():
@@ -67,17 +68,18 @@ def create_environment(name, session_id):
 
         v = Volunteer(
           name = k,
-          #user = u,
+          user = u,
           avatar = v['avatar'],
           quote = v['quote'],
           #twitter = None,
           home_neighborhood = neighborhoods[v['home_neighborhood']],
           work_neighborhood = neighborhoods[v['work_neighborhood']],
           session_id = session_id,
-          create_rights = v['create_rights'],
+          group_wheel = v['create_rights'],
           privacy__event_attendance = privacy__event_attendance,
           applications = [application.key().id()],
-          user = u, name = k, preferred_email=email)    
+          preferred_email=email)    
+        v.put()
 
         auth = Auth(
                 strategy = 'dev',
@@ -86,7 +88,11 @@ def create_environment(name, session_id):
             )
         auth.put()
 
-
+        
+        #account = Account(user = u, name = k, preferred_email=email)
+        #account.put()
+        #print 'Adding ' + auth.identifier
+ 
     
         volunteers[k] = v
 
@@ -96,7 +102,8 @@ def create_environment(name, session_id):
         u = User(email)
         v = Volunteer(
           name = k,
-          user = u, name = k, preferred_email=email,
+          user = u, 
+          preferred_email=email,
           #user = u,
           avatar = v['avatar'],
           quote = v['quote'],
@@ -112,10 +119,6 @@ def create_environment(name, session_id):
     for k,v in events.items():
         date = datetime.datetime.strptime(v['time'] + " " + v['date'], "%H:%M %m/%d/%Y")
         enddate = datetime.datetime.strptime(v['endtime'] + " " + v['enddate'], "%H:%M %m/%d/%Y")
-        try:
-            date_created = datetime.datetime.strptime(v['time'] + " " + v['date_created'], "%H:%M %m/%d/%Y").date()
-        except:
-            date_created = date.date()
 
         try:
             duration = int(v['duration'])
@@ -124,7 +127,6 @@ def create_environment(name, session_id):
         e = Event(
           name = k,
           neighborhood = neighborhoods[v['neighborhood']],
-          date_created = date_created,
           date = date,
           enddate = enddate,
           description = v['description'],
@@ -134,12 +136,14 @@ def create_environment(name, session_id):
           in_past = date < now()
                   
         )
+        print 'Adding ' + e.name
         e.put()
         events[k] = e
 
+
+    print 'Adding events, organizations'
     put(events.values() + \
-        organizations.values() + \
-        volunteers.values())
+        organizations.values())
  
     cat = InterestCategory(name = 'tests_ic')
     cat.put()
@@ -211,16 +215,32 @@ def armageddon(test_objects):
         
 def manual_armageddon(name):
     "removes population from datastore, slowly"
+    from models.neighborhood import Neighborhood
+    from models.volunteer import Volunteer
+    from models.event import Event
+    from models.eventvolunteer import EventVolunteer
+    from models.volunteerfollower import VolunteerFollower
+    from models.interest import Interest
+    from models.interestcategory import InterestCategory
+    from models.auth.account import Account
+    from models.auth.auth import Auth
+    
+    #from utils.applications.operations import synchronize_apps
+    #synchronize_apps(server=0)
+    
+    os.environ['HTTP_HOST'] = host
+    application = Application.all().filter('name = ', 'seattle').get()
+
     print 'Bye-bye population'
     exec('from gui_integration_tests.test_environments.%s import my_env'%name)
 
     (volunteers, organizations, neighborhoods, events, event_volunteers, social_network) = copy.deepcopy(my_env)
     
     for k,v in neighborhoods.items():
-        neighborhoods = db.GqlQuery("SELECT * FROM Neighborhood WHERE name = :name", 
+        neighborhoods_query = db.GqlQuery("SELECT * FROM Neighborhood WHERE name = :name", 
                                    name = k)
-        for n in neighborhoods:
-          n.delete()
+        for n in neighborhoods_query:
+            n.delete()
         
     for k,v in volunteers.items():
       delete_user(k)
