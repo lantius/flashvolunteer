@@ -32,7 +32,7 @@
 	            map: map,
 	            visible: true,
 				clickable: true,
-				title: '{{event.name}}' + ' - ' + '{{event.get_start_time_full}}'
+				title: '{{event.name|escape}}' + ' - ' + '{{event.get_start_time_full}}'
 	          });		  
 		  {% endfor %}
 

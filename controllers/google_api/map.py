@@ -22,7 +22,7 @@ class MapHandler(AbstractHandler):
 
 
 class NeighborhoodMapHandler(AbstractHandler):
-    LIMIT = 4 
+    LIMIT = 25 
     def get(self):
         
         params = self.parameterize() 
@@ -44,13 +44,13 @@ class NeighborhoodMapHandler(AbstractHandler):
         self.response.out.write(template.render(path, template_values))
     
 class RegionMapHandler(AbstractHandler):
-    LIMIT = 4 
+    LIMIT = 25 
     def get(self):
         app = self.get_application()
         lon = app.sw_coord.lon + (app.ne_coord.lon - app.sw_coord.lon) / 2.0
         lat = app.ne_coord.lat + (app.sw_coord.lat - app.ne_coord.lat) / 2.0
         
-        events = app.upcoming_events().fetch(3)
+        events = app.upcoming_events().fetch(self.LIMIT)
             
         template_values = {
             'lon' : lon,
@@ -64,13 +64,13 @@ class RegionMapHandler(AbstractHandler):
         self.response.out.write(template.render(path, template_values))
 
 class NeighborhoodsMapHandler(AbstractHandler):
-    LIMIT = 4 
+    LIMIT = 25
     def get(self):
         app = self.get_application()
         lon = app.sw_coord.lon + (app.ne_coord.lon - app.sw_coord.lon) / 2.0
         lat = app.ne_coord.lat + (app.sw_coord.lat - app.ne_coord.lat) / 2.0
         
-        events = app.upcoming_events().fetch(3)
+        events = app.upcoming_events().fetch(self.LIMIT)
             
         template_values = {
             'lon' : lon,

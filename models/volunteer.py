@@ -11,7 +11,7 @@ class Volunteer(AbstractUser):
 
     home_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'home_neighborhood')
     work_neighborhood = db.ReferenceProperty(Neighborhood, collection_name = 'work_neighborhood')
-    
+    account = db.ReferenceProperty(reference_class = None)
     privacy__event_attendance = db.StringProperty(default='everyone')
 
     def validate(self, params):

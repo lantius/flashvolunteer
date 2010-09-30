@@ -98,6 +98,14 @@ indexes:
   - name: reminder_message_sent
   - name: startdate
 
+- kind: Event
+  properties:
+  - name: application
+  - name: hidden
+  - name: is_ongoing
+  - name: enddate
+
+
 - kind: EventInterestCategory
   properties:
   - name: event_is_hidden
@@ -181,7 +189,7 @@ indexes:
   - name: sent
   - name: trigger
     direction: desc
-
+    
 - kind: Message
   properties:
   - name: sender
@@ -196,6 +204,19 @@ indexes:
 - kind: Message
   properties:
   - name: sent
+  - name: trigger
+    direction: desc
+
+- kind: Message
+  properties:
+  - name: sender
+  - name: sent
+  - name: trigger
+    direction: desc
+
+- kind: Message
+  properties:
+  - name: sender
   - name: trigger
     direction: desc
 

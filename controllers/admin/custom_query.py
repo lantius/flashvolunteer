@@ -10,6 +10,7 @@ from google.appengine.ext.webapp import template
 
 from models.afg_opportunity import AFGOpportunity
 from models.eventvolunteer import EventVolunteer
+from models.volunteer import Volunteer
 
 from django.utils import simplejson
 import datetime
@@ -22,8 +23,7 @@ class CustomQueryHandler(AbstractHandler):
         except:
             return
         
-        results= EventVolunteer.all().filter('isowner =',False)
-        
+        results= db.GqlQuery("SELECT * FROM Volunteer where date_added > DATETIME(2010,8,10,0,0)")
                     
         template_values = {
             'volunteer': volunteer,

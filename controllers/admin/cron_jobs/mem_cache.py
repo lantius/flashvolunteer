@@ -15,10 +15,11 @@ def mem_cache(app_id, is_debugging):
      
     if not memcache.get('%s-upcoming_events'%application.name):
         upcoming_events = application.upcoming_events()
-        ongoing_events = application.ongoing_events()
+        ongoing_events = application.ongoing_opportunities()
             
 class MemCache(AbstractHandler):
 
     def get(self):
-        for app in Application.all():
-            deferred.defer(mem_cache, app.key().id(), self.is_debugging())
+        return
+        #for app in Application.all():
+        #    deferred.defer(mem_cache, app.key().id(), self.is_debugging())

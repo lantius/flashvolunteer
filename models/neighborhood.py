@@ -24,7 +24,7 @@ class Neighborhood(db.Model):
         return self.home_neighborhood
     
     def ongoing_opportunities(self):
-        return self.events.order('date').filter('in_past =', True).filter('hidden =', False).filter('is_ongoing =',True)
+        return self.events.order('date').filter('in_past =', False).filter('hidden =', False).filter('is_ongoing =',True)
     
     def events_past(self):
         return self.events.order('date').filter('in_past =', True).filter('hidden =', False)

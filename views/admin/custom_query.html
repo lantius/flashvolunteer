@@ -24,15 +24,15 @@
     <tbody>
         <tr>
             <th>Person</th>
-            <th>Date</th>
-			<th>Hours</th>
+            <th>Email</th>
         </tr>
-        {% for ev in results %}
+        {% for v in results %}
+		    {% if v.preferred_email %}
           <tr>
-            <td><a href={{ev.volunteer.url}}>{{ev.volunteer.get_name}}</a></td>
-            <td>{{ev.event_date}}</td>
-            <td>{{ev.hours}}</td>
+            <td><a href={{v.url}}>{{v.get_name}}</a></td>
+            <td>{{v.preferred_email}}</td>
           </tr>
+			 {% endif %}
         {% endfor %}
         
     </tbody>

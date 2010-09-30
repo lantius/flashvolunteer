@@ -60,18 +60,26 @@ class MigrateDatastore(AbstractHandler):
         #deferred.defer(synchronize_apps, self.get_server())
         #deferred.defer(consolidate_account_data)
         #deferred.defer(chunk, migrate_account_vol, Auth)
-        deferred.defer(chunk, migrate_account_vol7, Message)
-        deferred.defer(chunk, migrate_account_vol8, MessageReceipt)
+        #deferred.defer(chunk, migrate_account_vol7, Message)
+        #deferred.defer(chunk, migrate_account_vol8, MessageReceipt)
         #deferred.defer(chunk, migrate_account_vol3, EventPhoto)
         #deferred.defer(chunk, migrate_account_vol4, Interest)
         #deferred.defer(chunk, migrate_account_vol5, VolunteerFollower)
         #deferred.defer(chunk, migrate_account_vol6, VolunteerFollower)
-                
+        deferred.defer(chunk, migrate_account_vol9, Volunteer)
+        
         #for app in Application.all():
         #    skin = Skin(application = app)
         #    skin.put()
 
+        #deferred.defer(clear_message_queue)
+        
         self.redirect('/admin/migrate')
+
+def clear_message_queue():
+    for mr in MessageReceipt.all().filter('sent =', False).fetch(100):
+        mr.sent = True
+        mr.put()
         
 
 CHUNK_SIZE = 100
@@ -87,7 +95,17 @@ def chunk(func, model):
             break
         
         qry = qry.filter('__key__ >', results[-1])
-    
+
+def migrate_account_vol9(key):
+    logging.info('migrate_account_vol2')
+
+    for a in Volunteer.all().order('__key__').filter('__key__ >=', key).fetch(CHUNK_SIZE):
+        if not a.preferred_email or not a.preferred_email.endswith('@Facebook'):
+            continue
+        a.preferred_email = None
+        a.put()
+
+    logging.info('/migrate_account_vol2')
     
 def migrate_account_vol(key):
     logging.info('migrate_account_vol')

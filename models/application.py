@@ -21,31 +21,32 @@ class Application(db.Model):
 
   
     def ongoing_opportunities(self):
-        memcached = memcache.get('%s-ongoing_opportunities'%self.name)
-        if not memcached:
-            date = now()
-                    
-            memcached = self.events.filter(
-                'date >= ', date).filter(
-                'hidden = ', False).filter(
-                'is_ongoing = ', True).order(
-                'date')
-            memcache.set('%s-ongoing_opportunities'%self.name, memcached, 60 * 10)
+        #TODO: intelligently memcache this; caching query doesn't do anything
+        #memcached = memcache.get('%s-ongoing_opportunities'%self.name)
+        #if not memcached:
+        date = now()
+                
+        memcached = self.events.filter(
+            'date >= ', date).filter(
+            'hidden = ', False).filter(
+            'is_ongoing = ', True).order(
+            'date')
+        #    memcache.set('%s-ongoing_opportunities'%self.name, memcached, 60 * 10)
         
         return memcached        
         
     def upcoming_events(self):
-        memcached = memcache.get('%s-upcoming_events'%self.name)
-        if not memcached:
-            date = now()
-                    
-            memcached = self.events.filter(
-                'date >= ', date).filter(
-                'hidden = ', False).filter(
-                'is_ongoing = ', False).order(
-                'date')
+#        memcached = memcache.get('%s-upcoming_events'%self.name)
+#        if not memcached:
+        date = now()
                 
-            memcache.set('%s-upcoming_events'%self.name, memcached, 60 * 10)
+        memcached = self.events.filter(
+            'date >= ', date).filter(
+            'hidden = ', False).filter(
+            'is_ongoing = ', False).order(
+            'date')
+                
+        #memcache.set('%s-upcoming_events'%self.name, memcached, 60 * 10)
         return memcached
 
 from components.appengine_admin.model_register import register, ModelAdmin

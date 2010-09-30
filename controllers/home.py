@@ -22,10 +22,12 @@ class MainPage(AbstractHandler):
             return  
         
         upcoming_events = self.get_application().upcoming_events().fetch(MainPage.LIMIT)
+        ongoing_opportunities = self.get_application().ongoing_opportunities().fetch(MainPage.LIMIT)
         
         template_values = {
             'volunteer' : volunteer,
             'upcoming_events': upcoming_events,
+            'ongoing_opportunities': ongoing_opportunities
           }
         self._add_base_template_values(vals = template_values)
         
