@@ -1,0 +1,36 @@
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('admin');
+
+      $(document).ready(function() {
+            load_title('Administer search index');
+            load_header('');
+      });
+</script>
+
+{% if not account.is_admin %}
+    <div id="home-top">
+    
+        <div id="home-error">
+            This section is for Flash Volunteer {{application_alias}} administrators only!
+        </div>
+    </div>
+{% else %}
+
+    <div id="home-top">
+	    <a href="/admin" class="fv">&laquo; back to admin home</a>
+    </div>
+    
+    <h2>Manage full-text search</h2>
+
+    <form class="validate_form" action="/admin/searchadmin/createeventindex" method="post">      
+        <input type=hidden name="session_id" value="{{ session_id }}">
+        <input class="submit" id="submit" type="submit" value="Create full-text search index for Events"/>
+    </form>
+
+{%endif%}
+
+{% endblock content %}
