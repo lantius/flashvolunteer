@@ -25,12 +25,14 @@
         <tr>
             <th>Person</th>
             <th>Email</th>
+				<th>Added</th>
         </tr>
         {% for v in results %}
 		    {% if v.preferred_email %}
           <tr>
             <td><a href={{v.url}}>{{v.get_name}}</a></td>
             <td>{{v.preferred_email}}</td>
+				<td>{{v.date_added}}</td>
           </tr>
 			 {% endif %}
         {% endfor %}

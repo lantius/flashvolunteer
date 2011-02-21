@@ -23,7 +23,7 @@ class CustomQueryHandler(AbstractHandler):
         except:
             return
         
-        results= db.GqlQuery("SELECT * FROM Volunteer where date_added > DATETIME(2010,8,10,0,0)")
+        results= db.GqlQuery("SELECT * FROM Volunteer where date_added > DATETIME(2010,9,30,10,0)")
                     
         template_values = {
             'volunteer': volunteer,
