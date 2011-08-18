@@ -38,7 +38,7 @@ from controllers.paginated_volunteer_pages import \
     PaginatedNeighborhoodVolunteerWorkPage, PaginatedNeighborhoodVolunteerHomePage, \
     PaginatedVolunteerTeam, PaginatedEventAttendeesPage
 
-from controllers.static import StaticPage
+from controllers.static import StaticPage, CauseCrowdPage
 from controllers.settings import SettingsPage
 from controllers.interest_categories import CategoryPage
 
@@ -200,6 +200,7 @@ def real_main():
            ('/category(|)', CategoryPage),
            
            ('/static/(\w+)', StaticPage),
+           ('/causecrowd(|/\w+)', CauseCrowdPage),
            ('/timeout', TimeoutPage),
            
            ('/api/applications/all', AllApplications), 
