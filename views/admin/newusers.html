@@ -1,0 +1,44 @@
+{% extends to_extend %}
+
+{% block content %}
+
+<script>
+      set_active('admin');
+
+      $(document).ready(function() {
+            load_title('Newest Members');
+            load_header('Newest Members');
+      });
+</script>
+
+{% if not volunteer.is_admin %}
+	<div id="home-top">
+	
+	    <div id="home-error">
+	        This section is for Flash Volunteer {{application_alias}} administrators only!
+	    </div>
+	</div>
+{% else %}
+	<div id="home-top">
+	<table>
+        <tr>
+            <th>Name</th><th>E-Mail Address</th><th>Date Joined</th>
+        </tr>
+        {% for volunteer_in_list in volunteers %}
+            {% include "../volunteers/person_lists/_volunteer_list_table.html" %}
+        {% endfor %}
+        {% if prev %}
+            <a class="submit pagination_link prev" title="Previous page" href='{{url}}?bookmark={{prev}}&back=1'>&laquo; Previous</a>
+        {% endif %}
+        {% if next %}
+            <a class="submit pagination_link next" title="Next page" href='{{url}}?bookmark={{next}}'>Next &raquo;</a>
+        {% endif %}
+    </table>
+    <script type="text/javascript">
+        function LoadNextPage(url){
+            $('#dialogs').load(url+'&' + get_params());
+        }
+    </script>
+{%endif%}
+
+{% endblock content %}

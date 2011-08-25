@@ -1,0 +1,24 @@
+{% extends to_extend %}
+
+{% block title_block %}
+    <h1>Cause Crowd</h1>
+{% endblock %}
+
+{% block content %}
+
+<script>
+      set_active('');
+      $(document).ready(function() {
+            load_title('Cause Crowd');
+    		load_header('Cause Crowd');
+      });
+</script>
+
+
+<div id="middle100">
+    View in <a href="/causecrowd/en">English</a> | <a href="/causecrowd/es">Español</a> | <a href="/causecrowd/cn">简体中文</a> | <a href="/causecrowd/tw">繁體中文</a>
+    <br/><br/>
+    <img src="/stylesheets/media/CSDI_{{ language }}.png" />
+</div>
+
+{% endblock content %}

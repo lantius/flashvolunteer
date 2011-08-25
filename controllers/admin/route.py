@@ -16,10 +16,12 @@ from controllers.admin.custom_query import CustomQueryHandler
 from controllers.admin.sync_with_mail_chimp import SyncWithMailChimp
 from controllers.admin.sync_application import SyncApplication
 
+
 from controllers.admin.afg_interface import AllForGoodInterface
 
 from controllers.settings import SettingsPage
 from controllers.admin.home import AdminPage
+from controllers.admin.newusers import NewUsersPage
 
 from components.appengine_admin.views import Admin as AppEngineAdmin
 
@@ -34,6 +36,7 @@ def main():
     application = webapp.WSGIApplication([
         ('/admin', AdminPage),
         ('/admin/migrate', MigrateDatastore),
+        ('/admin/newusers', NewUsersPage),
         ('/admin/send_message', SiteWideMessage),
         ('/admin/afg_interface(|/rebuild|/publish|/dismiss)', AllForGoodInterface),
         
