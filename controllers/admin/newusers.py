@@ -32,11 +32,11 @@ class NewUsersPage(AbstractHandler):
         SEARCH_LIST = 25
         session = self._session()
         application = self.get_application()
-        volunteers_query = Volunteer.all().filter('applications =', application.key().id()).order('__key__')
+        volunteers_query = Volunteer.all().filter('applications =', application.key().id()).order('-__key__')
         
         bookmark = self.request.get("bookmark", None)
         if bookmark and bookmark != '-':
-            volunteers_query = volunteers_query.filter('__key__ >=', Key(encoded=bookmark))
+            volunteers_query = volunteers_query.filter('__key__ <=', Key(encoded=bookmark))
             
             trace = session.get('volunteers_search_prev', None)
             if not trace or trace == []:
@@ -46,7 +46,7 @@ class NewUsersPage(AbstractHandler):
                 isBack = self.request.get("back", None)
                 if isBack and isBack == '1':
                     prev = trace.pop() 
-                    while prev >= bookmark:
+                    while prev <= bookmark:
                         try:
                             prev = trace.pop()
                         except: 

@@ -238,3 +238,20 @@ indexes:
   properties:
   - name: application
   - name: name
+
+- kind: Volunteer
+  properties:
+  - name: applications
+  - name: __key__
+    direction: desc
+
+- kind: Volunteer
+  properties:
+  - name: applications
+  - name: joinedon
+
+- kind: Volunteer
+  properties:
+  - name: applications
+  - name: joinedon
+    direction: desc
