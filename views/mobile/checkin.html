@@ -1,0 +1,43 @@
+{% extends to_extend %}
+
+{% block title_block %}
+    <h1>About Flash Volunteer</h1>
+{% endblock %}
+
+{% block content %}
+
+<script>
+      set_active('');
+      $(document).ready(function() {
+            load_title('Check In');
+            
+{% if event.name %}
+    load_header('Check In For {{event.name|striptags}}');
+{% else %}
+    load_header('Thanks for checkin in!');
+{% endif %}
+      });
+</script>
+
+
+<div id="middle100">
+
+    <form class="validate_form" action="/mobile/checkin/{{event.key.id}}" id="new_account" method="post">
+        <input class="hidden" name="session_id" type="hidden" value="{{session_id}}" />
+            <fieldset>
+                <ol>
+                    <li>
+                        <label for="name">Name</label>
+                        <input class="text required name" id="name" name="name" tabindex="1" type="text" />             
+                    </li>
+                    <li>
+                        <label for="email">Email</label>{% if errors.user_not_found %}<strong class="error">No user with that email</strong>{% endif %}  
+                        <input class="text required email" id="email" name="email" tabindex="2" type="text" {%if email %}value={{email}}{%endif%} />
+                    </li>
+                </ol>
+            </fieldset>
+        <input class="submit" name="commit" tabindex="3" type="submit" value="Check In" />
+    </form>
+</div>
+
+{% endblock content %}

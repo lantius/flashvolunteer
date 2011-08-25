@@ -32,6 +32,7 @@ from controllers.organizations import OrganizationPage
 from controllers.neighborhoods import NeighborhoodsPage, NeighborhoodDetailPage
 from controllers.friends import FriendsPage 
 from controllers.applications import AllApplications, ThisApplication
+from controllers.mobile import CheckinPage
 
 from controllers.paginated_volunteer_pages import \
     PaginatedTeamPage, PaginatedVolunteerCategoryPage, \
@@ -150,6 +151,7 @@ def real_main():
            
            ('/delete', SettingsPage),
            ('/profile', ProfilePage),
+           ('/mobile/checkin(|/\d+)', CheckinPage),
            ('/messages(|/\d+)', Mailbox),
            ('/messages/(inbox|sent)', Mailbox),
            
