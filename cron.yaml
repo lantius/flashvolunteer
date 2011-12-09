@@ -7,11 +7,6 @@ cron:
   url: /admin/cron_jobs/event_message_factory
   schedule: every 5 minutes
   
-- description: regenerate stats
-  url: /admin/cron_jobs/stats_gen
-  schedule: every 15 minutes
-  timezone: America/New_York
-  
 - description: updates memcache
   url: /admin/cron_jobs/mem_cache
   schedule: every 15 minutes
