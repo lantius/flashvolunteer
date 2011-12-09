@@ -1,0 +1,80 @@
+{% extends to_extend %}
+
+{% block title_block %}
+    <h1>Flash Volunteer 2.0</h1>
+{% endblock %}
+
+{% block content %}
+
+<script>
+      set_active('');
+      $(document).ready(function() {
+            load_title('Flash Volunteer 2.0');
+    		load_header('Flash Volunteer 2.0');
+      });
+</script>
+
+
+<div id="middle100">
+	<div class="hardmodule">
+	    <div class="moduletitle">
+	        <h3>Making it easier and more fun than ever to volunteer</h3>
+	    </div>
+        <p>2011 was a big year for the development and growth of Flash Volunteer, from a successful partnership with the City of Seattle Department of Neighborhoods to a social innovation award worth $10,000.</p>
+    </div>
+	<div class="hardmodule">
+	    <div class="moduletitle">
+	        <h3>So what now?</h3>
+	    </div>
+        <p>We are capitalizing on our momentum to boost volunteerism even more in the Puget Sound. We're amping up our outreach and fundraising efforts in support of a revamped platform: Flash Volunteer 2.0.</p>
+    </div>
+	<div class="hardmodule">
+	    <div class="moduletitle">
+	        <h3>Flash Volunteer, better than ever</h3>
+	    </div>
+        <p>We are looking forward to better mobile functionality and a simpler user interface in the new and improved version of our platform. Among the enhancements we are working on:<br/><br/>
+        For the individual volunteer
+        <ul class="bullets">
+            <li>Easier navigation</li>
+            <li>Ability to add events directly to personalcalendars</li>
+            <li>Event "check-in" on mobile devices</li>
+            <li>Advancements in Flash Volunteer teams</li>
+            <li>Browse for events by organization or cause</li>
+            <li>More customizable profile and user experience</li>
+        </ul>
+        For the volunteer coordinator
+        <ul class="bullets">
+            <li>Quicker event creation</li>
+            <li>Forum for collecting feedback</li>
+            <li>Administrator accounts and organization profile pages</li>
+            <li>Easier social media sharing to broadcast the direct event link</li>
+            <li>Improved notifications of event signups</li>
+            <li>Compile lists of fans by neighborhood</li>
+        </ul>
+    </div>
+	<div class="hardmodule">
+	    <div class="moduletitle">
+	        <h3>Be the first to know</h3>
+	    </div>
+        <form method="post" action="http://oi.vresp.com?fid=c1e3fbafbe" target="vr_optin_popup" onsubmit="window.open( 'http://www.verticalresponse.com', 'vr_optin_popup', 'scrollbars=yes,width=600,height=450' ); return true;">
+            <div style="font-family: verdana; font-size: 11px; width: 160px; padding: 10px; border: 1px solid #000000; background: #dddddd">
+                <strong><span style="color: #333333;">Sign up for our newsletter</span></strong><br/><br/>
+                <label style="color: #333333;">Email address:</label><br/>
+                <input name="email_address" size="15" style="margin-top: 5px; border: 1px solid #999; padding: 3px;"/><br/>
+                <input type="submit" value="Join" style="margin-top: 5px; border: 1px solid #999; padding: 3px;"/><br/>
+                <br/><span style="color: #333333;"><a title="Email Marketing Software by VerticalResponse" href="http://www.verticalresponse.com">Email Marketing Software</a> by VerticalResponse</span>
+            </div>
+        </form>
+    </div>
+	<div class="hardmodule">
+	    <div class="moduletitle">
+	        <h3>Want to lend a hand?</h3>
+	    </div>
+        <p>Help us launch 2.0 by offering your expertise and energy in one of many areas. We are powered for volunteers, by volunteers.</p>
+        <p>If outreach and advocacy is your style, join a committee to help organizations and volunteers connect and makeour neighborhoods better. Email <a href="mailto:talk@flashvolunteer.org">talk@flashvolunteer.org</a> to learn more.</p>
+        <p>We are also looking for designers, programmers, UI gurus and developers to help us create the next generation of our site. Email <a href="mailto:brad@flashvolunteer.org">brad@flashvolunteer.org</a>.</p>
+        <p>Of course, donations also help! Flash Volunteer is free for all users, and we keep costs low, with no paid staff. Some of our funds are spent on outreach materials, but the bulk goes to the development of the website and mobile app. <a href="/static/donate">Make a donation today.</a></p>
+    </div>
+</div>
+
+{% endblock content %}
